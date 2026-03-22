@@ -1,0 +1,64 @@
+export const THREE_LAYER_PROOF_ROOM = {
+  id: "proof-three-layer-01",
+  districtId: "dev",
+  title: "Three Layer Proof",
+  optional: true,
+  developmentOnly: true,
+  unlockCost: 0,
+  postmarks: 0,
+  objective: "Switch through all three sheets and reach the mailbox.",
+  blurb: "A development proof room that validates three-layer traversal in the core simulation.",
+  intro: [
+    {
+      speaker: "Batch 1",
+      text: "This room exists to prove that the shipping schema and simulation can support three real layers.",
+    },
+  ],
+  hintTiers: [
+    "The top stitch only gets you to the middle sheet. You need the lower stitch to reach the final sheet.",
+    "Switch on the top stitch first, walk down to the lower stitch on the middle sheet, then switch again.",
+    "Walk to the top stitch, switch to layer two, walk down three spaces to the lower stitch, switch again, then move right, right, up to the mailbox.",
+  ],
+  layers: [
+    {
+      id: "front-sheet",
+      name: "Front Sheet",
+      tiles: [
+        "#######",
+        "#..S..#",
+        "#.###.#",
+        "#.....#",
+        "#.....#",
+        "#######",
+      ],
+    },
+    {
+      id: "middle-sheet",
+      name: "Middle Sheet",
+      tiles: [
+        "#######",
+        "#..S..#",
+        "#.....#",
+        "#.....#",
+        "#..S..#",
+        "#######",
+      ],
+    },
+    {
+      id: "back-sheet",
+      name: "Back Sheet",
+      tiles: [
+        "#######",
+        "#.....#",
+        "#.....#",
+        "#....G#",
+        "#..S..#",
+        "#######",
+      ],
+    },
+  ],
+  start: { layer: 0, x: 1, y: 1, facing: "right" },
+  entities: [],
+  switches: [],
+  doors: [],
+};

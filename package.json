@@ -1,0 +1,15 @@
+{
+  "name": "patchwork-post",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync:godot-data": "node scripts/export-godot-content.mjs",
+    "start": "node server.mjs",
+    "test": "node --test",
+    "test:godot": "node scripts/run-godot-tests.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.58.2"
+  }
+}

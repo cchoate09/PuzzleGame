@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patchwork Post</title>
+    <link rel="stylesheet" href="./styles/app.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Festival Delivery Prototype</p>
+          <h1>Patchwork Post</h1>
+        </div>
+        <div class="topbar-stats">
+          <div class="stat-chip">
+            <span>Postmarks</span>
+            <strong id="postmark-count">0</strong>
+          </div>
+          <div class="stat-chip">
+            <span>Room</span>
+            <strong id="room-count">0 / 0</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside class="panel map-panel">
+          <div class="panel-header">
+            <h2>Town Map</h2>
+            <p>Branch through the town and reopen routes layer by layer.</p>
+          </div>
+          <div id="district-list" class="district-list"></div>
+          <div class="legend">
+            <span class="badge mandatory">Main Route</span>
+            <span class="badge optional">Side Route</span>
+            <span class="badge locked">Locked</span>
+          </div>
+        </aside>
+
+        <section class="panel play-panel">
+          <div class="canvas-wrap">
+            <canvas id="game-canvas" width="1180" height="760"></canvas>
+            <div id="start-screen" class="overlay">
+              <div class="overlay-card">
+                <p class="eyebrow">Warm Whimsical Layered Logic</p>
+                <h2>Restore the town before the festival begins.</h2>
+                <p>
+                  Move through stitched paper layers, transfer parcels between sheets,
+                  and coordinate echoes and shadows to reopen Patchwork Post.
+                </p>
+                <div class="overlay-actions">
+                  <button id="start-btn" class="primary">Start Delivery Route</button>
+                  <button id="resume-btn" class="secondary">Resume Last Room</button>
+                </div>
+                <div class="overlay-controls">
+                  <p><strong>Keyboard:</strong> arrows or WASD move, <kbd>Tab</kbd> switch layer, <kbd>X</kbd> transfer, <kbd>Z</kbd>/<kbd>Y</kbd> undo and redo, <kbd>R</kbd> reset, <kbd>Space</kbd> wait.</p>
+                  <p><strong>Controller:</strong> d-pad move, <kbd>A</kbd> wait, <kbd>X</kbd> transfer, <kbd>Y</kbd> switch layer, shoulder buttons undo and redo.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-bar">
+            <button data-action="up">Up</button>
+            <button data-action="left">Left</button>
+            <button data-action="down">Down</button>
+            <button data-action="right">Right</button>
+            <button data-action="wait">Wait</button>
+            <button data-action="switch_layer">Switch Layer</button>
+            <button data-action="transfer">Transfer</button>
+            <button data-action="undo">Undo</button>
+            <button data-action="redo">Redo</button>
+            <button data-action="reset">Reset</button>
+            <button data-action="replay">Replay</button>
+          </div>
+
+          <div class="status-strip">
+            <div>
+              <span class="label">District</span>
+              <strong id="district-name">Mailroom</strong>
+            </div>
+            <div>
+              <span class="label">Room</span>
+              <strong id="room-name">Loose Thread</strong>
+            </div>
+            <div>
+              <span class="label">Moves</span>
+              <strong id="move-count">0</strong>
+            </div>
+            <div>
+              <span class="label">Active Layer</span>
+              <strong id="active-layer-name">Front Sheet</strong>
+            </div>
+            <div>
+              <span class="label">Objective</span>
+              <strong id="objective-text">Reach the glowing mailbox.</strong>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel info-panel">
+          <div class="panel-header">
+            <h2 id="story-title">Town Journal</h2>
+            <p id="story-summary">Small characters, short scenes, and clean mechanical reads.</p>
+          </div>
+
+          <section class="story-card">
+            <h3>Current Beat</h3>
+            <div id="dialogue-card" class="dialogue-card"></div>
+          </section>
+
+          <details class="drawer" open>
+            <summary>Hints</summary>
+            <div class="drawer-content">
+              <p id="hint-summary">Optional hints preserve momentum without spoiling the room too early.</p>
+              <div class="hint-actions">
+                <button data-hint-tier="1">Hint 1</button>
+                <button data-hint-tier="2">Hint 2</button>
+                <button data-hint-tier="3">Hint 3</button>
+              </div>
+              <div id="hint-list" class="hint-list"></div>
+            </div>
+          </details>
+
+          <details class="drawer">
+            <summary>Journal & Achievements</summary>
+            <div class="drawer-content">
+              <div id="journal-list" class="journal-list"></div>
+              <div id="achievement-list" class="achievement-list"></div>
+            </div>
+          </details>
+
+          <details class="drawer">
+            <summary>Accessibility & Controls</summary>
+            <div class="drawer-content">
+              <label class="setting-row">
+                <span>High Contrast</span>
+                <input id="setting-contrast" type="checkbox" />
+              </label>
+              <label class="setting-row">
+                <span>Reduced Motion</span>
+                <input id="setting-motion" type="checkbox" />
+              </label>
+              <label class="setting-row">
+                <span>Font Scale</span>
+                <input id="setting-font-scale" type="range" min="0.95" max="1.25" step="0.05" />
+              </label>
+              <div class="control-remap">
+                <h4>Keyboard Remapping</h4>
+                <div id="control-list" class="control-list"></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="drawer">
+            <summary>Content Tools</summary>
+            <div class="drawer-content">
+              <div class="tool-row">
+                <button id="refresh-room-json">Refresh Current Room JSON</button>
+                <button id="load-room-json">Preview JSON</button>
+                <button id="validate-room">Validate Room</button>
+              </div>
+              <div class="tool-row hint-authoring">
+                <input id="author-hint-1" type="text" placeholder="Hint tier 1" />
+                <input id="author-hint-2" type="text" placeholder="Hint tier 2" />
+                <input id="author-hint-3" type="text" placeholder="Hint tier 3" />
+              </div>
+              <textarea id="room-json" spellcheck="false"></textarea>
+              <pre id="validation-output" class="validation-output"></pre>
+              <div class="tool-row">
+                <button id="replay-solution">Replay Best Solution</button>
+                <button id="replay-current">Replay Current Run</button>
+              </div>
+              <pre id="action-log" class="validation-output"></pre>
+            </div>
+          </details>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
