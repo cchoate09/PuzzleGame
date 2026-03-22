@@ -2,6 +2,8 @@ param(
   [string]$GodotConsolePath = $env:GODOT_CONSOLE_PATH
 )
 
+$ErrorActionPreference = "Stop"
+
 function Find-GodotConsole {
   param([string]$ExplicitPath)
 
@@ -24,6 +26,10 @@ function Find-GodotConsole {
     ForEach-Object { Get-ChildItem $_.FullName -Filter "Godot_v*_console.exe" -ErrorAction SilentlyContinue } |
     Sort-Object FullName -Descending
 
+  if (-not $matches -or $matches.Count -eq 0) {
+    return $null
+  }
+
   return $matches[0].FullName
 }
 
@@ -39,19 +45,26 @@ if (-not $version) {
 }
 
 $releaseTag = $version -replace '\.stable$', '-stable'
-$downloadUrl = "https://github.com/godotengine/godot/releases/download/$releaseTag/Godot_v$releaseTag" + "_export_templates.tpz"
+$archiveName = "Godot_v${releaseTag}_export_templates.tpz"
+$downloadUrl = "https://github.com/godotengine/godot/releases/download/$releaseTag/$archiveName"
 $cacheDir = Join-Path (Resolve-Path ".").Path "output\godot-templates"
-$tpzPath = Join-Path $cacheDir "Godot_v$releaseTag" + "_export_templates.tpz"
+$tpzPath = Join-Path $cacheDir $archiveName
 $zipPath = Join-Path $cacheDir "templates.zip"
 $unzipPath = Join-Path $cacheDir "unzipped"
 $targetDir = Join-Path $env:APPDATA "Godot\export_templates\$version"
 
 New-Item -ItemType Directory -Force $cacheDir | Out-Null
-curl.exe -L $downloadUrl -o $tpzPath
+Write-Output "Downloading Godot export templates from $downloadUrl"
+curl.exe -f -L $downloadUrl -o $tpzPath
 Copy-Item $tpzPath $zipPath -Force
 Remove-Item -Recurse -Force $unzipPath -ErrorAction SilentlyContinue
 Expand-Archive -Path $zipPath -DestinationPath $unzipPath -Force
 New-Item -ItemType Directory -Force $targetDir | Out-Null
-Copy-Item (Join-Path $unzipPath "templates\*") $targetDir -Recurse -Force
+$templatesDir = Join-Path $unzipPath "templates"
+if (-not (Test-Path $templatesDir)) {
+  throw "Expected extracted templates directory at '$templatesDir', but it was not found."
+}
+
+Copy-Item (Join-Path $templatesDir "*") $targetDir -Recurse -Force
 
 Write-Output "Installed Godot export templates for $version to $targetDir"
