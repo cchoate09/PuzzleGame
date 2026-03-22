@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check Out
+        uses: actions/checkout@v4
+
+      - name: Set Up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install Godot
+        run: winget install --exact --id GodotEngine.GodotEngine --accept-package-agreements --accept-source-agreements
+
+      - name: Install Godot Export Templates
+        shell: powershell
+        run: .\scripts\install-godot-export-templates.ps1
+
+      - name: Sync Shared Content
+        run: npm run sync:content
+
+      - name: Run Browser Tests
+        run: npm test
+
+      - name: Run Godot Tests
+        run: npm run test:godot

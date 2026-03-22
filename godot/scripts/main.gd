@@ -1,45 +1,101 @@
 extends Control
 
 const DEV_PROOF_ROOM_ID := "proof-three-layer-01"
+const BACKDROP := Color("efe1c4")
+const CARD_FILL := Color("fff8eb")
+const CARD_BORDER := Color("d3b98c")
+const ACCENT_INK := Color("452b24")
+const ACCENT_MUTED := Color("7e6454")
+const ACCENT_GOLD := Color("d49f3d")
+const ACCENT_GREEN := Color("7aa37c")
+const ACCENT_RUST := Color("cf6d49")
+
 const ContentLoader = preload("res://scripts/core/content_loader.gd")
 const SaveRuntime = preload("res://scripts/core/patchwork_save.gd")
 const EngineScript = preload("res://scripts/core/patchwork_engine.gd")
 const RoomViewScript = preload("res://scripts/ui/room_view.gd")
+const AudioManagerScript = preload("res://scripts/ui/audio_manager.gd")
 
 var campaign: Dictionary = {}
 var dev_rooms: Dictionary = {}
 var solutions: Dictionary = {}
 var profile: Dictionary = {}
 var engine
+var audio_manager
 var room_ids: Array = []
-var current_room_index := 0
+var current_room_index: int = 0
+var current_font_scale: float = 1.0
+var last_room_id: String = ""
+var last_solved_state := false
+var transition_time_left := 0.0
+var toast_time_left := 0.0
+var dialogue_time_left := 0.0
+var solve_time_left := 0.0
+var route_unlock_snapshot: Dictionary = {"districts": [], "rooms": []}
 
+var eyebrow_label: Label
 var title_label: Label
 var subtitle_label: Label
+var move_label: Label
+var progress_label: Label
+var route_status_label: Label
 var room_view
-var info_label: Label
+var district_list: VBoxContainer
+var objective_label: Label
+var blurb_label: Label
+var hint_status_label: Label
+var hint_text_label: Label
+var journal_label: Label
+var stats_label: Label
 var controls_label: Label
+var setting_contrast_button: CheckButton
+var setting_motion_button: CheckButton
+var setting_font_scale_slider: HSlider
+var setting_font_scale_value: Label
+var footer_label: Label
+var layer_chip_row: HBoxContainer
+var dialogue_panel: PanelContainer
+var dialogue_speaker_label: Label
+var dialogue_text_label: Label
+var toast_panel: PanelContainer
+var toast_label: Label
+var solve_panel: PanelContainer
+var solve_title_label: Label
+var solve_subtitle_label: Label
+var transition_overlay: ColorRect
+var card_title_labels: Array = []
+var scalable_controls: Array = []
+var route_buttons: Dictionary = {}
+var action_buttons: Dictionary = {}
+var hint_buttons: Array = []
 
 func _ready() -> void:
+	RenderingServer.set_default_clear_color(BACKDROP)
 	_bootstrap_input_map()
 	_build_ui()
+	audio_manager = AudioManagerScript.new()
+	add_child(audio_manager)
 
 	campaign = ContentLoader.load_campaign_index()
 	dev_rooms = ContentLoader.load_dev_rooms()
 	solutions = ContentLoader.load_solutions()
 	profile = SaveRuntime.load_profile()
+	_apply_profile_settings()
 
 	if campaign.is_empty():
 		title_label.text = "Generated content is missing."
-		subtitle_label.text = "Run `npm run sync:godot-data` from the repo root, then reopen the project."
+		subtitle_label.text = "Run `npm run sync:content` from the repo root, then reopen the project."
 		return
 
 	engine = EngineScript.new(campaign)
 	room_ids = ContentLoader.get_room_order(campaign)
-	var initial_room_id := String(profile.get("lastRoomId", room_ids[0] if not room_ids.is_empty() else "mailroom-01"))
+	route_unlock_snapshot = _capture_unlock_snapshot()
+	var fallback_room_id: String = room_ids[0] if not room_ids.is_empty() else "mailroom-01"
+	var initial_room_id: String = String(profile.get("lastRoomId", fallback_room_id))
 	_load_room(initial_room_id, true)
 
 func _process(delta: float) -> void:
+	_update_overlay_state(delta)
 	if engine == null:
 		return
 	if engine.is_replaying():
@@ -88,35 +144,73 @@ func _unhandled_input(event: InputEvent) -> void:
 	if action.is_empty():
 		return
 
-	var changed: bool = engine.dispatch(action)
-	if changed:
-		_after_state_change()
+	_dispatch_room_action(action)
 
 func _build_ui() -> void:
+	var backdrop := ColorRect.new()
+	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+	backdrop.color = BACKDROP
+	add_child(backdrop)
+
 	var margin := MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	margin.add_theme_constant_override("margin_left", 24)
-	margin.add_theme_constant_override("margin_top", 24)
-	margin.add_theme_constant_override("margin_right", 24)
-	margin.add_theme_constant_override("margin_bottom", 24)
+	margin.add_theme_constant_override("margin_left", 26)
+	margin.add_theme_constant_override("margin_top", 20)
+	margin.add_theme_constant_override("margin_right", 26)
+	margin.add_theme_constant_override("margin_bottom", 20)
 	add_child(margin)
 
 	var layout := VBoxContainer.new()
 	layout.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	layout.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	layout.add_theme_constant_override("separation", 14)
+	layout.add_theme_constant_override("separation", 16)
 	margin.add_child(layout)
+
+	var header_card: Dictionary = _create_card("Town Route")
+	layout.add_child(header_card["panel"])
+
+	var header_row := HBoxContainer.new()
+	header_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_row.add_theme_constant_override("separation", 16)
+	header_card["body"].add_child(header_row)
+
+	var header_left := VBoxContainer.new()
+	header_left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_left.add_theme_constant_override("separation", 6)
+	header_row.add_child(header_left)
+
+	eyebrow_label = Label.new()
+	eyebrow_label.text = "PATCHWORK POST"
+	_register_scaled_font(eyebrow_label, 14)
+	eyebrow_label.add_theme_color_override("font_color", ACCENT_RUST)
+	header_left.add_child(eyebrow_label)
 
 	title_label = Label.new()
 	title_label.text = "Patchwork Post Shipping Runtime"
-	title_label.add_theme_font_size_override("font_size", 28)
-	layout.add_child(title_label)
+	_register_scaled_font(title_label, 32)
+	title_label.add_theme_color_override("font_color", ACCENT_INK)
+	header_left.add_child(title_label)
 
 	subtitle_label = Label.new()
 	subtitle_label.text = "Loading native gameplay core..."
 	subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	subtitle_label.modulate = Color("d7cab7")
-	layout.add_child(subtitle_label)
+	_register_scaled_font(subtitle_label, 16)
+	subtitle_label.add_theme_color_override("font_color", ACCENT_MUTED)
+	header_left.add_child(subtitle_label)
+
+	var header_right := VBoxContainer.new()
+	header_right.custom_minimum_size = Vector2(250, 0)
+	header_right.add_theme_constant_override("separation", 10)
+	header_row.add_child(header_right)
+
+	move_label = _create_metric_label()
+	header_right.add_child(move_label)
+
+	progress_label = _create_metric_label()
+	header_right.add_child(progress_label)
+
+	route_status_label = _create_metric_label()
+	header_right.add_child(route_status_label)
 
 	var content_row := HBoxContainer.new()
 	content_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -124,38 +218,332 @@ func _build_ui() -> void:
 	content_row.add_theme_constant_override("separation", 18)
 	layout.add_child(content_row)
 
+	var route_column := VBoxContainer.new()
+	route_column.custom_minimum_size = Vector2(320, 0)
+	route_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	route_column.add_theme_constant_override("separation", 14)
+	content_row.add_child(route_column)
+
+	var route_card: Dictionary = _create_card("Town Map")
+	route_card["panel"].size_flags_vertical = Control.SIZE_EXPAND_FILL
+	route_column.add_child(route_card["panel"])
+
+	var route_intro := _create_body_label(14, ACCENT_MUTED)
+	route_intro.text = "Restore one district at a time. Mandatory rooms reopen the main route; side rooms deepen mastery and hide extra notes."
+	route_card["body"].add_child(route_intro)
+
+	var route_scroll := ScrollContainer.new()
+	route_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	route_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	route_scroll.custom_minimum_size = Vector2(0, 440)
+	route_card["body"].add_child(route_scroll)
+
+	district_list = VBoxContainer.new()
+	district_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	district_list.add_theme_constant_override("separation", 12)
+	route_scroll.add_child(district_list)
+
 	var board_panel := PanelContainer.new()
 	board_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	board_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	board_panel.add_theme_stylebox_override("panel", _make_card_style(CARD_FILL, CARD_BORDER, 24))
 	content_row.add_child(board_panel)
 
+	var board_shell := Control.new()
+	board_shell.set_anchors_preset(Control.PRESET_FULL_RECT)
+	board_shell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	board_shell.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	board_panel.add_child(board_shell)
+
 	room_view = RoomViewScript.new()
+	room_view.set_anchors_preset(Control.PRESET_FULL_RECT)
 	room_view.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	room_view.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	board_panel.add_child(room_view)
+	board_shell.add_child(room_view)
 
-	var side_panel := PanelContainer.new()
-	side_panel.custom_minimum_size = Vector2(330, 400)
-	side_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	content_row.add_child(side_panel)
+	dialogue_panel = PanelContainer.new()
+	dialogue_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	dialogue_panel.offset_left = 22
+	dialogue_panel.offset_top = 20
+	dialogue_panel.offset_right = -220
+	dialogue_panel.offset_bottom = 140
+	dialogue_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	dialogue_panel.visible = false
+	dialogue_panel.modulate.a = 0.0
+	dialogue_panel.add_theme_stylebox_override("panel", _make_card_style(Color("fff8ef"), Color("d9c2a0"), 22))
+	board_shell.add_child(dialogue_panel)
 
-	var side_margin := MarginContainer.new()
-	side_margin.add_theme_constant_override("margin_left", 16)
-	side_margin.add_theme_constant_override("margin_top", 16)
-	side_margin.add_theme_constant_override("margin_right", 16)
-	side_margin.add_theme_constant_override("margin_bottom", 16)
-	side_panel.add_child(side_margin)
+	var dialogue_margin := MarginContainer.new()
+	dialogue_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dialogue_margin.add_theme_constant_override("margin_left", 18)
+	dialogue_margin.add_theme_constant_override("margin_top", 14)
+	dialogue_margin.add_theme_constant_override("margin_right", 18)
+	dialogue_margin.add_theme_constant_override("margin_bottom", 14)
+	dialogue_panel.add_child(dialogue_margin)
 
-	info_label = Label.new()
-	info_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	info_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	info_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	side_margin.add_child(info_label)
+	var dialogue_body := VBoxContainer.new()
+	dialogue_body.add_theme_constant_override("separation", 6)
+	dialogue_margin.add_child(dialogue_body)
 
-	controls_label = Label.new()
-	controls_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	controls_label.modulate = Color("d7cab7")
-	layout.add_child(controls_label)
+	dialogue_speaker_label = _create_body_label(13, ACCENT_RUST)
+	dialogue_body.add_child(dialogue_speaker_label)
+
+	dialogue_text_label = _create_body_label(17, ACCENT_INK)
+	dialogue_body.add_child(dialogue_text_label)
+
+	solve_panel = PanelContainer.new()
+	solve_panel.set_anchors_preset(Control.PRESET_CENTER)
+	solve_panel.custom_minimum_size = Vector2(360, 0)
+	solve_panel.position = Vector2(-180, -72)
+	solve_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	solve_panel.visible = false
+	solve_panel.modulate.a = 0.0
+	solve_panel.add_theme_stylebox_override("panel", _make_card_style(Color("fff4d4"), Color("d3a74b"), 26))
+	board_shell.add_child(solve_panel)
+
+	var solve_margin := MarginContainer.new()
+	solve_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	solve_margin.add_theme_constant_override("margin_left", 20)
+	solve_margin.add_theme_constant_override("margin_top", 16)
+	solve_margin.add_theme_constant_override("margin_right", 20)
+	solve_margin.add_theme_constant_override("margin_bottom", 16)
+	solve_panel.add_child(solve_margin)
+
+	var solve_body := VBoxContainer.new()
+	solve_body.add_theme_constant_override("separation", 6)
+	solve_margin.add_child(solve_body)
+
+	solve_title_label = _create_body_label(24, ACCENT_INK)
+	solve_title_label.text = "Route Restored"
+	solve_body.add_child(solve_title_label)
+
+	solve_subtitle_label = _create_body_label(14, ACCENT_MUTED)
+	solve_subtitle_label.text = "Pick another room from the map."
+	solve_body.add_child(solve_subtitle_label)
+
+	toast_panel = PanelContainer.new()
+	toast_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	toast_panel.offset_left = 22
+	toast_panel.offset_top = -90
+	toast_panel.offset_right = -260
+	toast_panel.offset_bottom = -22
+	toast_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	toast_panel.visible = false
+	toast_panel.modulate.a = 0.0
+	toast_panel.add_theme_stylebox_override("panel", _make_card_style(Color("f5edd8"), Color("ceb48a"), 20))
+	board_shell.add_child(toast_panel)
+
+	var toast_margin := MarginContainer.new()
+	toast_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	toast_margin.add_theme_constant_override("margin_left", 16)
+	toast_margin.add_theme_constant_override("margin_top", 12)
+	toast_margin.add_theme_constant_override("margin_right", 16)
+	toast_margin.add_theme_constant_override("margin_bottom", 12)
+	toast_panel.add_child(toast_margin)
+
+	toast_label = _create_body_label(14, ACCENT_INK)
+	toast_margin.add_child(toast_label)
+
+	transition_overlay = ColorRect.new()
+	transition_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	transition_overlay.color = Color(0.97, 0.92, 0.82, 0.0)
+	transition_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	board_shell.add_child(transition_overlay)
+
+	var side_column := VBoxContainer.new()
+	side_column.custom_minimum_size = Vector2(360, 0)
+	side_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	side_column.add_theme_constant_override("separation", 14)
+	content_row.add_child(side_column)
+
+	var objective_card: Dictionary = _create_card("Route Objective")
+	side_column.add_child(objective_card["panel"])
+
+	objective_label = _create_body_label(20, ACCENT_INK)
+	objective_card["body"].add_child(objective_label)
+
+	blurb_label = _create_body_label(15, ACCENT_MUTED)
+	objective_card["body"].add_child(blurb_label)
+
+	hint_status_label = _create_body_label(14, ACCENT_RUST)
+	objective_card["body"].add_child(hint_status_label)
+
+	var hint_row := HBoxContainer.new()
+	hint_row.add_theme_constant_override("separation", 8)
+	objective_card["body"].add_child(hint_row)
+
+	for tier in range(1, 4):
+		var button := Button.new()
+		button.text = "Hint %d" % tier
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.pressed.connect(_handle_hint_request.bind(tier))
+		_style_button(button, Color("f4ead1"), CARD_BORDER, ACCENT_INK)
+		hint_row.add_child(button)
+		hint_buttons.append(button)
+
+	hint_text_label = _create_body_label(14, ACCENT_MUTED)
+	objective_card["body"].add_child(hint_text_label)
+
+	var notes_card: Dictionary = _create_card("Town Notes")
+	side_column.add_child(notes_card["panel"])
+
+	layer_chip_row = HBoxContainer.new()
+	layer_chip_row.add_theme_constant_override("separation", 8)
+	notes_card["body"].add_child(layer_chip_row)
+
+	journal_label = _create_body_label(14, ACCENT_INK)
+	notes_card["body"].add_child(journal_label)
+
+	stats_label = _create_body_label(14, ACCENT_MUTED)
+	notes_card["body"].add_child(stats_label)
+
+	var settings_card: Dictionary = _create_card("Courier Settings")
+	side_column.add_child(settings_card["panel"])
+
+	setting_contrast_button = CheckButton.new()
+	setting_contrast_button.text = "High Contrast"
+	_register_scaled_font(setting_contrast_button, 14)
+	setting_contrast_button.toggled.connect(_handle_high_contrast_toggled)
+	settings_card["body"].add_child(setting_contrast_button)
+
+	setting_motion_button = CheckButton.new()
+	setting_motion_button.text = "Reduced Motion"
+	_register_scaled_font(setting_motion_button, 14)
+	setting_motion_button.toggled.connect(_handle_reduced_motion_toggled)
+	settings_card["body"].add_child(setting_motion_button)
+
+	var font_row := HBoxContainer.new()
+	font_row.add_theme_constant_override("separation", 10)
+	settings_card["body"].add_child(font_row)
+
+	var font_label := _create_body_label(14, ACCENT_INK)
+	font_label.text = "Font Scale"
+	font_row.add_child(font_label)
+
+	setting_font_scale_slider = HSlider.new()
+	setting_font_scale_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	setting_font_scale_slider.min_value = 0.9
+	setting_font_scale_slider.max_value = 1.35
+	setting_font_scale_slider.step = 0.05
+	setting_font_scale_slider.value_changed.connect(_handle_font_scale_changed)
+	font_row.add_child(setting_font_scale_slider)
+
+	setting_font_scale_value = _create_body_label(13, ACCENT_MUTED)
+	setting_font_scale_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	font_row.add_child(setting_font_scale_value)
+
+	controls_label = _create_body_label(13, ACCENT_MUTED)
+	controls_label.text = "Move: WASD or arrows\nWait: Space\nSwitch: Tab\nTransfer: X\nUndo/Redo: Z/Y\nReset: R"
+	settings_card["body"].add_child(controls_label)
+
+	var action_card: Dictionary = _create_card("Courier Tools")
+	side_column.add_child(action_card["panel"])
+
+	var action_grid := GridContainer.new()
+	action_grid.columns = 2
+	action_grid.add_theme_constant_override("h_separation", 10)
+	action_grid.add_theme_constant_override("v_separation", 10)
+	action_card["body"].add_child(action_grid)
+
+	_add_action_button(action_grid, "prev_room", "Prev Room", Color("ead8b8"), _cycle_room.bind(-1))
+	_add_action_button(action_grid, "next_room", "Next Room", Color("ead8b8"), _cycle_room.bind(1))
+	_add_action_button(action_grid, "undo", "Undo", Color("f2e7cf"), _dispatch_room_action.bind({"type": "undo"}))
+	_add_action_button(action_grid, "redo", "Redo", Color("f2e7cf"), _dispatch_room_action.bind({"type": "redo"}))
+	_add_action_button(action_grid, "reset", "Reset", Color("f7ddd4"), _dispatch_room_action.bind({"type": "reset"}))
+	_add_action_button(action_grid, "replay", "Replay", Color("dbead8"), _play_replay)
+	_add_action_button(action_grid, "story", "Story Beat", Color("efe2f0"), _show_dialogue_for_current_room)
+
+	footer_label = Label.new()
+	footer_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_register_scaled_font(footer_label, 13)
+	footer_label.add_theme_color_override("font_color", ACCENT_MUTED)
+	layout.add_child(footer_label)
+
+func _register_scaled_font(control: Control, base_size: int, property_name: String = "font_size") -> void:
+	control.set_meta("patchwork_font_property", property_name)
+	control.set_meta("patchwork_font_base", base_size)
+	scalable_controls.append(control)
+	control.add_theme_font_size_override(property_name, int(round(base_size * current_font_scale)))
+
+func _create_card(title_text: String) -> Dictionary:
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", _make_card_style(CARD_FILL, CARD_BORDER, 22))
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 14)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 16)
+	panel.add_child(margin)
+
+	var body := VBoxContainer.new()
+	body.add_theme_constant_override("separation", 10)
+	margin.add_child(body)
+
+	var title := Label.new()
+	title.text = title_text
+	_register_scaled_font(title, 17)
+	title.add_theme_color_override("font_color", ACCENT_RUST)
+	body.add_child(title)
+	card_title_labels.append(title)
+
+	return {"panel": panel, "body": body}
+
+func _create_body_label(font_size: int, color: Color) -> Label:
+	var label := Label.new()
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_register_scaled_font(label, font_size)
+	label.add_theme_color_override("font_color", color)
+	return label
+
+func _create_metric_label() -> Label:
+	var label := Label.new()
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_register_scaled_font(label, 15)
+	label.add_theme_color_override("font_color", ACCENT_INK)
+	return label
+
+func _make_card_style(fill: Color, border: Color, radius: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = fill
+	style.border_color = border
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.set_corner_radius_all(radius)
+	return style
+
+func _make_button_style(fill: Color, border: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = fill
+	style.border_color = border
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.set_corner_radius_all(16)
+	return style
+
+func _style_button(button: Button, fill: Color, border: Color, font_color: Color) -> void:
+	button.custom_minimum_size = Vector2(0, 42)
+	_register_scaled_font(button, 14)
+	button.add_theme_stylebox_override("normal", _make_button_style(fill, border))
+	button.add_theme_stylebox_override("hover", _make_button_style(fill.lightened(0.05), border))
+	button.add_theme_stylebox_override("pressed", _make_button_style(fill.darkened(0.08), border))
+	button.add_theme_stylebox_override("disabled", _make_button_style(fill.darkened(0.12), border.darkened(0.1)))
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_disabled_color", ACCENT_MUTED)
+
+func _add_action_button(parent: GridContainer, key: String, text: String, fill: Color, action: Callable) -> void:
+	var button := Button.new()
+	button.text = text
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.pressed.connect(action)
+	_style_button(button, fill, CARD_BORDER, ACCENT_INK)
+	parent.add_child(button)
+	action_buttons[key] = button
 
 func _bootstrap_input_map() -> void:
 	_bind_keys("move_up", [KEY_W, KEY_UP])
@@ -191,21 +579,98 @@ func _action_has_key(action_name: String, keycode: int) -> bool:
 			return true
 	return false
 
+func _get_district_by_id(district_id: String) -> Dictionary:
+	for candidate in campaign.get("districts", []):
+		if candidate.get("id", "") == district_id:
+			return candidate
+	return {}
+
+func _get_rooms_for_district(district_id: String) -> Array:
+	var rooms: Array = []
+	for candidate in campaign.get("rooms", []):
+		if candidate.get("districtId", "") == district_id:
+			rooms.append(candidate)
+	return rooms
+
+func _room_solved(room_id: String) -> bool:
+	return bool(profile.get("rooms", {}).get(room_id, {}).get("solved", false))
+
+func _is_district_unlocked(district: Dictionary) -> bool:
+	return SaveRuntime.get_postmark_count(profile, campaign) >= int(district.get("unlockPostmarks", 0))
+
+func _is_room_unlocked(room: Dictionary) -> bool:
+	var district := _get_district_by_id(String(room.get("districtId", "")))
+	if district.is_empty() or not _is_district_unlocked(district):
+		return false
+
+	var district_rooms: Array = _get_rooms_for_district(String(room.get("districtId", "")))
+	var mandatory_rooms: Array = []
+	for candidate in district_rooms:
+		if not candidate.get("optional", false):
+			mandatory_rooms.append(candidate)
+
+	if room.get("optional", false):
+		if mandatory_rooms.is_empty():
+			return true
+		for candidate in mandatory_rooms:
+			if _room_solved(String(candidate.get("id", ""))):
+				return true
+		return false
+
+	var room_index := -1
+	for index in range(mandatory_rooms.size()):
+		if String(mandatory_rooms[index].get("id", "")) == String(room.get("id", "")):
+			room_index = index
+			break
+	if room_index <= 0:
+		return true
+	for index in range(room_index):
+		if not _room_solved(String(mandatory_rooms[index].get("id", ""))):
+			return false
+	return true
+
+func _capture_unlock_snapshot() -> Dictionary:
+	var unlocked_districts: Array = []
+	var unlocked_rooms: Array = []
+	for district in campaign.get("districts", []):
+		if _is_district_unlocked(district):
+			unlocked_districts.append(String(district.get("id", "")))
+	for room in campaign.get("rooms", []):
+		if _is_room_unlocked(room):
+			unlocked_rooms.append(String(room.get("id", "")))
+	return {"districts": unlocked_districts, "rooms": unlocked_rooms}
+
 func _cycle_room(delta: int) -> void:
-	if room_ids.is_empty():
+	if room_ids.is_empty() or campaign.is_empty():
 		return
 
-	if engine.get_room().get("id", "") == DEV_PROOF_ROOM_ID:
-		current_room_index = 0 if delta > 0 else room_ids.size() - 1
+	var unlocked_room_ids: Array = []
+	for room in campaign.get("rooms", []):
+		if _is_room_unlocked(room):
+			unlocked_room_ids.append(String(room.get("id", "")))
+	if unlocked_room_ids.is_empty():
+		unlocked_room_ids = room_ids.duplicate()
+
+	var current_room_id := String(engine.get_room().get("id", ""))
+	var current_index := unlocked_room_ids.find(current_room_id)
+	if current_room_id == DEV_PROOF_ROOM_ID or current_index == -1:
+		current_index = 0 if delta > 0 else unlocked_room_ids.size() - 1
 	else:
-		current_room_index = wrapi(current_room_index + delta, 0, room_ids.size())
-	_load_room(room_ids[current_room_index], true)
+		current_index = wrapi(current_index + delta, 0, unlocked_room_ids.size())
+	_load_room(String(unlocked_room_ids[current_index]), true)
 
 func _load_room(room_id: String, restore_snapshot: bool) -> void:
 	if room_id == DEV_PROOF_ROOM_ID:
 		var proof_room: Dictionary = dev_rooms.get("threeLayerProofRoom", {})
 		if not proof_room.is_empty():
 			engine.load_preview_room(proof_room)
+			last_room_id = DEV_PROOF_ROOM_ID
+			last_solved_state = false
+			room_view.begin_room_intro()
+			_show_dialogue_for_current_room()
+			_show_toast("Developer proof room loaded. Use this slice to verify three-sheet routing and active-layer readability.")
+			if audio_manager != null:
+				audio_manager.play_event("enter")
 			_refresh_ui()
 		return
 
@@ -220,115 +685,504 @@ func _load_room(room_id: String, restore_snapshot: bool) -> void:
 		snapshot = progress.get("lastSnapshot", null)
 	progress["attempts"] = int(progress.get("attempts", 0)) + 1
 	engine.load_room(room_id, snapshot)
+	last_room_id = room_id
+	last_solved_state = bool(engine.get_runtime().get("solved", false))
 	profile["lastRoomId"] = room_id
 	SaveRuntime.save_profile(profile)
+	room_view.begin_room_intro()
+	_show_dialogue_for_current_room()
+	_start_room_transition()
+	if audio_manager != null:
+		audio_manager.play_event("enter")
 	_refresh_ui()
 
+func _dispatch_room_action(action: Dictionary) -> void:
+	if engine == null or engine.get_room().is_empty():
+		return
+	var previous_runtime: Dictionary = engine.get_runtime().duplicate(true)
+	var changed: bool = engine.dispatch(action)
+	if not changed:
+		return
+	dialogue_time_left = minf(dialogue_time_left, 0.18)
+	var audio_event := _determine_audio_event(action, previous_runtime, engine.get_runtime())
+	if audio_manager != null and not audio_event.is_empty():
+		audio_manager.play_event(audio_event)
+	_after_state_change(action, previous_runtime)
+
 func _play_replay() -> void:
-	var room_id := String(engine.get_room().get("id", ""))
+	var room_id: String = String(engine.get_room().get("id", ""))
 	var actions: Array = []
 	if room_id == DEV_PROOF_ROOM_ID:
 		actions = solutions.get("threeLayerProofSolution", [])
 	else:
-		var progress := SaveRuntime.get_room_progress(profile, room_id)
+		var progress: Dictionary = SaveRuntime.get_room_progress(profile, room_id)
 		actions = progress.get("bestSolution", [])
 		if actions.is_empty():
 			actions = solutions.get("canonicalSolutions", {}).get(room_id, [])
 	if engine.start_replay(actions):
+		_show_toast("Replaying the saved route. Watch how the layer relationships unfold.")
 		_refresh_ui()
 
-func _after_state_change() -> void:
+func _handle_hint_request(tier: int) -> void:
+	var room: Dictionary = engine.get_room()
+	var room_id: String = String(room.get("id", ""))
+	if room_id.is_empty() or room_id == DEV_PROOF_ROOM_ID:
+		return
+	SaveRuntime.reveal_hint(profile, room_id, tier)
+	SaveRuntime.save_profile(profile)
+	if audio_manager != null:
+		audio_manager.play_event("hint")
+	_show_toast("Hint %d revealed. The help escalates from reframing to a guided opening." % tier)
+	_refresh_ui()
+
+func _determine_audio_event(action: Dictionary, previous_runtime: Dictionary, current_runtime: Dictionary) -> String:
+	match String(action.get("type", "")):
+		"move":
+			return "push" if _did_push_entity(previous_runtime, current_runtime) else "move"
+		"wait":
+			return "wait"
+		"switch_layer":
+			return "switch_layer"
+		"transfer":
+			return "transfer"
+		"undo":
+			return "undo"
+		"redo":
+			return "redo"
+		"reset":
+			return "reset"
+		_:
+			return ""
+
+func _did_push_entity(previous_runtime: Dictionary, current_runtime: Dictionary) -> bool:
+	var previous_positions := {}
+	for entity in previous_runtime.get("entities", []):
+		if entity.get("pushable", false):
+			previous_positions[entity.get("id", "")] = "%s:%s:%s" % [entity.get("layer", 0), entity.get("x", 0), entity.get("y", 0)]
+	for entity in current_runtime.get("entities", []):
+		if not entity.get("pushable", false):
+			continue
+		var entity_id := String(entity.get("id", ""))
+		if not previous_positions.has(entity_id):
+			continue
+		var current_position := "%s:%s:%s" % [entity.get("layer", 0), entity.get("x", 0), entity.get("y", 0)]
+		if current_position != String(previous_positions[entity_id]):
+			return true
+	return false
+
+func _after_state_change(action: Dictionary = {}, previous_runtime: Dictionary = {}) -> void:
 	var room: Dictionary = engine.get_room()
 	if room.is_empty():
 		return
 
-	var room_id := String(room.get("id", ""))
+	var room_id: String = String(room.get("id", ""))
+	var unlocked_before: Dictionary = route_unlock_snapshot.duplicate(true)
+	var was_solved := _room_solved(room_id)
 	if room_id != DEV_PROOF_ROOM_ID:
+		var progress_before: Dictionary = SaveRuntime.get_room_progress(profile, room_id)
 		if engine.get_runtime().get("solved", false):
 			SaveRuntime.complete_room(profile, room, engine.get_runtime())
 			SaveRuntime.unlock_journal(profile, String(room.get("districtId", "")))
 			SaveRuntime.unlock_achievement(profile, String(room.get("achievementId", "")))
+			if int(progress_before.get("hintsRevealed", 0)) == 0:
+				SaveRuntime.unlock_achievement(profile, "careful-hands")
 			SaveRuntime.set_room_snapshot(profile, room_id, null)
 		else:
 			SaveRuntime.set_room_snapshot(profile, room_id, engine.get_room_snapshot())
 		profile["lastRoomId"] = room_id
 		SaveRuntime.save_profile(profile)
 
+	route_unlock_snapshot = _capture_unlock_snapshot()
+	if bool(engine.get_runtime().get("solved", false)) and not was_solved:
+		room_view.trigger_solve_flash()
+		_show_solve_banner(room)
+		_handle_unlock_changes(unlocked_before, route_unlock_snapshot)
+	elif String(action.get("type", "")) == "reset":
+		_show_toast("Room reset. The papers are back in their original alignment.")
+
+	last_solved_state = bool(engine.get_runtime().get("solved", false))
 	_refresh_ui()
 
 func _refresh_ui() -> void:
 	var room: Dictionary = engine.get_room()
 	var runtime: Dictionary = engine.get_runtime()
+	room_view.set_accessibility(
+		bool(profile.get("settings", {}).get("highContrast", false)),
+		bool(profile.get("settings", {}).get("reducedMotion", false))
+	)
 	room_view.set_room_state(room, runtime)
 
-	var district_id := String(room.get("districtId", ""))
-	var district: Dictionary = {}
-	for candidate in campaign.get("districts", []):
-		if candidate.get("id", "") == district_id:
-			district = candidate
-			break
-
-	title_label.text = "%s%s" % [room.get("title", "Patchwork Post"), " (Preview)" if room.get("id", "") == DEV_PROOF_ROOM_ID else ""]
-	subtitle_label.text = "%s\n%s" % [
-		district.get("title", "Shipping Runtime"),
-		room.get("objective", "Reach the mailbox.")
-	]
+	var district_id: String = String(room.get("districtId", ""))
+	var district: Dictionary = _get_district_by_id(district_id)
+	_apply_district_palette(district_id)
 
 	var state: Dictionary = engine.get_text_state()
 	var player: Dictionary = state.get("player", {})
+	var room_id: String = String(room.get("id", ""))
 	var layer_names: Array = state.get("layerNames", [])
-	var active_layer := int(state.get("activeLayer", 0))
-	var layer_name: String = String(layer_names[active_layer]) if active_layer >= 0 and active_layer < layer_names.size() else "Layer"
-	var room_id := String(room.get("id", ""))
-	var progress := SaveRuntime.get_room_progress(profile, room_id) if room_id != DEV_PROOF_ROOM_ID else {}
+	var active_layer: int = int(state.get("activeLayer", 0))
+	var is_preview: bool = room_id == DEV_PROOF_ROOM_ID
+	var progress: Dictionary = SaveRuntime.get_room_progress(profile, room_id) if not is_preview else {}
+	var hints_revealed: int = int(progress.get("hintsRevealed", 0)) if not is_preview else 0
 
-	var lines := [
-		"Room: %s" % room.get("id", ""),
-		"Layer: %s (%d/%d)" % [layer_name, active_layer + 1, layer_names.size()],
-		"Player: x%s y%s facing %s" % [player.get("x", 0), player.get("y", 0), player.get("facing", "right")],
-		"Moves: %s" % state.get("moveCount", 0),
-		"Solved: %s" % ("yes" if state.get("solved", false) else "no"),
+	title_label.text = room.get("title", "Patchwork Post")
+	subtitle_label.text = "%s\n%s" % [
+		district.get("title", "Development Preview"),
+		district.get("summary", room.get("objective", "Reach the mailbox.")),
 	]
 
-	if room_id != DEV_PROOF_ROOM_ID:
-		lines.append("Postmarks earned: %d" % SaveRuntime.get_postmark_count(profile, campaign))
-		lines.append("Rooms solved: %d" % SaveRuntime.get_solved_count(profile))
-		lines.append("Attempts on this room: %d" % int(progress.get("attempts", 0)))
-		lines.append("Best moves: %s" % ("-" if progress.get("bestMoves", null) == null else str(progress.get("bestMoves"))))
+	move_label.text = "Moves: %d\nActive layer: %s" % [
+		int(state.get("moveCount", 0)),
+		String(layer_names[active_layer]) if active_layer >= 0 and active_layer < layer_names.size() else "Layer",
+	]
+	progress_label.text = "Postmarks: %d\nSolved rooms: %d / %d%s" % [
+		SaveRuntime.get_postmark_count(profile, campaign),
+		SaveRuntime.get_solved_count(profile),
+		campaign.get("rooms", []).size(),
+		"\nRoute restored" if runtime.get("solved", false) else "",
+	]
+	route_status_label.text = _build_route_status_text(district, room, is_preview)
 
-	lines.append("")
-	lines.append("Switches and doors:")
-	for switch_def in state.get("switches", []):
-		lines.append("  %s at L%d (%d,%d): %s" % [
-			switch_def.get("id", ""),
-			int(switch_def.get("layer", 0)) + 1,
-			switch_def.get("x", 0),
-			switch_def.get("y", 0),
-			"active" if switch_def.get("active", false) else "idle",
-		])
-	for door in state.get("doors", []):
-		lines.append("  %s at L%d (%d,%d): %s" % [
-			door.get("id", ""),
-			int(door.get("layer", 0)) + 1,
-			door.get("x", 0),
-			door.get("y", 0),
-			"open" if door.get("open", false) else "closed",
-		])
-	if state.get("switches", []).is_empty() and state.get("doors", []).is_empty():
-		lines.append("  No linked mechanisms in this room.")
+	objective_label.text = room.get("objective", "Reach the mailbox.")
+	blurb_label.text = room.get("blurb", "Restore the route and keep the folds aligned.")
+	hint_status_label.text = "Hints revealed: %d / 3" % hints_revealed if not is_preview else "Hints are disabled in the proof room."
+	hint_text_label.text = _build_hint_text(room, hints_revealed, is_preview)
 
-	lines.append("")
-	lines.append("Entities:")
-	for entity in state.get("entities", []):
-		lines.append("  %s (%s) on L%d at (%d,%d)" % [
-			entity.get("id", ""),
-			entity.get("type", ""),
-			int(entity.get("layer", 0)) + 1,
-			entity.get("x", 0),
-			entity.get("y", 0),
-		])
-	if state.get("entities", []).is_empty():
-		lines.append("  No entities in this room.")
+	for index in range(hint_buttons.size()):
+		var button: Button = hint_buttons[index]
+		var tier := index + 1
+		button.disabled = is_preview or tier <= hints_revealed
+		match tier:
+			1:
+				button.text = "Shown" if tier <= hints_revealed else "Reframe"
+			2:
+				button.text = "Shown" if tier <= hints_revealed else "Mechanic"
+			3:
+				button.text = "Shown" if tier <= hints_revealed else "Opening"
 
-	info_label.text = "\n".join(lines)
-	controls_label.text = "Move: arrows/WASD | Wait: Space | Switch: Tab | Transfer: X | Undo/Redo: Z/Y | Reset: R | Replay: P | Rooms: [ and ] | Proof room: F8"
+	_rebuild_layer_chips(layer_names, active_layer)
+	_rebuild_route_list(room_id)
+	journal_label.text = _build_notes_text(room, district, player)
+	stats_label.text = _build_stats_text(progress, is_preview)
+	_apply_settings_ui()
+
+	footer_label.text = "Move with arrows or WASD. Space waits, Tab switches layers, X transfers, Z/Y undo-redo, R resets, P replays, [ and ] cycle rooms, and F8 opens the three-layer proof room."
+
+	var can_replay: bool = is_preview or not SaveRuntime.get_room_progress(profile, room_id).get("bestSolution", []).is_empty() or solutions.get("canonicalSolutions", {}).has(room_id)
+	action_buttons["undo"].disabled = not engine.can_undo()
+	action_buttons["redo"].disabled = not engine.can_redo()
+	action_buttons["replay"].disabled = not can_replay
+	action_buttons["story"].disabled = room.get("intro", []).is_empty()
+
+func _build_hint_text(room: Dictionary, hints_revealed: int, is_preview: bool) -> String:
+	if is_preview:
+		return room.get("intro", [])[0].get("text", "This room exists to verify three-layer support.") if not room.get("intro", []).is_empty() else "Development proof room."
+	if hints_revealed == 0:
+		return "Need a nudge? Start with a reframe, then a mechanic read, then a guided opening. The goal is to preserve the aha, not replace it."
+	var hint_lines: Array = []
+	for index in range(hints_revealed):
+		var label := "Reframe"
+		if index == 1:
+			label = "Mechanic"
+		elif index == 2:
+			label = "Opening"
+		hint_lines.append("%s: %s" % [label, room.get("hintTiers", [])[index]])
+	return "\n\n".join(hint_lines)
+
+func _build_route_status_text(district: Dictionary, room: Dictionary, is_preview: bool) -> String:
+	if is_preview:
+		return "Preview room\nNot part of progression"
+	if room.get("optional", false):
+		return "Side route\nOptional mastery"
+	var district_rooms := _get_rooms_for_district(String(room.get("districtId", "")))
+	var solved_main := 0
+	var main_total := 0
+	for candidate in district_rooms:
+		if candidate.get("optional", false):
+			continue
+		main_total += 1
+		if _room_solved(String(candidate.get("id", ""))):
+			solved_main += 1
+	return "%s\nMain route %d / %d" % [district.get("subtitle", "Route status"), solved_main, main_total]
+
+func _build_notes_text(room: Dictionary, district: Dictionary, player: Dictionary) -> String:
+	var intro_line := ""
+	if not room.get("intro", []).is_empty():
+		var intro_beat: Dictionary = room.get("intro", [])[0]
+		intro_line = "%s: %s" % [intro_beat.get("speaker", "Guide"), intro_beat.get("text", "")]
+
+	return "%s\n\n%s\n\nCourier position: (%d, %d), facing %s." % [
+		intro_line,
+		district.get("journalBody", "The town still reads like folded paper."),
+		int(player.get("x", 0)),
+		int(player.get("y", 0)),
+		player.get("facing", "right"),
+	]
+
+func _build_stats_text(progress: Dictionary, is_preview: bool) -> String:
+	if is_preview:
+		return "Development-only room.\nUse it to verify three-sheet routing, active-layer animation, and overlay clarity without progression pressure."
+	return "Attempts: %d\nBest moves: %s\nHints used: %d\nSolved: %s" % [
+		int(progress.get("attempts", 0)),
+		"-" if progress.get("bestMoves", null) == null else str(progress.get("bestMoves")),
+		int(progress.get("hintsRevealed", 0)),
+		"Yes" if progress.get("solved", false) else "No",
+	]
+
+func _rebuild_layer_chips(layer_names: Array, active_layer: int) -> void:
+	for child in layer_chip_row.get_children():
+		child.queue_free()
+
+	for index in range(layer_names.size()):
+		var chip := PanelContainer.new()
+		var fill := Color("f7eedb") if index == active_layer else Color("efe3c8")
+		var border := ACCENT_GOLD if index == active_layer else CARD_BORDER
+		chip.add_theme_stylebox_override("panel", _make_card_style(fill, border, 12))
+		layer_chip_row.add_child(chip)
+
+		var margin := MarginContainer.new()
+		margin.add_theme_constant_override("margin_left", 10)
+		margin.add_theme_constant_override("margin_top", 6)
+		margin.add_theme_constant_override("margin_right", 10)
+		margin.add_theme_constant_override("margin_bottom", 6)
+		chip.add_child(margin)
+
+		var label := Label.new()
+		label.text = String(layer_names[index])
+		_register_scaled_font(label, 12)
+		label.add_theme_color_override("font_color", ACCENT_INK if index == active_layer else ACCENT_MUTED)
+		margin.add_child(label)
+
+func _apply_settings_ui() -> void:
+	if setting_contrast_button != null:
+		setting_contrast_button.set_block_signals(true)
+		setting_contrast_button.button_pressed = bool(profile.get("settings", {}).get("highContrast", false))
+		setting_contrast_button.set_block_signals(false)
+	if setting_motion_button != null:
+		setting_motion_button.set_block_signals(true)
+		setting_motion_button.button_pressed = bool(profile.get("settings", {}).get("reducedMotion", false))
+		setting_motion_button.set_block_signals(false)
+	if setting_font_scale_slider != null:
+		setting_font_scale_slider.set_block_signals(true)
+		setting_font_scale_slider.value = float(profile.get("settings", {}).get("fontScale", 1.0))
+		setting_font_scale_slider.set_block_signals(false)
+	if setting_font_scale_value != null:
+		setting_font_scale_value.text = "%d%%" % int(round(float(profile.get("settings", {}).get("fontScale", 1.0)) * 100.0))
+
+func _apply_profile_settings() -> void:
+	current_font_scale = clampf(float(profile.get("settings", {}).get("fontScale", 1.0)), 0.9, 1.35)
+	for control in scalable_controls:
+		if control == null or not is_instance_valid(control):
+			continue
+		var property_name := String(control.get_meta("patchwork_font_property", "font_size"))
+		var base_size := int(control.get_meta("patchwork_font_base", 14))
+		control.add_theme_font_size_override(property_name, int(round(base_size * current_font_scale)))
+	room_view.set_accessibility(
+		bool(profile.get("settings", {}).get("highContrast", false)),
+		bool(profile.get("settings", {}).get("reducedMotion", false))
+	)
+	_apply_settings_ui()
+
+func _handle_high_contrast_toggled(enabled: bool) -> void:
+	profile.get("settings", {})["highContrast"] = enabled
+	SaveRuntime.save_profile(profile)
+	_apply_profile_settings()
+	_refresh_ui()
+
+func _handle_reduced_motion_toggled(enabled: bool) -> void:
+	profile.get("settings", {})["reducedMotion"] = enabled
+	SaveRuntime.save_profile(profile)
+	_apply_profile_settings()
+	_refresh_ui()
+
+func _handle_font_scale_changed(value: float) -> void:
+	profile.get("settings", {})["fontScale"] = value
+	SaveRuntime.save_profile(profile)
+	_apply_profile_settings()
+	_refresh_ui()
+
+func _apply_district_palette(district_id: String) -> void:
+	var accent := ACCENT_RUST
+	var secondary := ACCENT_MUTED
+	match district_id:
+		"mailroom":
+			accent = Color("c36b4a")
+		"market":
+			accent = Color("b35b56")
+		"greenhouse":
+			accent = Color("6b9a5d")
+		"clocktower":
+			accent = Color("5f7999")
+		"theater":
+			accent = Color("6f5d82")
+		"rooftops":
+			accent = Color("c58f2d")
+		"attic":
+			accent = Color("8b6b4e")
+		_:
+			accent = ACCENT_RUST
+	eyebrow_label.add_theme_color_override("font_color", accent)
+	route_status_label.add_theme_color_override("font_color", accent)
+	for label in card_title_labels:
+		if label != null and is_instance_valid(label):
+			label.add_theme_color_override("font_color", accent)
+	subtitle_label.add_theme_color_override("font_color", secondary)
+
+func _rebuild_route_list(current_room_id: String) -> void:
+	if district_list == null:
+		return
+	for child in district_list.get_children():
+		child.queue_free()
+	route_buttons.clear()
+
+	for district in campaign.get("districts", []):
+		var unlocked := _is_district_unlocked(district)
+		var rooms := _get_rooms_for_district(String(district.get("id", "")))
+		var solved_count := 0
+		for room in rooms:
+			if _room_solved(String(room.get("id", ""))):
+				solved_count += 1
+
+		var card := PanelContainer.new()
+		card.add_theme_stylebox_override("panel", _make_card_style(
+			Color("fff6e8") if unlocked else Color("efe5d4"),
+			CARD_BORDER if unlocked else Color("cbb79a"),
+			18
+		))
+		district_list.add_child(card)
+
+		var margin := MarginContainer.new()
+		margin.add_theme_constant_override("margin_left", 14)
+		margin.add_theme_constant_override("margin_top", 12)
+		margin.add_theme_constant_override("margin_right", 14)
+		margin.add_theme_constant_override("margin_bottom", 12)
+		card.add_child(margin)
+
+		var body := VBoxContainer.new()
+		body.add_theme_constant_override("separation", 8)
+		margin.add_child(body)
+
+		var title := _create_body_label(16, ACCENT_INK)
+		title.text = "%s%s" % [district.get("title", "District"), "" if unlocked else " (Locked)"]
+		body.add_child(title)
+
+		var subtitle := _create_body_label(12, ACCENT_MUTED)
+		subtitle.text = district.get("subtitle", "")
+		body.add_child(subtitle)
+
+		var summary := _create_body_label(12, ACCENT_MUTED)
+		summary.text = district.get("summary", "")
+		body.add_child(summary)
+
+		var badge := _create_body_label(12, ACCENT_RUST if unlocked else ACCENT_MUTED)
+		badge.text = "%d/%d rooms solved" % [solved_count, rooms.size()] if unlocked else "Need %d postmarks" % int(district.get("unlockPostmarks", 0))
+		body.add_child(badge)
+
+		var room_list := VBoxContainer.new()
+		room_list.add_theme_constant_override("separation", 6)
+		body.add_child(room_list)
+
+		for room in rooms:
+			var button := Button.new()
+			var room_id := String(room.get("id", ""))
+			var room_unlocked := unlocked and _is_room_unlocked(room)
+			var room_solved := _room_solved(room_id)
+			button.text = "%s  %s" % [room.get("title", room_id), "(Side)" if room.get("optional", false) else "(Main)"]
+			button.disabled = not room_unlocked
+			button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+			var fill := Color("eef3df") if room_solved else Color("f4ead1")
+			if room_id == current_room_id:
+				fill = Color("f7eed6")
+			if not room_unlocked:
+				fill = Color("e9decd")
+			var border := ACCENT_GOLD if room_id == current_room_id else (ACCENT_GREEN if room_solved else CARD_BORDER)
+			_style_button(button, fill, border, ACCENT_INK)
+			button.pressed.connect(_load_room.bind(room_id, true))
+			room_list.add_child(button)
+			route_buttons[room_id] = button
+
+func _start_room_transition() -> void:
+	transition_time_left = 0.42 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 0.08
+	transition_overlay.visible = true
+
+func _show_dialogue_for_current_room() -> void:
+	if engine == null:
+		return
+	var room: Dictionary = engine.get_room()
+	if room.is_empty() or room.get("intro", []).is_empty():
+		dialogue_panel.visible = false
+		dialogue_time_left = 0.0
+		return
+	var beat: Dictionary = room.get("intro", [])[0]
+	dialogue_speaker_label.text = String(beat.get("speaker", "Guide")).to_upper()
+	dialogue_text_label.text = String(beat.get("text", ""))
+	dialogue_panel.visible = true
+	dialogue_time_left = 6.0 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 3.0
+
+func _show_toast(message: String) -> void:
+	toast_label.text = message
+	toast_panel.visible = true
+	toast_time_left = 3.2 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 2.2
+
+func _show_solve_banner(room: Dictionary) -> void:
+	solve_title_label.text = "Route Restored"
+	solve_subtitle_label.text = "%s is back in circulation." % room.get("title", "The route")
+	solve_panel.visible = true
+	solve_time_left = 2.2 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 1.0
+	if audio_manager != null:
+		audio_manager.play_event("solve")
+
+func _handle_unlock_changes(before_snapshot: Dictionary, after_snapshot: Dictionary) -> void:
+	var new_districts: Array = []
+	for district_id in after_snapshot.get("districts", []):
+		if not before_snapshot.get("districts", []).has(district_id):
+			new_districts.append(district_id)
+	var new_rooms: Array = []
+	for room_id in after_snapshot.get("rooms", []):
+		if not before_snapshot.get("rooms", []).has(room_id):
+			new_rooms.append(room_id)
+
+	if not new_districts.is_empty():
+		var district := _get_district_by_id(String(new_districts[0]))
+		_show_toast("District unlocked: %s. A fresh route sheet is ready on the map." % district.get("title", "New district"))
+	elif not new_rooms.is_empty():
+		var unlocked_room := ContentLoader.get_room_by_id(campaign, String(new_rooms[0]))
+		_show_toast("New route unlocked: %s." % unlocked_room.get("title", "Room"))
+
+func _update_overlay_state(delta: float) -> void:
+	var reduced_motion := bool(profile.get("settings", {}).get("reducedMotion", false))
+	if transition_overlay != null:
+		if transition_time_left > 0.0:
+			transition_time_left = maxf(0.0, transition_time_left - delta)
+			var progress := transition_time_left / (0.08 if reduced_motion else 0.42)
+			transition_overlay.color.a = progress * 0.48
+		else:
+			transition_overlay.color.a = 0.0
+			transition_overlay.visible = false
+
+	if dialogue_panel != null:
+		if dialogue_time_left > 0.0:
+			dialogue_time_left = maxf(0.0, dialogue_time_left - delta)
+			dialogue_panel.visible = true
+			dialogue_panel.modulate.a = minf(1.0, dialogue_panel.modulate.a + delta * (10.0 if reduced_motion else 6.0))
+		else:
+			dialogue_panel.modulate.a = maxf(0.0, dialogue_panel.modulate.a - delta * (18.0 if reduced_motion else 7.0))
+			dialogue_panel.visible = dialogue_panel.modulate.a > 0.01
+
+	if toast_panel != null:
+		if toast_time_left > 0.0:
+			toast_time_left = maxf(0.0, toast_time_left - delta)
+			toast_panel.visible = true
+			toast_panel.modulate.a = minf(1.0, toast_panel.modulate.a + delta * 8.0)
+		else:
+			toast_panel.modulate.a = maxf(0.0, toast_panel.modulate.a - delta * 8.0)
+			toast_panel.visible = toast_panel.modulate.a > 0.01
+
+	if solve_panel != null:
+		if solve_time_left > 0.0:
+			solve_time_left = maxf(0.0, solve_time_left - delta)
+			solve_panel.visible = true
+			solve_panel.modulate.a = minf(1.0, solve_panel.modulate.a + delta * 7.0)
+		else:
+			solve_panel.modulate.a = maxf(0.0, solve_panel.modulate.a - delta * 8.0)
+			solve_panel.visible = solve_panel.modulate.a > 0.01

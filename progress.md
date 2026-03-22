@@ -34,14 +34,30 @@ Notes
   - verified `npm test` passes for all current canonical rooms, replay behavior, undo/redo/reset behavior, and the three-layer proof room
   - verified `npm run test:godot` passes for canonical room replays, undo/redo/reset behavior, replay behavior, and the three-layer proof room in the native runtime
   - verified the Godot main scene boots headlessly without script errors
-- Batch 1 remaining gaps:
-  - the native presentation is intentionally minimal and debug-oriented; final-feel rendering belongs to Batch 2
-  - export templates and Steam integration are not configured yet
-  - the cross-runtime content source of truth still originates in the JS authoring files and exports into `godot/data/generated/`
+  - completed Batch 1 cleanup by moving shared authoring data into `data/source/` and generating both browser and Godot outputs from that source
+  - added `scripts/sync-content.mjs` and generated browser modules in `src/content/generated/`
+  - added root repo documentation in `README.md`
+  - added GitHub Actions CI in `.github/workflows/ci.yml`
+  - added reusable Godot setup tooling in `scripts/godot-paths.mjs`, `scripts/verify-godot-setup.mjs`, and `scripts/install-godot-export-templates.ps1`
+  - installed official Godot export templates locally and verified them with `npm run verify:godot`
+- Batch 1 status:
+  - complete
+- Batch 2 progress:
+  - completed the vertical-slice presentation pass in the native runtime
+  - expanded the Godot shell into a three-column game layout with route-map navigation, room HUD, dialogue overlays, toast notifications, solve banners, and in-game settings
+  - upgraded the Godot board renderer into a district-themed papercraft presentation with stitched seam connectors, torn edges, layered lift shadows, animated active-sheet focus, and stronger interactable silhouettes
+  - added accessibility wiring for high contrast, reduced motion, and font scaling in the shipping runtime
+  - added first-pass procedural audio for move, push, switch, transfer, hint, reset, room-enter, and solve feedback
+  - added a Batch 2 UI smoke test in `godot/scripts/tests/run_batch2_ui_smoke.gd`
+  - documented the vertical-slice presentation direction in `docs/batch-2-ui-style-guide.md` and `docs/batch-2-audio-style-guide.md`
+  - verified `npm test`, `npm run test:godot`, and a headless boot of the main Godot scene all pass after the visual/UX changes
+
+- Batch 2 status:
+  - complete for the current vertical slice
 
 TODO
 - Expand the prototype into the full planned campaign size with many more rooms, district beats, and difficulty ramps.
 - Add richer room-editor affordances beyond raw JSON editing, including drag-and-drop placement and better visual layer inspection.
-- Decide whether to migrate authoring data fully into engine-agnostic JSON during Batch 1 cleanup or leave the JS authoring files as the source until the editor arrives in Batch 3.
-- Install Godot export templates before the first real desktop export pass.
+- Start Batch 3 by building the room editor, validation browser, and balance metadata workflow inside Godot.
+- Decide how much of the browser prototype UI should continue to evolve versus freezing it as a mechanics reference while Godot becomes the clear primary runtime.
 - Add Steam-specific production hooks later, such as achievement plumbing, export targets, and cloud-save integration on the shipping runtime.

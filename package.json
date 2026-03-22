@@ -4,10 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "sync:godot-data": "node scripts/export-godot-content.mjs",
+    "install:godot-templates": "powershell -ExecutionPolicy Bypass -File scripts/install-godot-export-templates.ps1",
+    "sync:content": "node scripts/sync-content.mjs",
+    "sync:godot-data": "npm run sync:content",
     "start": "node server.mjs",
     "test": "node --test",
-    "test:godot": "node scripts/run-godot-tests.mjs"
+    "test:godot": "node scripts/run-godot-tests.mjs",
+    "verify:godot": "node scripts/verify-godot-setup.mjs"
   },
   "dependencies": {
     "playwright": "^1.58.2"

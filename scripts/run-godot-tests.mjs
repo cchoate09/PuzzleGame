@@ -1,31 +1,9 @@
 import { spawnSync } from "node:child_process";
-import fs from "node:fs";
 import path from "node:path";
+import { findGodotConsole } from "./godot-paths.mjs";
 
 const rootDir = path.resolve(".");
 const projectDir = path.join(rootDir, "godot");
-
-function findGodotConsole() {
-  const candidates = [
-    process.env.GODOT_CONSOLE_PATH,
-    path.join(
-      process.env.LOCALAPPDATA || "",
-      "Microsoft",
-      "WinGet",
-      "Packages",
-      "GodotEngine.GodotEngine_Microsoft.Winget.Source_8wekyb3d8bbwe",
-      "Godot_v4.6.1-stable_win64_console.exe"
-    ),
-  ].filter(Boolean);
-
-  for (const candidate of candidates) {
-    if (candidate && fs.existsSync(candidate)) {
-      return candidate;
-    }
-  }
-
-  return null;
-}
 
 function run(command, args) {
   const result = spawnSync(command, args, {
@@ -49,11 +27,18 @@ if (!godotConsole) {
   process.exit(1);
 }
 
-run(process.execPath, [path.join("scripts", "export-godot-content.mjs")]);
+run(process.execPath, [path.join("scripts", "sync-content.mjs")]);
 run(godotConsole, [
   "--headless",
   "--path",
   projectDir,
   "--script",
   "res://scripts/tests/run_batch1_tests.gd",
+]);
+run(godotConsole, [
+  "--headless",
+  "--path",
+  projectDir,
+  "--script",
+  "res://scripts/tests/run_batch2_ui_smoke.gd",
 ]);
