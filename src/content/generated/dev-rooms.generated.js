@@ -17,6 +17,12 @@ export const THREE_LAYER_PROOF_ROOM = {
       "text": "This room exists to prove that the shipping schema and simulation can support three real layers."
     }
   ],
+  "balance": {
+    "intendedLesson": "Confirm that three aligned stitch points support readable traversal across every layer in the runtime.",
+    "targetDifficulty": 2,
+    "expectedSolveMinutes": 1.5,
+    "commonMisunderstanding": "Players may assume the first stitch reaches the final layer, but the route requires changing layers twice."
+  },
   "hintTiers": [
     "The top stitch only gets you to the middle sheet. You need the lower stitch to reach the final sheet.",
     "Switch on the top stitch first, walk down to the lower stitch on the middle sheet, then switch again.",

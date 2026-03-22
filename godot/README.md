@@ -1,6 +1,6 @@
 # Patchwork Post Godot Runtime
 
-This directory is the native Godot 4 runtime for Patchwork Post. Batch 1 established the production base; Batch 2 now carries the first near-final vertical-slice presentation pass.
+This directory is the native Godot 4 runtime for Patchwork Post. Batch 1 established the production base, Batch 2 delivered the first near-final vertical-slice presentation pass, and Batch 3 added the internal content-production toolchain.
 
 ## Current Scope
 
@@ -13,7 +13,9 @@ This directory is the native Godot 4 runtime for Patchwork Post. Batch 1 establi
 - room HUD with dialogue cards, solve banners, toasts, hints, notes, settings, and action tools
 - accessibility toggles for high contrast, reduced motion, and font scaling
 - first-pass procedural interaction audio
-- headless regression runner for canonical solutions plus a UI smoke test
+- in-engine room authoring dock with tile painting, layer management, metadata editing, entity placement, switch-door linking, validation, and balance review
+- local playtest telemetry summaries for internal iteration
+- headless regression runner for canonical solutions, UI smoke coverage, and authoring-tool coverage
 
 ## Commands
 
@@ -36,6 +38,7 @@ To open the runtime manually, launch the Godot editor against [project.godot](C:
 ## Notes
 
 - This runtime is now the primary vertical-slice surface for presentation work.
+- Authoring workflow details are documented in [batch-3-authoring-workflow.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-3-authoring-workflow.md).
 - Visual and audio direction notes are documented in:
   - [batch-2-ui-style-guide.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-2-ui-style-guide.md)
   - [batch-2-audio-style-guide.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-2-audio-style-guide.md)

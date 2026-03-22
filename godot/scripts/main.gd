@@ -13,19 +13,26 @@ const ACCENT_RUST := Color("cf6d49")
 const ContentLoader = preload("res://scripts/core/content_loader.gd")
 const SaveRuntime = preload("res://scripts/core/patchwork_save.gd")
 const EngineScript = preload("res://scripts/core/patchwork_engine.gd")
+const ContentRepository = preload("res://scripts/core/content_repository.gd")
 const RoomViewScript = preload("res://scripts/ui/room_view.gd")
 const AudioManagerScript = preload("res://scripts/ui/audio_manager.gd")
+const PlaytestLoggerScript = preload("res://scripts/tools/playtest_logger.gd")
+const AuthoringDockScript = preload("res://scripts/tools/room_authoring_dock.gd")
 
 var campaign: Dictionary = {}
 var dev_rooms: Dictionary = {}
 var solutions: Dictionary = {}
+var source_campaign: Dictionary = {}
 var profile: Dictionary = {}
 var engine
 var audio_manager
+var playtest_logger
+var authoring_dock
 var room_ids: Array = []
 var current_room_index: int = 0
 var current_font_scale: float = 1.0
 var last_room_id: String = ""
+var authoring_context_room_id: String = ""
 var last_solved_state := false
 var transition_time_left := 0.0
 var toast_time_left := 0.0
@@ -79,7 +86,9 @@ func _ready() -> void:
 	campaign = ContentLoader.load_campaign_index()
 	dev_rooms = ContentLoader.load_dev_rooms()
 	solutions = ContentLoader.load_solutions()
+	source_campaign = ContentRepository.load_source_campaign()
 	profile = SaveRuntime.load_profile()
+	playtest_logger = PlaytestLoggerScript.new()
 	_apply_profile_settings()
 
 	if campaign.is_empty():
@@ -101,6 +110,10 @@ func _process(delta: float) -> void:
 	if engine.is_replaying():
 		engine.update(delta * 1000.0)
 		_refresh_ui()
+
+func _exit_tree() -> void:
+	if playtest_logger != null:
+		playtest_logger.abandon_current("quit")
 
 func _unhandled_input(event: InputEvent) -> void:
 	if engine == null or event.is_echo():
@@ -453,6 +466,14 @@ func _build_ui() -> void:
 	_add_action_button(action_grid, "replay", "Replay", Color("dbead8"), _play_replay)
 	_add_action_button(action_grid, "story", "Story Beat", Color("efe2f0"), _show_dialogue_for_current_room)
 
+	authoring_dock = AuthoringDockScript.new()
+	authoring_dock.custom_minimum_size = Vector2(0, 320)
+	authoring_dock.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	authoring_dock.campaign_saved.connect(_handle_authoring_campaign_saved)
+	authoring_dock.preview_requested.connect(_handle_authoring_preview_requested)
+	authoring_dock.room_load_requested.connect(_handle_authoring_room_load_requested)
+	layout.add_child(authoring_dock)
+
 	footer_label = Label.new()
 	footer_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_register_scaled_font(footer_label, 13)
@@ -663,6 +684,8 @@ func _load_room(room_id: String, restore_snapshot: bool) -> void:
 	if room_id == DEV_PROOF_ROOM_ID:
 		var proof_room: Dictionary = dev_rooms.get("threeLayerProofRoom", {})
 		if not proof_room.is_empty():
+			if playtest_logger != null:
+				playtest_logger.abandon_current("proof_room")
 			engine.load_preview_room(proof_room)
 			last_room_id = DEV_PROOF_ROOM_ID
 			last_solved_state = false
@@ -686,7 +709,10 @@ func _load_room(room_id: String, restore_snapshot: bool) -> void:
 	progress["attempts"] = int(progress.get("attempts", 0)) + 1
 	engine.load_room(room_id, snapshot)
 	last_room_id = room_id
+	authoring_context_room_id = room_id
 	last_solved_state = bool(engine.get_runtime().get("solved", false))
+	if playtest_logger != null:
+		playtest_logger.begin_room(room)
 	profile["lastRoomId"] = room_id
 	SaveRuntime.save_profile(profile)
 	room_view.begin_room_intro()
@@ -704,6 +730,10 @@ func _dispatch_room_action(action: Dictionary) -> void:
 	if not changed:
 		return
 	dialogue_time_left = minf(dialogue_time_left, 0.18)
+	if playtest_logger != null:
+		playtest_logger.record_action(action)
+		if String(action.get("type", "")) == "reset":
+			playtest_logger.record_reset()
 	var audio_event := _determine_audio_event(action, previous_runtime, engine.get_runtime())
 	if audio_manager != null and not audio_event.is_empty():
 		audio_manager.play_event(audio_event)
@@ -723,17 +753,47 @@ func _play_replay() -> void:
 		_show_toast("Replaying the saved route. Watch how the layer relationships unfold.")
 		_refresh_ui()
 
+func _is_preview_runtime() -> bool:
+	return engine != null and String(engine.get_text_state().get("mode", "")) == "preview"
+
 func _handle_hint_request(tier: int) -> void:
 	var room: Dictionary = engine.get_room()
 	var room_id: String = String(room.get("id", ""))
-	if room_id.is_empty() or room_id == DEV_PROOF_ROOM_ID:
+	if room_id.is_empty() or _is_preview_runtime():
 		return
 	SaveRuntime.reveal_hint(profile, room_id, tier)
 	SaveRuntime.save_profile(profile)
+	if playtest_logger != null:
+		playtest_logger.record_hint(tier)
 	if audio_manager != null:
 		audio_manager.play_event("hint")
 	_show_toast("Hint %d revealed. The help escalates from reframing to a guided opening." % tier)
 	_refresh_ui()
+
+func _handle_authoring_preview_requested(room_data: Dictionary) -> void:
+	if engine == null or room_data.is_empty():
+		return
+	engine.load_preview_room(room_data)
+	room_view.begin_room_intro()
+	_start_room_transition()
+	_show_toast("Previewing draft room %s." % room_data.get("id", ""))
+	_refresh_ui()
+
+func _handle_authoring_room_load_requested(room_id: String) -> void:
+	if ContentLoader.get_room_by_id(campaign, room_id).is_empty():
+		_show_toast("Save the draft first to load it into the campaign runtime.")
+		return
+	_load_room(room_id, false)
+
+func _handle_authoring_campaign_saved(next_campaign: Dictionary, next_source_campaign: Dictionary, active_room_id: String) -> void:
+	campaign = next_campaign.duplicate(true)
+	source_campaign = next_source_campaign.duplicate(true)
+	engine = EngineScript.new(campaign)
+	room_ids = ContentLoader.get_room_order(campaign)
+	route_unlock_snapshot = _capture_unlock_snapshot()
+	authoring_context_room_id = active_room_id
+	_show_toast("Saved authoring changes for %s." % active_room_id)
+	_load_room(active_room_id, false)
 
 func _determine_audio_event(action: Dictionary, previous_runtime: Dictionary, current_runtime: Dictionary) -> String:
 	match String(action.get("type", "")):
@@ -778,7 +838,7 @@ func _after_state_change(action: Dictionary = {}, previous_runtime: Dictionary =
 	var room_id: String = String(room.get("id", ""))
 	var unlocked_before: Dictionary = route_unlock_snapshot.duplicate(true)
 	var was_solved := _room_solved(room_id)
-	if room_id != DEV_PROOF_ROOM_ID:
+	if not _is_preview_runtime():
 		var progress_before: Dictionary = SaveRuntime.get_room_progress(profile, room_id)
 		if engine.get_runtime().get("solved", false):
 			SaveRuntime.complete_room(profile, room, engine.get_runtime())
@@ -794,6 +854,8 @@ func _after_state_change(action: Dictionary = {}, previous_runtime: Dictionary =
 
 	route_unlock_snapshot = _capture_unlock_snapshot()
 	if bool(engine.get_runtime().get("solved", false)) and not was_solved:
+		if playtest_logger != null:
+			playtest_logger.complete_room(engine.get_runtime())
 		room_view.trigger_solve_flash()
 		_show_solve_banner(room)
 		_handle_unlock_changes(unlocked_before, route_unlock_snapshot)
@@ -821,7 +883,7 @@ func _refresh_ui() -> void:
 	var room_id: String = String(room.get("id", ""))
 	var layer_names: Array = state.get("layerNames", [])
 	var active_layer: int = int(state.get("activeLayer", 0))
-	var is_preview: bool = room_id == DEV_PROOF_ROOM_ID
+	var is_preview: bool = _is_preview_runtime()
 	var progress: Dictionary = SaveRuntime.get_room_progress(profile, room_id) if not is_preview else {}
 	var hints_revealed: int = int(progress.get("hintsRevealed", 0)) if not is_preview else 0
 
@@ -873,6 +935,14 @@ func _refresh_ui() -> void:
 	action_buttons["redo"].disabled = not engine.can_redo()
 	action_buttons["replay"].disabled = not can_replay
 	action_buttons["story"].disabled = room.get("intro", []).is_empty()
+	if authoring_dock != null and not source_campaign.is_empty():
+		var target_room_id: String = room_id if not is_preview else authoring_context_room_id
+		var telemetry_summary: Dictionary = playtest_logger.summarize(campaign) if playtest_logger != null else {}
+		if target_room_id != authoring_context_room_id:
+			authoring_context_room_id = target_room_id
+			authoring_dock.set_context(campaign, source_campaign, target_room_id, telemetry_summary)
+		else:
+			authoring_dock.update_playtest_summary(telemetry_summary)
 
 func _build_hint_text(room: Dictionary, hints_revealed: int, is_preview: bool) -> String:
 	if is_preview:

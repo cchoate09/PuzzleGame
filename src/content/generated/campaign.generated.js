@@ -144,7 +144,13 @@ export const ROOM_DEFS = [
     },
     "entities": [],
     "switches": [],
-    "doors": []
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach stitched layer switching as the core route-solving verb.",
+      "targetDifficulty": 1,
+      "expectedSolveMinutes": 2,
+      "commonMisunderstanding": "Players over-search the front sheet instead of treating the stitch as required progress."
+    }
   },
   {
     "id": "mailroom-02",
@@ -210,7 +216,13 @@ export const ROOM_DEFS = [
       }
     ],
     "switches": [],
-    "doors": []
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach parcel transfer as a cleaner alternative to pushing.",
+      "targetDifficulty": 1,
+      "expectedSolveMinutes": 2,
+      "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
+    }
   },
   {
     "id": "market-01",
@@ -293,7 +305,13 @@ export const ROOM_DEFS = [
           "market-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Teach persistent door pressure with parcels and cross-layer route payoff.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players carry the parcel around instead of parking it on the plate first."
+    }
   },
   {
     "id": "market-side-01",
@@ -377,7 +395,13 @@ export const ROOM_DEFS = [
           "side-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Reinforce transfer by hiding the switch on a different layer.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players hunt for a walking path to the plate instead of moving the parcel onto it."
+    }
   },
   {
     "id": "greenhouse-01",
@@ -450,7 +474,13 @@ export const ROOM_DEFS = [
       }
     ],
     "switches": [],
-    "doors": []
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach projector alignment and same-coordinate bridge projection.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+    }
   },
   {
     "id": "clocktower-01",
@@ -535,7 +565,13 @@ export const ROOM_DEFS = [
           "clock-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Teach echo timing and the value of a wait action.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
+    }
   },
   {
     "id": "theater-01",
@@ -619,7 +655,13 @@ export const ROOM_DEFS = [
           "stage-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Teach mirrored shadow movement and planning for a separate actor.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
+    }
   },
   {
     "id": "rooftops-01",
@@ -719,7 +761,13 @@ export const ROOM_DEFS = [
           "roof-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Combine parcel parking, layer switching, and projection in one route.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 6,
+      "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
+    }
   },
   {
     "id": "attic-01",
@@ -804,7 +852,13 @@ export const ROOM_DEFS = [
           "attic-latch"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Teach sticky latches plus shadow setup in a short optional mastery room.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
+    }
   }
 ];
 export const ROOM_LOOKUP = {
@@ -863,7 +917,13 @@ export const ROOM_LOOKUP = {
     },
     "entities": [],
     "switches": [],
-    "doors": []
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach stitched layer switching as the core route-solving verb.",
+      "targetDifficulty": 1,
+      "expectedSolveMinutes": 2,
+      "commonMisunderstanding": "Players over-search the front sheet instead of treating the stitch as required progress."
+    }
   },
   "mailroom-02": {
     "id": "mailroom-02",
@@ -929,7 +989,13 @@ export const ROOM_LOOKUP = {
       }
     ],
     "switches": [],
-    "doors": []
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach parcel transfer as a cleaner alternative to pushing.",
+      "targetDifficulty": 1,
+      "expectedSolveMinutes": 2,
+      "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
+    }
   },
   "market-01": {
     "id": "market-01",
@@ -1012,7 +1078,13 @@ export const ROOM_LOOKUP = {
           "market-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Teach persistent door pressure with parcels and cross-layer route payoff.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players carry the parcel around instead of parking it on the plate first."
+    }
   },
   "market-side-01": {
     "id": "market-side-01",
@@ -1096,7 +1168,13 @@ export const ROOM_LOOKUP = {
           "side-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Reinforce transfer by hiding the switch on a different layer.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players hunt for a walking path to the plate instead of moving the parcel onto it."
+    }
   },
   "greenhouse-01": {
     "id": "greenhouse-01",
@@ -1169,7 +1247,13 @@ export const ROOM_LOOKUP = {
       }
     ],
     "switches": [],
-    "doors": []
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach projector alignment and same-coordinate bridge projection.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+    }
   },
   "clocktower-01": {
     "id": "clocktower-01",
@@ -1254,7 +1338,13 @@ export const ROOM_LOOKUP = {
           "clock-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Teach echo timing and the value of a wait action.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
+    }
   },
   "theater-01": {
     "id": "theater-01",
@@ -1338,7 +1428,13 @@ export const ROOM_LOOKUP = {
           "stage-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Teach mirrored shadow movement and planning for a separate actor.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
+    }
   },
   "rooftops-01": {
     "id": "rooftops-01",
@@ -1438,7 +1534,13 @@ export const ROOM_LOOKUP = {
           "roof-plate"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Combine parcel parking, layer switching, and projection in one route.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 6,
+      "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
+    }
   },
   "attic-01": {
     "id": "attic-01",
@@ -1523,7 +1625,13 @@ export const ROOM_LOOKUP = {
           "attic-latch"
         ]
       }
-    ]
+    ],
+    "balance": {
+      "intendedLesson": "Teach sticky latches plus shadow setup in a short optional mastery room.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
+    }
   }
 };
 export const CAMPAIGN_INDEX = {
@@ -1670,7 +1778,13 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [],
       "switches": [],
-      "doors": []
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach stitched layer switching as the core route-solving verb.",
+        "targetDifficulty": 1,
+        "expectedSolveMinutes": 2,
+        "commonMisunderstanding": "Players over-search the front sheet instead of treating the stitch as required progress."
+      }
     },
     {
       "id": "mailroom-02",
@@ -1736,7 +1850,13 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "switches": [],
-      "doors": []
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach parcel transfer as a cleaner alternative to pushing.",
+        "targetDifficulty": 1,
+        "expectedSolveMinutes": 2,
+        "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
+      }
     },
     {
       "id": "market-01",
@@ -1819,7 +1939,13 @@ export const CAMPAIGN_INDEX = {
             "market-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Teach persistent door pressure with parcels and cross-layer route payoff.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players carry the parcel around instead of parking it on the plate first."
+      }
     },
     {
       "id": "market-side-01",
@@ -1903,7 +2029,13 @@ export const CAMPAIGN_INDEX = {
             "side-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Reinforce transfer by hiding the switch on a different layer.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players hunt for a walking path to the plate instead of moving the parcel onto it."
+      }
     },
     {
       "id": "greenhouse-01",
@@ -1976,7 +2108,13 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "switches": [],
-      "doors": []
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach projector alignment and same-coordinate bridge projection.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+      }
     },
     {
       "id": "clocktower-01",
@@ -2061,7 +2199,13 @@ export const CAMPAIGN_INDEX = {
             "clock-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Teach echo timing and the value of a wait action.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
+      }
     },
     {
       "id": "theater-01",
@@ -2145,7 +2289,13 @@ export const CAMPAIGN_INDEX = {
             "stage-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Teach mirrored shadow movement and planning for a separate actor.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
+      }
     },
     {
       "id": "rooftops-01",
@@ -2245,7 +2395,13 @@ export const CAMPAIGN_INDEX = {
             "roof-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Combine parcel parking, layer switching, and projection in one route.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 6,
+        "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
+      }
     },
     {
       "id": "attic-01",
@@ -2330,7 +2486,13 @@ export const CAMPAIGN_INDEX = {
             "attic-latch"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Teach sticky latches plus shadow setup in a short optional mastery room.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
+      }
     }
   ],
   "roomsById": {
@@ -2389,7 +2551,13 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [],
       "switches": [],
-      "doors": []
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach stitched layer switching as the core route-solving verb.",
+        "targetDifficulty": 1,
+        "expectedSolveMinutes": 2,
+        "commonMisunderstanding": "Players over-search the front sheet instead of treating the stitch as required progress."
+      }
     },
     "mailroom-02": {
       "id": "mailroom-02",
@@ -2455,7 +2623,13 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "switches": [],
-      "doors": []
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach parcel transfer as a cleaner alternative to pushing.",
+        "targetDifficulty": 1,
+        "expectedSolveMinutes": 2,
+        "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
+      }
     },
     "market-01": {
       "id": "market-01",
@@ -2538,7 +2712,13 @@ export const CAMPAIGN_INDEX = {
             "market-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Teach persistent door pressure with parcels and cross-layer route payoff.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players carry the parcel around instead of parking it on the plate first."
+      }
     },
     "market-side-01": {
       "id": "market-side-01",
@@ -2622,7 +2802,13 @@ export const CAMPAIGN_INDEX = {
             "side-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Reinforce transfer by hiding the switch on a different layer.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players hunt for a walking path to the plate instead of moving the parcel onto it."
+      }
     },
     "greenhouse-01": {
       "id": "greenhouse-01",
@@ -2695,7 +2881,13 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "switches": [],
-      "doors": []
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach projector alignment and same-coordinate bridge projection.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+      }
     },
     "clocktower-01": {
       "id": "clocktower-01",
@@ -2780,7 +2972,13 @@ export const CAMPAIGN_INDEX = {
             "clock-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Teach echo timing and the value of a wait action.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
+      }
     },
     "theater-01": {
       "id": "theater-01",
@@ -2864,7 +3062,13 @@ export const CAMPAIGN_INDEX = {
             "stage-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Teach mirrored shadow movement and planning for a separate actor.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
+      }
     },
     "rooftops-01": {
       "id": "rooftops-01",
@@ -2964,7 +3168,13 @@ export const CAMPAIGN_INDEX = {
             "roof-plate"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Combine parcel parking, layer switching, and projection in one route.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 6,
+        "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
+      }
     },
     "attic-01": {
       "id": "attic-01",
@@ -3049,7 +3259,13 @@ export const CAMPAIGN_INDEX = {
             "attic-latch"
           ]
         }
-      ]
+      ],
+      "balance": {
+        "intendedLesson": "Teach sticky latches plus shadow setup in a short optional mastery room.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
+      }
     }
   }
 };

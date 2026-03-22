@@ -22,6 +22,7 @@ This document locks the v1 room data shape for Batch 1. The schema is based on t
   intro: DialogueBeat[],
   achievementId?: string,
   hintTiers: [string, string, string],
+  balance: BalanceMetadata,
   layers: RoomLayer[],
   start: PlayerStart,
   entities: Entity[],
@@ -118,6 +119,17 @@ Rules:
 }
 ```
 
+### `BalanceMetadata`
+
+```js
+{
+  intendedLesson: string,
+  targetDifficulty: 1 | 2 | 3 | 4 | 5,
+  expectedSolveMinutes: number,
+  commonMisunderstanding: string,
+}
+```
+
 ## Tile Vocabulary
 
 Supported v1 tiles:
@@ -146,20 +158,14 @@ Rules:
 
 ## Authoring Metadata Expectations
 
-Every shipping room should also carry design metadata, even if the current runtime does not consume it yet.
+Every shipping room is expected to carry balance metadata for the Batch 3 tooling pass. The Godot validator now treats missing balance metadata as a structural error, and the in-engine balance browser uses it to compare rooms across districts.
 
-Recommended additions for production authoring:
+Guidelines:
 
-```js
-{
-  intendedLesson: string,
-  targetDifficulty: "intro" | "easy" | "medium" | "hard" | "expert",
-  expectedSolveMinutes: number,
-  commonFailureMode: string,
-}
-```
-
-These are not required by the current prototype, but they should be added before large-scale content production.
+- `intendedLesson` should describe the specific concept or interaction the room teaches.
+- `targetDifficulty` should use a 1 to 5 scale so design and playtest data line up cleanly.
+- `expectedSolveMinutes` should reflect a first-solve target for players at the room's intended point in the campaign.
+- `commonMisunderstanding` should capture the most likely false assumption or wrong read the puzzle creates.
 
 ## Save Snapshot Contract
 

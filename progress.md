@@ -54,10 +54,33 @@ Notes
 
 - Batch 2 status:
   - complete for the current vertical slice
+- Batch 3 progress:
+  - added a Godot-side content repository in `godot/scripts/core/content_repository.gd` so authored rooms can be loaded and saved directly from `data/source/campaign.json`
+  - upgraded `godot/scripts/core/patchwork_validator.gd` from basic structural checks into a richer report with errors, warnings, infos, metrics, reachability checks, linkage checks, and balance metadata validation
+  - added `godot/scripts/tools/playtest_logger.gd` to capture local internal telemetry for attempts, solves, resets, hint use, and abandonment
+  - built an in-engine authoring dock in `godot/scripts/tools/room_authoring_dock.gd` with:
+    - district room browser
+    - live room preview
+    - visual tile painting
+    - start, entity, switch, and door placement
+    - structure editing for room resize and layer add/remove
+    - hint and metadata authoring
+    - switch-door linking
+    - validation summaries
+    - balance and playtest browser tabs
+  - integrated the authoring dock into the shipping runtime through `godot/scripts/main.gd`
+  - added Batch 3 regression coverage in `godot/scripts/tests/run_batch3_tools_tests.gd`
+  - expanded `scripts/run-godot-tests.mjs` so `npm run test:godot` now runs Batch 1, Batch 2, and Batch 3 coverage in one pass
+  - added required balance metadata to all current campaign rooms and the three-layer proof room
+  - documented the new toolchain in `docs/batch-3-authoring-workflow.md`
+  - verified `npm test`, `npm run test:godot`, `npm run verify:godot`, and a headless boot of the Godot main scene all pass after the tooling changes
+
+- Batch 3 status:
+  - complete for the current internal content-production scope
 
 TODO
 - Expand the prototype into the full planned campaign size with many more rooms, district beats, and difficulty ramps.
-- Add richer room-editor affordances beyond raw JSON editing, including drag-and-drop placement and better visual layer inspection.
-- Start Batch 3 by building the room editor, validation browser, and balance metadata workflow inside Godot.
+- Push into Batch 4: richer hint UX, controller-only navigation polish, Steam-facing support hooks, and a stronger demo-ready accessibility pass.
+- Add richer room-editor ergonomics over time, such as drag placement, copy/paste, and faster layer inspection, if content production exposes pain points.
 - Decide how much of the browser prototype UI should continue to evolve versus freezing it as a mechanics reference while Godot becomes the clear primary runtime.
 - Add Steam-specific production hooks later, such as achievement plumbing, export targets, and cloud-save integration on the shipping runtime.

@@ -42,3 +42,10 @@ run(godotConsole, [
   "--script",
   "res://scripts/tests/run_batch2_ui_smoke.gd",
 ]);
+run(godotConsole, [
+  "--headless",
+  "--path",
+  projectDir,
+  "--script",
+  "res://scripts/tests/run_batch3_tools_tests.gd",
+]);
