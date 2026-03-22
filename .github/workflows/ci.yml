@@ -7,13 +7,15 @@ on:
 jobs:
   test:
     runs-on: windows-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Check Out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set Up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
