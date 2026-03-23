@@ -127,6 +127,53 @@ export function validateRoom(room) {
     }
   }
 
+  const routingStampIds = new Set();
+  const routingStampLocations = new Set();
+  for (const stamp of room.routingStamps || []) {
+    if (!stamp?.id) {
+      issues.push("A routing stamp is missing its id.");
+    } else if (routingStampIds.has(stamp.id)) {
+      issues.push(`Duplicate routing stamp id '${stamp.id}'.`);
+    }
+    routingStampIds.add(stamp.id);
+
+    if (!room.layers[stamp.layer]) {
+      issues.push(`Routing stamp '${stamp.id}' uses invalid layer index '${stamp.layer}'.`);
+      continue;
+    }
+    if (stamp.x < 0 || stamp.x >= width || stamp.y < 0 || stamp.y >= height) {
+      issues.push(`Routing stamp '${stamp.id}' is outside the room bounds.`);
+      continue;
+    }
+    if (room.layers[stamp.layer]?.tiles[stamp.y]?.[stamp.x] === "#") {
+      issues.push(`Routing stamp '${stamp.id}' is placed on a wall.`);
+    }
+
+    if (!["up", "down", "left", "right"].includes(stamp.direction)) {
+      issues.push(`Routing stamp '${stamp.id}' uses invalid direction '${stamp.direction}'.`);
+    }
+
+    if (!Number.isInteger(stamp.distance) || stamp.distance < 1) {
+      issues.push(`Routing stamp '${stamp.id}' should use an integer distance of at least 1.`);
+    }
+
+    if (!Array.isArray(stamp.appliesTo) || stamp.appliesTo.length === 0) {
+      issues.push(`Routing stamp '${stamp.id}' should declare at least one routing channel.`);
+    } else {
+      for (const channel of stamp.appliesTo) {
+        if (!["switch", "transfer", "projection"].includes(channel)) {
+          issues.push(`Routing stamp '${stamp.id}' uses unsupported channel '${channel}'.`);
+        }
+      }
+    }
+
+    const locationKey = key(stamp.layer, stamp.x, stamp.y);
+    if (routingStampLocations.has(locationKey)) {
+      issues.push(`Multiple routing stamps share ${locationKey}; only one stamp should occupy a tile.`);
+    }
+    routingStampLocations.add(locationKey);
+  }
+
   if (!Array.isArray(room.hintTiers) || room.hintTiers.length < 3) {
     issues.push("Room should provide three hint tiers.");
   }

@@ -26,6 +26,7 @@ var suppress_form_events := false
 var selected_entity_index := -1
 var selected_switch_index := -1
 var selected_door_index := -1
+var selected_routing_index := -1
 var current_tool := "tile"
 var current_brush := "."
 
@@ -72,6 +73,13 @@ var switch_sticky_button: CheckButton
 var door_list: ItemList
 var door_id_edit: LineEdit
 var door_switch_links_box: VBoxContainer
+var routing_list: ItemList
+var routing_id_edit: LineEdit
+var routing_direction_option: OptionButton
+var routing_distance_spin: SpinBox
+var routing_apply_switch_button: CheckButton
+var routing_apply_transfer_button: CheckButton
+var routing_apply_projection_button: CheckButton
 var validation_label: RichTextLabel
 var balance_tree: Tree
 var playtest_tree: Tree
@@ -119,12 +127,14 @@ func load_room_for_edit(room_id: String) -> void:
 	selected_entity_index = 0 if not draft_room.get("entities", []).is_empty() else -1
 	selected_switch_index = 0 if not draft_room.get("switches", []).is_empty() else -1
 	selected_door_index = 0 if not draft_room.get("doors", []).is_empty() else -1
+	selected_routing_index = 0 if not draft_room.get("routingStamps", []).is_empty() else -1
 	validation_report = Validator.validate_room_report(draft_room)
 	_load_draft_into_forms()
 	_rebuild_layer_controls()
 	_rebuild_entities_section()
 	_rebuild_switch_section()
 	_rebuild_door_section()
+	_rebuild_routing_section()
 	_refresh_validation_view()
 	_rebuild_balance_tree()
 	_rebuild_playtest_tree()
@@ -328,7 +338,7 @@ func _build_ui() -> void:
 	tool_row.add_child(layer_selector)
 
 	tool_selector = OptionButton.new()
-	for tool_name in ["Tile", "Start", "Entity", "Switch", "Door"]:
+	for tool_name in ["Tile", "Start", "Entity", "Switch", "Door", "Stamp"]:
 		tool_selector.add_item(tool_name)
 	tool_selector.item_selected.connect(_handle_tool_selected)
 	tool_row.add_child(tool_selector)
@@ -509,6 +519,31 @@ func _build_ui() -> void:
 	door_switch_links_box.add_theme_constant_override("separation", 4)
 	door_card.add_child(door_switch_links_box)
 
+	var routing_card := _create_subsection_card(inspector_content, "Routing Stamps")
+	routing_list = ItemList.new()
+	routing_list.custom_minimum_size = Vector2(0, 92)
+	routing_list.item_selected.connect(_handle_routing_selected)
+	routing_card.add_child(routing_list)
+	var routing_buttons := HBoxContainer.new()
+	routing_buttons.add_theme_constant_override("separation", 8)
+	routing_card.add_child(routing_buttons)
+	var add_routing_button := Button.new()
+	add_routing_button.text = "Add Stamp"
+	add_routing_button.pressed.connect(_handle_add_routing_stamp)
+	routing_buttons.add_child(add_routing_button)
+	var remove_routing_button := Button.new()
+	remove_routing_button.text = "Remove Stamp"
+	remove_routing_button.pressed.connect(_handle_remove_routing_stamp)
+	routing_buttons.add_child(remove_routing_button)
+	routing_id_edit = _add_labeled_line_edit(routing_card, "Stamp Id", _handle_routing_id_changed)
+	routing_direction_option = _add_labeled_option(routing_card, "Direction", _handle_routing_direction_changed)
+	for direction_name in ["right", "left", "up", "down"]:
+		routing_direction_option.add_item(direction_name)
+	routing_distance_spin = _add_labeled_spin(routing_card, "Distance", 1, 6, 1, _handle_routing_distance_changed)
+	routing_apply_switch_button = _add_labeled_check(routing_card, "Applies To Switch Exits", _handle_routing_channel_toggled.bind("switch"))
+	routing_apply_transfer_button = _add_labeled_check(routing_card, "Applies To Transfers", _handle_routing_channel_toggled.bind("transfer"))
+	routing_apply_projection_button = _add_labeled_check(routing_card, "Applies To Projections", _handle_routing_channel_toggled.bind("projection"))
+
 	var validation_card := _create_subsection_card(inspector_content, "Validation")
 	validation_label = RichTextLabel.new()
 	validation_label.fit_content = true
@@ -587,6 +622,17 @@ func _normalize_room(room: Dictionary) -> Dictionary:
 	for entity in normalized.get("entities", []):
 		if entity.get("type", "") == "projector" and entity.get("projectionTargets", []).is_empty():
 			entity["projectionTargets"] = [{"layer": 0, "dx": 0, "dy": 0}]
+	if not normalized.has("routingStamps"):
+		normalized["routingStamps"] = []
+	for stamp in normalized.get("routingStamps", []):
+		if String(stamp.get("id", "")).is_empty():
+			stamp["id"] = "routing-%02d" % [normalized.get("routingStamps", []).find(stamp) + 1]
+		if String(stamp.get("direction", "")).is_empty():
+			stamp["direction"] = "right"
+		if int(stamp.get("distance", 0)) < 1:
+			stamp["distance"] = 1
+		if stamp.get("appliesTo", []).is_empty():
+			stamp["appliesTo"] = ["switch"]
 	return normalized
 
 func _selected_layer_index() -> int:
@@ -660,7 +706,7 @@ func _clamp_room_contents() -> void:
 	start["layer"] = clampi(int(start.get("layer", 0)), 0, layer_count - 1)
 	start["x"] = clampi(int(start.get("x", 1)), 1, max_x)
 	start["y"] = clampi(int(start.get("y", 1)), 1, max_y)
-	for collection_name in ["entities", "switches", "doors"]:
+	for collection_name in ["entities", "switches", "doors", "routingStamps"]:
 		for item in draft_room.get(collection_name, []):
 			item["layer"] = clampi(int(item.get("layer", 0)), 0, layer_count - 1)
 			item["x"] = clampi(int(item.get("x", 1)), 1, max_x)
@@ -814,11 +860,30 @@ func _cell_display_text(layer_index: int, x: int, y: int) -> String:
 	for door_def in draft_room.get("doors", []):
 		if door_def.get("layer", -1) == layer_index and door_def.get("x", -1) == x and door_def.get("y", -1) == y:
 			return "D"
+	for stamp in draft_room.get("routingStamps", []):
+		if stamp.get("layer", -1) != layer_index or stamp.get("x", -1) != x or stamp.get("y", -1) != y:
+			continue
+		match String(stamp.get("direction", "right")):
+			"left":
+				return "<"
+			"up":
+				return "A"
+			"down":
+				return "V"
+			_:
+				return ">"
 	return String(draft_room.get("layers", [])[layer_index].get("tiles", [])[y]).substr(x, 1)
 
 func _cell_tooltip(layer_index: int, x: int, y: int) -> String:
 	var parts := ["Layer %d (%d, %d)" % [layer_index + 1, x, y]]
 	parts.append("Tile: %s" % String(draft_room.get("layers", [])[layer_index].get("tiles", [])[y]).substr(x, 1))
+	for stamp in draft_room.get("routingStamps", []):
+		if stamp.get("layer", -1) == layer_index and stamp.get("x", -1) == x and stamp.get("y", -1) == y:
+			parts.append("Stamp: %s %s x%d" % [
+				stamp.get("id", ""),
+				String(stamp.get("direction", "right")),
+				int(stamp.get("distance", 1)),
+			])
 	return "\n".join(parts)
 
 func _rebuild_entities_section() -> void:
@@ -844,6 +909,14 @@ func _rebuild_door_section() -> void:
 	if selected_door_index >= 0 and selected_door_index < door_list.item_count:
 		door_list.select(selected_door_index)
 	_load_selected_door_into_form()
+
+func _rebuild_routing_section() -> void:
+	routing_list.clear()
+	for stamp in draft_room.get("routingStamps", []):
+		routing_list.add_item("%s (%s x%d)" % [stamp.get("id", ""), stamp.get("direction", "right"), int(stamp.get("distance", 1))])
+	if selected_routing_index >= 0 and selected_routing_index < routing_list.item_count:
+		routing_list.select(selected_routing_index)
+	_load_selected_routing_into_form()
 
 func _load_selected_entity_into_form() -> void:
 	suppress_form_events = true
@@ -902,6 +975,29 @@ func _load_selected_door_into_form() -> void:
 		door_switch_links_box.add_child(toggle)
 	suppress_form_events = false
 
+func _load_selected_routing_into_form() -> void:
+	suppress_form_events = true
+	if selected_routing_index < 0 or selected_routing_index >= draft_room.get("routingStamps", []).size():
+		routing_id_edit.text = ""
+		routing_distance_spin.value = 1
+		routing_apply_switch_button.button_pressed = false
+		routing_apply_transfer_button.button_pressed = false
+		routing_apply_projection_button.button_pressed = false
+		suppress_form_events = false
+		return
+	var stamp: Dictionary = draft_room.get("routingStamps", [])[selected_routing_index]
+	routing_id_edit.text = stamp.get("id", "")
+	routing_distance_spin.value = float(stamp.get("distance", 1))
+	for index in range(routing_direction_option.item_count):
+		if routing_direction_option.get_item_text(index) == stamp.get("direction", "right"):
+			routing_direction_option.select(index)
+			break
+	var applies_to: Array = stamp.get("appliesTo", [])
+	routing_apply_switch_button.button_pressed = applies_to.has("switch")
+	routing_apply_transfer_button.button_pressed = applies_to.has("transfer")
+	routing_apply_projection_button.button_pressed = applies_to.has("projection")
+	suppress_form_events = false
+
 func _refresh_validation_view() -> void:
 	validation_report = Validator.validate_room_report(draft_room)
 	var lines: Array = []
@@ -918,6 +1014,7 @@ func _refresh_validation_view() -> void:
 		validation_report.get("metrics", {}).get("switchCount", 0),
 		validation_report.get("metrics", {}).get("doorCount", 0),
 	])
+	lines.append("[i]Routing:[/i] %d stamp(s)" % validation_report.get("metrics", {}).get("routingStampCount", 0))
 	for issue in validation_report.get("issues", []):
 		var prefix := "[color=#a2412c]ERROR[/color]"
 		if issue.get("severity", "") == "warning":
@@ -971,6 +1068,7 @@ func _commit_structural_change() -> void:
 	_rebuild_entities_section()
 	_rebuild_switch_section()
 	_rebuild_door_section()
+	_rebuild_routing_section()
 	_rebuild_balance_tree()
 	if live_preview_button.button_pressed:
 		preview_requested.emit(draft_room.duplicate(true))
@@ -1067,7 +1165,7 @@ func _handle_remove_layer() -> void:
 		start["layer"] = int(start.get("layer", 0)) - 1
 	elif int(start.get("layer", 0)) == selected_layer:
 		start["layer"] = mini(selected_layer, next_layer_count - 1)
-	for collection_name in ["entities", "switches", "doors"]:
+	for collection_name in ["entities", "switches", "doors", "routingStamps"]:
 		for item in draft_room.get(collection_name, []):
 			if int(item.get("layer", 0)) > selected_layer:
 				item["layer"] = int(item.get("layer", 0)) - 1
@@ -1140,6 +1238,12 @@ func _handle_grid_cell_pressed(layer_index: int, x: int, y: int) -> void:
 				door_def["layer"] = layer_index
 				door_def["x"] = x
 				door_def["y"] = y
+		"stamp":
+			if selected_routing_index >= 0 and selected_routing_index < draft_room.get("routingStamps", []).size():
+				var stamp: Dictionary = draft_room.get("routingStamps", [])[selected_routing_index]
+				stamp["layer"] = layer_index
+				stamp["x"] = x
+				stamp["y"] = y
 		_:
 			_set_tile(layer_index, x, y, current_brush)
 	_commit_structural_change()
@@ -1403,6 +1507,65 @@ func _handle_door_switch_link_toggled(enabled: bool, switch_id: String) -> void:
 	door_def["switchIds"] = links
 	_commit_structural_change()
 
+func _handle_routing_selected(index: int) -> void:
+	selected_routing_index = index
+	_load_selected_routing_into_form()
+
+func _handle_add_routing_stamp() -> void:
+	draft_room.get("routingStamps", []).append({
+		"id": "routing-%02d" % [draft_room.get("routingStamps", []).size() + 1],
+		"layer": layer_selector.selected,
+		"x": 1,
+		"y": 1,
+		"direction": "right",
+		"distance": 1,
+		"appliesTo": ["switch"],
+	})
+	selected_routing_index = draft_room.get("routingStamps", []).size() - 1
+	_commit_structural_change()
+
+func _handle_remove_routing_stamp() -> void:
+	if selected_routing_index < 0 or selected_routing_index >= draft_room.get("routingStamps", []).size():
+		return
+	draft_room.get("routingStamps", []).remove_at(selected_routing_index)
+	selected_routing_index = mini(selected_routing_index, draft_room.get("routingStamps", []).size() - 1)
+	_commit_structural_change()
+
+func _handle_routing_id_changed(new_text: String) -> void:
+	if suppress_form_events or selected_routing_index < 0:
+		return
+	draft_room.get("routingStamps", [])[selected_routing_index]["id"] = new_text.strip_edges()
+	_commit_structural_change()
+
+func _handle_routing_direction_changed(index: int) -> void:
+	if suppress_form_events or selected_routing_index < 0:
+		return
+	draft_room.get("routingStamps", [])[selected_routing_index]["direction"] = routing_direction_option.get_item_text(index)
+	_commit_structural_change()
+
+func _handle_routing_distance_changed(value: float) -> void:
+	if suppress_form_events or selected_routing_index < 0:
+		return
+	draft_room.get("routingStamps", [])[selected_routing_index]["distance"] = int(value)
+	_commit_structural_change()
+
+func _handle_routing_channel_toggled(enabled: bool, channel: String) -> void:
+	if suppress_form_events or selected_routing_index < 0:
+		return
+	var stamp: Dictionary = draft_room.get("routingStamps", [])[selected_routing_index]
+	var applies_to: Array = stamp.get("appliesTo", [])
+	if enabled and not applies_to.has(channel):
+		applies_to.append(channel)
+	elif not enabled and applies_to.has(channel):
+		applies_to.erase(channel)
+	if applies_to.is_empty():
+		applies_to.append("switch")
+		suppress_form_events = true
+		routing_apply_switch_button.button_pressed = true
+		suppress_form_events = false
+	stamp["appliesTo"] = applies_to
+	_commit_structural_change()
+
 func _handle_preview_requested() -> void:
 	if not draft_room.is_empty():
 		preview_requested.emit(draft_room.duplicate(true))
@@ -1424,12 +1587,14 @@ func _handle_new_room() -> void:
 	selected_entity_index = -1
 	selected_switch_index = -1
 	selected_door_index = -1
+	selected_routing_index = -1
 	validation_report = Validator.validate_room_report(draft_room)
 	_load_draft_into_forms()
 	_rebuild_layer_controls()
 	_rebuild_entities_section()
 	_rebuild_switch_section()
 	_rebuild_door_section()
+	_rebuild_routing_section()
 	_refresh_validation_view()
 	status_label.text = "Created blank draft %s" % draft_room.get("id", "")
 	if live_preview_button.button_pressed:
@@ -1450,6 +1615,7 @@ func _handle_duplicate_room() -> void:
 	_rebuild_entities_section()
 	_rebuild_switch_section()
 	_rebuild_door_section()
+	_rebuild_routing_section()
 	_refresh_validation_view()
 
 func _handle_save_room() -> void:

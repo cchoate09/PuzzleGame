@@ -113,3 +113,48 @@ test("demo slice metadata references a complete Batch 5 early-game route", () =>
   assert.equal(earlyDistrictRoomCount, 15);
   assert.equal(getRoomById(demo.finalRoomId)?.districtId, "greenhouse");
 });
+
+test("Batch 6 campaign metadata exposes a main route, a secret route, and hidden journal entries", () => {
+  const mainCampaign = campaign.mainCampaign;
+  const secretRoute = campaign.secretRoute;
+
+  assert.ok(mainCampaign, "Campaign should expose main-campaign metadata");
+  assert.ok(secretRoute, "Campaign should expose secret-route metadata");
+  assert.equal(mainCampaign.mainRoomIds.length, 21);
+  assert.equal(secretRoute.roomIds.length, 3);
+  assert.deepEqual(secretRoute.requiredRoomIds, [
+    "clocktower-side-01",
+    "theater-side-01",
+    "rooftops-side-01",
+  ]);
+  assert.equal(campaign.journalEntries.length, 5);
+  assert.equal(getRoomById(mainCampaign.finalRoomId)?.districtId, "rooftops");
+  assert.equal(getRoomById(secretRoute.finalRoomId)?.districtId, "attic");
+});
+
+test("routing stamps redirect switch exits, transfer destinations, and projection bridges", () => {
+  const switchEngine = new PatchworkEngine(campaign);
+  switchEngine.loadRoom("clocktower-03");
+  switchEngine.dispatch({ type: "move", direction: "right" });
+  switchEngine.dispatch({ type: "move", direction: "right" });
+  switchEngine.dispatch({ type: "switch_layer" });
+  assert.equal(switchEngine.getRuntime().player.layer, 1);
+  assert.equal(switchEngine.getRuntime().player.x, 5);
+  assert.equal(switchEngine.getRuntime().player.y, 1);
+  assert.equal(switchEngine.getRuntime().solved, true);
+
+  const transferEngine = new PatchworkEngine(campaign);
+  transferEngine.loadRoom("rooftops-03");
+  assert.equal(transferEngine.dispatch({ type: "transfer" }), true);
+  const routedParcel = transferEngine.getRuntime().entities.find((entity) => entity.id === "parcel-stamped");
+  assert.deepEqual(
+    { layer: routedParcel.layer, x: routedParcel.x, y: routedParcel.y },
+    { layer: 1, x: 4, y: 4 }
+  );
+  assert.equal(transferEngine.getRuntime().dynamicState.activeSwitches.has("roof-transfer-plate"), true);
+
+  const projectionEngine = new PatchworkEngine(campaign);
+  projectionEngine.loadRoom("rooftops-02");
+  assert.equal(projectionEngine.dispatch({ type: "move", direction: "left" }), true);
+  assert.equal(projectionEngine.getRuntime().dynamicState.bridges.has("1:4:2"), true);
+});

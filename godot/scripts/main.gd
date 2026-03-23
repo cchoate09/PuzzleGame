@@ -866,12 +866,46 @@ func _get_demo_config() -> Dictionary:
 	var demo_config: Variant = campaign.get("demo", {})
 	return demo_config if demo_config is Dictionary else {}
 
+func _get_main_campaign_config() -> Dictionary:
+	var config: Variant = campaign.get("mainCampaign", {})
+	return config if config is Dictionary else {}
+
+func _get_secret_route_config() -> Dictionary:
+	var config: Variant = campaign.get("secretRoute", {})
+	return config if config is Dictionary else {}
+
+func _get_journal_entries() -> Array:
+	var entries: Variant = campaign.get("journalEntries", [])
+	return entries if entries is Array else []
+
 func _get_demo_room_ids(key: String) -> Array:
 	var ids: Array = []
 	var demo_config := _get_demo_config()
 	for room_id in demo_config.get(key, []):
 		ids.append(String(room_id))
 	return ids
+
+func _get_arc_room_ids(config: Dictionary, key: String = "mainRoomIds") -> Array:
+	var ids: Array = []
+	for room_id in config.get(key, []):
+		ids.append(String(room_id))
+	return ids
+
+func _requirements_met(required_room_ids: Array) -> bool:
+	for room_id_variant in required_room_ids:
+		if not _room_solved(String(room_id_variant)):
+			return false
+	return true
+
+func _get_lock_label(required_room_ids: Array) -> String:
+	if required_room_ids.is_empty():
+		return ""
+	var titles: Array = []
+	for room_id_variant in required_room_ids:
+		var required_room := ContentLoader.get_room_by_id(campaign, String(room_id_variant))
+		var title := String(required_room.get("title", room_id_variant))
+		titles.append(title)
+	return "Solve: %s" % ", ".join(titles)
 
 func _count_solved_subset(room_ids_subset: Array) -> int:
 	var solved := 0
@@ -891,11 +925,15 @@ func _room_solved(room_id: String) -> bool:
 	return bool(profile.get("rooms", {}).get(room_id, {}).get("solved", false))
 
 func _is_district_unlocked(district: Dictionary) -> bool:
-	return SaveRuntime.get_postmark_count(profile, campaign) >= int(district.get("unlockPostmarks", 0))
+	if SaveRuntime.get_postmark_count(profile, campaign) < int(district.get("unlockPostmarks", 0)):
+		return false
+	return _requirements_met(district.get("requiresRooms", []))
 
 func _is_room_unlocked(room: Dictionary) -> bool:
 	var district := _get_district_by_id(String(room.get("districtId", "")))
 	if district.is_empty() or not _is_district_unlocked(district):
+		return false
+	if not _requirements_met(room.get("requiresRooms", [])):
 		return false
 
 	var district_rooms: Array = _get_rooms_for_district(String(room.get("districtId", "")))
@@ -905,6 +943,8 @@ func _is_room_unlocked(room: Dictionary) -> bool:
 			mandatory_rooms.append(candidate)
 
 	if room.get("optional", false):
+		if not room.get("requiresRooms", []).is_empty():
+			return true
 		if mandatory_rooms.is_empty():
 			return true
 		for candidate in mandatory_rooms:
@@ -941,6 +981,20 @@ func _is_demo_complete() -> bool:
 		return false
 	return _count_solved_subset(main_room_ids) >= main_room_ids.size()
 
+func _is_main_campaign_complete() -> bool:
+	var config := _get_main_campaign_config()
+	var main_room_ids := _get_arc_room_ids(config)
+	if main_room_ids.is_empty():
+		return false
+	return _count_solved_subset(main_room_ids) >= main_room_ids.size()
+
+func _is_secret_route_complete() -> bool:
+	var config := _get_secret_route_config()
+	var route_room_ids := _get_arc_room_ids(config, "roomIds")
+	if route_room_ids.is_empty():
+		return false
+	return _count_solved_subset(route_room_ids) >= route_room_ids.size()
+
 func _should_show_demo_completion(room_id: String) -> bool:
 	var demo_config := _get_demo_config()
 	if demo_config.is_empty():
@@ -948,6 +1002,22 @@ func _should_show_demo_completion(room_id: String) -> bool:
 	if String(demo_config.get("finalRoomId", "")) != room_id:
 		return false
 	return _is_demo_complete()
+
+func _should_show_main_campaign_completion(room_id: String) -> bool:
+	var config := _get_main_campaign_config()
+	if config.is_empty():
+		return false
+	if String(config.get("finalRoomId", "")) != room_id:
+		return false
+	return _is_main_campaign_complete()
+
+func _should_show_secret_route_completion(room_id: String) -> bool:
+	var config := _get_secret_route_config()
+	if config.is_empty():
+		return false
+	if String(config.get("finalRoomId", "")) != room_id:
+		return false
+	return _is_secret_route_complete()
 
 func _cycle_room(delta: int) -> void:
 	if room_ids.is_empty() or campaign.is_empty():
@@ -1158,6 +1228,30 @@ func _did_push_entity(previous_runtime: Dictionary, current_runtime: Dictionary)
 			return true
 	return false
 
+func _unlock_room_journal_entries(room_id: String) -> Array:
+	var unlocked_titles: Array = []
+	for entry in _get_journal_entries():
+		var unlock_room_ids: Array = entry.get("unlockRoomIds", [])
+		if not unlock_room_ids.has(room_id):
+			continue
+		var entry_id := String(entry.get("id", ""))
+		if SaveRuntime.unlock_journal_entry(profile, entry_id):
+			unlocked_titles.append(String(entry.get("title", entry_id)))
+	return unlocked_titles
+
+func _get_unlocked_journal_entries_for_district(district_id: String) -> Array:
+	var unlocked_ids: Array = profile.get("journalEntriesUnlocked", [])
+	var entries: Array = []
+	for entry in _get_journal_entries():
+		var entry_id := String(entry.get("id", ""))
+		if not unlocked_ids.has(entry_id):
+			continue
+		var entry_district := String(entry.get("districtId", ""))
+		if not entry_district.is_empty() and entry_district != district_id:
+			continue
+		entries.append(entry)
+	return entries
+
 func _after_state_change(action: Dictionary = {}, previous_runtime: Dictionary = {}) -> void:
 	var room: Dictionary = engine.get_room()
 	if room.is_empty():
@@ -1171,10 +1265,15 @@ func _after_state_change(action: Dictionary = {}, previous_runtime: Dictionary =
 		if engine.get_runtime().get("solved", false):
 			SaveRuntime.complete_room(profile, room, engine.get_runtime())
 			SaveRuntime.unlock_journal(profile, String(room.get("districtId", "")))
+			var journal_unlocks := _unlock_room_journal_entries(room_id)
 			SaveRuntime.unlock_achievement(profile, String(room.get("achievementId", "")))
 			if int(progress_before.get("hintsRevealed", 0)) == 0:
 				SaveRuntime.unlock_achievement(profile, "careful-hands")
+			if profile.get("journalEntriesUnlocked", []).size() >= _get_journal_entries().size() and not _get_journal_entries().is_empty():
+				SaveRuntime.unlock_achievement(profile, "archivist")
 			SaveRuntime.set_room_snapshot(profile, room_id, null)
+			if not journal_unlocks.is_empty():
+				_show_toast("Hidden notes unlocked: %s." % ", ".join(journal_unlocks))
 		else:
 			SaveRuntime.set_room_snapshot(profile, room_id, engine.get_room_snapshot())
 		profile["lastRoomId"] = room_id
@@ -1190,6 +1289,10 @@ func _after_state_change(action: Dictionary = {}, previous_runtime: Dictionary =
 		_handle_unlock_changes(unlocked_before, route_unlock_snapshot)
 		if _should_show_demo_completion(room_id):
 			_show_demo_completion(room)
+		elif _should_show_main_campaign_completion(room_id):
+			_show_main_campaign_completion(room)
+		elif _should_show_secret_route_completion(room_id):
+			_show_secret_route_completion(room)
 		elif not room.get("outro", []).is_empty():
 			_show_dialogue_beat(room.get("outro", [])[0], 7.2 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 4.0)
 	elif String(action.get("type", "")) == "reset":
@@ -1231,6 +1334,14 @@ func _refresh_ui() -> void:
 	var demo_main_room_ids := _get_demo_room_ids("mainRoomIds")
 	if not demo_main_room_ids.is_empty():
 		progress_lines.append("Demo route: %d / %d main" % [_count_solved_subset(demo_main_room_ids), demo_main_room_ids.size()])
+	var main_campaign_config := _get_main_campaign_config()
+	var main_route_ids := _get_arc_room_ids(main_campaign_config)
+	if not main_route_ids.is_empty():
+		progress_lines.append("Main route: %d / %d" % [_count_solved_subset(main_route_ids), main_route_ids.size()])
+	var secret_route_config := _get_secret_route_config()
+	var secret_route_ids := _get_arc_room_ids(secret_route_config, "roomIds")
+	if not secret_route_ids.is_empty():
+		progress_lines.append("Secret line: %d / %d" % [_count_solved_subset(secret_route_ids), secret_route_ids.size()])
 
 	title_label.text = room.get("title", "Patchwork Post")
 	subtitle_label.text = "%s\n%s" % [
@@ -1371,8 +1482,11 @@ func _build_save_status_text() -> String:
 func _build_route_status_text(district: Dictionary, room: Dictionary, is_preview: bool) -> String:
 	if is_preview:
 		return "Preview room\nNot part of progression"
+	if room.get("secret", false):
+		return "Secret route\nHidden mastery"
 	if room.get("optional", false):
-		return "Side route\nOptional mastery"
+		var lock_label := _get_lock_label(room.get("requiresRooms", []))
+		return "Side route\n%s" % ("Optional mastery" if lock_label.is_empty() else lock_label)
 	var district_rooms := _get_rooms_for_district(String(room.get("districtId", "")))
 	var solved_main := 0
 	var main_total := 0
@@ -1382,21 +1496,30 @@ func _build_route_status_text(district: Dictionary, room: Dictionary, is_preview
 		main_total += 1
 		if _room_solved(String(candidate.get("id", ""))):
 			solved_main += 1
-	return "%s\nMain route %d / %d" % [district.get("subtitle", "Route status"), solved_main, main_total]
+	var status_text := "%s\nMain route %d / %d" % [district.get("subtitle", "Route status"), solved_main, main_total]
+	var required_room_ids: Array = room.get("requiresRooms", [])
+	if not required_room_ids.is_empty():
+		status_text += "\n%s" % _get_lock_label(required_room_ids)
+	return status_text
 
 func _build_notes_text(room: Dictionary, district: Dictionary, player: Dictionary) -> String:
 	var intro_line := ""
 	if not room.get("intro", []).is_empty():
 		var intro_beat: Dictionary = room.get("intro", [])[0]
 		intro_line = "%s: %s" % [intro_beat.get("speaker", "Guide"), intro_beat.get("text", "")]
-
-	return "%s\n\n%s\n\nCourier position: (%d, %d), facing %s." % [
-		intro_line,
-		district.get("journalBody", "The town still reads like folded paper."),
+	var lines: Array = [intro_line, String(district.get("journalBody", "The town still reads like folded paper."))]
+	var hidden_entries := _get_unlocked_journal_entries_for_district(String(room.get("districtId", "")))
+	if not hidden_entries.is_empty():
+		var hidden_lines: Array = []
+		for entry in hidden_entries:
+			hidden_lines.append("%s: %s" % [entry.get("title", "Margin Note"), entry.get("body", "")])
+		lines.append("Hidden threads:\n%s" % "\n\n".join(hidden_lines))
+	lines.append("Courier position: (%d, %d), facing %s." % [
 		int(player.get("x", 0)),
 		int(player.get("y", 0)),
 		player.get("facing", "right"),
-	]
+	])
+	return "\n\n".join(lines)
 
 func _build_stats_text(progress: Dictionary, is_preview: bool) -> String:
 	if is_preview:
@@ -1564,7 +1687,13 @@ func _rebuild_route_list(current_room_id: String) -> void:
 		body.add_child(summary)
 
 		var badge := _create_body_label(12, ACCENT_RUST if unlocked else ACCENT_MUTED)
-		badge.text = "%d/%d rooms solved" % [solved_count, rooms.size()] if unlocked else "Need %d postmarks" % int(district.get("unlockPostmarks", 0))
+		var district_lock := _get_lock_label(district.get("requiresRooms", []))
+		if unlocked:
+			badge.text = "%d/%d rooms solved" % [solved_count, rooms.size()]
+		elif not district_lock.is_empty():
+			badge.text = district_lock
+		else:
+			badge.text = "Need %d postmarks" % int(district.get("unlockPostmarks", 0))
 		body.add_child(badge)
 
 		var room_list := VBoxContainer.new()
@@ -1576,9 +1705,15 @@ func _rebuild_route_list(current_room_id: String) -> void:
 			var room_id := String(room.get("id", ""))
 			var room_unlocked := unlocked and _is_room_unlocked(room)
 			var room_solved := _room_solved(room_id)
-			var room_role := "Side" if room.get("optional", false) else "Main"
+			var room_role := "Secret" if room.get("secret", false) else ("Side" if room.get("optional", false) else "Main")
 			var room_state := "Solved" if room_solved else ("Locked" if not room_unlocked else "Open")
-			button.text = "[%s | %s] %s" % [room_role, room_state, room.get("title", room_id)]
+			var room_lock := _get_lock_label(room.get("requiresRooms", []))
+			button.text = "[%s | %s] %s%s" % [
+				room_role,
+				room_state,
+				room.get("title", room_id),
+				"" if room_lock.is_empty() or room_unlocked else " (%s)" % room_lock,
+			]
 			button.disabled = not room_unlocked
 			button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			var fill := Color("eef3df") if room_solved else Color("f4ead1")
@@ -1629,18 +1764,12 @@ func _show_solve_banner(room: Dictionary) -> void:
 	if audio_manager != null:
 		audio_manager.play_event("solve")
 
-func _show_demo_completion(room: Dictionary) -> void:
-	var demo_config := _get_demo_config()
-	if demo_config.is_empty() or demo_panel == null:
+func _show_special_completion_panel(ending: Dictionary, default_title: String, default_subtitle: String, default_body: String, teaser_lines: Array = []) -> void:
+	if demo_panel == null:
 		return
-	var ending: Dictionary = demo_config.get("ending", {})
-	var teaser_lines: Array = []
-	for teaser_line in demo_config.get("teaserLines", []):
-		teaser_lines.append(String(teaser_line))
-
-	demo_title_label.text = String(ending.get("title", "Demo Route Complete"))
-	var subtitle := String(ending.get("subtitle", "%s completes the public festival-route slice." % room.get("title", "This room")))
-	var body := String(ending.get("body", "The next districts twist the same rules into delayed echoes, mirrored shadows, and full mixed-mechanic routes."))
+	demo_title_label.text = String(ending.get("title", default_title))
+	var subtitle := String(ending.get("subtitle", default_subtitle))
+	var body := String(ending.get("body", default_body))
 	demo_body_label.text = "%s\n\n%s" % [subtitle, body]
 	var teaser_text := ""
 	if not teaser_lines.is_empty():
@@ -1653,6 +1782,51 @@ func _show_demo_completion(room: Dictionary) -> void:
 	var ending_beat: Dictionary = ending.get("beat", {})
 	if not ending_beat.is_empty():
 		_show_dialogue_beat(ending_beat, 8.6 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 4.4)
+
+func _show_demo_completion(room: Dictionary) -> void:
+	var demo_config := _get_demo_config()
+	if demo_config.is_empty():
+		return
+	var teaser_lines: Array = []
+	for teaser_line in demo_config.get("teaserLines", []):
+		teaser_lines.append(String(teaser_line))
+	_show_special_completion_panel(
+		demo_config.get("ending", {}),
+		"Demo Route Complete",
+		"%s completes the public festival-route slice." % room.get("title", "This room"),
+		"The next districts twist the same rules into delayed echoes, mirrored shadows, and full mixed-mechanic routes.",
+		teaser_lines
+	)
+
+func _show_main_campaign_completion(room: Dictionary) -> void:
+	var config := _get_main_campaign_config()
+	if config.is_empty():
+		return
+	var teaser_lines: Array = []
+	var secret_config := _get_secret_route_config()
+	for required_room in secret_config.get("requiredRoomIds", []):
+		var secret_room := ContentLoader.get_room_by_id(campaign, String(required_room))
+		if not secret_room.is_empty() and not _room_solved(String(required_room)):
+			teaser_lines.append("Unsolved secret route piece: %s" % secret_room.get("title", String(required_room)))
+	_show_special_completion_panel(
+		config.get("ending", {}),
+		"Festival Line Restored",
+		"%s reconnects the rooftop delivery lane." % room.get("title", "This room"),
+		"The festival line is back. Optional margin notes can still be traced into the hidden attic route.",
+		teaser_lines
+	)
+
+func _show_secret_route_completion(room: Dictionary) -> void:
+	var config := _get_secret_route_config()
+	if config.is_empty():
+		return
+	_show_special_completion_panel(
+		config.get("ending", {}),
+		"Secret Line Complete",
+		"%s restores the final hidden route above the town." % room.get("title", "This room"),
+		"You found the attic line and tied the whole folded town together.",
+		[]
+	)
 
 func _handle_unlock_changes(before_snapshot: Dictionary, after_snapshot: Dictionary) -> void:
 	var new_districts: Array = []

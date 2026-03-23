@@ -149,7 +149,8 @@ static func create_blank_room(room_id: String, district_id: String = "mailroom")
 		},
 		"entities": [],
 		"switches": [],
-		"doors": []
+		"doors": [],
+		"routingStamps": []
 	}
 
 static func duplicate_room(campaign_source: Dictionary, source_room_id: String, new_room_id: String) -> Dictionary:

@@ -26,6 +26,11 @@ static func _clone(value: Variant) -> Variant:
 static func _coord_key(layer: int, x: int, y: int) -> String:
 	return "%d:%d:%d" % [layer, x, y]
 
+static func _clamp_distance(value: Variant) -> int:
+	if value == null:
+		return 1
+	return maxi(1, int(value))
+
 func load_room(room_id: String, snapshot: Variant = null) -> Dictionary:
 	var rooms_by_id: Dictionary = campaign.get("roomsById", {})
 	var next_room: Dictionary = rooms_by_id.get(room_id, {})
@@ -276,6 +281,35 @@ func get_mirrored_vector(direction: Dictionary, axis: String) -> Dictionary:
 		return {"dx": direction["dx"], "dy": -int(direction["dy"])}
 	return {"dx": -int(direction["dx"]), "dy": direction["dy"]}
 
+func routing_stamp_applies_to(stamp: Dictionary, channel: String) -> bool:
+	var applies_to: Array = stamp.get("appliesTo", [])
+	return applies_to.has(channel)
+
+func find_routing_stamp(layer: int, x: int, y: int, channel: String) -> Dictionary:
+	for stamp in room.get("routingStamps", []):
+		if int(stamp.get("layer", -1)) != layer:
+			continue
+		if int(stamp.get("x", -1)) != x or int(stamp.get("y", -1)) != y:
+			continue
+		if routing_stamp_applies_to(stamp, channel):
+			return stamp
+	return {}
+
+func get_routed_destination(layer: int, x: int, y: int, channel: String) -> Dictionary:
+	var stamp := find_routing_stamp(layer, x, y, channel)
+	if stamp.is_empty():
+		return {"layer": layer, "x": x, "y": y}
+	var direction: Dictionary = DIRECTIONS.get(String(stamp.get("direction", "")), {})
+	if direction.is_empty():
+		return {"layer": layer, "x": x, "y": y}
+	var distance := _clamp_distance(stamp.get("distance", 1))
+	return {
+		"layer": layer,
+		"x": x + int(direction.get("dx", 0)) * distance,
+		"y": y + int(direction.get("dy", 0)) * distance,
+		"stamp": stamp,
+	}
+
 func try_switch_layer() -> bool:
 	var player: Dictionary = runtime["player"]
 	if get_tile(int(player["layer"]), int(player["x"]), int(player["y"])) != "S":
@@ -290,9 +324,12 @@ func try_switch_layer() -> bool:
 			available_layers.append(layer_index)
 
 	for layer_index in available_layers:
-		if is_passable(layer_index, int(player["x"]), int(player["y"]), {"ignorePlayer": true}):
-			player["layer"] = layer_index
-			runtime["activeLayer"] = layer_index
+		var routed := get_routed_destination(layer_index, int(player["x"]), int(player["y"]), "switch")
+		if is_passable(int(routed["layer"]), int(routed["x"]), int(routed["y"]), {"ignorePlayer": true}):
+			player["layer"] = int(routed["layer"])
+			player["x"] = int(routed["x"])
+			player["y"] = int(routed["y"])
+			runtime["activeLayer"] = int(routed["layer"])
 			return true
 
 	return false
@@ -316,8 +353,11 @@ func try_transfer() -> bool:
 		var target_layer: int = (int(entity["layer"]) + offset) % layer_count
 		if target_layer == int(entity["layer"]):
 			continue
-		if is_passable(target_layer, int(entity["x"]), int(entity["y"]), {"ignoreEntityId": entity["id"]}):
-			entity["layer"] = target_layer
+		var routed := get_routed_destination(target_layer, int(entity["x"]), int(entity["y"]), "transfer")
+		if is_passable(int(routed["layer"]), int(routed["x"]), int(routed["y"]), {"ignoreEntityId": entity["id"]}):
+			entity["layer"] = int(routed["layer"])
+			entity["x"] = int(routed["x"])
+			entity["y"] = int(routed["y"])
 			return true
 	return false
 
@@ -383,11 +423,14 @@ func update_dynamic_state(runtime_state: Dictionary) -> void:
 	var bridges := {}
 	for entity in runtime_state.get("entities", []):
 		for projection in entity.get("projectionTargets", []):
-			bridges[_coord_key(
+			var routed := get_routed_destination(
 				int(projection["layer"]),
 				int(entity["x"]) + int(projection["dx"]),
-				int(entity["y"]) + int(projection["dy"])
-			)] = true
+				int(entity["y"]) + int(projection["dy"]),
+				"projection"
+			)
+			if not get_tile(int(routed["layer"]), int(routed["x"]), int(routed["y"])).is_empty():
+				bridges[_coord_key(int(routed["layer"]), int(routed["x"]), int(routed["y"]))] = true
 
 	var active_switches := {}
 	for switch_id in runtime_state.get("latchedSwitches", []):
@@ -501,6 +544,17 @@ func get_text_state() -> Dictionary:
 			"open": runtime.get("dynamicState", {}).get("openDoors", {}).has(door.get("id", "")),
 		})
 
+	var routing_stamps: Array = []
+	for stamp in room.get("routingStamps", []):
+		routing_stamps.append({
+			"id": stamp.get("id", ""),
+			"layer": stamp.get("layer", 0),
+			"x": stamp.get("x", 0),
+			"y": stamp.get("y", 0),
+			"direction": stamp.get("direction", ""),
+			"appliesTo": _clone(stamp.get("appliesTo", [])),
+		})
+
 	var layer_names: Array = []
 	for layer_data in room.get("layers", []):
 		layer_names.append(layer_data.get("name", "Layer"))
@@ -521,6 +575,7 @@ func get_text_state() -> Dictionary:
 		"entities": entities,
 		"switches": switches,
 		"doors": doors,
+		"routingStamps": routing_stamps,
 		"moveCount": runtime.get("moveCount", 0),
 		"solved": runtime.get("solved", false),
 		"availableActions": ["move", "wait", "switch_layer", "transfer", "undo", "redo", "reset"],

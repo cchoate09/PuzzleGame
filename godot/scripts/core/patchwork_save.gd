@@ -3,14 +3,14 @@ extends RefCounted
 
 const InputBindings = preload("res://scripts/core/patchwork_input.gd")
 
-const PROFILE_VERSION := 3
+const PROFILE_VERSION := 4
 const LEGACY_STORAGE_PATH := "user://patchwork-post-save-v1.json"
 const FULL_STORAGE_PATH := "user://profiles/full/patchwork-post-save-v2.json"
 const DEMO_STORAGE_PATH := "user://profiles/demo/patchwork-post-save-v2.json"
 const DEMO_CARRYOVER_PATH := "user://profiles/shared/patchwork-post-demo-carryover.json"
 const STORAGE_PATH := FULL_STORAGE_PATH
 const BUILD_CHANNEL := "full"
-const CONTENT_VERSION := "batch-5"
+const CONTENT_VERSION := "batch-6"
 
 static func clone(value: Variant) -> Variant:
 	if value is Dictionary or value is Array:
@@ -31,6 +31,7 @@ static func create_default_profile() -> Dictionary:
 		"rooms": {},
 		"achievements": {},
 		"journalsUnlocked": [],
+		"journalEntriesUnlocked": [],
 		"steam": {
 			"cloudSlot": "patchwork-post-profile",
 			"pendingAchievements": [],
@@ -72,6 +73,7 @@ static func hydrate_profile(raw: Variant) -> Dictionary:
 		"rooms": {},
 		"achievements": clone(base["achievements"]),
 		"journalsUnlocked": [],
+		"journalEntriesUnlocked": [],
 		"steam": {
 			"cloudSlot": raw_dict.get("steam", {}).get("cloudSlot", base["steam"]["cloudSlot"]),
 			"pendingAchievements": [],
@@ -91,6 +93,10 @@ static func hydrate_profile(raw: Variant) -> Dictionary:
 	for journal_id in raw_dict.get("journalsUnlocked", []):
 		if not profile["journalsUnlocked"].has(journal_id):
 			profile["journalsUnlocked"].append(journal_id)
+
+	for entry_id in raw_dict.get("journalEntriesUnlocked", []):
+		if not profile["journalEntriesUnlocked"].has(entry_id):
+			profile["journalEntriesUnlocked"].append(entry_id)
 
 	var raw_settings: Dictionary = raw_dict.get("settings", {})
 	var settings: Dictionary = profile["settings"]
@@ -210,6 +216,24 @@ static func unlock_journal(profile: Dictionary, district_id: String) -> void:
 	var journals: Array = profile.get("journalsUnlocked", [])
 	if not journals.has(district_id):
 		journals.append(district_id)
+
+static func unlock_journal_entry(profile: Dictionary, entry_id: String) -> bool:
+	if entry_id.is_empty():
+		return false
+	var entries: Array = profile.get("journalEntriesUnlocked", [])
+	if entries.has(entry_id):
+		return false
+	entries.append(entry_id)
+	return true
+
+static func get_unlocked_journal_entries(profile: Dictionary, district_id: String = "") -> Array:
+	var entries: Array = []
+	for entry_id in profile.get("journalEntriesUnlocked", []):
+		if district_id.is_empty():
+			entries.append(entry_id)
+		else:
+			entries.append(entry_id)
+	return entries
 
 static func unlock_achievement(profile: Dictionary, achievement_id: String) -> bool:
 	if achievement_id.is_empty():

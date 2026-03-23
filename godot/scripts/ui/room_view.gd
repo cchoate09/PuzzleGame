@@ -17,6 +17,7 @@ const BASE_PARCEL := Color("cb7148")
 const BASE_PROJECTOR := Color("b6a04c")
 const BASE_ECHO := Color("7f8fc4")
 const BASE_SHADOW := Color("2e2a38")
+const BASE_ROUTING := Color("c86b4b")
 const BASE_ACTIVE_STRIP := Color("e8b44a")
 const BASE_INACTIVE_STRIP := Color("d7c29d")
 const BASE_GRID_LINE := Color("dacbb2")
@@ -165,6 +166,7 @@ func _draw_layer_card(layer_index: int, board_origin: Vector2, tile_size: float,
 
 	_draw_tiles(layer_index, board_origin, tile_size, focus, palette)
 	_draw_switches(layer_index, board_origin, tile_size, palette)
+	_draw_routing_stamps(layer_index, board_origin, tile_size, palette)
 	_draw_doors(layer_index, board_origin, tile_size, palette)
 	_draw_entities(layer_index, board_origin, tile_size, palette)
 	_draw_player(layer_index, board_origin, tile_size, palette)
@@ -257,6 +259,57 @@ func _draw_doors(layer_index: int, board_origin: Vector2, tile_size: float, pale
 			_draw_panel(door_rect, palette["parcel"].darkened(0.18), Color(0, 0, 0, 0), 10, 0)
 			draw_circle(door_rect.position + Vector2(door_rect.size.x - 12, door_rect.size.y * 0.5), 3.0, Color("fff0cb"))
 			draw_line(door_rect.position + Vector2(door_rect.size.x * 0.5, 6), door_rect.position + Vector2(door_rect.size.x * 0.5, door_rect.size.y - 6), Color("84513d"), 2.0)
+
+func _draw_routing_stamps(layer_index: int, board_origin: Vector2, tile_size: float, palette: Dictionary) -> void:
+	var font: Font = get_theme_default_font()
+	for stamp in room.get("routingStamps", []):
+		if int(stamp.get("layer", -1)) != layer_index:
+			continue
+		var stamp_rect := Rect2(
+			board_origin + Vector2(int(stamp.get("x", 0)) * tile_size + tile_size * 0.18, int(stamp.get("y", 0)) * tile_size + tile_size * 0.18),
+			Vector2(tile_size * 0.64, tile_size * 0.64)
+		)
+		_draw_panel(stamp_rect, Color(palette["routing"].r, palette["routing"].g, palette["routing"].b, 0.18), palette["routing"], 14, 2)
+		_draw_stamp_arrow(stamp_rect, String(stamp.get("direction", "right")), palette["routing"])
+		if font != null:
+			var channels: Array = []
+			for channel in stamp.get("appliesTo", []):
+				var label := String(channel)
+				channels.append(label.left(1).to_upper())
+			var badge_text := ""
+			for channel_label in channels:
+				badge_text += String(channel_label)
+			draw_string(font, stamp_rect.position + Vector2(6, stamp_rect.size.y - 6), badge_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, palette["routing"].darkened(0.25))
+
+func _draw_stamp_arrow(rect: Rect2, direction: String, color: Color) -> void:
+	var center := rect.get_center()
+	var shaft_start := center
+	var shaft_end := center
+	match direction:
+		"left":
+			shaft_start += Vector2(rect.size.x * 0.18, 0)
+			shaft_end += Vector2(-rect.size.x * 0.18, 0)
+		"up":
+			shaft_start += Vector2(0, rect.size.y * 0.18)
+			shaft_end += Vector2(0, -rect.size.y * 0.18)
+		"down":
+			shaft_start += Vector2(0, -rect.size.y * 0.18)
+			shaft_end += Vector2(0, rect.size.y * 0.18)
+		_:
+			shaft_start += Vector2(-rect.size.x * 0.18, 0)
+			shaft_end += Vector2(rect.size.x * 0.18, 0)
+	draw_line(shaft_start, shaft_end, color, 2.4)
+	var tip := PackedVector2Array()
+	match direction:
+		"left":
+			tip = PackedVector2Array([shaft_end + Vector2(-7, 0), shaft_end + Vector2(4, -5), shaft_end + Vector2(4, 5)])
+		"up":
+			tip = PackedVector2Array([shaft_end + Vector2(0, -7), shaft_end + Vector2(-5, 4), shaft_end + Vector2(5, 4)])
+		"down":
+			tip = PackedVector2Array([shaft_end + Vector2(0, 7), shaft_end + Vector2(-5, -4), shaft_end + Vector2(5, -4)])
+		_:
+			tip = PackedVector2Array([shaft_end + Vector2(7, 0), shaft_end + Vector2(-4, -5), shaft_end + Vector2(-4, 5)])
+	draw_colored_polygon(tip, color)
 
 func _draw_entities(layer_index: int, board_origin: Vector2, tile_size: float, palette: Dictionary) -> void:
 	for entity in runtime.get("entities", []):
@@ -403,6 +456,7 @@ func _get_palette(district_id: String) -> Dictionary:
 		"projector": BASE_PROJECTOR,
 		"echo": BASE_ECHO,
 		"shadow": BASE_SHADOW,
+		"routing": BASE_ROUTING,
 		"active_strip": accent,
 		"inactive_strip": BASE_INACTIVE_STRIP,
 		"grid_line": BASE_GRID_LINE,
@@ -420,5 +474,6 @@ func _get_palette(district_id: String) -> Dictionary:
 		palette["parcel"] = Color("b04a2d")
 		palette["echo"] = Color("556fd8")
 		palette["shadow"] = Color("111111")
+		palette["routing"] = Color("b1411e")
 		palette["grid_line"] = Color("7d6951")
 	return palette

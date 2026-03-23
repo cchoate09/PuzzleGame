@@ -18,9 +18,29 @@ export const ACHIEVEMENTS = [
     "description": "Finish the first three districts and glimpse the routes ahead."
   },
   {
+    "id": "stage-route",
+    "title": "Stage Marks",
+    "description": "Finish the Theater district and restore the stamped stage route."
+  },
+  {
     "id": "festival-line",
     "title": "Festival Line",
-    "description": "Reach the Rooftops and restore the final delivery lane."
+    "description": "Reconnect the full rooftop delivery lane."
+  },
+  {
+    "id": "attic-secret",
+    "title": "Attic Door",
+    "description": "Find the hidden attic route above the town."
+  },
+  {
+    "id": "secret-line",
+    "title": "Secret Line",
+    "description": "Finish the attic postscript and restore Mina's hidden route."
+  },
+  {
+    "id": "archivist",
+    "title": "Archivist",
+    "description": "Collect every hidden journal thread tucked into the late-game side routes."
   },
   {
     "id": "careful-hands",
@@ -61,7 +81,7 @@ export const DISTRICTS = [
     "title": "Clocktower",
     "subtitle": "Timing made visible",
     "unlockPostmarks": 11,
-    "summary": "Echo couriers repeat your previous move one beat later.",
+    "summary": "Echo couriers, rerouted stitch exits, and one optional side route hidden inside the bell frame.",
     "journalTitle": "Clocktower Timing",
     "journalBody": "The tower's routes are delayed by one bell. If I move now, my echo steps a moment later. It is unsettling to solve puzzles with my own future in the room."
   },
@@ -69,8 +89,8 @@ export const DISTRICTS = [
     "id": "theater",
     "title": "Theater",
     "subtitle": "Shadows on the backdrops",
-    "unlockPostmarks": 12,
-    "summary": "Shadow couriers mirror your movements and can latch hidden mechanisms.",
+    "unlockPostmarks": 14,
+    "summary": "Shadow couriers latch hidden marks, then combine with rerouted stitch landings across the stage.",
     "journalTitle": "Theater Blocking",
     "journalBody": "Every prop in the theater has a partner behind the curtain. Nothing moves alone, especially not under the footlights."
   },
@@ -78,8 +98,8 @@ export const DISTRICTS = [
     "id": "rooftops",
     "title": "Rooftops",
     "subtitle": "The festival line",
-    "unlockPostmarks": 13,
-    "summary": "Mix switches, projection, and layer travel in one final route.",
+    "unlockPostmarks": 17,
+    "summary": "Projection and transfer stamps reshape the final rooftop lanes before the festival route reconnects.",
     "journalTitle": "Rooftop Draft",
     "journalBody": "When the routes finally align, the whole town reads like one folded letter. Rooftops first, festival after."
   },
@@ -87,10 +107,15 @@ export const DISTRICTS = [
     "id": "attic",
     "title": "Attic",
     "subtitle": "A hidden route tucked into the rafters",
-    "unlockPostmarks": 14,
-    "summary": "A secret bonus room for players who want one more twist.",
+    "unlockPostmarks": 21,
+    "summary": "A post-credits secret line opened by the three hidden margin routes across the late game.",
     "journalTitle": "Attic Margin",
-    "journalBody": "There is always one route Mina forgets to mention aloud. She says every town deserves one secret line for the people who still look up."
+    "journalBody": "There is always one route Mina forgets to mention aloud. She says every town deserves one secret line for the people who still look up.",
+    "requiresRooms": [
+      "clocktower-side-01",
+      "theater-side-01",
+      "rooftops-side-01"
+    ]
   }
 ];
 export const ROOM_DEFS = [
@@ -1466,6 +1491,292 @@ export const ROOM_DEFS = [
     }
   },
   {
+    "id": "clocktower-02",
+    "districtId": "clocktower",
+    "title": "Borrowed Bell",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Let the echo hold the gate, reach the stitch, and climb to the mailbox.",
+    "blurb": "A delayed footstep can hold the route open long enough to fold through it.",
+    "intro": [
+      {
+        "speaker": "Bell Keeper",
+        "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
+      }
+    ],
+    "hintTiers": [
+      "You do not need the echo to escort you forever. You only need the door open for one crossing.",
+      "Move once to queue the echo, wait so it can stand on the plate, then cross the opened gate and keep climbing.",
+      "Walk right, wait, walk right through the door, walk right onto the stitch, switch sheets, then step right into the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "clock-borrowed-front",
+        "name": "Borrowed Face",
+        "tiles": [
+          "########",
+          "#..D.S.#",
+          "#.####.#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "clock-borrowed-back",
+        "name": "Bell Frame",
+        "tiles": [
+          "########",
+          "#....SG#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "echo-borrowed",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      }
+    ],
+    "switches": [
+      {
+        "id": "clock-borrowed-plate",
+        "layer": 1,
+        "x": 2,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "clock-borrowed-door",
+        "layer": 0,
+        "x": 3,
+        "y": 1,
+        "switchIds": [
+          "clock-borrowed-plate"
+        ]
+      }
+    ],
+    "routingStamps": [],
+    "balance": {
+      "intendedLesson": "Extend echo timing into a stitched route instead of a single hallway crossing.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players often switch too early and forget the echo still has to open the first gate."
+    }
+  },
+  {
+    "id": "clocktower-03",
+    "districtId": "clocktower",
+    "title": "Stamped Exit",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Use the routing stamp to land exactly where the mailbox route resumes.",
+    "blurb": "Some stitched exits arrive somewhere else entirely once they pass under the clock stamp.",
+    "intro": [
+      {
+        "speaker": "Bell Keeper",
+        "text": "That stamp reroutes a stitch exit the instant you land. Read the arrow, not just the stitch."
+      }
+    ],
+    "hintTiers": [
+      "The goal is not a walk after the stitch. The stitch itself is the final delivery hop.",
+      "Switch on the marked stitch. The routing stamp on the destination sheet will slide the exit to the right.",
+      "Walk right twice onto the stitch, then switch sheets. The routing stamp sends you directly to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "clock-stamp-front",
+        "name": "Clock Front",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.###.#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "clock-stamp-back",
+        "name": "Clock Stamp",
+        "tiles": [
+          "#######",
+          "#..S.G#",
+          "#.###.#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [],
+    "switches": [],
+    "doors": [],
+    "routingStamps": [
+      {
+        "id": "clock-switch-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 1,
+        "direction": "right",
+        "distance": 2,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Introduce routing stamps through a clean stitched exit instead of layering them onto multiple other systems at once.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players step on the stitch and still expect to move manually afterward instead of trusting the reroute."
+    }
+  },
+  {
+    "id": "clocktower-side-01",
+    "districtId": "clocktower",
+    "title": "Pendulum Route",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "clocktower-03"
+    ],
+    "objective": "Borrow a beat, fall through the rerouted stitch, and ride the lower route to the mailbox.",
+    "blurb": "A side route that turns one rerouted stitch into a full three-sheet descent.",
+    "intro": [
+      {
+        "speaker": "Bell Keeper",
+        "text": "The stamp drops you onto a second stitch if you line the sheets up first. Think of it like a pendulum swing, not a ladder."
+      }
+    ],
+    "hintTiers": [
+      "The first stitch is not the destination. It is the drop point for the second switch.",
+      "Use the echo to open the first door, then let the routing stamp drop you onto the lower stitch before you switch again.",
+      "Walk right, wait, walk right three more times to the stitch, switch to the middle sheet, switch again at the lower stitch, then go right and climb to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "clock-pendulum-front",
+        "name": "Pendulum Face",
+        "tiles": [
+          "########",
+          "#..D.S.#",
+          "#.####.#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "clock-pendulum-middle",
+        "name": "Pendulum Frame",
+        "tiles": [
+          "########",
+          "#....S.#",
+          "#.####.#",
+          "#......#",
+          "#....S.#",
+          "########"
+        ]
+      },
+      {
+        "id": "clock-pendulum-back",
+        "name": "Bell Route",
+        "tiles": [
+          "########",
+          "#.....G#",
+          "#.####.#",
+          "#......#",
+          "#....S.#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "echo-pendulum",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      }
+    ],
+    "switches": [
+      {
+        "id": "clock-pendulum-plate",
+        "layer": 1,
+        "x": 2,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "clock-pendulum-door",
+        "layer": 0,
+        "x": 3,
+        "y": 1,
+        "switchIds": [
+          "clock-pendulum-plate"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "clock-pendulum-stamp",
+        "layer": 1,
+        "x": 5,
+        "y": 1,
+        "direction": "down",
+        "distance": 3,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Use one routing stamp to turn a familiar echo-door puzzle into a genuine three-sheet route.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 7,
+      "commonMisunderstanding": "Players often switch once, see the lower stitch, and then forget the final climb still happens on the back sheet."
+    }
+  },
+  {
     "id": "theater-01",
     "districtId": "theater",
     "title": "Understudy",
@@ -1556,6 +1867,322 @@ export const ROOM_DEFS = [
     }
   },
   {
+    "id": "theater-02",
+    "districtId": "theater",
+    "title": "Latch Cue",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Let your shadow latch the hidden switch, then climb through the open route.",
+    "blurb": "The stage route stays open once the understudy hits the mark.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
+      }
+    ],
+    "hintTiers": [
+      "The shadow does not need to babysit the switch. It only needs to touch it once.",
+      "Move right once to latch the switch with the shadow, then make your own climb to the stitch.",
+      "Move right, go up three times to the stitch, switch sheets, then go down and cross the now-open route to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "stage-latch-front",
+        "name": "Stage",
+        "tiles": [
+          "#######",
+          "#.S...#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "stage-latch-back",
+        "name": "Backstage",
+        "tiles": [
+          "#######",
+          "#.S...#",
+          "#....G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-latch",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-latch-switch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-latch-door",
+        "layer": 1,
+        "x": 3,
+        "y": 2,
+        "switchIds": [
+          "stage-latch-switch"
+        ]
+      }
+    ],
+    "routingStamps": [],
+    "balance": {
+      "intendedLesson": "Introduce sticky latches as a cleaner shadow-planning escalation before the routed shadow rooms.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players often assume the shadow must keep standing on the switch and overcomplicate the route."
+    }
+  },
+  {
+    "id": "theater-03",
+    "districtId": "theater",
+    "title": "Marked Landing",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Latch the mark, switch sheets, and let the stamp drop you through the open landing.",
+    "blurb": "The spotlight stamp only helps if the shadow has already unlocked the door it lands on.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "The stamp lands you on a different mark, but the landing only matters if the shadow has opened the prop door first."
+      }
+    ],
+    "hintTiers": [
+      "The shadow action happens before the stitched landing pays off.",
+      "Step right once to latch the switch with the shadow, then climb to the stitch and trust the rerouted landing.",
+      "Move right, go up three times, move right onto the stitch, switch sheets, and step right into the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "stage-mark-front",
+        "name": "Stage Floor",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#..##..#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "stage-mark-back",
+        "name": "Spotlight Grid",
+        "tiles": [
+          "########",
+          "#..S.DG#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-mark",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-mark-switch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-mark-door",
+        "layer": 1,
+        "x": 5,
+        "y": 1,
+        "switchIds": [
+          "stage-mark-switch"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "stage-mark-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 1,
+        "direction": "right",
+        "distance": 2,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "achievementId": "stage-route",
+    "balance": {
+      "intendedLesson": "Combine sticky shadow setup with a routed stitch landing that only works because the shadow solved the destination first.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 6,
+      "commonMisunderstanding": "Players often climb correctly but forget to move right once at the start, so the landing stays blocked."
+    }
+  },
+  {
+    "id": "theater-side-01",
+    "districtId": "theater",
+    "title": "Backstage Fold",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "theater-03"
+    ],
+    "objective": "Latch the cue, fall through the rerouted stitch, and take the hidden backstage climb.",
+    "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
+      }
+    ],
+    "hintTiers": [
+      "The first stitch is the setup. The second stitch is the route.",
+      "Move right once so the shadow latches the cue, then use the routed stitch to drop onto the lower switch point.",
+      "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "stage-fold-front",
+        "name": "Front Curtain",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "stage-fold-middle",
+        "name": "Backstage Grid",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#..S...#",
+          "########"
+        ]
+      },
+      {
+        "id": "stage-fold-back",
+        "name": "Fly Loft",
+        "tiles": [
+          "########",
+          "#....DG#",
+          "#......#",
+          "#......#",
+          "#..S...#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-fold",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-fold-switch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-fold-door",
+        "layer": 2,
+        "x": 5,
+        "y": 1,
+        "switchIds": [
+          "stage-fold-switch"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "stage-fold-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 1,
+        "direction": "down",
+        "distance": 3,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Push the routed shadow idea into a three-layer secret path that still hinges on one readable fold.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 8,
+      "commonMisunderstanding": "Players often keep searching the middle sheet for the goal instead of treating it as the folded route into the loft."
+    }
+  },
+  {
     "id": "rooftops-01",
     "districtId": "rooftops",
     "title": "Festival Line",
@@ -1570,7 +2197,6 @@ export const ROOM_DEFS = [
         "text": "By now the town expects more than one insight at a time. Hold the line open, then build the bridge."
       }
     ],
-    "achievementId": "festival-line",
     "hintTiers": [
       "One parcel belongs on the switch. The lantern belongs where the tear is.",
       "Park the parcel on the switch first so you do not have to revisit it after the bridge is ready.",
@@ -1659,6 +2285,450 @@ export const ROOM_DEFS = [
       "targetDifficulty": 4,
       "expectedSolveMinutes": 6,
       "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
+    },
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
+      }
+    ]
+  },
+  {
+    "id": "rooftops-02",
+    "districtId": "rooftops",
+    "title": "Forwarded Lantern",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Push the lantern into line, switch sheets, and cross the rerouted bridge.",
+    "blurb": "The rooftop stamp forwards a bridge one tile farther than the lantern expects.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "Projection stamps forward the bridge itself. Line the lantern up with the stamp, not the gap."
+      }
+    ],
+    "hintTiers": [
+      "Aim the lantern at the stamp tile, not directly at the gap.",
+      "Push the lantern left once so its projection lands on the stamp, then switch sheets and walk over the forwarded bridge.",
+      "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down, then cross right three times to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "roof-forward-top",
+        "name": "Roofline",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "roof-forward-bottom",
+        "name": "Forwarded Span",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#...~.G#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 3,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "lantern-forward",
+        "type": "projector",
+        "layer": 0,
+        "x": 4,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 1,
+            "dx": 0,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "routingStamps": [
+      {
+        "id": "roof-forward-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 2,
+        "direction": "right",
+        "distance": 1,
+        "appliesTo": [
+          "projection"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Introduce projection routing as a spatial alignment problem instead of a raw bridge-placement guess.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players push the lantern directly under the gap and miss that the stamp forwards the bridge one tile farther."
+    }
+  },
+  {
+    "id": "rooftops-03",
+    "districtId": "rooftops",
+    "title": "Stamped Parcel",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Forward the parcel onto the rooftop plate, then climb through the reopened lane.",
+    "blurb": "A transfer stamp can park a parcel exactly where a distant lane needs weight.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "The parcel does not stay where you send it. The rooftop stamp forwards the delivery to the pressure plate."
+      }
+    ],
+    "hintTiers": [
+      "Transfer first. The stamp will handle the final parking spot for the parcel.",
+      "Stand still and transfer the parcel into the other sheet; the stamp there forwards it onto the switch.",
+      "Transfer the parcel, climb to the stitch with three moves up and two right, switch sheets, then walk right three times through the open lane to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "roof-transfer-top",
+        "name": "Top Route",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "roof-transfer-bottom",
+        "name": "Stamped Lane",
+        "tiles": [
+          "########",
+          "#..S.DG#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-stamped",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "roof-transfer-plate",
+        "layer": 1,
+        "x": 4,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "roof-transfer-door",
+        "layer": 1,
+        "x": 5,
+        "y": 1,
+        "switchIds": [
+          "roof-transfer-plate"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "roof-transfer-stamp",
+        "layer": 1,
+        "x": 2,
+        "y": 4,
+        "direction": "right",
+        "distance": 2,
+        "appliesTo": [
+          "transfer"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Introduce transfer routing as a way to park a parcel across the fold without a long push setup.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 6,
+      "commonMisunderstanding": "Players often try to walk the parcel to the plate manually instead of trusting the transfer stamp."
+    }
+  },
+  {
+    "id": "rooftops-side-01",
+    "districtId": "rooftops",
+    "title": "Sky Postscript",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "rooftops-03"
+    ],
+    "objective": "Push the lantern into line, fold through both stitches, and trace the hidden rooftop note.",
+    "blurb": "The skyline keeps one extra route for players who read the stamps and the folds together.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "There is one more note tucked into the skyline if you can read the bridge, the stitch, and the drop as one route."
+      }
+    ],
+    "hintTiers": [
+      "Set the lantern before you start climbing. The folded route only works once the bridge is already forwarded.",
+      "Push the lantern left once, climb to the top stitch, drop to the lower stitch on the middle sheet, then cross the forwarded bridge on the last sheet.",
+      "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down twice to the lower stitch, switch again, go up once, then cross right three times to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "sky-postscript-top",
+        "name": "Upper Roof",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "sky-postscript-middle",
+        "name": "Margin Route",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#..S...#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "sky-postscript-bottom",
+        "name": "Skyline Note",
+        "tiles": [
+          "########",
+          "#......#",
+          "#...~.G#",
+          "#..S...#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 3,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "lantern-postscript",
+        "type": "projector",
+        "layer": 0,
+        "x": 4,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": 0,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "routingStamps": [
+      {
+        "id": "sky-postscript-stamp",
+        "layer": 2,
+        "x": 3,
+        "y": 2,
+        "direction": "right",
+        "distance": 1,
+        "appliesTo": [
+          "projection"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Turn projection routing into a longer folded route that still hinges on one bridge-placement insight.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 8,
+      "commonMisunderstanding": "Players often reach the lower stitch correctly but forget the bridge was forwarded one tile farther than the lamp suggests."
+    }
+  },
+  {
+    "id": "rooftops-04",
+    "districtId": "rooftops",
+    "title": "Festival Line Restored",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Park the parcel, trust the forwarded lantern bridge, and reconnect the full rooftop line.",
+    "blurb": "The final rooftop route ties pressure, projection, and three stitched sheets into one letter-long climb.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "This is the full line: park the parcel, trust the forwarded bridge, then follow the fold all the way down to the festival roof."
+      }
+    ],
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "The festival line is back. If you also found the three hidden margins, there is still one attic route left above us."
+      }
+    ],
+    "hintTiers": [
+      "Treat this as setup first and travel second. The parcel and lantern should be ready before you start climbing.",
+      "Push the parcel onto the plate, use the upper stitch to reach the middle sheet, then descend to the lower stitch before you cross the bridge.",
+      "Move left three times to park the parcel, climb to the upper stitch, switch to the middle sheet, descend to the lower stitch, switch again, then go up twice and right three times through the bridge and door."
+    ],
+    "achievementId": "festival-line",
+    "layers": [
+      {
+        "id": "festival-line-top",
+        "name": "Festival Roof",
+        "tiles": [
+          "########",
+          "#.S....#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "festival-line-middle",
+        "name": "Carrier Fold",
+        "tiles": [
+          "########",
+          "#.S....#",
+          "#......#",
+          "#......#",
+          "#.S....#",
+          "########"
+        ]
+      },
+      {
+        "id": "festival-line-bottom",
+        "name": "Delivery Lane",
+        "tiles": [
+          "########",
+          "#......#",
+          "#..~DG.#",
+          "#......#",
+          "#.S....#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "festival-parcel",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "festival-lantern",
+        "type": "projector",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": -1,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [
+      {
+        "id": "festival-line-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "festival-line-door",
+        "layer": 2,
+        "x": 4,
+        "y": 2,
+        "switchIds": [
+          "festival-line-plate"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "festival-line-stamp",
+        "layer": 2,
+        "x": 2,
+        "y": 2,
+        "direction": "right",
+        "distance": 1,
+        "appliesTo": [
+          "projection"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Deliver a real finale by braiding parcel parking, forwarded projection, and three-layer travel into one readable route.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 9,
+      "commonMisunderstanding": "Players often start climbing before the parcel is parked and then have to unravel the whole route when the final door is still shut."
     }
   },
   {
@@ -1750,6 +2820,287 @@ export const ROOM_DEFS = [
       "targetDifficulty": 4,
       "expectedSolveMinutes": 5,
       "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
+    },
+    "secret": true,
+    "achievementId": "attic-secret",
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+      }
+    ],
+    "requiresRooms": [
+      "clocktower-side-01",
+      "theater-side-01",
+      "rooftops-side-01"
+    ]
+  },
+  {
+    "id": "attic-02",
+    "districtId": "attic",
+    "title": "Folded Ledger",
+    "optional": true,
+    "secret": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "attic-01"
+    ],
+    "objective": "Latch the shadow cue, drop through the rerouted stitch, and climb the ledger route.",
+    "blurb": "One hidden route folds through a second stitch only after the shadow has opened the door at the top.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "The attic routes are never straight. Open the top door with your shadow first, then trust the drop into the ledger fold."
+      }
+    ],
+    "hintTiers": [
+      "The shadow setup happens before the stitched drop matters.",
+      "Move right once to latch the switch with the shadow, then climb to the stitch and let the routing stamp drop you to the lower one.",
+      "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "attic-ledger-top",
+        "name": "Ledger Top",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "attic-ledger-middle",
+        "name": "Ledger Fold",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#..S...#",
+          "########"
+        ]
+      },
+      {
+        "id": "attic-ledger-bottom",
+        "name": "Ledger Back",
+        "tiles": [
+          "########",
+          "#....DG#",
+          "#......#",
+          "#......#",
+          "#..S...#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-ledger",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "attic-ledger-latch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "attic-ledger-door",
+        "layer": 2,
+        "x": 5,
+        "y": 1,
+        "switchIds": [
+          "attic-ledger-latch"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "attic-ledger-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 1,
+        "direction": "down",
+        "distance": 3,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Blend the secret-route shadow latch with a routed drop that converts one stitched entry into a full attic climb.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 9,
+      "commonMisunderstanding": "Players often set the shadow correctly but keep searching the middle sheet for the goal instead of switching again immediately."
+    }
+  },
+  {
+    "id": "attic-03",
+    "districtId": "attic",
+    "title": "Mina's Postscript",
+    "optional": true,
+    "secret": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "attic-02"
+    ],
+    "objective": "Latch the final cue, trust both stamps, and carry the attic line to its last mailbox.",
+    "blurb": "The hidden route ends by combining a rerouted stitch with a forwarded lantern bridge.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "This is the one route I never wrote down cleanly. Set the shadow cue, trust the drop, and let the lantern finish the sentence."
+      }
+    ],
+    "achievementId": "secret-line",
+    "hintTiers": [
+      "The first move sets the shadow cue. After that, the stamps do the clever part for you.",
+      "Move right once so the shadow latches the switch, climb to the upper stitch, let it drop you to the lower stitch, then follow the lantern bridge through the final door.",
+      "Move right, go up three times, switch sheets, switch again, go up twice, then cross right three times through the bridge and the opened door to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "postscript-top",
+        "name": "Postscript Front",
+        "tiles": [
+          "########",
+          "#.S....#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "postscript-middle",
+        "name": "Postscript Fold",
+        "tiles": [
+          "########",
+          "#.S....#",
+          "#......#",
+          "#......#",
+          "#.S....#",
+          "########"
+        ]
+      },
+      {
+        "id": "postscript-back",
+        "name": "Postscript Route",
+        "tiles": [
+          "########",
+          "#......#",
+          "#..~DG.#",
+          "#......#",
+          "#.S....#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-postscript",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
+      {
+        "id": "lantern-postscript",
+        "type": "projector",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": -1,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [
+      {
+        "id": "postscript-latch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "postscript-door",
+        "layer": 2,
+        "x": 4,
+        "y": 2,
+        "switchIds": [
+          "postscript-latch"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "postscript-switch-stamp",
+        "layer": 1,
+        "x": 2,
+        "y": 1,
+        "direction": "down",
+        "distance": 3,
+        "appliesTo": [
+          "switch"
+        ]
+      },
+      {
+        "id": "postscript-bridge-stamp",
+        "layer": 2,
+        "x": 2,
+        "y": 2,
+        "direction": "right",
+        "distance": 1,
+        "appliesTo": [
+          "projection"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Finish the secret route by combining the two routing channels players learned separately into one clean attic postscript.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 10,
+      "commonMisunderstanding": "Players often remember the stitched drop but forget the lantern bridge is also being rerouted by a second stamp."
     }
   }
 ];
@@ -3125,6 +4476,292 @@ export const ROOM_LOOKUP = {
       "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
     }
   },
+  "clocktower-02": {
+    "id": "clocktower-02",
+    "districtId": "clocktower",
+    "title": "Borrowed Bell",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Let the echo hold the gate, reach the stitch, and climb to the mailbox.",
+    "blurb": "A delayed footstep can hold the route open long enough to fold through it.",
+    "intro": [
+      {
+        "speaker": "Bell Keeper",
+        "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
+      }
+    ],
+    "hintTiers": [
+      "You do not need the echo to escort you forever. You only need the door open for one crossing.",
+      "Move once to queue the echo, wait so it can stand on the plate, then cross the opened gate and keep climbing.",
+      "Walk right, wait, walk right through the door, walk right onto the stitch, switch sheets, then step right into the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "clock-borrowed-front",
+        "name": "Borrowed Face",
+        "tiles": [
+          "########",
+          "#..D.S.#",
+          "#.####.#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "clock-borrowed-back",
+        "name": "Bell Frame",
+        "tiles": [
+          "########",
+          "#....SG#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "echo-borrowed",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      }
+    ],
+    "switches": [
+      {
+        "id": "clock-borrowed-plate",
+        "layer": 1,
+        "x": 2,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "clock-borrowed-door",
+        "layer": 0,
+        "x": 3,
+        "y": 1,
+        "switchIds": [
+          "clock-borrowed-plate"
+        ]
+      }
+    ],
+    "routingStamps": [],
+    "balance": {
+      "intendedLesson": "Extend echo timing into a stitched route instead of a single hallway crossing.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players often switch too early and forget the echo still has to open the first gate."
+    }
+  },
+  "clocktower-03": {
+    "id": "clocktower-03",
+    "districtId": "clocktower",
+    "title": "Stamped Exit",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Use the routing stamp to land exactly where the mailbox route resumes.",
+    "blurb": "Some stitched exits arrive somewhere else entirely once they pass under the clock stamp.",
+    "intro": [
+      {
+        "speaker": "Bell Keeper",
+        "text": "That stamp reroutes a stitch exit the instant you land. Read the arrow, not just the stitch."
+      }
+    ],
+    "hintTiers": [
+      "The goal is not a walk after the stitch. The stitch itself is the final delivery hop.",
+      "Switch on the marked stitch. The routing stamp on the destination sheet will slide the exit to the right.",
+      "Walk right twice onto the stitch, then switch sheets. The routing stamp sends you directly to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "clock-stamp-front",
+        "name": "Clock Front",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.###.#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "clock-stamp-back",
+        "name": "Clock Stamp",
+        "tiles": [
+          "#######",
+          "#..S.G#",
+          "#.###.#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [],
+    "switches": [],
+    "doors": [],
+    "routingStamps": [
+      {
+        "id": "clock-switch-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 1,
+        "direction": "right",
+        "distance": 2,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Introduce routing stamps through a clean stitched exit instead of layering them onto multiple other systems at once.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players step on the stitch and still expect to move manually afterward instead of trusting the reroute."
+    }
+  },
+  "clocktower-side-01": {
+    "id": "clocktower-side-01",
+    "districtId": "clocktower",
+    "title": "Pendulum Route",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "clocktower-03"
+    ],
+    "objective": "Borrow a beat, fall through the rerouted stitch, and ride the lower route to the mailbox.",
+    "blurb": "A side route that turns one rerouted stitch into a full three-sheet descent.",
+    "intro": [
+      {
+        "speaker": "Bell Keeper",
+        "text": "The stamp drops you onto a second stitch if you line the sheets up first. Think of it like a pendulum swing, not a ladder."
+      }
+    ],
+    "hintTiers": [
+      "The first stitch is not the destination. It is the drop point for the second switch.",
+      "Use the echo to open the first door, then let the routing stamp drop you onto the lower stitch before you switch again.",
+      "Walk right, wait, walk right three more times to the stitch, switch to the middle sheet, switch again at the lower stitch, then go right and climb to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "clock-pendulum-front",
+        "name": "Pendulum Face",
+        "tiles": [
+          "########",
+          "#..D.S.#",
+          "#.####.#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "clock-pendulum-middle",
+        "name": "Pendulum Frame",
+        "tiles": [
+          "########",
+          "#....S.#",
+          "#.####.#",
+          "#......#",
+          "#....S.#",
+          "########"
+        ]
+      },
+      {
+        "id": "clock-pendulum-back",
+        "name": "Bell Route",
+        "tiles": [
+          "########",
+          "#.....G#",
+          "#.####.#",
+          "#......#",
+          "#....S.#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "echo-pendulum",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      }
+    ],
+    "switches": [
+      {
+        "id": "clock-pendulum-plate",
+        "layer": 1,
+        "x": 2,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "clock-pendulum-door",
+        "layer": 0,
+        "x": 3,
+        "y": 1,
+        "switchIds": [
+          "clock-pendulum-plate"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "clock-pendulum-stamp",
+        "layer": 1,
+        "x": 5,
+        "y": 1,
+        "direction": "down",
+        "distance": 3,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Use one routing stamp to turn a familiar echo-door puzzle into a genuine three-sheet route.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 7,
+      "commonMisunderstanding": "Players often switch once, see the lower stitch, and then forget the final climb still happens on the back sheet."
+    }
+  },
   "theater-01": {
     "id": "theater-01",
     "districtId": "theater",
@@ -3215,6 +4852,322 @@ export const ROOM_LOOKUP = {
       "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
     }
   },
+  "theater-02": {
+    "id": "theater-02",
+    "districtId": "theater",
+    "title": "Latch Cue",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Let your shadow latch the hidden switch, then climb through the open route.",
+    "blurb": "The stage route stays open once the understudy hits the mark.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
+      }
+    ],
+    "hintTiers": [
+      "The shadow does not need to babysit the switch. It only needs to touch it once.",
+      "Move right once to latch the switch with the shadow, then make your own climb to the stitch.",
+      "Move right, go up three times to the stitch, switch sheets, then go down and cross the now-open route to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "stage-latch-front",
+        "name": "Stage",
+        "tiles": [
+          "#######",
+          "#.S...#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "stage-latch-back",
+        "name": "Backstage",
+        "tiles": [
+          "#######",
+          "#.S...#",
+          "#....G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-latch",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-latch-switch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-latch-door",
+        "layer": 1,
+        "x": 3,
+        "y": 2,
+        "switchIds": [
+          "stage-latch-switch"
+        ]
+      }
+    ],
+    "routingStamps": [],
+    "balance": {
+      "intendedLesson": "Introduce sticky latches as a cleaner shadow-planning escalation before the routed shadow rooms.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players often assume the shadow must keep standing on the switch and overcomplicate the route."
+    }
+  },
+  "theater-03": {
+    "id": "theater-03",
+    "districtId": "theater",
+    "title": "Marked Landing",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Latch the mark, switch sheets, and let the stamp drop you through the open landing.",
+    "blurb": "The spotlight stamp only helps if the shadow has already unlocked the door it lands on.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "The stamp lands you on a different mark, but the landing only matters if the shadow has opened the prop door first."
+      }
+    ],
+    "hintTiers": [
+      "The shadow action happens before the stitched landing pays off.",
+      "Step right once to latch the switch with the shadow, then climb to the stitch and trust the rerouted landing.",
+      "Move right, go up three times, move right onto the stitch, switch sheets, and step right into the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "stage-mark-front",
+        "name": "Stage Floor",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#..##..#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "stage-mark-back",
+        "name": "Spotlight Grid",
+        "tiles": [
+          "########",
+          "#..S.DG#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-mark",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-mark-switch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-mark-door",
+        "layer": 1,
+        "x": 5,
+        "y": 1,
+        "switchIds": [
+          "stage-mark-switch"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "stage-mark-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 1,
+        "direction": "right",
+        "distance": 2,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "achievementId": "stage-route",
+    "balance": {
+      "intendedLesson": "Combine sticky shadow setup with a routed stitch landing that only works because the shadow solved the destination first.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 6,
+      "commonMisunderstanding": "Players often climb correctly but forget to move right once at the start, so the landing stays blocked."
+    }
+  },
+  "theater-side-01": {
+    "id": "theater-side-01",
+    "districtId": "theater",
+    "title": "Backstage Fold",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "theater-03"
+    ],
+    "objective": "Latch the cue, fall through the rerouted stitch, and take the hidden backstage climb.",
+    "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
+      }
+    ],
+    "hintTiers": [
+      "The first stitch is the setup. The second stitch is the route.",
+      "Move right once so the shadow latches the cue, then use the routed stitch to drop onto the lower switch point.",
+      "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "stage-fold-front",
+        "name": "Front Curtain",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "stage-fold-middle",
+        "name": "Backstage Grid",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#..S...#",
+          "########"
+        ]
+      },
+      {
+        "id": "stage-fold-back",
+        "name": "Fly Loft",
+        "tiles": [
+          "########",
+          "#....DG#",
+          "#......#",
+          "#......#",
+          "#..S...#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-fold",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-fold-switch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-fold-door",
+        "layer": 2,
+        "x": 5,
+        "y": 1,
+        "switchIds": [
+          "stage-fold-switch"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "stage-fold-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 1,
+        "direction": "down",
+        "distance": 3,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Push the routed shadow idea into a three-layer secret path that still hinges on one readable fold.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 8,
+      "commonMisunderstanding": "Players often keep searching the middle sheet for the goal instead of treating it as the folded route into the loft."
+    }
+  },
   "rooftops-01": {
     "id": "rooftops-01",
     "districtId": "rooftops",
@@ -3230,7 +5183,6 @@ export const ROOM_LOOKUP = {
         "text": "By now the town expects more than one insight at a time. Hold the line open, then build the bridge."
       }
     ],
-    "achievementId": "festival-line",
     "hintTiers": [
       "One parcel belongs on the switch. The lantern belongs where the tear is.",
       "Park the parcel on the switch first so you do not have to revisit it after the bridge is ready.",
@@ -3319,6 +5271,450 @@ export const ROOM_LOOKUP = {
       "targetDifficulty": 4,
       "expectedSolveMinutes": 6,
       "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
+    },
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
+      }
+    ]
+  },
+  "rooftops-02": {
+    "id": "rooftops-02",
+    "districtId": "rooftops",
+    "title": "Forwarded Lantern",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Push the lantern into line, switch sheets, and cross the rerouted bridge.",
+    "blurb": "The rooftop stamp forwards a bridge one tile farther than the lantern expects.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "Projection stamps forward the bridge itself. Line the lantern up with the stamp, not the gap."
+      }
+    ],
+    "hintTiers": [
+      "Aim the lantern at the stamp tile, not directly at the gap.",
+      "Push the lantern left once so its projection lands on the stamp, then switch sheets and walk over the forwarded bridge.",
+      "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down, then cross right three times to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "roof-forward-top",
+        "name": "Roofline",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "roof-forward-bottom",
+        "name": "Forwarded Span",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#...~.G#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 3,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "lantern-forward",
+        "type": "projector",
+        "layer": 0,
+        "x": 4,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 1,
+            "dx": 0,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "routingStamps": [
+      {
+        "id": "roof-forward-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 2,
+        "direction": "right",
+        "distance": 1,
+        "appliesTo": [
+          "projection"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Introduce projection routing as a spatial alignment problem instead of a raw bridge-placement guess.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players push the lantern directly under the gap and miss that the stamp forwards the bridge one tile farther."
+    }
+  },
+  "rooftops-03": {
+    "id": "rooftops-03",
+    "districtId": "rooftops",
+    "title": "Stamped Parcel",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Forward the parcel onto the rooftop plate, then climb through the reopened lane.",
+    "blurb": "A transfer stamp can park a parcel exactly where a distant lane needs weight.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "The parcel does not stay where you send it. The rooftop stamp forwards the delivery to the pressure plate."
+      }
+    ],
+    "hintTiers": [
+      "Transfer first. The stamp will handle the final parking spot for the parcel.",
+      "Stand still and transfer the parcel into the other sheet; the stamp there forwards it onto the switch.",
+      "Transfer the parcel, climb to the stitch with three moves up and two right, switch sheets, then walk right three times through the open lane to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "roof-transfer-top",
+        "name": "Top Route",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "roof-transfer-bottom",
+        "name": "Stamped Lane",
+        "tiles": [
+          "########",
+          "#..S.DG#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-stamped",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "roof-transfer-plate",
+        "layer": 1,
+        "x": 4,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "roof-transfer-door",
+        "layer": 1,
+        "x": 5,
+        "y": 1,
+        "switchIds": [
+          "roof-transfer-plate"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "roof-transfer-stamp",
+        "layer": 1,
+        "x": 2,
+        "y": 4,
+        "direction": "right",
+        "distance": 2,
+        "appliesTo": [
+          "transfer"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Introduce transfer routing as a way to park a parcel across the fold without a long push setup.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 6,
+      "commonMisunderstanding": "Players often try to walk the parcel to the plate manually instead of trusting the transfer stamp."
+    }
+  },
+  "rooftops-side-01": {
+    "id": "rooftops-side-01",
+    "districtId": "rooftops",
+    "title": "Sky Postscript",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "rooftops-03"
+    ],
+    "objective": "Push the lantern into line, fold through both stitches, and trace the hidden rooftop note.",
+    "blurb": "The skyline keeps one extra route for players who read the stamps and the folds together.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "There is one more note tucked into the skyline if you can read the bridge, the stitch, and the drop as one route."
+      }
+    ],
+    "hintTiers": [
+      "Set the lantern before you start climbing. The folded route only works once the bridge is already forwarded.",
+      "Push the lantern left once, climb to the top stitch, drop to the lower stitch on the middle sheet, then cross the forwarded bridge on the last sheet.",
+      "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down twice to the lower stitch, switch again, go up once, then cross right three times to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "sky-postscript-top",
+        "name": "Upper Roof",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "sky-postscript-middle",
+        "name": "Margin Route",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#..S...#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "sky-postscript-bottom",
+        "name": "Skyline Note",
+        "tiles": [
+          "########",
+          "#......#",
+          "#...~.G#",
+          "#..S...#",
+          "#......#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 3,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "lantern-postscript",
+        "type": "projector",
+        "layer": 0,
+        "x": 4,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": 0,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "routingStamps": [
+      {
+        "id": "sky-postscript-stamp",
+        "layer": 2,
+        "x": 3,
+        "y": 2,
+        "direction": "right",
+        "distance": 1,
+        "appliesTo": [
+          "projection"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Turn projection routing into a longer folded route that still hinges on one bridge-placement insight.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 8,
+      "commonMisunderstanding": "Players often reach the lower stitch correctly but forget the bridge was forwarded one tile farther than the lamp suggests."
+    }
+  },
+  "rooftops-04": {
+    "id": "rooftops-04",
+    "districtId": "rooftops",
+    "title": "Festival Line Restored",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Park the parcel, trust the forwarded lantern bridge, and reconnect the full rooftop line.",
+    "blurb": "The final rooftop route ties pressure, projection, and three stitched sheets into one letter-long climb.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "This is the full line: park the parcel, trust the forwarded bridge, then follow the fold all the way down to the festival roof."
+      }
+    ],
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "The festival line is back. If you also found the three hidden margins, there is still one attic route left above us."
+      }
+    ],
+    "hintTiers": [
+      "Treat this as setup first and travel second. The parcel and lantern should be ready before you start climbing.",
+      "Push the parcel onto the plate, use the upper stitch to reach the middle sheet, then descend to the lower stitch before you cross the bridge.",
+      "Move left three times to park the parcel, climb to the upper stitch, switch to the middle sheet, descend to the lower stitch, switch again, then go up twice and right three times through the bridge and door."
+    ],
+    "achievementId": "festival-line",
+    "layers": [
+      {
+        "id": "festival-line-top",
+        "name": "Festival Roof",
+        "tiles": [
+          "########",
+          "#.S....#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "festival-line-middle",
+        "name": "Carrier Fold",
+        "tiles": [
+          "########",
+          "#.S....#",
+          "#......#",
+          "#......#",
+          "#.S....#",
+          "########"
+        ]
+      },
+      {
+        "id": "festival-line-bottom",
+        "name": "Delivery Lane",
+        "tiles": [
+          "########",
+          "#......#",
+          "#..~DG.#",
+          "#......#",
+          "#.S....#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "festival-parcel",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "festival-lantern",
+        "type": "projector",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": -1,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [
+      {
+        "id": "festival-line-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "festival-line-door",
+        "layer": 2,
+        "x": 4,
+        "y": 2,
+        "switchIds": [
+          "festival-line-plate"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "festival-line-stamp",
+        "layer": 2,
+        "x": 2,
+        "y": 2,
+        "direction": "right",
+        "distance": 1,
+        "appliesTo": [
+          "projection"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Deliver a real finale by braiding parcel parking, forwarded projection, and three-layer travel into one readable route.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 9,
+      "commonMisunderstanding": "Players often start climbing before the parcel is parked and then have to unravel the whole route when the final door is still shut."
     }
   },
   "attic-01": {
@@ -3410,6 +5806,287 @@ export const ROOM_LOOKUP = {
       "targetDifficulty": 4,
       "expectedSolveMinutes": 5,
       "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
+    },
+    "secret": true,
+    "achievementId": "attic-secret",
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+      }
+    ],
+    "requiresRooms": [
+      "clocktower-side-01",
+      "theater-side-01",
+      "rooftops-side-01"
+    ]
+  },
+  "attic-02": {
+    "id": "attic-02",
+    "districtId": "attic",
+    "title": "Folded Ledger",
+    "optional": true,
+    "secret": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "attic-01"
+    ],
+    "objective": "Latch the shadow cue, drop through the rerouted stitch, and climb the ledger route.",
+    "blurb": "One hidden route folds through a second stitch only after the shadow has opened the door at the top.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "The attic routes are never straight. Open the top door with your shadow first, then trust the drop into the ledger fold."
+      }
+    ],
+    "hintTiers": [
+      "The shadow setup happens before the stitched drop matters.",
+      "Move right once to latch the switch with the shadow, then climb to the stitch and let the routing stamp drop you to the lower one.",
+      "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "attic-ledger-top",
+        "name": "Ledger Top",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "attic-ledger-middle",
+        "name": "Ledger Fold",
+        "tiles": [
+          "########",
+          "#..S...#",
+          "#......#",
+          "#......#",
+          "#..S...#",
+          "########"
+        ]
+      },
+      {
+        "id": "attic-ledger-bottom",
+        "name": "Ledger Back",
+        "tiles": [
+          "########",
+          "#....DG#",
+          "#......#",
+          "#......#",
+          "#..S...#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-ledger",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "attic-ledger-latch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "attic-ledger-door",
+        "layer": 2,
+        "x": 5,
+        "y": 1,
+        "switchIds": [
+          "attic-ledger-latch"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "attic-ledger-stamp",
+        "layer": 1,
+        "x": 3,
+        "y": 1,
+        "direction": "down",
+        "distance": 3,
+        "appliesTo": [
+          "switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Blend the secret-route shadow latch with a routed drop that converts one stitched entry into a full attic climb.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 9,
+      "commonMisunderstanding": "Players often set the shadow correctly but keep searching the middle sheet for the goal instead of switching again immediately."
+    }
+  },
+  "attic-03": {
+    "id": "attic-03",
+    "districtId": "attic",
+    "title": "Mina's Postscript",
+    "optional": true,
+    "secret": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "requiresRooms": [
+      "attic-02"
+    ],
+    "objective": "Latch the final cue, trust both stamps, and carry the attic line to its last mailbox.",
+    "blurb": "The hidden route ends by combining a rerouted stitch with a forwarded lantern bridge.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "This is the one route I never wrote down cleanly. Set the shadow cue, trust the drop, and let the lantern finish the sentence."
+      }
+    ],
+    "achievementId": "secret-line",
+    "hintTiers": [
+      "The first move sets the shadow cue. After that, the stamps do the clever part for you.",
+      "Move right once so the shadow latches the switch, climb to the upper stitch, let it drop you to the lower stitch, then follow the lantern bridge through the final door.",
+      "Move right, go up three times, switch sheets, switch again, go up twice, then cross right three times through the bridge and the opened door to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "postscript-top",
+        "name": "Postscript Front",
+        "tiles": [
+          "########",
+          "#.S....#",
+          "#......#",
+          "#......#",
+          "#......#",
+          "########"
+        ]
+      },
+      {
+        "id": "postscript-middle",
+        "name": "Postscript Fold",
+        "tiles": [
+          "########",
+          "#.S....#",
+          "#......#",
+          "#......#",
+          "#.S....#",
+          "########"
+        ]
+      },
+      {
+        "id": "postscript-back",
+        "name": "Postscript Route",
+        "tiles": [
+          "########",
+          "#......#",
+          "#..~DG.#",
+          "#......#",
+          "#.S....#",
+          "########"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-postscript",
+        "type": "shadow",
+        "layer": 1,
+        "x": 5,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
+      {
+        "id": "lantern-postscript",
+        "type": "projector",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": -1,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [
+      {
+        "id": "postscript-latch",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "postscript-door",
+        "layer": 2,
+        "x": 4,
+        "y": 2,
+        "switchIds": [
+          "postscript-latch"
+        ]
+      }
+    ],
+    "routingStamps": [
+      {
+        "id": "postscript-switch-stamp",
+        "layer": 1,
+        "x": 2,
+        "y": 1,
+        "direction": "down",
+        "distance": 3,
+        "appliesTo": [
+          "switch"
+        ]
+      },
+      {
+        "id": "postscript-bridge-stamp",
+        "layer": 2,
+        "x": 2,
+        "y": 2,
+        "direction": "right",
+        "distance": 1,
+        "appliesTo": [
+          "projection"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Finish the secret route by combining the two routing channels players learned separately into one clean attic postscript.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 10,
+      "commonMisunderstanding": "Players often remember the stitched drop but forget the lantern bridge is also being rerouted by a second stamp."
     }
   }
 };
@@ -3431,9 +6108,29 @@ export const CAMPAIGN_INDEX = {
       "description": "Finish the first three districts and glimpse the routes ahead."
     },
     {
+      "id": "stage-route",
+      "title": "Stage Marks",
+      "description": "Finish the Theater district and restore the stamped stage route."
+    },
+    {
       "id": "festival-line",
       "title": "Festival Line",
-      "description": "Reach the Rooftops and restore the final delivery lane."
+      "description": "Reconnect the full rooftop delivery lane."
+    },
+    {
+      "id": "attic-secret",
+      "title": "Attic Door",
+      "description": "Find the hidden attic route above the town."
+    },
+    {
+      "id": "secret-line",
+      "title": "Secret Line",
+      "description": "Finish the attic postscript and restore Mina's hidden route."
+    },
+    {
+      "id": "archivist",
+      "title": "Archivist",
+      "description": "Collect every hidden journal thread tucked into the late-game side routes."
     },
     {
       "id": "careful-hands",
@@ -3474,7 +6171,7 @@ export const CAMPAIGN_INDEX = {
       "title": "Clocktower",
       "subtitle": "Timing made visible",
       "unlockPostmarks": 11,
-      "summary": "Echo couriers repeat your previous move one beat later.",
+      "summary": "Echo couriers, rerouted stitch exits, and one optional side route hidden inside the bell frame.",
       "journalTitle": "Clocktower Timing",
       "journalBody": "The tower's routes are delayed by one bell. If I move now, my echo steps a moment later. It is unsettling to solve puzzles with my own future in the room."
     },
@@ -3482,8 +6179,8 @@ export const CAMPAIGN_INDEX = {
       "id": "theater",
       "title": "Theater",
       "subtitle": "Shadows on the backdrops",
-      "unlockPostmarks": 12,
-      "summary": "Shadow couriers mirror your movements and can latch hidden mechanisms.",
+      "unlockPostmarks": 14,
+      "summary": "Shadow couriers latch hidden marks, then combine with rerouted stitch landings across the stage.",
       "journalTitle": "Theater Blocking",
       "journalBody": "Every prop in the theater has a partner behind the curtain. Nothing moves alone, especially not under the footlights."
     },
@@ -3491,8 +6188,8 @@ export const CAMPAIGN_INDEX = {
       "id": "rooftops",
       "title": "Rooftops",
       "subtitle": "The festival line",
-      "unlockPostmarks": 13,
-      "summary": "Mix switches, projection, and layer travel in one final route.",
+      "unlockPostmarks": 17,
+      "summary": "Projection and transfer stamps reshape the final rooftop lanes before the festival route reconnects.",
       "journalTitle": "Rooftop Draft",
       "journalBody": "When the routes finally align, the whole town reads like one folded letter. Rooftops first, festival after."
     },
@@ -3500,10 +6197,15 @@ export const CAMPAIGN_INDEX = {
       "id": "attic",
       "title": "Attic",
       "subtitle": "A hidden route tucked into the rafters",
-      "unlockPostmarks": 14,
-      "summary": "A secret bonus room for players who want one more twist.",
+      "unlockPostmarks": 21,
+      "summary": "A post-credits secret line opened by the three hidden margin routes across the late game.",
       "journalTitle": "Attic Margin",
-      "journalBody": "There is always one route Mina forgets to mention aloud. She says every town deserves one secret line for the people who still look up."
+      "journalBody": "There is always one route Mina forgets to mention aloud. She says every town deserves one secret line for the people who still look up.",
+      "requiresRooms": [
+        "clocktower-side-01",
+        "theater-side-01",
+        "rooftops-side-01"
+      ]
     }
   ],
   "rooms": [
@@ -4879,6 +7581,292 @@ export const CAMPAIGN_INDEX = {
       }
     },
     {
+      "id": "clocktower-02",
+      "districtId": "clocktower",
+      "title": "Borrowed Bell",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Let the echo hold the gate, reach the stitch, and climb to the mailbox.",
+      "blurb": "A delayed footstep can hold the route open long enough to fold through it.",
+      "intro": [
+        {
+          "speaker": "Bell Keeper",
+          "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
+        }
+      ],
+      "hintTiers": [
+        "You do not need the echo to escort you forever. You only need the door open for one crossing.",
+        "Move once to queue the echo, wait so it can stand on the plate, then cross the opened gate and keep climbing.",
+        "Walk right, wait, walk right through the door, walk right onto the stitch, switch sheets, then step right into the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "clock-borrowed-front",
+          "name": "Borrowed Face",
+          "tiles": [
+            "########",
+            "#..D.S.#",
+            "#.####.#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "clock-borrowed-back",
+          "name": "Bell Frame",
+          "tiles": [
+            "########",
+            "#....SG#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "echo-borrowed",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        }
+      ],
+      "switches": [
+        {
+          "id": "clock-borrowed-plate",
+          "layer": 1,
+          "x": 2,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "clock-borrowed-door",
+          "layer": 0,
+          "x": 3,
+          "y": 1,
+          "switchIds": [
+            "clock-borrowed-plate"
+          ]
+        }
+      ],
+      "routingStamps": [],
+      "balance": {
+        "intendedLesson": "Extend echo timing into a stitched route instead of a single hallway crossing.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players often switch too early and forget the echo still has to open the first gate."
+      }
+    },
+    {
+      "id": "clocktower-03",
+      "districtId": "clocktower",
+      "title": "Stamped Exit",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Use the routing stamp to land exactly where the mailbox route resumes.",
+      "blurb": "Some stitched exits arrive somewhere else entirely once they pass under the clock stamp.",
+      "intro": [
+        {
+          "speaker": "Bell Keeper",
+          "text": "That stamp reroutes a stitch exit the instant you land. Read the arrow, not just the stitch."
+        }
+      ],
+      "hintTiers": [
+        "The goal is not a walk after the stitch. The stitch itself is the final delivery hop.",
+        "Switch on the marked stitch. The routing stamp on the destination sheet will slide the exit to the right.",
+        "Walk right twice onto the stitch, then switch sheets. The routing stamp sends you directly to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "clock-stamp-front",
+          "name": "Clock Front",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.###.#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "clock-stamp-back",
+          "name": "Clock Stamp",
+          "tiles": [
+            "#######",
+            "#..S.G#",
+            "#.###.#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [],
+      "switches": [],
+      "doors": [],
+      "routingStamps": [
+        {
+          "id": "clock-switch-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 1,
+          "direction": "right",
+          "distance": 2,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Introduce routing stamps through a clean stitched exit instead of layering them onto multiple other systems at once.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players step on the stitch and still expect to move manually afterward instead of trusting the reroute."
+      }
+    },
+    {
+      "id": "clocktower-side-01",
+      "districtId": "clocktower",
+      "title": "Pendulum Route",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "clocktower-03"
+      ],
+      "objective": "Borrow a beat, fall through the rerouted stitch, and ride the lower route to the mailbox.",
+      "blurb": "A side route that turns one rerouted stitch into a full three-sheet descent.",
+      "intro": [
+        {
+          "speaker": "Bell Keeper",
+          "text": "The stamp drops you onto a second stitch if you line the sheets up first. Think of it like a pendulum swing, not a ladder."
+        }
+      ],
+      "hintTiers": [
+        "The first stitch is not the destination. It is the drop point for the second switch.",
+        "Use the echo to open the first door, then let the routing stamp drop you onto the lower stitch before you switch again.",
+        "Walk right, wait, walk right three more times to the stitch, switch to the middle sheet, switch again at the lower stitch, then go right and climb to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "clock-pendulum-front",
+          "name": "Pendulum Face",
+          "tiles": [
+            "########",
+            "#..D.S.#",
+            "#.####.#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "clock-pendulum-middle",
+          "name": "Pendulum Frame",
+          "tiles": [
+            "########",
+            "#....S.#",
+            "#.####.#",
+            "#......#",
+            "#....S.#",
+            "########"
+          ]
+        },
+        {
+          "id": "clock-pendulum-back",
+          "name": "Bell Route",
+          "tiles": [
+            "########",
+            "#.....G#",
+            "#.####.#",
+            "#......#",
+            "#....S.#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "echo-pendulum",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        }
+      ],
+      "switches": [
+        {
+          "id": "clock-pendulum-plate",
+          "layer": 1,
+          "x": 2,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "clock-pendulum-door",
+          "layer": 0,
+          "x": 3,
+          "y": 1,
+          "switchIds": [
+            "clock-pendulum-plate"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "clock-pendulum-stamp",
+          "layer": 1,
+          "x": 5,
+          "y": 1,
+          "direction": "down",
+          "distance": 3,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Use one routing stamp to turn a familiar echo-door puzzle into a genuine three-sheet route.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 7,
+        "commonMisunderstanding": "Players often switch once, see the lower stitch, and then forget the final climb still happens on the back sheet."
+      }
+    },
+    {
       "id": "theater-01",
       "districtId": "theater",
       "title": "Understudy",
@@ -4969,6 +7957,322 @@ export const CAMPAIGN_INDEX = {
       }
     },
     {
+      "id": "theater-02",
+      "districtId": "theater",
+      "title": "Latch Cue",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Let your shadow latch the hidden switch, then climb through the open route.",
+      "blurb": "The stage route stays open once the understudy hits the mark.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
+        }
+      ],
+      "hintTiers": [
+        "The shadow does not need to babysit the switch. It only needs to touch it once.",
+        "Move right once to latch the switch with the shadow, then make your own climb to the stitch.",
+        "Move right, go up three times to the stitch, switch sheets, then go down and cross the now-open route to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "stage-latch-front",
+          "name": "Stage",
+          "tiles": [
+            "#######",
+            "#.S...#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "stage-latch-back",
+          "name": "Backstage",
+          "tiles": [
+            "#######",
+            "#.S...#",
+            "#....G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-latch",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-latch-switch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-latch-door",
+          "layer": 1,
+          "x": 3,
+          "y": 2,
+          "switchIds": [
+            "stage-latch-switch"
+          ]
+        }
+      ],
+      "routingStamps": [],
+      "balance": {
+        "intendedLesson": "Introduce sticky latches as a cleaner shadow-planning escalation before the routed shadow rooms.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players often assume the shadow must keep standing on the switch and overcomplicate the route."
+      }
+    },
+    {
+      "id": "theater-03",
+      "districtId": "theater",
+      "title": "Marked Landing",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Latch the mark, switch sheets, and let the stamp drop you through the open landing.",
+      "blurb": "The spotlight stamp only helps if the shadow has already unlocked the door it lands on.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "The stamp lands you on a different mark, but the landing only matters if the shadow has opened the prop door first."
+        }
+      ],
+      "hintTiers": [
+        "The shadow action happens before the stitched landing pays off.",
+        "Step right once to latch the switch with the shadow, then climb to the stitch and trust the rerouted landing.",
+        "Move right, go up three times, move right onto the stitch, switch sheets, and step right into the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "stage-mark-front",
+          "name": "Stage Floor",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#..##..#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "stage-mark-back",
+          "name": "Spotlight Grid",
+          "tiles": [
+            "########",
+            "#..S.DG#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-mark",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-mark-switch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-mark-door",
+          "layer": 1,
+          "x": 5,
+          "y": 1,
+          "switchIds": [
+            "stage-mark-switch"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "stage-mark-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 1,
+          "direction": "right",
+          "distance": 2,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "achievementId": "stage-route",
+      "balance": {
+        "intendedLesson": "Combine sticky shadow setup with a routed stitch landing that only works because the shadow solved the destination first.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 6,
+        "commonMisunderstanding": "Players often climb correctly but forget to move right once at the start, so the landing stays blocked."
+      }
+    },
+    {
+      "id": "theater-side-01",
+      "districtId": "theater",
+      "title": "Backstage Fold",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "theater-03"
+      ],
+      "objective": "Latch the cue, fall through the rerouted stitch, and take the hidden backstage climb.",
+      "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
+        }
+      ],
+      "hintTiers": [
+        "The first stitch is the setup. The second stitch is the route.",
+        "Move right once so the shadow latches the cue, then use the routed stitch to drop onto the lower switch point.",
+        "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "stage-fold-front",
+          "name": "Front Curtain",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "stage-fold-middle",
+          "name": "Backstage Grid",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#..S...#",
+            "########"
+          ]
+        },
+        {
+          "id": "stage-fold-back",
+          "name": "Fly Loft",
+          "tiles": [
+            "########",
+            "#....DG#",
+            "#......#",
+            "#......#",
+            "#..S...#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-fold",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-fold-switch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-fold-door",
+          "layer": 2,
+          "x": 5,
+          "y": 1,
+          "switchIds": [
+            "stage-fold-switch"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "stage-fold-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 1,
+          "direction": "down",
+          "distance": 3,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Push the routed shadow idea into a three-layer secret path that still hinges on one readable fold.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 8,
+        "commonMisunderstanding": "Players often keep searching the middle sheet for the goal instead of treating it as the folded route into the loft."
+      }
+    },
+    {
       "id": "rooftops-01",
       "districtId": "rooftops",
       "title": "Festival Line",
@@ -4983,7 +8287,6 @@ export const CAMPAIGN_INDEX = {
           "text": "By now the town expects more than one insight at a time. Hold the line open, then build the bridge."
         }
       ],
-      "achievementId": "festival-line",
       "hintTiers": [
         "One parcel belongs on the switch. The lantern belongs where the tear is.",
         "Park the parcel on the switch first so you do not have to revisit it after the bridge is ready.",
@@ -5072,6 +8375,450 @@ export const CAMPAIGN_INDEX = {
         "targetDifficulty": 4,
         "expectedSolveMinutes": 6,
         "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
+      },
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
+        }
+      ]
+    },
+    {
+      "id": "rooftops-02",
+      "districtId": "rooftops",
+      "title": "Forwarded Lantern",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Push the lantern into line, switch sheets, and cross the rerouted bridge.",
+      "blurb": "The rooftop stamp forwards a bridge one tile farther than the lantern expects.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "Projection stamps forward the bridge itself. Line the lantern up with the stamp, not the gap."
+        }
+      ],
+      "hintTiers": [
+        "Aim the lantern at the stamp tile, not directly at the gap.",
+        "Push the lantern left once so its projection lands on the stamp, then switch sheets and walk over the forwarded bridge.",
+        "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down, then cross right three times to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "roof-forward-top",
+          "name": "Roofline",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "roof-forward-bottom",
+          "name": "Forwarded Span",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#...~.G#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 3,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "lantern-forward",
+          "type": "projector",
+          "layer": 0,
+          "x": 4,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 1,
+              "dx": 0,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "routingStamps": [
+        {
+          "id": "roof-forward-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 2,
+          "direction": "right",
+          "distance": 1,
+          "appliesTo": [
+            "projection"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Introduce projection routing as a spatial alignment problem instead of a raw bridge-placement guess.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players push the lantern directly under the gap and miss that the stamp forwards the bridge one tile farther."
+      }
+    },
+    {
+      "id": "rooftops-03",
+      "districtId": "rooftops",
+      "title": "Stamped Parcel",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Forward the parcel onto the rooftop plate, then climb through the reopened lane.",
+      "blurb": "A transfer stamp can park a parcel exactly where a distant lane needs weight.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "The parcel does not stay where you send it. The rooftop stamp forwards the delivery to the pressure plate."
+        }
+      ],
+      "hintTiers": [
+        "Transfer first. The stamp will handle the final parking spot for the parcel.",
+        "Stand still and transfer the parcel into the other sheet; the stamp there forwards it onto the switch.",
+        "Transfer the parcel, climb to the stitch with three moves up and two right, switch sheets, then walk right three times through the open lane to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "roof-transfer-top",
+          "name": "Top Route",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "roof-transfer-bottom",
+          "name": "Stamped Lane",
+          "tiles": [
+            "########",
+            "#..S.DG#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-stamped",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "roof-transfer-plate",
+          "layer": 1,
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "roof-transfer-door",
+          "layer": 1,
+          "x": 5,
+          "y": 1,
+          "switchIds": [
+            "roof-transfer-plate"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "roof-transfer-stamp",
+          "layer": 1,
+          "x": 2,
+          "y": 4,
+          "direction": "right",
+          "distance": 2,
+          "appliesTo": [
+            "transfer"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Introduce transfer routing as a way to park a parcel across the fold without a long push setup.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 6,
+        "commonMisunderstanding": "Players often try to walk the parcel to the plate manually instead of trusting the transfer stamp."
+      }
+    },
+    {
+      "id": "rooftops-side-01",
+      "districtId": "rooftops",
+      "title": "Sky Postscript",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "rooftops-03"
+      ],
+      "objective": "Push the lantern into line, fold through both stitches, and trace the hidden rooftop note.",
+      "blurb": "The skyline keeps one extra route for players who read the stamps and the folds together.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "There is one more note tucked into the skyline if you can read the bridge, the stitch, and the drop as one route."
+        }
+      ],
+      "hintTiers": [
+        "Set the lantern before you start climbing. The folded route only works once the bridge is already forwarded.",
+        "Push the lantern left once, climb to the top stitch, drop to the lower stitch on the middle sheet, then cross the forwarded bridge on the last sheet.",
+        "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down twice to the lower stitch, switch again, go up once, then cross right three times to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "sky-postscript-top",
+          "name": "Upper Roof",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "sky-postscript-middle",
+          "name": "Margin Route",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#..S...#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "sky-postscript-bottom",
+          "name": "Skyline Note",
+          "tiles": [
+            "########",
+            "#......#",
+            "#...~.G#",
+            "#..S...#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 3,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "lantern-postscript",
+          "type": "projector",
+          "layer": 0,
+          "x": 4,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": 0,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "routingStamps": [
+        {
+          "id": "sky-postscript-stamp",
+          "layer": 2,
+          "x": 3,
+          "y": 2,
+          "direction": "right",
+          "distance": 1,
+          "appliesTo": [
+            "projection"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Turn projection routing into a longer folded route that still hinges on one bridge-placement insight.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 8,
+        "commonMisunderstanding": "Players often reach the lower stitch correctly but forget the bridge was forwarded one tile farther than the lamp suggests."
+      }
+    },
+    {
+      "id": "rooftops-04",
+      "districtId": "rooftops",
+      "title": "Festival Line Restored",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Park the parcel, trust the forwarded lantern bridge, and reconnect the full rooftop line.",
+      "blurb": "The final rooftop route ties pressure, projection, and three stitched sheets into one letter-long climb.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "This is the full line: park the parcel, trust the forwarded bridge, then follow the fold all the way down to the festival roof."
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "The festival line is back. If you also found the three hidden margins, there is still one attic route left above us."
+        }
+      ],
+      "hintTiers": [
+        "Treat this as setup first and travel second. The parcel and lantern should be ready before you start climbing.",
+        "Push the parcel onto the plate, use the upper stitch to reach the middle sheet, then descend to the lower stitch before you cross the bridge.",
+        "Move left three times to park the parcel, climb to the upper stitch, switch to the middle sheet, descend to the lower stitch, switch again, then go up twice and right three times through the bridge and door."
+      ],
+      "achievementId": "festival-line",
+      "layers": [
+        {
+          "id": "festival-line-top",
+          "name": "Festival Roof",
+          "tiles": [
+            "########",
+            "#.S....#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "festival-line-middle",
+          "name": "Carrier Fold",
+          "tiles": [
+            "########",
+            "#.S....#",
+            "#......#",
+            "#......#",
+            "#.S....#",
+            "########"
+          ]
+        },
+        {
+          "id": "festival-line-bottom",
+          "name": "Delivery Lane",
+          "tiles": [
+            "########",
+            "#......#",
+            "#..~DG.#",
+            "#......#",
+            "#.S....#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "festival-parcel",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "festival-lantern",
+          "type": "projector",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": -1,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [
+        {
+          "id": "festival-line-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "festival-line-door",
+          "layer": 2,
+          "x": 4,
+          "y": 2,
+          "switchIds": [
+            "festival-line-plate"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "festival-line-stamp",
+          "layer": 2,
+          "x": 2,
+          "y": 2,
+          "direction": "right",
+          "distance": 1,
+          "appliesTo": [
+            "projection"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Deliver a real finale by braiding parcel parking, forwarded projection, and three-layer travel into one readable route.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 9,
+        "commonMisunderstanding": "Players often start climbing before the parcel is parked and then have to unravel the whole route when the final door is still shut."
       }
     },
     {
@@ -5163,6 +8910,287 @@ export const CAMPAIGN_INDEX = {
         "targetDifficulty": 4,
         "expectedSolveMinutes": 5,
         "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
+      },
+      "secret": true,
+      "achievementId": "attic-secret",
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+        }
+      ],
+      "requiresRooms": [
+        "clocktower-side-01",
+        "theater-side-01",
+        "rooftops-side-01"
+      ]
+    },
+    {
+      "id": "attic-02",
+      "districtId": "attic",
+      "title": "Folded Ledger",
+      "optional": true,
+      "secret": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "attic-01"
+      ],
+      "objective": "Latch the shadow cue, drop through the rerouted stitch, and climb the ledger route.",
+      "blurb": "One hidden route folds through a second stitch only after the shadow has opened the door at the top.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "The attic routes are never straight. Open the top door with your shadow first, then trust the drop into the ledger fold."
+        }
+      ],
+      "hintTiers": [
+        "The shadow setup happens before the stitched drop matters.",
+        "Move right once to latch the switch with the shadow, then climb to the stitch and let the routing stamp drop you to the lower one.",
+        "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "attic-ledger-top",
+          "name": "Ledger Top",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "attic-ledger-middle",
+          "name": "Ledger Fold",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#..S...#",
+            "########"
+          ]
+        },
+        {
+          "id": "attic-ledger-bottom",
+          "name": "Ledger Back",
+          "tiles": [
+            "########",
+            "#....DG#",
+            "#......#",
+            "#......#",
+            "#..S...#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-ledger",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "attic-ledger-latch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "attic-ledger-door",
+          "layer": 2,
+          "x": 5,
+          "y": 1,
+          "switchIds": [
+            "attic-ledger-latch"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "attic-ledger-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 1,
+          "direction": "down",
+          "distance": 3,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Blend the secret-route shadow latch with a routed drop that converts one stitched entry into a full attic climb.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 9,
+        "commonMisunderstanding": "Players often set the shadow correctly but keep searching the middle sheet for the goal instead of switching again immediately."
+      }
+    },
+    {
+      "id": "attic-03",
+      "districtId": "attic",
+      "title": "Mina's Postscript",
+      "optional": true,
+      "secret": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "attic-02"
+      ],
+      "objective": "Latch the final cue, trust both stamps, and carry the attic line to its last mailbox.",
+      "blurb": "The hidden route ends by combining a rerouted stitch with a forwarded lantern bridge.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "This is the one route I never wrote down cleanly. Set the shadow cue, trust the drop, and let the lantern finish the sentence."
+        }
+      ],
+      "achievementId": "secret-line",
+      "hintTiers": [
+        "The first move sets the shadow cue. After that, the stamps do the clever part for you.",
+        "Move right once so the shadow latches the switch, climb to the upper stitch, let it drop you to the lower stitch, then follow the lantern bridge through the final door.",
+        "Move right, go up three times, switch sheets, switch again, go up twice, then cross right three times through the bridge and the opened door to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "postscript-top",
+          "name": "Postscript Front",
+          "tiles": [
+            "########",
+            "#.S....#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "postscript-middle",
+          "name": "Postscript Fold",
+          "tiles": [
+            "########",
+            "#.S....#",
+            "#......#",
+            "#......#",
+            "#.S....#",
+            "########"
+          ]
+        },
+        {
+          "id": "postscript-back",
+          "name": "Postscript Route",
+          "tiles": [
+            "########",
+            "#......#",
+            "#..~DG.#",
+            "#......#",
+            "#.S....#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-postscript",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
+        {
+          "id": "lantern-postscript",
+          "type": "projector",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": -1,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [
+        {
+          "id": "postscript-latch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "postscript-door",
+          "layer": 2,
+          "x": 4,
+          "y": 2,
+          "switchIds": [
+            "postscript-latch"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "postscript-switch-stamp",
+          "layer": 1,
+          "x": 2,
+          "y": 1,
+          "direction": "down",
+          "distance": 3,
+          "appliesTo": [
+            "switch"
+          ]
+        },
+        {
+          "id": "postscript-bridge-stamp",
+          "layer": 2,
+          "x": 2,
+          "y": 2,
+          "direction": "right",
+          "distance": 1,
+          "appliesTo": [
+            "projection"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Finish the secret route by combining the two routing channels players learned separately into one clean attic postscript.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 10,
+        "commonMisunderstanding": "Players often remember the stitched drop but forget the lantern bridge is also being rerouted by a second stamp."
       }
     }
   ],
@@ -5207,6 +9235,112 @@ export const CAMPAIGN_INDEX = {
       "Theater: Shadow couriers mirror you across a second sheet.",
       "Rooftops: Doors, bridges, and transfers braid into one final lane."
     ]
+  },
+  "journalEntries": [
+    {
+      "id": "bell-margin",
+      "districtId": "clocktower",
+      "title": "Bell Margin",
+      "body": "The bell routes were stamped to drop tired couriers onto lower ledges. Mina says good routing saves effort you never see.",
+      "unlockRoomIds": [
+        "clocktower-side-01"
+      ]
+    },
+    {
+      "id": "backstage-margin",
+      "districtId": "theater",
+      "title": "Backstage Margin",
+      "body": "The theater keeps one folded route behind the scenery so stagehands can move props without crossing the audience's eye line.",
+      "unlockRoomIds": [
+        "theater-side-01"
+      ]
+    },
+    {
+      "id": "sky-margin",
+      "districtId": "rooftops",
+      "title": "Sky Margin",
+      "body": "The skyline note was never meant for deliveries. Mina used it to leave messages where only someone climbing the roofs would read them.",
+      "unlockRoomIds": [
+        "rooftops-side-01"
+      ]
+    },
+    {
+      "id": "attic-margin",
+      "districtId": "attic",
+      "title": "Attic Margin",
+      "body": "The first attic page lists route pieces Mina hid on purpose, just to see who still noticed the folds after the credits rolled.",
+      "unlockRoomIds": [
+        "attic-01"
+      ]
+    },
+    {
+      "id": "mina-postscript",
+      "districtId": "attic",
+      "title": "Mina's Postscript",
+      "body": "The town was never broken into separate routes. It was one folded letter the whole time, waiting for someone patient enough to read every crease.",
+      "unlockRoomIds": [
+        "attic-03"
+      ]
+    }
+  ],
+  "mainCampaign": {
+    "title": "Full Festival Route",
+    "mainRoomIds": [
+      "mailroom-01",
+      "mailroom-02",
+      "mailroom-03",
+      "mailroom-04",
+      "market-01",
+      "market-02",
+      "market-03",
+      "greenhouse-01",
+      "greenhouse-02",
+      "greenhouse-03",
+      "greenhouse-04",
+      "clocktower-01",
+      "clocktower-02",
+      "clocktower-03",
+      "theater-01",
+      "theater-02",
+      "theater-03",
+      "rooftops-01",
+      "rooftops-02",
+      "rooftops-03",
+      "rooftops-04"
+    ],
+    "finalRoomId": "rooftops-04",
+    "ending": {
+      "title": "Festival Line Restored",
+      "subtitle": "The rooftop delivery line is live again and the town reads like one folded letter.",
+      "body": "Credits are safe without the secret route. The attic still waits for anyone who found every hidden margin note on the way up.",
+      "beat": {
+        "speaker": "Mina",
+        "text": "That is the line the town needed. If you also found the three margin routes, meet me in the attic."
+      }
+    }
+  },
+  "secretRoute": {
+    "title": "Attic Postscript",
+    "requiredRoomIds": [
+      "clocktower-side-01",
+      "theater-side-01",
+      "rooftops-side-01"
+    ],
+    "roomIds": [
+      "attic-01",
+      "attic-02",
+      "attic-03"
+    ],
+    "finalRoomId": "attic-03",
+    "ending": {
+      "title": "Secret Line Complete",
+      "subtitle": "The attic postscript is open and Mina's hidden route finally has a reader.",
+      "body": "Every late-game side route now folds back into one final attic line, turning the optional mastery path into the game's quietest ending.",
+      "beat": {
+        "speaker": "Mina",
+        "text": "Most postkeepers stop at the official route. You kept reading until the margins answered back."
+      }
+    }
   },
   "roomsById": {
     "mailroom-01": {
@@ -6580,6 +10714,292 @@ export const CAMPAIGN_INDEX = {
         "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
       }
     },
+    "clocktower-02": {
+      "id": "clocktower-02",
+      "districtId": "clocktower",
+      "title": "Borrowed Bell",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Let the echo hold the gate, reach the stitch, and climb to the mailbox.",
+      "blurb": "A delayed footstep can hold the route open long enough to fold through it.",
+      "intro": [
+        {
+          "speaker": "Bell Keeper",
+          "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
+        }
+      ],
+      "hintTiers": [
+        "You do not need the echo to escort you forever. You only need the door open for one crossing.",
+        "Move once to queue the echo, wait so it can stand on the plate, then cross the opened gate and keep climbing.",
+        "Walk right, wait, walk right through the door, walk right onto the stitch, switch sheets, then step right into the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "clock-borrowed-front",
+          "name": "Borrowed Face",
+          "tiles": [
+            "########",
+            "#..D.S.#",
+            "#.####.#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "clock-borrowed-back",
+          "name": "Bell Frame",
+          "tiles": [
+            "########",
+            "#....SG#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "echo-borrowed",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        }
+      ],
+      "switches": [
+        {
+          "id": "clock-borrowed-plate",
+          "layer": 1,
+          "x": 2,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "clock-borrowed-door",
+          "layer": 0,
+          "x": 3,
+          "y": 1,
+          "switchIds": [
+            "clock-borrowed-plate"
+          ]
+        }
+      ],
+      "routingStamps": [],
+      "balance": {
+        "intendedLesson": "Extend echo timing into a stitched route instead of a single hallway crossing.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players often switch too early and forget the echo still has to open the first gate."
+      }
+    },
+    "clocktower-03": {
+      "id": "clocktower-03",
+      "districtId": "clocktower",
+      "title": "Stamped Exit",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Use the routing stamp to land exactly where the mailbox route resumes.",
+      "blurb": "Some stitched exits arrive somewhere else entirely once they pass under the clock stamp.",
+      "intro": [
+        {
+          "speaker": "Bell Keeper",
+          "text": "That stamp reroutes a stitch exit the instant you land. Read the arrow, not just the stitch."
+        }
+      ],
+      "hintTiers": [
+        "The goal is not a walk after the stitch. The stitch itself is the final delivery hop.",
+        "Switch on the marked stitch. The routing stamp on the destination sheet will slide the exit to the right.",
+        "Walk right twice onto the stitch, then switch sheets. The routing stamp sends you directly to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "clock-stamp-front",
+          "name": "Clock Front",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.###.#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "clock-stamp-back",
+          "name": "Clock Stamp",
+          "tiles": [
+            "#######",
+            "#..S.G#",
+            "#.###.#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [],
+      "switches": [],
+      "doors": [],
+      "routingStamps": [
+        {
+          "id": "clock-switch-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 1,
+          "direction": "right",
+          "distance": 2,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Introduce routing stamps through a clean stitched exit instead of layering them onto multiple other systems at once.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players step on the stitch and still expect to move manually afterward instead of trusting the reroute."
+      }
+    },
+    "clocktower-side-01": {
+      "id": "clocktower-side-01",
+      "districtId": "clocktower",
+      "title": "Pendulum Route",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "clocktower-03"
+      ],
+      "objective": "Borrow a beat, fall through the rerouted stitch, and ride the lower route to the mailbox.",
+      "blurb": "A side route that turns one rerouted stitch into a full three-sheet descent.",
+      "intro": [
+        {
+          "speaker": "Bell Keeper",
+          "text": "The stamp drops you onto a second stitch if you line the sheets up first. Think of it like a pendulum swing, not a ladder."
+        }
+      ],
+      "hintTiers": [
+        "The first stitch is not the destination. It is the drop point for the second switch.",
+        "Use the echo to open the first door, then let the routing stamp drop you onto the lower stitch before you switch again.",
+        "Walk right, wait, walk right three more times to the stitch, switch to the middle sheet, switch again at the lower stitch, then go right and climb to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "clock-pendulum-front",
+          "name": "Pendulum Face",
+          "tiles": [
+            "########",
+            "#..D.S.#",
+            "#.####.#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "clock-pendulum-middle",
+          "name": "Pendulum Frame",
+          "tiles": [
+            "########",
+            "#....S.#",
+            "#.####.#",
+            "#......#",
+            "#....S.#",
+            "########"
+          ]
+        },
+        {
+          "id": "clock-pendulum-back",
+          "name": "Bell Route",
+          "tiles": [
+            "########",
+            "#.....G#",
+            "#.####.#",
+            "#......#",
+            "#....S.#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "echo-pendulum",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        }
+      ],
+      "switches": [
+        {
+          "id": "clock-pendulum-plate",
+          "layer": 1,
+          "x": 2,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "clock-pendulum-door",
+          "layer": 0,
+          "x": 3,
+          "y": 1,
+          "switchIds": [
+            "clock-pendulum-plate"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "clock-pendulum-stamp",
+          "layer": 1,
+          "x": 5,
+          "y": 1,
+          "direction": "down",
+          "distance": 3,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Use one routing stamp to turn a familiar echo-door puzzle into a genuine three-sheet route.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 7,
+        "commonMisunderstanding": "Players often switch once, see the lower stitch, and then forget the final climb still happens on the back sheet."
+      }
+    },
     "theater-01": {
       "id": "theater-01",
       "districtId": "theater",
@@ -6670,6 +11090,322 @@ export const CAMPAIGN_INDEX = {
         "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
       }
     },
+    "theater-02": {
+      "id": "theater-02",
+      "districtId": "theater",
+      "title": "Latch Cue",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Let your shadow latch the hidden switch, then climb through the open route.",
+      "blurb": "The stage route stays open once the understudy hits the mark.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
+        }
+      ],
+      "hintTiers": [
+        "The shadow does not need to babysit the switch. It only needs to touch it once.",
+        "Move right once to latch the switch with the shadow, then make your own climb to the stitch.",
+        "Move right, go up three times to the stitch, switch sheets, then go down and cross the now-open route to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "stage-latch-front",
+          "name": "Stage",
+          "tiles": [
+            "#######",
+            "#.S...#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "stage-latch-back",
+          "name": "Backstage",
+          "tiles": [
+            "#######",
+            "#.S...#",
+            "#....G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-latch",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-latch-switch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-latch-door",
+          "layer": 1,
+          "x": 3,
+          "y": 2,
+          "switchIds": [
+            "stage-latch-switch"
+          ]
+        }
+      ],
+      "routingStamps": [],
+      "balance": {
+        "intendedLesson": "Introduce sticky latches as a cleaner shadow-planning escalation before the routed shadow rooms.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players often assume the shadow must keep standing on the switch and overcomplicate the route."
+      }
+    },
+    "theater-03": {
+      "id": "theater-03",
+      "districtId": "theater",
+      "title": "Marked Landing",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Latch the mark, switch sheets, and let the stamp drop you through the open landing.",
+      "blurb": "The spotlight stamp only helps if the shadow has already unlocked the door it lands on.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "The stamp lands you on a different mark, but the landing only matters if the shadow has opened the prop door first."
+        }
+      ],
+      "hintTiers": [
+        "The shadow action happens before the stitched landing pays off.",
+        "Step right once to latch the switch with the shadow, then climb to the stitch and trust the rerouted landing.",
+        "Move right, go up three times, move right onto the stitch, switch sheets, and step right into the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "stage-mark-front",
+          "name": "Stage Floor",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#..##..#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "stage-mark-back",
+          "name": "Spotlight Grid",
+          "tiles": [
+            "########",
+            "#..S.DG#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-mark",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-mark-switch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-mark-door",
+          "layer": 1,
+          "x": 5,
+          "y": 1,
+          "switchIds": [
+            "stage-mark-switch"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "stage-mark-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 1,
+          "direction": "right",
+          "distance": 2,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "achievementId": "stage-route",
+      "balance": {
+        "intendedLesson": "Combine sticky shadow setup with a routed stitch landing that only works because the shadow solved the destination first.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 6,
+        "commonMisunderstanding": "Players often climb correctly but forget to move right once at the start, so the landing stays blocked."
+      }
+    },
+    "theater-side-01": {
+      "id": "theater-side-01",
+      "districtId": "theater",
+      "title": "Backstage Fold",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "theater-03"
+      ],
+      "objective": "Latch the cue, fall through the rerouted stitch, and take the hidden backstage climb.",
+      "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
+        }
+      ],
+      "hintTiers": [
+        "The first stitch is the setup. The second stitch is the route.",
+        "Move right once so the shadow latches the cue, then use the routed stitch to drop onto the lower switch point.",
+        "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "stage-fold-front",
+          "name": "Front Curtain",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "stage-fold-middle",
+          "name": "Backstage Grid",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#..S...#",
+            "########"
+          ]
+        },
+        {
+          "id": "stage-fold-back",
+          "name": "Fly Loft",
+          "tiles": [
+            "########",
+            "#....DG#",
+            "#......#",
+            "#......#",
+            "#..S...#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-fold",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-fold-switch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-fold-door",
+          "layer": 2,
+          "x": 5,
+          "y": 1,
+          "switchIds": [
+            "stage-fold-switch"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "stage-fold-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 1,
+          "direction": "down",
+          "distance": 3,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Push the routed shadow idea into a three-layer secret path that still hinges on one readable fold.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 8,
+        "commonMisunderstanding": "Players often keep searching the middle sheet for the goal instead of treating it as the folded route into the loft."
+      }
+    },
     "rooftops-01": {
       "id": "rooftops-01",
       "districtId": "rooftops",
@@ -6685,7 +11421,6 @@ export const CAMPAIGN_INDEX = {
           "text": "By now the town expects more than one insight at a time. Hold the line open, then build the bridge."
         }
       ],
-      "achievementId": "festival-line",
       "hintTiers": [
         "One parcel belongs on the switch. The lantern belongs where the tear is.",
         "Park the parcel on the switch first so you do not have to revisit it after the bridge is ready.",
@@ -6774,6 +11509,450 @@ export const CAMPAIGN_INDEX = {
         "targetDifficulty": 4,
         "expectedSolveMinutes": 6,
         "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
+      },
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
+        }
+      ]
+    },
+    "rooftops-02": {
+      "id": "rooftops-02",
+      "districtId": "rooftops",
+      "title": "Forwarded Lantern",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Push the lantern into line, switch sheets, and cross the rerouted bridge.",
+      "blurb": "The rooftop stamp forwards a bridge one tile farther than the lantern expects.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "Projection stamps forward the bridge itself. Line the lantern up with the stamp, not the gap."
+        }
+      ],
+      "hintTiers": [
+        "Aim the lantern at the stamp tile, not directly at the gap.",
+        "Push the lantern left once so its projection lands on the stamp, then switch sheets and walk over the forwarded bridge.",
+        "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down, then cross right three times to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "roof-forward-top",
+          "name": "Roofline",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "roof-forward-bottom",
+          "name": "Forwarded Span",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#...~.G#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 3,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "lantern-forward",
+          "type": "projector",
+          "layer": 0,
+          "x": 4,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 1,
+              "dx": 0,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "routingStamps": [
+        {
+          "id": "roof-forward-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 2,
+          "direction": "right",
+          "distance": 1,
+          "appliesTo": [
+            "projection"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Introduce projection routing as a spatial alignment problem instead of a raw bridge-placement guess.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players push the lantern directly under the gap and miss that the stamp forwards the bridge one tile farther."
+      }
+    },
+    "rooftops-03": {
+      "id": "rooftops-03",
+      "districtId": "rooftops",
+      "title": "Stamped Parcel",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Forward the parcel onto the rooftop plate, then climb through the reopened lane.",
+      "blurb": "A transfer stamp can park a parcel exactly where a distant lane needs weight.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "The parcel does not stay where you send it. The rooftop stamp forwards the delivery to the pressure plate."
+        }
+      ],
+      "hintTiers": [
+        "Transfer first. The stamp will handle the final parking spot for the parcel.",
+        "Stand still and transfer the parcel into the other sheet; the stamp there forwards it onto the switch.",
+        "Transfer the parcel, climb to the stitch with three moves up and two right, switch sheets, then walk right three times through the open lane to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "roof-transfer-top",
+          "name": "Top Route",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "roof-transfer-bottom",
+          "name": "Stamped Lane",
+          "tiles": [
+            "########",
+            "#..S.DG#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-stamped",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "roof-transfer-plate",
+          "layer": 1,
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "roof-transfer-door",
+          "layer": 1,
+          "x": 5,
+          "y": 1,
+          "switchIds": [
+            "roof-transfer-plate"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "roof-transfer-stamp",
+          "layer": 1,
+          "x": 2,
+          "y": 4,
+          "direction": "right",
+          "distance": 2,
+          "appliesTo": [
+            "transfer"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Introduce transfer routing as a way to park a parcel across the fold without a long push setup.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 6,
+        "commonMisunderstanding": "Players often try to walk the parcel to the plate manually instead of trusting the transfer stamp."
+      }
+    },
+    "rooftops-side-01": {
+      "id": "rooftops-side-01",
+      "districtId": "rooftops",
+      "title": "Sky Postscript",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "rooftops-03"
+      ],
+      "objective": "Push the lantern into line, fold through both stitches, and trace the hidden rooftop note.",
+      "blurb": "The skyline keeps one extra route for players who read the stamps and the folds together.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "There is one more note tucked into the skyline if you can read the bridge, the stitch, and the drop as one route."
+        }
+      ],
+      "hintTiers": [
+        "Set the lantern before you start climbing. The folded route only works once the bridge is already forwarded.",
+        "Push the lantern left once, climb to the top stitch, drop to the lower stitch on the middle sheet, then cross the forwarded bridge on the last sheet.",
+        "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down twice to the lower stitch, switch again, go up once, then cross right three times to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "sky-postscript-top",
+          "name": "Upper Roof",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "sky-postscript-middle",
+          "name": "Margin Route",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#..S...#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "sky-postscript-bottom",
+          "name": "Skyline Note",
+          "tiles": [
+            "########",
+            "#......#",
+            "#...~.G#",
+            "#..S...#",
+            "#......#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 3,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "lantern-postscript",
+          "type": "projector",
+          "layer": 0,
+          "x": 4,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": 0,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "routingStamps": [
+        {
+          "id": "sky-postscript-stamp",
+          "layer": 2,
+          "x": 3,
+          "y": 2,
+          "direction": "right",
+          "distance": 1,
+          "appliesTo": [
+            "projection"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Turn projection routing into a longer folded route that still hinges on one bridge-placement insight.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 8,
+        "commonMisunderstanding": "Players often reach the lower stitch correctly but forget the bridge was forwarded one tile farther than the lamp suggests."
+      }
+    },
+    "rooftops-04": {
+      "id": "rooftops-04",
+      "districtId": "rooftops",
+      "title": "Festival Line Restored",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Park the parcel, trust the forwarded lantern bridge, and reconnect the full rooftop line.",
+      "blurb": "The final rooftop route ties pressure, projection, and three stitched sheets into one letter-long climb.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "This is the full line: park the parcel, trust the forwarded bridge, then follow the fold all the way down to the festival roof."
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "The festival line is back. If you also found the three hidden margins, there is still one attic route left above us."
+        }
+      ],
+      "hintTiers": [
+        "Treat this as setup first and travel second. The parcel and lantern should be ready before you start climbing.",
+        "Push the parcel onto the plate, use the upper stitch to reach the middle sheet, then descend to the lower stitch before you cross the bridge.",
+        "Move left three times to park the parcel, climb to the upper stitch, switch to the middle sheet, descend to the lower stitch, switch again, then go up twice and right three times through the bridge and door."
+      ],
+      "achievementId": "festival-line",
+      "layers": [
+        {
+          "id": "festival-line-top",
+          "name": "Festival Roof",
+          "tiles": [
+            "########",
+            "#.S....#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "festival-line-middle",
+          "name": "Carrier Fold",
+          "tiles": [
+            "########",
+            "#.S....#",
+            "#......#",
+            "#......#",
+            "#.S....#",
+            "########"
+          ]
+        },
+        {
+          "id": "festival-line-bottom",
+          "name": "Delivery Lane",
+          "tiles": [
+            "########",
+            "#......#",
+            "#..~DG.#",
+            "#......#",
+            "#.S....#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "festival-parcel",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "festival-lantern",
+          "type": "projector",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": -1,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [
+        {
+          "id": "festival-line-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "festival-line-door",
+          "layer": 2,
+          "x": 4,
+          "y": 2,
+          "switchIds": [
+            "festival-line-plate"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "festival-line-stamp",
+          "layer": 2,
+          "x": 2,
+          "y": 2,
+          "direction": "right",
+          "distance": 1,
+          "appliesTo": [
+            "projection"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Deliver a real finale by braiding parcel parking, forwarded projection, and three-layer travel into one readable route.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 9,
+        "commonMisunderstanding": "Players often start climbing before the parcel is parked and then have to unravel the whole route when the final door is still shut."
       }
     },
     "attic-01": {
@@ -6865,6 +12044,287 @@ export const CAMPAIGN_INDEX = {
         "targetDifficulty": 4,
         "expectedSolveMinutes": 5,
         "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
+      },
+      "secret": true,
+      "achievementId": "attic-secret",
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+        }
+      ],
+      "requiresRooms": [
+        "clocktower-side-01",
+        "theater-side-01",
+        "rooftops-side-01"
+      ]
+    },
+    "attic-02": {
+      "id": "attic-02",
+      "districtId": "attic",
+      "title": "Folded Ledger",
+      "optional": true,
+      "secret": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "attic-01"
+      ],
+      "objective": "Latch the shadow cue, drop through the rerouted stitch, and climb the ledger route.",
+      "blurb": "One hidden route folds through a second stitch only after the shadow has opened the door at the top.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "The attic routes are never straight. Open the top door with your shadow first, then trust the drop into the ledger fold."
+        }
+      ],
+      "hintTiers": [
+        "The shadow setup happens before the stitched drop matters.",
+        "Move right once to latch the switch with the shadow, then climb to the stitch and let the routing stamp drop you to the lower one.",
+        "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "attic-ledger-top",
+          "name": "Ledger Top",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "attic-ledger-middle",
+          "name": "Ledger Fold",
+          "tiles": [
+            "########",
+            "#..S...#",
+            "#......#",
+            "#......#",
+            "#..S...#",
+            "########"
+          ]
+        },
+        {
+          "id": "attic-ledger-bottom",
+          "name": "Ledger Back",
+          "tiles": [
+            "########",
+            "#....DG#",
+            "#......#",
+            "#......#",
+            "#..S...#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-ledger",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "attic-ledger-latch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "attic-ledger-door",
+          "layer": 2,
+          "x": 5,
+          "y": 1,
+          "switchIds": [
+            "attic-ledger-latch"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "attic-ledger-stamp",
+          "layer": 1,
+          "x": 3,
+          "y": 1,
+          "direction": "down",
+          "distance": 3,
+          "appliesTo": [
+            "switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Blend the secret-route shadow latch with a routed drop that converts one stitched entry into a full attic climb.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 9,
+        "commonMisunderstanding": "Players often set the shadow correctly but keep searching the middle sheet for the goal instead of switching again immediately."
+      }
+    },
+    "attic-03": {
+      "id": "attic-03",
+      "districtId": "attic",
+      "title": "Mina's Postscript",
+      "optional": true,
+      "secret": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "requiresRooms": [
+        "attic-02"
+      ],
+      "objective": "Latch the final cue, trust both stamps, and carry the attic line to its last mailbox.",
+      "blurb": "The hidden route ends by combining a rerouted stitch with a forwarded lantern bridge.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "This is the one route I never wrote down cleanly. Set the shadow cue, trust the drop, and let the lantern finish the sentence."
+        }
+      ],
+      "achievementId": "secret-line",
+      "hintTiers": [
+        "The first move sets the shadow cue. After that, the stamps do the clever part for you.",
+        "Move right once so the shadow latches the switch, climb to the upper stitch, let it drop you to the lower stitch, then follow the lantern bridge through the final door.",
+        "Move right, go up three times, switch sheets, switch again, go up twice, then cross right three times through the bridge and the opened door to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "postscript-top",
+          "name": "Postscript Front",
+          "tiles": [
+            "########",
+            "#.S....#",
+            "#......#",
+            "#......#",
+            "#......#",
+            "########"
+          ]
+        },
+        {
+          "id": "postscript-middle",
+          "name": "Postscript Fold",
+          "tiles": [
+            "########",
+            "#.S....#",
+            "#......#",
+            "#......#",
+            "#.S....#",
+            "########"
+          ]
+        },
+        {
+          "id": "postscript-back",
+          "name": "Postscript Route",
+          "tiles": [
+            "########",
+            "#......#",
+            "#..~DG.#",
+            "#......#",
+            "#.S....#",
+            "########"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-postscript",
+          "type": "shadow",
+          "layer": 1,
+          "x": 5,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
+        {
+          "id": "lantern-postscript",
+          "type": "projector",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": -1,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [
+        {
+          "id": "postscript-latch",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "postscript-door",
+          "layer": 2,
+          "x": 4,
+          "y": 2,
+          "switchIds": [
+            "postscript-latch"
+          ]
+        }
+      ],
+      "routingStamps": [
+        {
+          "id": "postscript-switch-stamp",
+          "layer": 1,
+          "x": 2,
+          "y": 1,
+          "direction": "down",
+          "distance": 3,
+          "appliesTo": [
+            "switch"
+          ]
+        },
+        {
+          "id": "postscript-bridge-stamp",
+          "layer": 2,
+          "x": 2,
+          "y": 2,
+          "direction": "right",
+          "distance": 1,
+          "appliesTo": [
+            "projection"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Finish the secret route by combining the two routing channels players learned separately into one clean attic postscript.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 10,
+        "commonMisunderstanding": "Players often remember the stitched drop but forget the lantern bridge is also being rerouted by a second stamp."
       }
     }
   }

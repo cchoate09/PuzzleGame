@@ -91,6 +91,7 @@ static func validate_room_report(room: Dictionary) -> Dictionary:
 			"entityCount": 0,
 			"switchCount": 0,
 			"doorCount": 0,
+			"routingStampCount": 0,
 			"goalCount": 0,
 			"stitchCount": 0,
 		},
@@ -204,6 +205,49 @@ static func validate_room_report(room: Dictionary) -> Dictionary:
 		for switch_id in door_def.get("switchIds", []):
 			if not switch_ids.has(switch_id):
 				_add_issue(report, "error", "doors", "Door '%s' references missing switch '%s'." % [door_id, switch_id])
+
+	var routing_stamp_ids := {}
+	var routing_stamp_locations := {}
+	report["metrics"]["routingStampCount"] = room.get("routingStamps", []).size()
+	for stamp in room.get("routingStamps", []):
+		var stamp_id := String(stamp.get("id", ""))
+		if stamp_id.is_empty():
+			_add_issue(report, "error", "routing", "A routing stamp is missing its id.")
+		elif routing_stamp_ids.has(stamp_id):
+			_add_issue(report, "error", "routing", "Duplicate routing stamp id '%s'." % stamp_id)
+		routing_stamp_ids[stamp_id] = true
+
+		var stamp_layer := int(stamp.get("layer", -1))
+		var stamp_x := int(stamp.get("x", -1))
+		var stamp_y := int(stamp.get("y", -1))
+		if stamp_layer < 0 or stamp_layer >= layers.size():
+			_add_issue(report, "error", "routing", "Routing stamp '%s' uses an invalid layer index." % stamp_id)
+			continue
+		if stamp_x < 0 or stamp_x >= width or stamp_y < 0 or stamp_y >= height:
+			_add_issue(report, "error", "routing", "Routing stamp '%s' is outside the room bounds." % stamp_id)
+			continue
+		if _tile_at(layers, stamp_layer, stamp_x, stamp_y) == "#":
+			_add_issue(report, "error", "routing", "Routing stamp '%s' is placed on a wall." % stamp_id)
+
+		var direction := String(stamp.get("direction", ""))
+		if not ["up", "down", "left", "right"].has(direction):
+			_add_issue(report, "error", "routing", "Routing stamp '%s' uses invalid direction '%s'." % [stamp_id, direction])
+
+		if int(stamp.get("distance", 0)) < 1:
+			_add_issue(report, "error", "routing", "Routing stamp '%s' should use a distance of at least 1." % stamp_id)
+
+		var applies_to: Array = stamp.get("appliesTo", [])
+		if applies_to.is_empty():
+			_add_issue(report, "error", "routing", "Routing stamp '%s' should declare at least one routing channel." % stamp_id)
+		else:
+			for channel in applies_to:
+				if not ["switch", "transfer", "projection"].has(channel):
+					_add_issue(report, "error", "routing", "Routing stamp '%s' uses unsupported channel '%s'." % [stamp_id, String(channel)])
+
+		var location_key := _key(stamp_layer, stamp_x, stamp_y)
+		if routing_stamp_locations.has(location_key):
+			_add_issue(report, "warning", "routing", "Multiple routing stamps share %s." % location_key)
+		routing_stamp_locations[location_key] = true
 
 	var entity_ids := {}
 	report["metrics"]["entityCount"] = room.get("entities", []).size()

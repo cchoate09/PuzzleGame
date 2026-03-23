@@ -11,6 +11,14 @@ function coordKey(layer, x, y) {
   return `${layer}:${x}:${y}`;
 }
 
+function clampDistance(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    return 1;
+  }
+  return Math.max(1, Math.floor(parsed));
+}
+
 function normalizeAction(action) {
   if (typeof action === "string") {
     return { type: action };
@@ -306,6 +314,44 @@ export class PatchworkEngine {
     return { dx: -direction.dx, dy: direction.dy };
   }
 
+  routingStampAppliesTo(stamp, channel) {
+    if (!stamp) {
+      return false;
+    }
+    const appliesTo = Array.isArray(stamp.appliesTo) ? stamp.appliesTo : [];
+    return appliesTo.includes(channel);
+  }
+
+  findRoutingStamp(layer, x, y, channel) {
+    return (
+      (this.room.routingStamps || []).find(
+        (stamp) =>
+          stamp.layer === layer &&
+          stamp.x === x &&
+          stamp.y === y &&
+          this.routingStampAppliesTo(stamp, channel)
+      ) || null
+    );
+  }
+
+  getRoutedDestination(layer, x, y, channel) {
+    const stamp = this.findRoutingStamp(layer, x, y, channel);
+    if (!stamp) {
+      return { layer, x, y, stamp: null };
+    }
+    const direction = DIRECTIONS[stamp.direction];
+    if (!direction) {
+      return { layer, x, y, stamp: null };
+    }
+    const distance = clampDistance(stamp.distance);
+    return {
+      layer,
+      x: x + direction.dx * distance,
+      y: y + direction.dy * distance,
+      stamp,
+    };
+  }
+
   trySwitchLayer() {
     const { player } = this.runtime;
     if (this.getTile(player.layer, player.x, player.y) !== "S") {
@@ -317,9 +363,12 @@ export class PatchworkEngine {
       .filter((layerIndex) => layerIndex !== player.layer && this.getTile(layerIndex, player.x, player.y) === "S");
 
     for (const layerIndex of availableLayers) {
-      if (this.isPassable(layerIndex, player.x, player.y, { ignorePlayer: true })) {
+      const routed = this.getRoutedDestination(layerIndex, player.x, player.y, "switch");
+      if (this.isPassable(routed.layer, routed.x, routed.y, { ignorePlayer: true })) {
         player.layer = layerIndex;
-        this.runtime.activeLayer = layerIndex;
+        player.x = routed.x;
+        player.y = routed.y;
+        this.runtime.activeLayer = routed.layer;
         return true;
       }
     }
@@ -346,8 +395,11 @@ export class PatchworkEngine {
       if (targetLayer === entity.layer) {
         continue;
       }
-      if (this.isPassable(targetLayer, entity.x, entity.y, { ignoreEntityId: entity.id })) {
-        entity.layer = targetLayer;
+      const routed = this.getRoutedDestination(targetLayer, entity.x, entity.y, "transfer");
+      if (this.isPassable(routed.layer, routed.x, routed.y, { ignoreEntityId: entity.id })) {
+        entity.layer = routed.layer;
+        entity.x = routed.x;
+        entity.y = routed.y;
         return true;
       }
     }
@@ -425,7 +477,15 @@ export class PatchworkEngine {
         continue;
       }
       for (const projection of entity.projectionTargets) {
-        bridges.add(coordKey(projection.layer, entity.x + projection.dx, entity.y + projection.dy));
+        const routed = this.getRoutedDestination(
+          projection.layer,
+          entity.x + projection.dx,
+          entity.y + projection.dy,
+          "projection"
+        );
+        if (this.getTile(routed.layer, routed.x, routed.y)) {
+          bridges.add(coordKey(routed.layer, routed.x, routed.y));
+        }
       }
     }
 
@@ -540,6 +600,14 @@ export class PatchworkEngine {
         x: door.x,
         y: door.y,
         open: this.runtime.dynamicState.openDoors.has(door.id),
+      })),
+      routingStamps: (this.room.routingStamps || []).map((stamp) => ({
+        id: stamp.id,
+        layer: stamp.layer,
+        x: stamp.x,
+        y: stamp.y,
+        direction: stamp.direction,
+        appliesTo: [...(stamp.appliesTo || [])],
       })),
       moveCount: this.runtime.moveCount,
       solved: this.runtime.solved,

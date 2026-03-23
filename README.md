@@ -1,13 +1,13 @@
 # Patchwork Post
 
-Patchwork Post is a 2D logic-puzzle game prototype built around layered paper rooms, object transfer, switches, projection bridges, echo timing, and mirrored shadow actors.
+Patchwork Post is a 2D logic-puzzle game prototype built around layered paper rooms, object transfer, switches, projection bridges, echo timing, mirrored shadow actors, and late-game routing stamps that bend how routes behave across layers.
 
 The repo currently contains:
 
 - a browser prototype used as the mechanic reference
-- a Godot 4 native runtime that now carries the Batch 5 demo slice
+- a Godot 4 native runtime that now carries the full Batch 6 campaign prototype
 - shared JSON content sources that generate browser and Godot data outputs
-- regression tests for canonical puzzle solutions, UI smoke coverage, authoring tools, support systems, and the Batch 5 demo flow
+- regression tests for canonical puzzle solutions, UI smoke coverage, authoring tools, support systems, the Batch 5 demo flow, and the Batch 6 late-game campaign route
 
 ## Commands
 
@@ -46,4 +46,7 @@ npm run install:godot-templates
 - Batch 4 notes live in [batch-4-support-systems.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-4-support-systems.md).
 - Batch 5 is implemented: the first three districts now form a 15-room public-demo slice with 11 main rooms, 4 optional rooms, room handoff beats, a demo completion overlay, and updated progression gating.
 - Batch 5 notes live in [batch-5-demo-slice.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-5-demo-slice.md).
-- Batch 6 is the next major focus: expand the back half of the campaign and carry the same production quality into Clocktower, Theater, Rooftops, and Attic.
+- Batch 6 is implemented for the current campaign prototype: Clocktower, Theater, Rooftops, and Attic are now playable with a late-game routing-stamp modifier, optional mastery branches, a cross-district secret line, and hidden journal threads.
+- The shared campaign source now contains 31 rooms total: 21 main-route rooms and 10 optional or secret rooms.
+- The secret route now requires three late-game side routes before the attic unlocks, and the runtime surfaces separate completion beats for the main festival line and the attic postscript.
+- Batch 6 notes live in [batch-6-campaign-expansion.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-6-campaign-expansion.md).

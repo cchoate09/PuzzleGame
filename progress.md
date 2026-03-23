@@ -120,9 +120,31 @@ Notes
 - Batch 5 status:
   - complete for the current public-demo slice scope
 
+- Batch 6 progress:
+  - expanded the shared campaign source into a 31-room full-campaign prototype across all seven districts
+  - added Clocktower, Theater, Rooftops, and Attic content with late-game pacing, district handoff beats, optional mastery branches, and a secret attic route
+  - added `routingStamps` as the late-game routing modifier and wired it into browser and Godot simulation for:
+    - stitched layer switching
+    - parcel transfer
+    - projection bridge resolution
+  - added routing-stamp rendering, validation, and authoring support in the Godot runtime and content-production dock
+  - added campaign-level `mainCampaign`, `secretRoute`, and `journalEntries` metadata to support a true back-half progression structure
+  - upgraded the Godot shell with:
+    - main campaign completion flow
+    - secret-route completion flow
+    - attic gating based on side-route completion
+    - hidden journal entry unlock surfacing
+  - expanded the achievement mapping for the full current campaign prototype, including the attic route and journal completion
+  - added browser-side regression coverage for routing-stamp behavior and Batch 6 campaign metadata in `tests/room-regressions.test.js`
+  - added native Batch 6 progression coverage in `godot/scripts/tests/run_batch6_campaign_tests.gd`
+  - expanded `scripts/run-godot-tests.mjs` so `npm run test:godot` now runs Batch 1 through Batch 6 coverage
+  - verified `npm run sync:content`, `npm test`, `npm run test:godot`, and `npm run verify:godot` after the Batch 6 content and runtime changes
+
+- Batch 6 status:
+  - complete for the current full-campaign prototype scope
+
 TODO
-- Expand the prototype into the full planned campaign size with Clocktower, Theater, Rooftops, and Attic content that matches the new demo-slice quality bar.
 - Add richer room-editor ergonomics over time, such as drag placement, copy/paste, and faster layer inspection, if content production exposes pain points.
-- Push into Batch 6 with late-game route planning, optional mastery branches, and the planned cross-district secret line.
+- Push into Batch 7 with store-facing prep, external playtesting, Steam integration hardening, and asset production.
 - Decide how much of the browser prototype UI should continue to evolve versus freezing it as a mechanics reference while Godot becomes the clear primary runtime.
 - Replace the current Steam bridge stub with a live Steamworks plugin integration in a later batch.

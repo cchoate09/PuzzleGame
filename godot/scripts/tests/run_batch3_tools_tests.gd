@@ -61,6 +61,10 @@ func _initialize() -> void:
 	dock._handle_add_entity()
 	dock._handle_add_switch()
 	dock._handle_add_door()
+	dock._handle_add_routing_stamp()
+	dock._handle_routing_direction_changed(2)
+	dock._handle_routing_distance_changed(2)
+	dock._handle_routing_channel_toggled(true, "projection")
 	if not dock.draft_room.get("switches", []).is_empty():
 		var switch_id := String(dock.draft_room.get("switches", [])[0].get("id", ""))
 		dock.selected_door_index = 0
@@ -76,6 +80,9 @@ func _initialize() -> void:
 	_expect(String(saved_room.get("layers", [])[0].get("tiles", [])[0]).length() == 9 and saved_room.get("layers", [])[0].get("tiles", []).size() == 8, "Saved draft room should persist grid resize edits.")
 	_expect(saved_room.get("entities", []).size() == 1, "Saved draft room should persist entity edits.")
 	_expect(saved_room.get("switches", []).size() == 1 and saved_room.get("doors", []).size() == 1, "Saved draft room should persist switch and door edits.")
+	_expect(saved_room.get("routingStamps", []).size() == 1, "Saved draft room should persist routing stamp edits.")
+	_expect(int(saved_room.get("routingStamps", [])[0].get("distance", 0)) == 2, "Saved draft room should persist routing stamp distance edits.")
+	_expect(saved_room.get("routingStamps", [])[0].get("appliesTo", []).has("projection"), "Saved draft room should persist routing stamp channel edits.")
 
 	var report: Dictionary = Validator.validate_room_report(saved_room)
 	_expect(report.get("metrics", {}).get("entityCount", 0) == 1, "Validator report should expose metrics for saved draft rooms.")
