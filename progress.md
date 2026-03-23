@@ -77,10 +77,33 @@ Notes
 
 - Batch 3 status:
   - complete for the current internal content-production scope
+- Batch 4 progress:
+  - added persisted gameplay-input binding support in `godot/scripts/core/patchwork_input.gd`
+  - upgraded the Godot shell with:
+    - guided opening hint support
+    - controller-first menu focus behavior
+    - saved keyboard/controller remapping
+    - Steam/save status surfacing
+    - demo-safe hidden-by-default developer tools
+  - upgraded save handling in `godot/scripts/core/patchwork_save.gd` with:
+    - v2 save metadata
+    - build channel metadata
+    - legacy import
+    - demo-to-full carryover import/export
+    - pending Steam achievement sync state
+  - added a Steam bridge seam in `godot/scripts/platform/steam_bridge.gd`
+  - added a first-pass Steam Input reference manifest at `steam/input/patchwork-post-steam-input.json`
+  - added Batch 4 regression coverage in `godot/scripts/tests/run_batch4_support_tests.gd`
+  - expanded `npm run test:godot` so it now runs Batch 1 through Batch 4 coverage
+  - documented the support-system layer in `docs/batch-4-support-systems.md`
+  - verified `npm test`, `npm run test:godot`, `npm run verify:godot`, and a headless Godot boot after the Batch 4 changes
+
+- Batch 4 status:
+  - complete for the current demo-support scope
 
 TODO
 - Expand the prototype into the full planned campaign size with many more rooms, district beats, and difficulty ramps.
-- Push into Batch 4: richer hint UX, controller-only navigation polish, Steam-facing support hooks, and a stronger demo-ready accessibility pass.
 - Add richer room-editor ergonomics over time, such as drag placement, copy/paste, and faster layer inspection, if content production exposes pain points.
+- Push into Batch 5 with more Mailroom, Market, and Greenhouse content so the now-polished support systems sit behind a stronger public demo.
 - Decide how much of the browser prototype UI should continue to evolve versus freezing it as a mechanics reference while Godot becomes the clear primary runtime.
-- Add Steam-specific production hooks later, such as achievement plumbing, export targets, and cloud-save integration on the shipping runtime.
+- Replace the current Steam bridge stub with a live Steamworks plugin integration in a later batch.

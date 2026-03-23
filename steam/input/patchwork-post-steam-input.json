@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "game": "Patchwork Post",
+  "actionSet": {
+    "name": "Courier",
+    "title": "Courier Controls",
+    "actions": [
+      { "name": "move_up", "title": "Move Up", "description": "Step upward through the current sheet." },
+      { "name": "move_down", "title": "Move Down", "description": "Step downward through the current sheet." },
+      { "name": "move_left", "title": "Move Left", "description": "Step left through the current sheet." },
+      { "name": "move_right", "title": "Move Right", "description": "Step right through the current sheet." },
+      { "name": "wait_turn", "title": "Wait", "description": "Hold still for one beat to advance echoes." },
+      { "name": "switch_layer", "title": "Switch Layer", "description": "Flip to the matching stitch on another sheet." },
+      { "name": "transfer_object", "title": "Transfer Parcel", "description": "Send the facing parcel to a matching spot on another layer." },
+      { "name": "undo_action", "title": "Undo", "description": "Rewind the last step." },
+      { "name": "redo_action", "title": "Redo", "description": "Reapply the last rewound step." },
+      { "name": "reset_room", "title": "Reset Room", "description": "Restart the current route from the initial state." },
+      { "name": "replay_room", "title": "Replay Route", "description": "Replay the saved best route or canonical solution." },
+      { "name": "next_room", "title": "Next Room", "description": "Cycle to the next unlocked route." },
+      { "name": "prev_room", "title": "Previous Room", "description": "Cycle to the previous unlocked route." }
+    ]
+  },
+  "menuNavigation": {
+    "ui_up": "D-Pad Up",
+    "ui_down": "D-Pad Down",
+    "ui_left": "D-Pad Left",
+    "ui_right": "D-Pad Right",
+    "ui_accept": "A",
+    "ui_cancel": "B",
+    "ui_focus_next": "RB",
+    "ui_focus_prev": "LB"
+  },
+  "notes": [
+    "Gameplay defaults use the left stick for board movement and the D-Pad for menu navigation.",
+    "The manifest is a first-pass reference file for Steam Input setup during Batch 4."
+  ]
+}

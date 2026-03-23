@@ -1,6 +1,6 @@
 # Patchwork Post Godot Runtime
 
-This directory is the native Godot 4 runtime for Patchwork Post. Batch 1 established the production base, Batch 2 delivered the first near-final vertical-slice presentation pass, and Batch 3 added the internal content-production toolchain.
+This directory is the native Godot 4 runtime for Patchwork Post. Batch 1 established the production base, Batch 2 delivered the first near-final vertical-slice presentation pass, Batch 3 added the internal content-production toolchain, and Batch 4 hardened the player-support systems for a public demo.
 
 ## Current Scope
 
@@ -15,7 +15,10 @@ This directory is the native Godot 4 runtime for Patchwork Post. Batch 1 establi
 - first-pass procedural interaction audio
 - in-engine room authoring dock with tile painting, layer management, metadata editing, entity placement, switch-door linking, validation, and balance review
 - local playtest telemetry summaries for internal iteration
-- headless regression runner for canonical solutions, UI smoke coverage, and authoring-tool coverage
+- progressive hint UX with guided openings
+- saved keyboard/controller remapping plus controller-first menu navigation
+- demo/full save carryover scaffolding and Steam support stubs
+- headless regression runner for canonical solutions, UI smoke coverage, authoring-tool coverage, and demo-support coverage
 
 ## Commands
 
@@ -39,7 +42,8 @@ To open the runtime manually, launch the Godot editor against [project.godot](C:
 
 - This runtime is now the primary vertical-slice surface for presentation work.
 - Authoring workflow details are documented in [batch-3-authoring-workflow.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-3-authoring-workflow.md).
+- Demo-support details are documented in [batch-4-support-systems.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-4-support-systems.md).
 - Visual and audio direction notes are documented in:
   - [batch-2-ui-style-guide.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-2-ui-style-guide.md)
   - [batch-2-audio-style-guide.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-2-audio-style-guide.md)
-- Steam-specific integration is not wired yet.
+- Steam-specific live plugin integration is not wired yet, but Batch 4 adds the runtime seams and reference manifest needed for that next step.

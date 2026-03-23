@@ -11,9 +11,11 @@ const ACCENT_GREEN := Color("7aa37c")
 const ACCENT_RUST := Color("cf6d49")
 
 const ContentLoader = preload("res://scripts/core/content_loader.gd")
+const InputBindings = preload("res://scripts/core/patchwork_input.gd")
 const SaveRuntime = preload("res://scripts/core/patchwork_save.gd")
 const EngineScript = preload("res://scripts/core/patchwork_engine.gd")
 const ContentRepository = preload("res://scripts/core/content_repository.gd")
+const SteamBridgeScript = preload("res://scripts/platform/steam_bridge.gd")
 const RoomViewScript = preload("res://scripts/ui/room_view.gd")
 const AudioManagerScript = preload("res://scripts/ui/audio_manager.gd")
 const PlaytestLoggerScript = preload("res://scripts/tools/playtest_logger.gd")
@@ -27,10 +29,13 @@ var profile: Dictionary = {}
 var engine
 var audio_manager
 var playtest_logger
+var steam_bridge
+var steam_status: Dictionary = {}
 var authoring_dock
 var room_ids: Array = []
 var current_room_index: int = 0
 var current_font_scale: float = 1.0
+var last_input_source := "keyboard"
 var last_room_id: String = ""
 var authoring_context_room_id: String = ""
 var last_solved_state := false
@@ -39,6 +44,10 @@ var toast_time_left := 0.0
 var dialogue_time_left := 0.0
 var solve_time_left := 0.0
 var route_unlock_snapshot: Dictionary = {"districts": [], "rooms": []}
+var remap_pending_action := ""
+var remap_pending_source := "keyboard"
+var hint_opening_actions: Array = []
+var developer_tools_visible := false
 
 var eyebrow_label: Label
 var title_label: Label
@@ -52,13 +61,22 @@ var objective_label: Label
 var blurb_label: Label
 var hint_status_label: Label
 var hint_text_label: Label
+var hint_opening_label: Label
+var hint_opening_button: Button
 var journal_label: Label
 var stats_label: Label
 var controls_label: Label
+var input_mode_label: Label
 var setting_contrast_button: CheckButton
 var setting_motion_button: CheckButton
 var setting_font_scale_slider: HSlider
 var setting_font_scale_value: Label
+var remap_rows: Dictionary = {}
+var steam_status_label: Label
+var save_status_label: Label
+var authoring_toggle_button: Button
+var remap_overlay: PanelContainer
+var remap_prompt_label: Label
 var footer_label: Label
 var layer_chip_row: HBoxContainer
 var dialogue_panel: PanelContainer
@@ -78,18 +96,21 @@ var hint_buttons: Array = []
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(BACKDROP)
+	profile = SaveRuntime.load_profile()
 	_bootstrap_input_map()
 	_build_ui()
 	audio_manager = AudioManagerScript.new()
 	add_child(audio_manager)
+	steam_bridge = SteamBridgeScript.new()
+	steam_status = steam_bridge.initialize()
 
 	campaign = ContentLoader.load_campaign_index()
 	dev_rooms = ContentLoader.load_dev_rooms()
 	solutions = ContentLoader.load_solutions()
 	source_campaign = ContentRepository.load_source_campaign()
-	profile = SaveRuntime.load_profile()
 	playtest_logger = PlaytestLoggerScript.new()
 	_apply_profile_settings()
+	_sync_steam_state()
 
 	if campaign.is_empty():
 		title_label.text = "Generated content is missing."
@@ -102,6 +123,7 @@ func _ready() -> void:
 	var fallback_room_id: String = room_ids[0] if not room_ids.is_empty() else "mailroom-01"
 	var initial_room_id: String = String(profile.get("lastRoomId", fallback_room_id))
 	_load_room(initial_room_id, true)
+	call_deferred("_prime_controller_focus")
 
 func _process(delta: float) -> void:
 	_update_overlay_state(delta)
@@ -115,8 +137,33 @@ func _exit_tree() -> void:
 	if playtest_logger != null:
 		playtest_logger.abandon_current("quit")
 
+func _input(event: InputEvent) -> void:
+	if event == null or event.is_echo():
+		return
+	var detected_source := InputBindings.detect_input_source(event)
+	if detected_source != "mouse":
+		last_input_source = detected_source
+	if remap_pending_action.is_empty():
+		return
+	if event is InputEventKey and bool(event.pressed) and int(event.keycode) == KEY_ESCAPE:
+		_cancel_control_rebind()
+		get_viewport().set_input_as_handled()
+		return
+	if InputBindings.is_bindable_event(event):
+		_complete_control_rebind(InputBindings.serialize_event(event))
+		get_viewport().set_input_as_handled()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if engine == null or event.is_echo():
+		return
+	if event is InputEventKey and bool(event.pressed) and int(event.keycode) == KEY_F9 and OS.is_debug_build():
+		_toggle_developer_tools()
+		return
+	if not remap_pending_action.is_empty():
+		return
+	var focus_owner: Control = get_viewport().gui_get_focus_owner()
+	var ui_focus_locked: bool = focus_owner != null and focus_owner != room_view
+	if ui_focus_locked:
 		return
 
 	if event.is_action_pressed("next_room"):
@@ -272,6 +319,7 @@ func _build_ui() -> void:
 	room_view.set_anchors_preset(Control.PRESET_FULL_RECT)
 	room_view.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	room_view.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	room_view.focus_mode = Control.FOCUS_ALL
 	board_shell.add_child(room_view)
 
 	dialogue_panel = PanelContainer.new()
@@ -363,11 +411,17 @@ func _build_ui() -> void:
 	transition_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	board_shell.add_child(transition_overlay)
 
+	var side_scroll := ScrollContainer.new()
+	side_scroll.custom_minimum_size = Vector2(360, 0)
+	side_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	side_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content_row.add_child(side_scroll)
+
 	var side_column := VBoxContainer.new()
-	side_column.custom_minimum_size = Vector2(360, 0)
-	side_column.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	side_column.custom_minimum_size = Vector2(336, 0)
+	side_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	side_column.add_theme_constant_override("separation", 14)
-	content_row.add_child(side_column)
+	side_scroll.add_child(side_column)
 
 	var objective_card: Dictionary = _create_card("Route Objective")
 	side_column.add_child(objective_card["panel"])
@@ -397,6 +451,15 @@ func _build_ui() -> void:
 	hint_text_label = _create_body_label(14, ACCENT_MUTED)
 	objective_card["body"].add_child(hint_text_label)
 
+	hint_opening_label = _create_body_label(13, ACCENT_MUTED)
+	objective_card["body"].add_child(hint_opening_label)
+
+	hint_opening_button = Button.new()
+	hint_opening_button.text = "Play Guided Opening"
+	hint_opening_button.pressed.connect(_handle_guided_opening_requested)
+	_style_button(hint_opening_button, Color("e5efd8"), Color("a9c089"), ACCENT_INK)
+	objective_card["body"].add_child(hint_opening_button)
+
 	var notes_card: Dictionary = _create_card("Town Notes")
 	side_column.add_child(notes_card["panel"])
 
@@ -415,12 +478,14 @@ func _build_ui() -> void:
 
 	setting_contrast_button = CheckButton.new()
 	setting_contrast_button.text = "High Contrast"
+	setting_contrast_button.focus_mode = Control.FOCUS_ALL
 	_register_scaled_font(setting_contrast_button, 14)
 	setting_contrast_button.toggled.connect(_handle_high_contrast_toggled)
 	settings_card["body"].add_child(setting_contrast_button)
 
 	setting_motion_button = CheckButton.new()
 	setting_motion_button.text = "Reduced Motion"
+	setting_motion_button.focus_mode = Control.FOCUS_ALL
 	_register_scaled_font(setting_motion_button, 14)
 	setting_motion_button.toggled.connect(_handle_reduced_motion_toggled)
 	settings_card["body"].add_child(setting_motion_button)
@@ -438,6 +503,7 @@ func _build_ui() -> void:
 	setting_font_scale_slider.min_value = 0.9
 	setting_font_scale_slider.max_value = 1.35
 	setting_font_scale_slider.step = 0.05
+	setting_font_scale_slider.focus_mode = Control.FOCUS_ALL
 	setting_font_scale_slider.value_changed.connect(_handle_font_scale_changed)
 	font_row.add_child(setting_font_scale_slider)
 
@@ -445,9 +511,28 @@ func _build_ui() -> void:
 	setting_font_scale_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	font_row.add_child(setting_font_scale_value)
 
+	input_mode_label = _create_body_label(13, ACCENT_RUST)
+	settings_card["body"].add_child(input_mode_label)
+
 	controls_label = _create_body_label(13, ACCENT_MUTED)
-	controls_label.text = "Move: WASD or arrows\nWait: Space\nSwitch: Tab\nTransfer: X\nUndo/Redo: Z/Y\nReset: R"
 	settings_card["body"].add_child(controls_label)
+
+	_build_control_remap_rows(settings_card["body"])
+
+	var reset_controls_button := Button.new()
+	reset_controls_button.text = "Reset Controls To Default"
+	reset_controls_button.pressed.connect(_handle_reset_controls_pressed)
+	_style_button(reset_controls_button, Color("f0e7d4"), CARD_BORDER, ACCENT_INK)
+	settings_card["body"].add_child(reset_controls_button)
+
+	var support_card: Dictionary = _create_card("Steam And Saves")
+	side_column.add_child(support_card["panel"])
+
+	steam_status_label = _create_body_label(13, ACCENT_INK)
+	support_card["body"].add_child(steam_status_label)
+
+	save_status_label = _create_body_label(13, ACCENT_MUTED)
+	support_card["body"].add_child(save_status_label)
 
 	var action_card: Dictionary = _create_card("Courier Tools")
 	side_column.add_child(action_card["panel"])
@@ -466,12 +551,20 @@ func _build_ui() -> void:
 	_add_action_button(action_grid, "replay", "Replay", Color("dbead8"), _play_replay)
 	_add_action_button(action_grid, "story", "Story Beat", Color("efe2f0"), _show_dialogue_for_current_room)
 
+	if OS.is_debug_build():
+		authoring_toggle_button = Button.new()
+		authoring_toggle_button.text = "Show Developer Tools"
+		authoring_toggle_button.pressed.connect(_toggle_developer_tools)
+		_style_button(authoring_toggle_button, Color("ede4f0"), CARD_BORDER, ACCENT_INK)
+		action_card["body"].add_child(authoring_toggle_button)
+
 	authoring_dock = AuthoringDockScript.new()
 	authoring_dock.custom_minimum_size = Vector2(0, 320)
 	authoring_dock.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	authoring_dock.campaign_saved.connect(_handle_authoring_campaign_saved)
 	authoring_dock.preview_requested.connect(_handle_authoring_preview_requested)
 	authoring_dock.room_load_requested.connect(_handle_authoring_room_load_requested)
+	authoring_dock.visible = developer_tools_visible and OS.is_debug_build()
 	layout.add_child(authoring_dock)
 
 	footer_label = Label.new()
@@ -479,6 +572,27 @@ func _build_ui() -> void:
 	_register_scaled_font(footer_label, 13)
 	footer_label.add_theme_color_override("font_color", ACCENT_MUTED)
 	layout.add_child(footer_label)
+
+	remap_overlay = PanelContainer.new()
+	remap_overlay.set_anchors_preset(Control.PRESET_CENTER)
+	remap_overlay.custom_minimum_size = Vector2(420, 0)
+	remap_overlay.position = Vector2(-210, -90)
+	remap_overlay.visible = false
+	remap_overlay.z_index = 50
+	remap_overlay.add_theme_stylebox_override("panel", _make_card_style(Color("fff8ef"), Color("d6bd96"), 24))
+	add_child(remap_overlay)
+
+	var remap_margin := MarginContainer.new()
+	remap_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	remap_margin.add_theme_constant_override("margin_left", 20)
+	remap_margin.add_theme_constant_override("margin_top", 18)
+	remap_margin.add_theme_constant_override("margin_right", 20)
+	remap_margin.add_theme_constant_override("margin_bottom", 18)
+	remap_overlay.add_child(remap_margin)
+
+	remap_prompt_label = _create_body_label(15, ACCENT_INK)
+	remap_prompt_label.text = "Press a key or controller input to bind this action. Press Escape to cancel."
+	remap_margin.add_child(remap_prompt_label)
 
 func _register_scaled_font(control: Control, base_size: int, property_name: String = "font_size") -> void:
 	control.set_meta("patchwork_font_property", property_name)
@@ -549,11 +663,13 @@ func _make_button_style(fill: Color, border: Color) -> StyleBoxFlat:
 
 func _style_button(button: Button, fill: Color, border: Color, font_color: Color) -> void:
 	button.custom_minimum_size = Vector2(0, 42)
+	button.focus_mode = Control.FOCUS_ALL
 	_register_scaled_font(button, 14)
 	button.add_theme_stylebox_override("normal", _make_button_style(fill, border))
 	button.add_theme_stylebox_override("hover", _make_button_style(fill.lightened(0.05), border))
 	button.add_theme_stylebox_override("pressed", _make_button_style(fill.darkened(0.08), border))
 	button.add_theme_stylebox_override("disabled", _make_button_style(fill.darkened(0.12), border.darkened(0.1)))
+	button.add_theme_stylebox_override("focus", _make_button_style(fill.lightened(0.02), ACCENT_GOLD))
 	button.add_theme_color_override("font_color", font_color)
 	button.add_theme_color_override("font_disabled_color", ACCENT_MUTED)
 
@@ -566,21 +682,62 @@ func _add_action_button(parent: GridContainer, key: String, text: String, fill: 
 	parent.add_child(button)
 	action_buttons[key] = button
 
+func _build_control_remap_rows(parent: VBoxContainer) -> void:
+	var remap_caption := _create_body_label(13, ACCENT_MUTED)
+	remap_caption.text = "Remap the core puzzle actions below. Keyboard and controller bindings are stored separately."
+	parent.add_child(remap_caption)
+
+	for spec in InputBindings.get_action_specs():
+		var action_name := String(spec.get("name", ""))
+		var row := PanelContainer.new()
+		row.add_theme_stylebox_override("panel", _make_card_style(Color("fbf3e3"), CARD_BORDER, 16))
+		parent.add_child(row)
+
+		var margin := MarginContainer.new()
+		margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+		margin.add_theme_constant_override("margin_left", 12)
+		margin.add_theme_constant_override("margin_top", 10)
+		margin.add_theme_constant_override("margin_right", 12)
+		margin.add_theme_constant_override("margin_bottom", 10)
+		row.add_child(margin)
+
+		var body := VBoxContainer.new()
+		body.add_theme_constant_override("separation", 6)
+		margin.add_child(body)
+
+		var header := _create_body_label(13, ACCENT_INK)
+		header.text = String(spec.get("label", action_name))
+		body.add_child(header)
+
+		var description := _create_body_label(12, ACCENT_MUTED)
+		description.text = String(spec.get("description", ""))
+		body.add_child(description)
+
+		var binding_row := HBoxContainer.new()
+		binding_row.add_theme_constant_override("separation", 8)
+		body.add_child(binding_row)
+
+		var keyboard_button := Button.new()
+		keyboard_button.text = "Keyboard"
+		keyboard_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		keyboard_button.pressed.connect(_start_control_rebind.bind(action_name, "keyboard"))
+		_style_button(keyboard_button, Color("f1e6cf"), CARD_BORDER, ACCENT_INK)
+		binding_row.add_child(keyboard_button)
+
+		var controller_button := Button.new()
+		controller_button.text = "Controller"
+		controller_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		controller_button.pressed.connect(_start_control_rebind.bind(action_name, "controller"))
+		_style_button(controller_button, Color("e2ebdd"), CARD_BORDER, ACCENT_INK)
+		binding_row.add_child(controller_button)
+
+		remap_rows[action_name] = {
+			"keyboard": keyboard_button,
+			"controller": controller_button,
+		}
+
 func _bootstrap_input_map() -> void:
-	_bind_keys("move_up", [KEY_W, KEY_UP])
-	_bind_keys("move_down", [KEY_S, KEY_DOWN])
-	_bind_keys("move_left", [KEY_A, KEY_LEFT])
-	_bind_keys("move_right", [KEY_D, KEY_RIGHT])
-	_bind_keys("wait_turn", [KEY_SPACE])
-	_bind_keys("switch_layer", [KEY_TAB])
-	_bind_keys("transfer_object", [KEY_X])
-	_bind_keys("undo_action", [KEY_Z])
-	_bind_keys("redo_action", [KEY_Y])
-	_bind_keys("reset_room", [KEY_R])
-	_bind_keys("replay_room", [KEY_P])
-	_bind_keys("next_room", [KEY_BRACKETRIGHT, KEY_PAGEDOWN])
-	_bind_keys("prev_room", [KEY_BRACKETLEFT, KEY_PAGEUP])
-	_bind_keys("load_proof_room", [KEY_F8])
+	InputBindings.ensure_input_map(profile.get("settings", {}).get("controls", {}))
 
 func _bind_keys(action_name: String, keycodes: Array) -> void:
 	if not InputMap.has_action(action_name):
@@ -599,6 +756,66 @@ func _action_has_key(action_name: String, keycode: int) -> bool:
 		if event is InputEventKey and int(event.keycode) == keycode:
 			return true
 	return false
+
+func _prime_controller_focus() -> void:
+	if room_view != null:
+		room_view.grab_focus()
+
+func _start_control_rebind(action_name: String, source: String) -> void:
+	remap_pending_action = action_name
+	remap_pending_source = source
+	remap_overlay.visible = true
+	remap_prompt_label.text = "Listening for %s (%s). Press a key, button, or stick direction. Press Escape to cancel." % [
+		InputBindings.get_action_label(action_name),
+		source.capitalize(),
+	]
+	_show_toast("Waiting for a %s binding for %s." % [source, InputBindings.get_action_label(action_name)])
+
+func _cancel_control_rebind() -> void:
+	remap_pending_action = ""
+	remap_pending_source = "keyboard"
+	if remap_overlay != null:
+		remap_overlay.visible = false
+	_show_toast("Control remap cancelled.")
+	_refresh_ui()
+
+func _complete_control_rebind(binding: Dictionary) -> void:
+	profile.get("settings", {})["controls"] = InputBindings.set_binding(
+		profile.get("settings", {}).get("controls", {}),
+		remap_pending_action,
+		remap_pending_source,
+		binding
+	)
+	InputBindings.ensure_input_map(profile.get("settings", {}).get("controls", {}))
+	SaveRuntime.save_profile(profile)
+	var bound_action := remap_pending_action
+	var bound_source := remap_pending_source
+	remap_pending_action = ""
+	remap_pending_source = "keyboard"
+	if remap_overlay != null:
+		remap_overlay.visible = false
+	_show_toast("%s %s binding set to %s." % [
+		InputBindings.get_action_label(bound_action),
+		bound_source,
+		InputBindings.describe_binding(binding),
+	])
+	_refresh_ui()
+
+func _handle_reset_controls_pressed() -> void:
+	profile.get("settings", {})["controls"] = InputBindings.reset_to_defaults()
+	InputBindings.ensure_input_map(profile.get("settings", {}).get("controls", {}))
+	SaveRuntime.save_profile(profile)
+	_show_toast("Controls restored to the default keyboard and controller layout.")
+	_refresh_ui()
+
+func _toggle_developer_tools() -> void:
+	if not OS.is_debug_build() or authoring_dock == null:
+		return
+	developer_tools_visible = not developer_tools_visible
+	authoring_dock.visible = developer_tools_visible
+	if authoring_toggle_button != null:
+		authoring_toggle_button.text = "Hide Developer Tools" if developer_tools_visible else "Show Developer Tools"
+	_show_toast("Developer tools %s." % ("opened" if developer_tools_visible else "hidden"))
 
 func _get_district_by_id(district_id: String) -> Dictionary:
 	for candidate in campaign.get("districts", []):
@@ -741,17 +958,57 @@ func _dispatch_room_action(action: Dictionary) -> void:
 
 func _play_replay() -> void:
 	var room_id: String = String(engine.get_room().get("id", ""))
-	var actions: Array = []
-	if room_id == DEV_PROOF_ROOM_ID:
-		actions = solutions.get("threeLayerProofSolution", [])
-	else:
-		var progress: Dictionary = SaveRuntime.get_room_progress(profile, room_id)
-		actions = progress.get("bestSolution", [])
-		if actions.is_empty():
-			actions = solutions.get("canonicalSolutions", {}).get(room_id, [])
+	var actions: Array = _get_solution_actions(room_id)
 	if engine.start_replay(actions):
 		_show_toast("Replaying the saved route. Watch how the layer relationships unfold.")
 		_refresh_ui()
+
+func _get_solution_actions(room_id: String) -> Array:
+	if room_id == DEV_PROOF_ROOM_ID:
+		return solutions.get("threeLayerProofSolution", [])
+	var progress: Dictionary = SaveRuntime.get_room_progress(profile, room_id)
+	var actions: Array = progress.get("bestSolution", [])
+	if actions.is_empty():
+		actions = solutions.get("canonicalSolutions", {}).get(room_id, [])
+	return actions
+
+func _build_guided_opening_actions(room_id: String) -> Array:
+	var solution_actions: Array = _get_solution_actions(room_id)
+	if solution_actions.is_empty():
+		return []
+	var opening_length := mini(4, solution_actions.size())
+	return solution_actions.slice(0, opening_length)
+
+func _describe_hint_action(action: Dictionary) -> String:
+	match String(action.get("type", "")):
+		"move":
+			return "Move %s" % String(action.get("direction", ""))
+		"switch_layer":
+			return "Switch layers"
+		"transfer":
+			return "Transfer the parcel"
+		"wait":
+			return "Wait a beat"
+		"undo":
+			return "Undo"
+		"redo":
+			return "Redo"
+		"reset":
+			return "Reset the room"
+		_:
+			return "Act"
+
+func _handle_guided_opening_requested() -> void:
+	if engine == null or _is_preview_runtime():
+		return
+	var room_id: String = String(engine.get_room().get("id", ""))
+	var opening_actions: Array = _build_guided_opening_actions(room_id)
+	if opening_actions.is_empty():
+		_show_toast("No guided opening is available for this room yet.")
+		return
+	engine.start_replay(opening_actions)
+	_show_toast("Guided opening started. Watch the first moves, then take over from there.")
+	_refresh_ui()
 
 func _is_preview_runtime() -> bool:
 	return engine != null and String(engine.get_text_state().get("mode", "")) == "preview"
@@ -851,6 +1108,7 @@ func _after_state_change(action: Dictionary = {}, previous_runtime: Dictionary =
 			SaveRuntime.set_room_snapshot(profile, room_id, engine.get_room_snapshot())
 		profile["lastRoomId"] = room_id
 		SaveRuntime.save_profile(profile)
+		_sync_steam_state()
 
 	route_unlock_snapshot = _capture_unlock_snapshot()
 	if bool(engine.get_runtime().get("solved", false)) and not was_solved:
@@ -886,6 +1144,7 @@ func _refresh_ui() -> void:
 	var is_preview: bool = _is_preview_runtime()
 	var progress: Dictionary = SaveRuntime.get_room_progress(profile, room_id) if not is_preview else {}
 	var hints_revealed: int = int(progress.get("hintsRevealed", 0)) if not is_preview else 0
+	hint_opening_actions = [] if is_preview else _build_guided_opening_actions(room_id)
 
 	title_label.text = room.get("title", "Patchwork Post")
 	subtitle_label.text = "%s\n%s" % [
@@ -909,6 +1168,9 @@ func _refresh_ui() -> void:
 	blurb_label.text = room.get("blurb", "Restore the route and keep the folds aligned.")
 	hint_status_label.text = "Hints revealed: %d / 3" % hints_revealed if not is_preview else "Hints are disabled in the proof room."
 	hint_text_label.text = _build_hint_text(room, hints_revealed, is_preview)
+	hint_opening_label.text = _build_hint_opening_text(hints_revealed, is_preview)
+	hint_opening_button.visible = not is_preview and hints_revealed >= 3
+	hint_opening_button.disabled = hint_opening_actions.is_empty() or engine.is_replaying()
 
 	for index in range(hint_buttons.size()):
 		var button: Button = hint_buttons[index]
@@ -927,8 +1189,15 @@ func _refresh_ui() -> void:
 	journal_label.text = _build_notes_text(room, district, player)
 	stats_label.text = _build_stats_text(progress, is_preview)
 	_apply_settings_ui()
+	_refresh_control_rows()
+	input_mode_label.text = "Input mode: %s. Use D-Pad to move focus, A to confirm, and shoulder buttons to cycle focus groups." % ("Controller" if last_input_source == "controller" else "Keyboard")
+	controls_label.text = _build_controls_text()
+	if steam_status_label != null:
+		steam_status_label.text = _build_steam_status_text()
+	if save_status_label != null:
+		save_status_label.text = _build_save_status_text()
 
-	footer_label.text = "Move with arrows or WASD. Space waits, Tab switches layers, X transfers, Z/Y undo-redo, R resets, P replays, [ and ] cycle rooms, and F8 opens the three-layer proof room."
+	footer_label.text = _build_footer_text()
 
 	var can_replay: bool = is_preview or not SaveRuntime.get_room_progress(profile, room_id).get("bestSolution", []).is_empty() or solutions.get("canonicalSolutions", {}).has(room_id)
 	action_buttons["undo"].disabled = not engine.can_undo()
@@ -958,6 +1227,65 @@ func _build_hint_text(room: Dictionary, hints_revealed: int, is_preview: bool) -
 			label = "Opening"
 		hint_lines.append("%s: %s" % [label, room.get("hintTiers", [])[index]])
 	return "\n\n".join(hint_lines)
+
+func _build_hint_opening_text(hints_revealed: int, is_preview: bool) -> String:
+	if is_preview:
+		return ""
+	if hints_revealed < 3:
+		return "Reveal the third hint tier to unlock a guided opening replay."
+	if hint_opening_actions.is_empty():
+		return "No guided opening is available for this room yet."
+	var steps: Array = []
+	for index in range(hint_opening_actions.size()):
+		steps.append("%d. %s" % [index + 1, _describe_hint_action(hint_opening_actions[index])])
+	return "Guided opening:\n%s" % "\n".join(steps)
+
+func _build_controls_text() -> String:
+	var controls: Dictionary = profile.get("settings", {}).get("controls", {})
+	var action_names := ["move_up", "wait_turn", "switch_layer", "transfer_object", "undo_action", "redo_action", "reset_room", "replay_room"]
+	var parts: Array = []
+	for action_name in action_names:
+		var summary := InputBindings.summarize_action_bindings(controls, action_name)
+		parts.append("%s: %s | %s" % [
+			summary.get("label", action_name),
+			summary.get("keyboard", "-"),
+			summary.get("controller", "-"),
+		])
+	return "\n".join(parts)
+
+func _build_footer_text() -> String:
+	var focus_hint := "Shoulder buttons cycle UI focus." if last_input_source == "controller" else "Tab cycles focus between the board and menus."
+	return "%s Use the D-Pad for menu navigation, or return focus to the board to move through the puzzle. F8 opens the proof room and F9 toggles developer tools in debug builds." % focus_hint
+
+func _refresh_control_rows() -> void:
+	var controls: Dictionary = profile.get("settings", {}).get("controls", {})
+	for action_name in remap_rows.keys():
+		var summary := InputBindings.summarize_action_bindings(controls, String(action_name))
+		var row: Dictionary = remap_rows[action_name]
+		if row.has("keyboard") and row["keyboard"] != null:
+			row["keyboard"].text = "Keyboard: %s" % summary.get("keyboard", "-")
+		if row.has("controller") and row["controller"] != null:
+			row["controller"].text = "Controller: %s" % summary.get("controller", "-")
+
+func _build_steam_status_text() -> String:
+	var provider := String(steam_status.get("provider", "Local Preview"))
+	var pending := SaveRuntime.get_pending_steam_achievements(profile).size()
+	var availability := "Connected" if bool(steam_status.get("available", false)) else "Offline stub"
+	return "Steam runtime: %s\nAchievement sync: %s\nPending unlocks: %d\nInput manifest: %s" % [
+		provider,
+		availability,
+		pending,
+		String(steam_status.get("manifestPath", "steam/input/patchwork-post-steam-input.json")),
+	]
+
+func _build_save_status_text() -> String:
+	var diagnostics := SaveRuntime.get_storage_diagnostics(profile)
+	return "Build channel: %s\nContent version: %s\nCloud slot: %s\nDemo carryover detected: %s" % [
+		diagnostics.get("buildChannel", "full"),
+		diagnostics.get("contentVersion", "batch-4"),
+		diagnostics.get("cloudSlot", "patchwork-post-profile"),
+		"Yes" if diagnostics.get("hasDemoCarryover", false) else "No",
+	]
 
 func _build_route_status_text(district: Dictionary, room: Dictionary, is_preview: bool) -> String:
 	if is_preview:
@@ -1018,7 +1346,7 @@ func _rebuild_layer_chips(layer_names: Array, active_layer: int) -> void:
 		chip.add_child(margin)
 
 		var label := Label.new()
-		label.text = String(layer_names[index])
+		label.text = "L%d %s%s" % [index + 1, String(layer_names[index]), " (Active)" if index == active_layer else ""]
 		_register_scaled_font(label, 12)
 		label.add_theme_color_override("font_color", ACCENT_INK if index == active_layer else ACCENT_MUTED)
 		margin.add_child(label)
@@ -1041,6 +1369,7 @@ func _apply_settings_ui() -> void:
 
 func _apply_profile_settings() -> void:
 	current_font_scale = clampf(float(profile.get("settings", {}).get("fontScale", 1.0)), 0.9, 1.35)
+	InputBindings.ensure_input_map(profile.get("settings", {}).get("controls", {}))
 	for control in scalable_controls:
 		if control == null or not is_instance_valid(control):
 			continue
@@ -1052,6 +1381,15 @@ func _apply_profile_settings() -> void:
 		bool(profile.get("settings", {}).get("reducedMotion", false))
 	)
 	_apply_settings_ui()
+
+func _sync_steam_state() -> void:
+	if steam_bridge == null:
+		return
+	var synced_ids: Array = steam_bridge.sync_pending_achievements(profile)
+	for achievement_id in synced_ids:
+		SaveRuntime.mark_steam_achievement_synced(profile, String(achievement_id))
+	if not synced_ids.is_empty():
+		SaveRuntime.save_profile(profile)
 
 func _handle_high_contrast_toggled(enabled: bool) -> void:
 	profile.get("settings", {})["highContrast"] = enabled
@@ -1157,7 +1495,9 @@ func _rebuild_route_list(current_room_id: String) -> void:
 			var room_id := String(room.get("id", ""))
 			var room_unlocked := unlocked and _is_room_unlocked(room)
 			var room_solved := _room_solved(room_id)
-			button.text = "%s  %s" % [room.get("title", room_id), "(Side)" if room.get("optional", false) else "(Main)"]
+			var room_role := "Side" if room.get("optional", false) else "Main"
+			var room_state := "Solved" if room_solved else ("Locked" if not room_unlocked else "Open")
+			button.text = "[%s | %s] %s" % [room_role, room_state, room.get("title", room_id)]
 			button.disabled = not room_unlocked
 			button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			var fill := Color("eef3df") if room_solved else Color("f4ead1")

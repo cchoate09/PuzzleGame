@@ -49,3 +49,10 @@ run(godotConsole, [
   "--script",
   "res://scripts/tests/run_batch3_tools_tests.gd",
 ]);
+run(godotConsole, [
+  "--headless",
+  "--path",
+  projectDir,
+  "--script",
+  "res://scripts/tests/run_batch4_support_tests.gd",
+]);
