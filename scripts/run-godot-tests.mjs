@@ -56,3 +56,10 @@ run(godotConsole, [
   "--script",
   "res://scripts/tests/run_batch4_support_tests.gd",
 ]);
+run(godotConsole, [
+  "--headless",
+  "--path",
+  projectDir,
+  "--script",
+  "res://scripts/tests/run_batch5_demo_tests.gd",
+]);

@@ -43,6 +43,7 @@ var transition_time_left := 0.0
 var toast_time_left := 0.0
 var dialogue_time_left := 0.0
 var solve_time_left := 0.0
+var demo_time_left := 0.0
 var route_unlock_snapshot: Dictionary = {"districts": [], "rooms": []}
 var remap_pending_action := ""
 var remap_pending_source := "keyboard"
@@ -87,6 +88,10 @@ var toast_label: Label
 var solve_panel: PanelContainer
 var solve_title_label: Label
 var solve_subtitle_label: Label
+var demo_panel: PanelContainer
+var demo_title_label: Label
+var demo_body_label: Label
+var demo_teaser_label: Label
 var transition_overlay: ColorRect
 var card_title_labels: Array = []
 var scalable_controls: Array = []
@@ -381,6 +386,40 @@ func _build_ui() -> void:
 	solve_subtitle_label = _create_body_label(14, ACCENT_MUTED)
 	solve_subtitle_label.text = "Pick another room from the map."
 	solve_body.add_child(solve_subtitle_label)
+
+	demo_panel = PanelContainer.new()
+	demo_panel.set_anchors_preset(Control.PRESET_CENTER)
+	demo_panel.custom_minimum_size = Vector2(440, 0)
+	demo_panel.position = Vector2(-220, -112)
+	demo_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	demo_panel.visible = false
+	demo_panel.modulate.a = 0.0
+	demo_panel.add_theme_stylebox_override("panel", _make_card_style(Color("fff7e4"), Color("c79f55"), 28))
+	board_shell.add_child(demo_panel)
+
+	var demo_margin := MarginContainer.new()
+	demo_margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	demo_margin.add_theme_constant_override("margin_left", 22)
+	demo_margin.add_theme_constant_override("margin_top", 18)
+	demo_margin.add_theme_constant_override("margin_right", 22)
+	demo_margin.add_theme_constant_override("margin_bottom", 18)
+	demo_panel.add_child(demo_margin)
+
+	var demo_body := VBoxContainer.new()
+	demo_body.add_theme_constant_override("separation", 8)
+	demo_margin.add_child(demo_body)
+
+	demo_title_label = _create_body_label(26, ACCENT_INK)
+	demo_title_label.text = "Demo Route Complete"
+	demo_body.add_child(demo_title_label)
+
+	demo_body_label = _create_body_label(14, ACCENT_MUTED)
+	demo_body_label.text = "The first three districts are back in circulation."
+	demo_body.add_child(demo_body_label)
+
+	demo_teaser_label = _create_body_label(14, ACCENT_INK)
+	demo_teaser_label.text = ""
+	demo_body.add_child(demo_teaser_label)
 
 	toast_panel = PanelContainer.new()
 	toast_panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
@@ -823,6 +862,24 @@ func _get_district_by_id(district_id: String) -> Dictionary:
 			return candidate
 	return {}
 
+func _get_demo_config() -> Dictionary:
+	var demo_config: Variant = campaign.get("demo", {})
+	return demo_config if demo_config is Dictionary else {}
+
+func _get_demo_room_ids(key: String) -> Array:
+	var ids: Array = []
+	var demo_config := _get_demo_config()
+	for room_id in demo_config.get(key, []):
+		ids.append(String(room_id))
+	return ids
+
+func _count_solved_subset(room_ids_subset: Array) -> int:
+	var solved := 0
+	for room_id in room_ids_subset:
+		if _room_solved(String(room_id)):
+			solved += 1
+	return solved
+
 func _get_rooms_for_district(district_id: String) -> Array:
 	var rooms: Array = []
 	for candidate in campaign.get("rooms", []):
@@ -877,6 +934,20 @@ func _capture_unlock_snapshot() -> Dictionary:
 		if _is_room_unlocked(room):
 			unlocked_rooms.append(String(room.get("id", "")))
 	return {"districts": unlocked_districts, "rooms": unlocked_rooms}
+
+func _is_demo_complete() -> bool:
+	var main_room_ids := _get_demo_room_ids("mainRoomIds")
+	if main_room_ids.is_empty():
+		return false
+	return _count_solved_subset(main_room_ids) >= main_room_ids.size()
+
+func _should_show_demo_completion(room_id: String) -> bool:
+	var demo_config := _get_demo_config()
+	if demo_config.is_empty():
+		return false
+	if String(demo_config.get("finalRoomId", "")) != room_id:
+		return false
+	return _is_demo_complete()
 
 func _cycle_room(delta: int) -> void:
 	if room_ids.is_empty() or campaign.is_empty():
@@ -1117,6 +1188,10 @@ func _after_state_change(action: Dictionary = {}, previous_runtime: Dictionary =
 		room_view.trigger_solve_flash()
 		_show_solve_banner(room)
 		_handle_unlock_changes(unlocked_before, route_unlock_snapshot)
+		if _should_show_demo_completion(room_id):
+			_show_demo_completion(room)
+		elif not room.get("outro", []).is_empty():
+			_show_dialogue_beat(room.get("outro", [])[0], 7.2 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 4.0)
 	elif String(action.get("type", "")) == "reset":
 		_show_toast("Room reset. The papers are back in their original alignment.")
 
@@ -1145,6 +1220,17 @@ func _refresh_ui() -> void:
 	var progress: Dictionary = SaveRuntime.get_room_progress(profile, room_id) if not is_preview else {}
 	var hints_revealed: int = int(progress.get("hintsRevealed", 0)) if not is_preview else 0
 	hint_opening_actions = [] if is_preview else _build_guided_opening_actions(room_id)
+	var progress_lines := [
+		"Postmarks: %d" % SaveRuntime.get_postmark_count(profile, campaign),
+		"Solved rooms: %d / %d%s" % [
+			SaveRuntime.get_solved_count(profile),
+			campaign.get("rooms", []).size(),
+			"\nRoute restored" if runtime.get("solved", false) else "",
+		],
+	]
+	var demo_main_room_ids := _get_demo_room_ids("mainRoomIds")
+	if not demo_main_room_ids.is_empty():
+		progress_lines.append("Demo route: %d / %d main" % [_count_solved_subset(demo_main_room_ids), demo_main_room_ids.size()])
 
 	title_label.text = room.get("title", "Patchwork Post")
 	subtitle_label.text = "%s\n%s" % [
@@ -1156,12 +1242,7 @@ func _refresh_ui() -> void:
 		int(state.get("moveCount", 0)),
 		String(layer_names[active_layer]) if active_layer >= 0 and active_layer < layer_names.size() else "Layer",
 	]
-	progress_label.text = "Postmarks: %d\nSolved rooms: %d / %d%s" % [
-		SaveRuntime.get_postmark_count(profile, campaign),
-		SaveRuntime.get_solved_count(profile),
-		campaign.get("rooms", []).size(),
-		"\nRoute restored" if runtime.get("solved", false) else "",
-	]
+	progress_label.text = "\n".join(progress_lines)
 	route_status_label.text = _build_route_status_text(district, room, is_preview)
 
 	objective_label.text = room.get("objective", "Reach the mailbox.")
@@ -1282,7 +1363,7 @@ func _build_save_status_text() -> String:
 	var diagnostics := SaveRuntime.get_storage_diagnostics(profile)
 	return "Build channel: %s\nContent version: %s\nCloud slot: %s\nDemo carryover detected: %s" % [
 		diagnostics.get("buildChannel", "full"),
-		diagnostics.get("contentVersion", "batch-4"),
+		diagnostics.get("contentVersion", SaveRuntime.CONTENT_VERSION),
 		diagnostics.get("cloudSlot", "patchwork-post-profile"),
 		"Yes" if diagnostics.get("hasDemoCarryover", false) else "No",
 	]
@@ -1523,11 +1604,17 @@ func _show_dialogue_for_current_room() -> void:
 		dialogue_panel.visible = false
 		dialogue_time_left = 0.0
 		return
-	var beat: Dictionary = room.get("intro", [])[0]
+	_show_dialogue_beat(room.get("intro", [])[0])
+
+func _show_dialogue_beat(beat: Dictionary, duration: float = -1.0) -> void:
+	if beat.is_empty():
+		return
 	dialogue_speaker_label.text = String(beat.get("speaker", "Guide")).to_upper()
 	dialogue_text_label.text = String(beat.get("text", ""))
 	dialogue_panel.visible = true
-	dialogue_time_left = 6.0 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 3.0
+	dialogue_panel.modulate.a = 0.0
+	var default_duration := 6.0 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 3.0
+	dialogue_time_left = duration if duration > 0.0 else default_duration
 
 func _show_toast(message: String) -> void:
 	toast_label.text = message
@@ -1541,6 +1628,31 @@ func _show_solve_banner(room: Dictionary) -> void:
 	solve_time_left = 2.2 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 1.0
 	if audio_manager != null:
 		audio_manager.play_event("solve")
+
+func _show_demo_completion(room: Dictionary) -> void:
+	var demo_config := _get_demo_config()
+	if demo_config.is_empty() or demo_panel == null:
+		return
+	var ending: Dictionary = demo_config.get("ending", {})
+	var teaser_lines: Array = []
+	for teaser_line in demo_config.get("teaserLines", []):
+		teaser_lines.append(String(teaser_line))
+
+	demo_title_label.text = String(ending.get("title", "Demo Route Complete"))
+	var subtitle := String(ending.get("subtitle", "%s completes the public festival-route slice." % room.get("title", "This room")))
+	var body := String(ending.get("body", "The next districts twist the same rules into delayed echoes, mirrored shadows, and full mixed-mechanic routes."))
+	demo_body_label.text = "%s\n\n%s" % [subtitle, body]
+	var teaser_text := ""
+	if not teaser_lines.is_empty():
+		teaser_text = "Ahead:\n%s" % "\n".join(teaser_lines)
+	demo_teaser_label.text = teaser_text
+	demo_panel.visible = true
+	demo_panel.modulate.a = 0.0
+	demo_time_left = 8.0 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 4.8
+
+	var ending_beat: Dictionary = ending.get("beat", {})
+	if not ending_beat.is_empty():
+		_show_dialogue_beat(ending_beat, 8.6 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 4.4)
 
 func _handle_unlock_changes(before_snapshot: Dictionary, after_snapshot: Dictionary) -> void:
 	var new_districts: Array = []
@@ -1596,3 +1708,12 @@ func _update_overlay_state(delta: float) -> void:
 		else:
 			solve_panel.modulate.a = maxf(0.0, solve_panel.modulate.a - delta * 8.0)
 			solve_panel.visible = solve_panel.modulate.a > 0.01
+
+	if demo_panel != null:
+		if demo_time_left > 0.0:
+			demo_time_left = maxf(0.0, demo_time_left - delta)
+			demo_panel.visible = true
+			demo_panel.modulate.a = minf(1.0, demo_panel.modulate.a + delta * 6.0)
+		else:
+			demo_panel.modulate.a = maxf(0.0, demo_panel.modulate.a - delta * 6.0)
+			demo_panel.visible = demo_panel.modulate.a > 0.01

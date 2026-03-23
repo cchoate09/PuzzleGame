@@ -93,3 +93,23 @@ test("three-layer proof room validates and solves correctly", () => {
   assert.equal(engine.getRuntime().solved, true);
   assert.deepEqual([...visitedLayers].sort((a, b) => a - b), [0, 1, 2]);
 });
+
+test("demo slice metadata references a complete Batch 5 early-game route", () => {
+  const demo = campaign.demo;
+  assert.ok(demo, "Campaign should expose demo metadata");
+  assert.deepEqual(demo.districtIds, ["mailroom", "market", "greenhouse"]);
+  assert.equal(demo.mainRoomIds.length, 11);
+  assert.equal(demo.optionalRoomIds.length, 4);
+
+  const allDemoRoomIds = [...demo.mainRoomIds, ...demo.optionalRoomIds];
+  for (const roomId of allDemoRoomIds) {
+    const room = getRoomById(roomId);
+    assert.ok(room, `Demo room '${roomId}' should exist in the campaign`);
+  }
+
+  const earlyDistrictRoomCount = campaign.rooms.filter((room) =>
+    demo.districtIds.includes(room.districtId)
+  ).length;
+  assert.equal(earlyDistrictRoomCount, 15);
+  assert.equal(getRoomById(demo.finalRoomId)?.districtId, "greenhouse");
+});

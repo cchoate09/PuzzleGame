@@ -19,9 +19,7 @@ async function readJson(filename) {
 function buildCampaignIndex(campaignSource) {
   const roomsById = Object.fromEntries(campaignSource.rooms.map((room) => [room.id, room]));
   return {
-    achievements: campaignSource.achievements,
-    districts: campaignSource.districts,
-    rooms: campaignSource.rooms,
+    ...campaignSource,
     roomsById,
   };
 }

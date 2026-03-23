@@ -3,14 +3,14 @@ extends RefCounted
 
 const InputBindings = preload("res://scripts/core/patchwork_input.gd")
 
-const PROFILE_VERSION := 2
+const PROFILE_VERSION := 3
 const LEGACY_STORAGE_PATH := "user://patchwork-post-save-v1.json"
 const FULL_STORAGE_PATH := "user://profiles/full/patchwork-post-save-v2.json"
 const DEMO_STORAGE_PATH := "user://profiles/demo/patchwork-post-save-v2.json"
 const DEMO_CARRYOVER_PATH := "user://profiles/shared/patchwork-post-demo-carryover.json"
 const STORAGE_PATH := FULL_STORAGE_PATH
 const BUILD_CHANNEL := "full"
-const CONTENT_VERSION := "batch-4"
+const CONTENT_VERSION := "batch-5"
 
 static func clone(value: Variant) -> Variant:
 	if value is Dictionary or value is Array:

@@ -41,12 +41,9 @@ static func load_source_campaign() -> Dictionary:
 	return data if data is Dictionary else {}
 
 static func build_campaign_index(campaign_source: Dictionary) -> Dictionary:
-	var campaign_index := {
-		"achievements": _clone(campaign_source.get("achievements", [])),
-		"districts": _clone(campaign_source.get("districts", [])),
-		"rooms": _clone(campaign_source.get("rooms", [])),
-		"roomsById": {},
-	}
+	var campaign_index: Dictionary = _clone(campaign_source)
+	campaign_index["rooms"] = _clone(campaign_source.get("rooms", []))
+	campaign_index["roomsById"] = {}
 	for room in campaign_index["rooms"]:
 		campaign_index["roomsById"][room.get("id", "")] = room
 	return campaign_index

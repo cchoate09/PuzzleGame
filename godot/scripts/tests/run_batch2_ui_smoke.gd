@@ -44,7 +44,14 @@ func _initialize() -> void:
 	_expect(scene.engine.get_runtime().get("solved", false), "Canonical mailroom solution should solve inside the main scene.")
 	_expect(scene.solve_time_left > 0.0, "Solving a new room should raise the solve banner.")
 	_expect(scene.route_buttons.has("market-01"), "Route list should include the newly unlocked market room button.")
-	_expect(not scene.route_buttons["market-01"].disabled, "Market room button should unlock after the opening solve.")
+	_expect(scene.route_buttons["market-01"].disabled, "Market room button should stay locked until the second mailroom postmark.")
+
+	scene._load_room("mailroom-02", false)
+	await process_frame
+	for action in canonical_solutions.get("mailroom-02", []):
+		scene._dispatch_room_action(action)
+
+	_expect(not scene.route_buttons["market-01"].disabled, "Market room button should unlock after the second mailroom solve.")
 
 	_restore_save()
 

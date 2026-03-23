@@ -13,6 +13,11 @@ export const ACHIEVEMENTS = [
     "description": "Solve an optional side room."
   },
   {
+    "id": "demo-complete",
+    "title": "Festival Preview",
+    "description": "Finish the first three districts and glimpse the routes ahead."
+  },
+  {
     "id": "festival-line",
     "title": "Festival Line",
     "description": "Reach the Rooftops and restore the final delivery lane."
@@ -29,7 +34,7 @@ export const DISTRICTS = [
     "title": "Mailroom",
     "subtitle": "The first tears in the paper",
     "unlockPostmarks": 0,
-    "summary": "Learn how stitched sheets overlap and how to step through them cleanly.",
+    "summary": "Learn how stitched sheets overlap, when to transfer a parcel, and how a route can fold back on itself.",
     "journalTitle": "Mina's Starter Journal",
     "journalBody": "The storm did not break the town so much as peel it apart. Mina says a good postkeeper does not force paper flat. They learn the folds, the little stubborn bulges, and work with them."
   },
@@ -37,8 +42,8 @@ export const DISTRICTS = [
     "id": "market",
     "title": "Market",
     "subtitle": "Routes braided through stalls and awnings",
-    "unlockPostmarks": 1,
-    "summary": "Transfer parcels between layers and use them to hold doors open or reveal shortcuts.",
+    "unlockPostmarks": 2,
+    "summary": "Transfer parcels between layers and use them to hold shutters open, even when the switch is hidden.",
     "journalTitle": "Market Sketches",
     "journalBody": "The market vendors patched their awnings before their roofs. Priorities. Every route is now tied to every other route, so fixing one usually means fixing three."
   },
@@ -46,8 +51,8 @@ export const DISTRICTS = [
     "id": "greenhouse",
     "title": "Greenhouse",
     "subtitle": "Lantern light and vine projections",
-    "unlockPostmarks": 2,
-    "summary": "Projection lanterns cast temporary bridges onto neighboring layers.",
+    "unlockPostmarks": 5,
+    "summary": "Projection lanterns cast temporary bridges onto neighboring layers, then combine with doors and multi-sheet routes.",
     "journalTitle": "Greenhouse Notes",
     "journalBody": "Some paper is seeded with silver thread. Mina calls it greenhouse stock. Shine a lamp through it and the next layer blooms into shape."
   },
@@ -55,7 +60,7 @@ export const DISTRICTS = [
     "id": "clocktower",
     "title": "Clocktower",
     "subtitle": "Timing made visible",
-    "unlockPostmarks": 3,
+    "unlockPostmarks": 11,
     "summary": "Echo couriers repeat your previous move one beat later.",
     "journalTitle": "Clocktower Timing",
     "journalBody": "The tower's routes are delayed by one bell. If I move now, my echo steps a moment later. It is unsettling to solve puzzles with my own future in the room."
@@ -64,7 +69,7 @@ export const DISTRICTS = [
     "id": "theater",
     "title": "Theater",
     "subtitle": "Shadows on the backdrops",
-    "unlockPostmarks": 4,
+    "unlockPostmarks": 12,
     "summary": "Shadow couriers mirror your movements and can latch hidden mechanisms.",
     "journalTitle": "Theater Blocking",
     "journalBody": "Every prop in the theater has a partner behind the curtain. Nothing moves alone, especially not under the footlights."
@@ -73,7 +78,7 @@ export const DISTRICTS = [
     "id": "rooftops",
     "title": "Rooftops",
     "subtitle": "The festival line",
-    "unlockPostmarks": 5,
+    "unlockPostmarks": 13,
     "summary": "Mix switches, projection, and layer travel in one final route.",
     "journalTitle": "Rooftop Draft",
     "journalBody": "When the routes finally align, the whole town reads like one folded letter. Rooftops first, festival after."
@@ -82,7 +87,7 @@ export const DISTRICTS = [
     "id": "attic",
     "title": "Attic",
     "subtitle": "A hidden route tucked into the rafters",
-    "unlockPostmarks": 6,
+    "unlockPostmarks": 14,
     "summary": "A secret bonus room for players who want one more twist.",
     "journalTitle": "Attic Margin",
     "journalBody": "There is always one route Mina forgets to mention aloud. She says every town deserves one secret line for the people who still look up."
@@ -225,6 +230,218 @@ export const ROOM_DEFS = [
     }
   },
   {
+    "id": "mailroom-03",
+    "districtId": "mailroom",
+    "title": "Forwarding Fold",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Nudge the parcel aside, switch sheets, and take the shortcut to the mailbox.",
+    "blurb": "The quickest route only opens once the crease is clear.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "Sometimes you push first and transfer second. Clear the lane, then use the stitch at the end."
+      }
+    ],
+    "hintTiers": [
+      "You only need the parcel out of the stitched lane, not far away from it.",
+      "Push the parcel once so you can stand beside it, then transfer it before stepping on the stitch.",
+      "Move right twice, transfer the parcel to the back sheet, walk onto the stitch, switch layers, and climb straight to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "crease-front",
+        "name": "Crease Front",
+        "tiles": [
+          "#######",
+          "#.....#",
+          "#.###.#",
+          "#....S#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "crease-back",
+        "name": "Crease Back",
+        "tiles": [
+          "#######",
+          "#....G#",
+          "#.###.#",
+          "#....S#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 3,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-forward",
+        "type": "parcel",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Recombine a single push, a transfer, and a stitch into one clean route.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players push the parcel again instead of transferring it once it has been nudged into position."
+    }
+  },
+  {
+    "id": "mailroom-side-01",
+    "districtId": "mailroom",
+    "title": "Return Receipt",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Switch to the back sheet, travel to the lower stitch, and return on the right layer.",
+    "blurb": "A side route that rewards noticing the second stitch before the goal.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "Some routes ask you to fold the room twice before they make sense."
+      }
+    ],
+    "hintTiers": [
+      "The first stitch is not the end of the route. It only gets you to the right sheet.",
+      "Use the top stitch first, then travel downward on the back sheet until you find the second stitch.",
+      "Walk to the top stitch, switch to the back sheet, climb down to the lower stitch, switch back, and finish on the front sheet."
+    ],
+    "layers": [
+      {
+        "id": "receipt-front",
+        "name": "Receipt Front",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.###.#",
+          "#.....#",
+          "#..S.G#",
+          "#######"
+        ]
+      },
+      {
+        "id": "receipt-back",
+        "name": "Receipt Back",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#..S..#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach that the shortest mailroom routes can alternate between sheets twice.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is effectively solved."
+    }
+  },
+  {
+    "id": "mailroom-04",
+    "districtId": "mailroom",
+    "title": "Backdated Route",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Free the stitch lane, climb to the top fold, then return on the front sheet to the mailbox.",
+    "blurb": "The final mailroom route loops through the back sheet before it is readable.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "This one folds back on itself. Clear the lower stitch first, then look for the older route above it."
+      }
+    ],
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "Good. The market shutters care less about neat folds and more about what you leave parked on a plate."
+      }
+    ],
+    "hintTiers": [
+      "The stitch at the far right gets you onto the correct sheet, but not yet to the goal.",
+      "Transfer the parcel away from the lower stitch, switch there, then travel to the upper stitch on the back sheet.",
+      "Move right twice, transfer the parcel, switch at the lower stitch, climb to the upper stitch on the back sheet, switch again, and finish on the front."
+    ],
+    "layers": [
+      {
+        "id": "dated-front",
+        "name": "Dated Front",
+        "tiles": [
+          "#######",
+          "#..S.G#",
+          "#.###.#",
+          "#....S#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "dated-back",
+        "name": "Dated Back",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#....S#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 3,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-dated",
+        "type": "parcel",
+        "layer": 0,
+        "x": 4,
+        "y": 3,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Cap the mailroom by chaining transfer with two distinct sheet swaps.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players switch at the lower stitch and then look for the goal immediately instead of climbing to the upper stitch first."
+    }
+  },
+  {
     "id": "market-01",
     "districtId": "market",
     "title": "Counterweight",
@@ -316,28 +533,117 @@ export const ROOM_DEFS = [
   {
     "id": "market-side-01",
     "districtId": "market",
-    "title": "Tied Parcel",
+    "title": "Stall Shortcut",
     "optional": true,
     "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Transfer the parcel onto the hidden plate to open the side route.",
-    "blurb": "An optional room that rewards reading both layers at once.",
+    "postmarks": 0,
+    "objective": "Park the parcel on the plate, switch layers, and take the reopened shortcut above the stalls.",
+    "blurb": "A side route that asks you to read a shutter and a stitch at the same time.",
     "intro": [
       {
-        "speaker": "Mina",
-        "text": "Some side routes only ask whether you noticed the second layer at all."
+        "speaker": "Market Clerk",
+        "text": "The side lane is lighter than the main route. Prop the shutter and steal the short way across."
       }
     ],
     "achievementId": "side-route",
     "hintTiers": [
-      "The door opens from a plate you cannot reach directly.",
-      "The parcel already sits above the hidden switch. Try transferring it instead of walking it there.",
-      "Move next to the parcel in the front sheet, transfer it to the back sheet, then return to the front route and walk through the opened door."
+      "The shortcut only matters after the plate is already held down.",
+      "Push the parcel onto the front plate first, then climb to the stitch instead of heading for the goal immediately.",
+      "Push the parcel onto the plate at the lower left, walk to the stitch on the top lane, switch to the back sheet, and take the reopened shortcut to the mailbox."
     ],
     "layers": [
       {
-        "id": "front",
-        "name": "Front Stall",
+        "id": "stall-front",
+        "name": "Stall Front",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "stall-back",
+        "name": "Stall Back",
+        "tiles": [
+          "#######",
+          "#..S.G#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "parcel-stall",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "stall-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "stall-door",
+        "layer": 1,
+        "x": 4,
+        "y": 1,
+        "switchIds": [
+          "stall-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Reinforce visible plates and door logic in a shorter optional room.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players head for the stitch first and only later realize the shortcut itself is still closed."
+    }
+  },
+  {
+    "id": "market-02",
+    "districtId": "market",
+    "title": "Counter Slot",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Send the parcel through the hidden counter slot and walk through the raised shutter.",
+    "blurb": "Some market plates live on the back sheet, far from the player.",
+    "intro": [
+      {
+        "speaker": "Market Clerk",
+        "text": "The switch is behind the counter, but the parcel still fits through the slot. Use that instead of looking for another hallway."
+      }
+    ],
+    "hintTiers": [
+      "The shutter opens from a place you cannot stand on yourself.",
+      "Move next to the parcel and transfer it onto the switch behind the counter before walking to the door.",
+      "Step right once, transfer the parcel to the back sheet, then walk up and across the opened shutter to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "counter-front",
+        "name": "Counter Front",
         "tiles": [
           "#######",
           "#.....#",
@@ -348,8 +654,8 @@ export const ROOM_DEFS = [
         ]
       },
       {
-        "id": "back",
-        "name": "Back Stall",
+        "id": "counter-back",
+        "name": "Counter Back",
         "tiles": [
           "#######",
           "#.....#",
@@ -363,12 +669,205 @@ export const ROOM_DEFS = [
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 2,
+      "y": 4,
       "facing": "right"
     },
     "entities": [
       {
-        "id": "parcel-c",
+        "id": "parcel-slot",
+        "type": "parcel",
+        "layer": 0,
+        "x": 3,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "counter-hidden-plate",
+        "layer": 1,
+        "x": 3,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "counter-shutter",
+        "layer": 0,
+        "x": 3,
+        "y": 2,
+        "switchIds": [
+          "counter-hidden-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Teach that a transfer can activate a switch the player will never physically touch.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players search for a walking path behind the counter instead of treating the parcel as the route's stand-in."
+    }
+  },
+  {
+    "id": "market-side-02",
+    "districtId": "market",
+    "title": "Ledger Slip",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Transfer the parcel onto the hidden plate, switch layers, and use the back-lane shutter.",
+    "blurb": "A side room that mixes the counter-slot trick with a stitched shortcut.",
+    "intro": [
+      {
+        "speaker": "Market Clerk",
+        "text": "The back-lane shutter lifts from the same hidden plate, but now you still have to get onto the right sheet."
+      }
+    ],
+    "hintTiers": [
+      "The parcel belongs on the hidden switch before you ever touch the stitch.",
+      "Transfer the parcel first, then walk to the stitch on the front sheet and switch to the back lane.",
+      "Move right once, transfer the parcel onto the hidden plate, climb to the stitch on the front sheet, switch layers, and take the opened back-lane route to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "ledger-front",
+        "name": "Ledger Front",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "ledger-back",
+        "name": "Ledger Back",
+        "tiles": [
+          "#######",
+          "#..S.G#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-ledger",
+        "type": "parcel",
+        "layer": 0,
+        "x": 3,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "ledger-hidden-plate",
+        "layer": 1,
+        "x": 3,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "ledger-door",
+        "layer": 1,
+        "x": 4,
+        "y": 1,
+        "switchIds": [
+          "ledger-hidden-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Show that hidden switches can matter on a different layer than the route they open.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players head to the stitch before the hidden plate is active and arrive on the back lane too early."
+    }
+  },
+  {
+    "id": "market-03",
+    "districtId": "market",
+    "title": "Inventory Check",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Use one parcel for the visible plate and another for the hidden plate, then walk through the central shutter.",
+    "blurb": "The final market route asks you to think about both sheets at once.",
+    "intro": [
+      {
+        "speaker": "Market Clerk",
+        "text": "One parcel props the shutter in plain sight. The other has to disappear behind the counter. Sort them before you walk."
+      }
+    ],
+    "outro": [
+      {
+        "speaker": "Gardener",
+        "text": "The greenhouse routes do not stay still either. Bring those steady hands over when you are done here."
+      }
+    ],
+    "hintTiers": [
+      "You have one parcel for each switch. Decide which one belongs to the hidden plate first.",
+      "Transfer the upper parcel to the back sheet, then push the lower parcel onto the visible floor plate before heading to the door.",
+      "Move up and left to transfer the upper parcel, return to the lower lane to push the second parcel onto the visible plate, then walk up through the opened shutter to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "inventory-front",
+        "name": "Inventory Front",
+        "tiles": [
+          "#######",
+          "#.....#",
+          "#....G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "inventory-back",
+        "name": "Inventory Back",
+        "tiles": [
+          "#######",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "parcel-visible",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-hidden",
         "type": "parcel",
         "layer": 0,
         "x": 3,
@@ -379,7 +878,13 @@ export const ROOM_DEFS = [
     ],
     "switches": [
       {
-        "id": "side-plate",
+        "id": "inventory-visible-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      },
+      {
+        "id": "inventory-hidden-plate",
         "layer": 1,
         "x": 3,
         "y": 3
@@ -387,20 +892,21 @@ export const ROOM_DEFS = [
     ],
     "doors": [
       {
-        "id": "side-door",
+        "id": "inventory-shutter",
         "layer": 0,
         "x": 3,
         "y": 2,
         "switchIds": [
-          "side-plate"
+          "inventory-visible-plate",
+          "inventory-hidden-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Reinforce transfer by hiding the switch on a different layer.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players hunt for a walking path to the plate instead of moving the parcel onto it."
+      "intendedLesson": "Cap the market by splitting visible and hidden door logic across two parcels.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players try to solve the visible plate first and only then look for the hidden plate, which leaves too much route still unopened."
     }
   },
   {
@@ -480,6 +986,392 @@ export const ROOM_DEFS = [
       "targetDifficulty": 3,
       "expectedSolveMinutes": 4,
       "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+    }
+  },
+  {
+    "id": "greenhouse-side-01",
+    "districtId": "greenhouse",
+    "title": "Graft Line",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Use the lantern's offset beam to patch the tear and cross to the mailbox.",
+    "blurb": "Not every bridge blooms directly underneath the lantern.",
+    "intro": [
+      {
+        "speaker": "Gardener",
+        "text": "Silver thread bends the light. Sometimes the bloom lands one square away from the lamp itself."
+      }
+    ],
+    "hintTiers": [
+      "This lantern does not bridge the square directly below it.",
+      "Push the lantern one step to the right so its offset beam lands on the tear.",
+      "Push the lantern right once, walk to the stitch, switch sheets, and use the offset bridge tile near the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "graft-top",
+        "name": "Graft Top",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "graft-bottom",
+        "name": "Graft Bottom",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#...~G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 3,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "lantern-offset",
+        "type": "projector",
+        "layer": 0,
+        "x": 2,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 1,
+            "dx": 1,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Show that a lantern's projection can use an offset target instead of matching coordinates exactly.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players line the lantern up with the tear directly instead of accounting for the shifted beam."
+    }
+  },
+  {
+    "id": "greenhouse-02",
+    "districtId": "greenhouse",
+    "title": "Overgrowth",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Grow a two-tile bridge across the wider tear and reach the mailbox.",
+    "blurb": "Some greenhouse tears ask for more than a single square of light.",
+    "intro": [
+      {
+        "speaker": "Gardener",
+        "text": "This bed tore wider than the others. One lamp can still cover it, but only if the bloom stretches far enough."
+      }
+    ],
+    "hintTiers": [
+      "This lantern can grow more than one bridge tile at once.",
+      "The lantern needs to stop one row higher so both projected tiles span the tear together.",
+      "Push the lantern upward into the center lane, switch sheets, and cross the two-tile bridge to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "overgrowth-top",
+        "name": "Overgrowth Top",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "overgrowth-bottom",
+        "name": "Overgrowth Bottom",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.~~.G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "lantern-wide",
+        "type": "projector",
+        "layer": 0,
+        "x": 2,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 1,
+            "dx": 0,
+            "dy": 0
+          },
+          {
+            "layer": 1,
+            "dx": 1,
+            "dy": 0
+          }
+        ]
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach multi-tile projection so wider tears read as one placement puzzle instead of many.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players align the lantern to only one missing tile and overlook that the same lamp can cover both."
+    }
+  },
+  {
+    "id": "greenhouse-03",
+    "districtId": "greenhouse",
+    "title": "Misted Gate",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Hold the gate open, grow the bridge, and cross to the mailbox.",
+    "blurb": "The lantern route and the pressure gate have to be solved in the right order.",
+    "intro": [
+      {
+        "speaker": "Gardener",
+        "text": "The gate and the vine bridge answer different tools. Set the parcel first so the lamp can do the rest."
+      }
+    ],
+    "hintTiers": [
+      "The parcel should stay on the switch while you work on the lantern.",
+      "Park the parcel first, then push the lantern into place before you switch layers.",
+      "Push the parcel onto the floor plate, lift the lantern onto the tear line, walk to the stitch, switch sheets, and cross the bridge through the opened gate."
+    ],
+    "layers": [
+      {
+        "id": "mist-top",
+        "name": "Mist Top",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "mist-bottom",
+        "name": "Mist Bottom",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#..~.G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "parcel-mist",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "lantern-mist",
+        "type": "projector",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 1,
+            "dx": 0,
+            "dy": 0
+          }
+        ]
+      }
+    ],
+    "switches": [
+      {
+        "id": "mist-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "mist-door",
+        "layer": 1,
+        "x": 4,
+        "y": 2,
+        "switchIds": [
+          "mist-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine earlier door logic with projection while still keeping the lantern placement readable.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 6,
+      "commonMisunderstanding": "Players try to solve the bridge first and only later realize the gate still needs the parcel parked on its switch."
+    }
+  },
+  {
+    "id": "greenhouse-04",
+    "districtId": "greenhouse",
+    "title": "Festival Draft",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Hold the gate, bloom the bridge, climb through the middle sheet, and restore the greenhouse finale route.",
+    "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
+      }
+    ],
+    "achievementId": "demo-complete",
+    "hintTiers": [
+      "Treat this like two setup problems before it becomes a travel problem: gate first, lantern second.",
+      "Park the parcel on the top switch, push the lantern into the tear line, switch to the middle sheet at the top stitch, then descend to the lower stitch.",
+      "Push the parcel onto the top-left switch, lift the lantern into the bridge position, switch to the middle sheet at the upper stitch, travel down to the lower stitch, switch to the final sheet, and cross the opened gate and bridge to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "draft-roof",
+        "name": "Draft Roof",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "draft-middle",
+        "name": "Draft Middle",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#S....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "draft-floor",
+        "name": "Draft Floor",
+        "tiles": [
+          "#######",
+          "#.....#",
+          "#..~.G#",
+          "#.....#",
+          "#S....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "parcel-draft",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "lantern-draft",
+        "type": "projector",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": 0,
+            "dy": 0
+          }
+        ]
+      }
+    ],
+    "switches": [
+      {
+        "id": "draft-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "draft-door",
+        "layer": 2,
+        "x": 4,
+        "y": 2,
+        "switchIds": [
+          "draft-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Cap the demo slice with three-sheet traversal layered on top of parcel parking and projection.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 7,
+      "commonMisunderstanding": "Players keep looking for the goal on the middle sheet instead of treating it as the route between the setup layer and the final layer."
     }
   },
   {
@@ -775,7 +1667,7 @@ export const ROOM_DEFS = [
     "title": "Dustline",
     "optional": true,
     "unlockCost": 0,
-    "postmarks": 1,
+    "postmarks": 0,
     "objective": "Latch the hidden switch with your shadow, then climb into the rafters.",
     "blurb": "A secret bonus room built around one permanent switch.",
     "intro": [
@@ -997,6 +1889,218 @@ export const ROOM_LOOKUP = {
       "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
     }
   },
+  "mailroom-03": {
+    "id": "mailroom-03",
+    "districtId": "mailroom",
+    "title": "Forwarding Fold",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Nudge the parcel aside, switch sheets, and take the shortcut to the mailbox.",
+    "blurb": "The quickest route only opens once the crease is clear.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "Sometimes you push first and transfer second. Clear the lane, then use the stitch at the end."
+      }
+    ],
+    "hintTiers": [
+      "You only need the parcel out of the stitched lane, not far away from it.",
+      "Push the parcel once so you can stand beside it, then transfer it before stepping on the stitch.",
+      "Move right twice, transfer the parcel to the back sheet, walk onto the stitch, switch layers, and climb straight to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "crease-front",
+        "name": "Crease Front",
+        "tiles": [
+          "#######",
+          "#.....#",
+          "#.###.#",
+          "#....S#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "crease-back",
+        "name": "Crease Back",
+        "tiles": [
+          "#######",
+          "#....G#",
+          "#.###.#",
+          "#....S#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 3,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-forward",
+        "type": "parcel",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Recombine a single push, a transfer, and a stitch into one clean route.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players push the parcel again instead of transferring it once it has been nudged into position."
+    }
+  },
+  "mailroom-side-01": {
+    "id": "mailroom-side-01",
+    "districtId": "mailroom",
+    "title": "Return Receipt",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Switch to the back sheet, travel to the lower stitch, and return on the right layer.",
+    "blurb": "A side route that rewards noticing the second stitch before the goal.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "Some routes ask you to fold the room twice before they make sense."
+      }
+    ],
+    "hintTiers": [
+      "The first stitch is not the end of the route. It only gets you to the right sheet.",
+      "Use the top stitch first, then travel downward on the back sheet until you find the second stitch.",
+      "Walk to the top stitch, switch to the back sheet, climb down to the lower stitch, switch back, and finish on the front sheet."
+    ],
+    "layers": [
+      {
+        "id": "receipt-front",
+        "name": "Receipt Front",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.###.#",
+          "#.....#",
+          "#..S.G#",
+          "#######"
+        ]
+      },
+      {
+        "id": "receipt-back",
+        "name": "Receipt Back",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#..S..#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach that the shortest mailroom routes can alternate between sheets twice.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is effectively solved."
+    }
+  },
+  "mailroom-04": {
+    "id": "mailroom-04",
+    "districtId": "mailroom",
+    "title": "Backdated Route",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Free the stitch lane, climb to the top fold, then return on the front sheet to the mailbox.",
+    "blurb": "The final mailroom route loops through the back sheet before it is readable.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "This one folds back on itself. Clear the lower stitch first, then look for the older route above it."
+      }
+    ],
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "Good. The market shutters care less about neat folds and more about what you leave parked on a plate."
+      }
+    ],
+    "hintTiers": [
+      "The stitch at the far right gets you onto the correct sheet, but not yet to the goal.",
+      "Transfer the parcel away from the lower stitch, switch there, then travel to the upper stitch on the back sheet.",
+      "Move right twice, transfer the parcel, switch at the lower stitch, climb to the upper stitch on the back sheet, switch again, and finish on the front."
+    ],
+    "layers": [
+      {
+        "id": "dated-front",
+        "name": "Dated Front",
+        "tiles": [
+          "#######",
+          "#..S.G#",
+          "#.###.#",
+          "#....S#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "dated-back",
+        "name": "Dated Back",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#....S#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 3,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-dated",
+        "type": "parcel",
+        "layer": 0,
+        "x": 4,
+        "y": 3,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Cap the mailroom by chaining transfer with two distinct sheet swaps.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players switch at the lower stitch and then look for the goal immediately instead of climbing to the upper stitch first."
+    }
+  },
   "market-01": {
     "id": "market-01",
     "districtId": "market",
@@ -1089,28 +2193,117 @@ export const ROOM_LOOKUP = {
   "market-side-01": {
     "id": "market-side-01",
     "districtId": "market",
-    "title": "Tied Parcel",
+    "title": "Stall Shortcut",
     "optional": true,
     "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Transfer the parcel onto the hidden plate to open the side route.",
-    "blurb": "An optional room that rewards reading both layers at once.",
+    "postmarks": 0,
+    "objective": "Park the parcel on the plate, switch layers, and take the reopened shortcut above the stalls.",
+    "blurb": "A side route that asks you to read a shutter and a stitch at the same time.",
     "intro": [
       {
-        "speaker": "Mina",
-        "text": "Some side routes only ask whether you noticed the second layer at all."
+        "speaker": "Market Clerk",
+        "text": "The side lane is lighter than the main route. Prop the shutter and steal the short way across."
       }
     ],
     "achievementId": "side-route",
     "hintTiers": [
-      "The door opens from a plate you cannot reach directly.",
-      "The parcel already sits above the hidden switch. Try transferring it instead of walking it there.",
-      "Move next to the parcel in the front sheet, transfer it to the back sheet, then return to the front route and walk through the opened door."
+      "The shortcut only matters after the plate is already held down.",
+      "Push the parcel onto the front plate first, then climb to the stitch instead of heading for the goal immediately.",
+      "Push the parcel onto the plate at the lower left, walk to the stitch on the top lane, switch to the back sheet, and take the reopened shortcut to the mailbox."
     ],
     "layers": [
       {
-        "id": "front",
-        "name": "Front Stall",
+        "id": "stall-front",
+        "name": "Stall Front",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "stall-back",
+        "name": "Stall Back",
+        "tiles": [
+          "#######",
+          "#..S.G#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "parcel-stall",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "stall-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "stall-door",
+        "layer": 1,
+        "x": 4,
+        "y": 1,
+        "switchIds": [
+          "stall-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Reinforce visible plates and door logic in a shorter optional room.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 3,
+      "commonMisunderstanding": "Players head for the stitch first and only later realize the shortcut itself is still closed."
+    }
+  },
+  "market-02": {
+    "id": "market-02",
+    "districtId": "market",
+    "title": "Counter Slot",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Send the parcel through the hidden counter slot and walk through the raised shutter.",
+    "blurb": "Some market plates live on the back sheet, far from the player.",
+    "intro": [
+      {
+        "speaker": "Market Clerk",
+        "text": "The switch is behind the counter, but the parcel still fits through the slot. Use that instead of looking for another hallway."
+      }
+    ],
+    "hintTiers": [
+      "The shutter opens from a place you cannot stand on yourself.",
+      "Move next to the parcel and transfer it onto the switch behind the counter before walking to the door.",
+      "Step right once, transfer the parcel to the back sheet, then walk up and across the opened shutter to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "counter-front",
+        "name": "Counter Front",
         "tiles": [
           "#######",
           "#.....#",
@@ -1121,8 +2314,8 @@ export const ROOM_LOOKUP = {
         ]
       },
       {
-        "id": "back",
-        "name": "Back Stall",
+        "id": "counter-back",
+        "name": "Counter Back",
         "tiles": [
           "#######",
           "#.....#",
@@ -1136,12 +2329,205 @@ export const ROOM_LOOKUP = {
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 2,
+      "y": 4,
       "facing": "right"
     },
     "entities": [
       {
-        "id": "parcel-c",
+        "id": "parcel-slot",
+        "type": "parcel",
+        "layer": 0,
+        "x": 3,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "counter-hidden-plate",
+        "layer": 1,
+        "x": 3,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "counter-shutter",
+        "layer": 0,
+        "x": 3,
+        "y": 2,
+        "switchIds": [
+          "counter-hidden-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Teach that a transfer can activate a switch the player will never physically touch.",
+      "targetDifficulty": 2,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players search for a walking path behind the counter instead of treating the parcel as the route's stand-in."
+    }
+  },
+  "market-side-02": {
+    "id": "market-side-02",
+    "districtId": "market",
+    "title": "Ledger Slip",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Transfer the parcel onto the hidden plate, switch layers, and use the back-lane shutter.",
+    "blurb": "A side room that mixes the counter-slot trick with a stitched shortcut.",
+    "intro": [
+      {
+        "speaker": "Market Clerk",
+        "text": "The back-lane shutter lifts from the same hidden plate, but now you still have to get onto the right sheet."
+      }
+    ],
+    "hintTiers": [
+      "The parcel belongs on the hidden switch before you ever touch the stitch.",
+      "Transfer the parcel first, then walk to the stitch on the front sheet and switch to the back lane.",
+      "Move right once, transfer the parcel onto the hidden plate, climb to the stitch on the front sheet, switch layers, and take the opened back-lane route to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "ledger-front",
+        "name": "Ledger Front",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "ledger-back",
+        "name": "Ledger Back",
+        "tiles": [
+          "#######",
+          "#..S.G#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 4,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-ledger",
+        "type": "parcel",
+        "layer": 0,
+        "x": 3,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "ledger-hidden-plate",
+        "layer": 1,
+        "x": 3,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "ledger-door",
+        "layer": 1,
+        "x": 4,
+        "y": 1,
+        "switchIds": [
+          "ledger-hidden-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Show that hidden switches can matter on a different layer than the route they open.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players head to the stitch before the hidden plate is active and arrive on the back lane too early."
+    }
+  },
+  "market-03": {
+    "id": "market-03",
+    "districtId": "market",
+    "title": "Inventory Check",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Use one parcel for the visible plate and another for the hidden plate, then walk through the central shutter.",
+    "blurb": "The final market route asks you to think about both sheets at once.",
+    "intro": [
+      {
+        "speaker": "Market Clerk",
+        "text": "One parcel props the shutter in plain sight. The other has to disappear behind the counter. Sort them before you walk."
+      }
+    ],
+    "outro": [
+      {
+        "speaker": "Gardener",
+        "text": "The greenhouse routes do not stay still either. Bring those steady hands over when you are done here."
+      }
+    ],
+    "hintTiers": [
+      "You have one parcel for each switch. Decide which one belongs to the hidden plate first.",
+      "Transfer the upper parcel to the back sheet, then push the lower parcel onto the visible floor plate before heading to the door.",
+      "Move up and left to transfer the upper parcel, return to the lower lane to push the second parcel onto the visible plate, then walk up through the opened shutter to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "inventory-front",
+        "name": "Inventory Front",
+        "tiles": [
+          "#######",
+          "#.....#",
+          "#....G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "inventory-back",
+        "name": "Inventory Back",
+        "tiles": [
+          "#######",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "parcel-visible",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-hidden",
         "type": "parcel",
         "layer": 0,
         "x": 3,
@@ -1152,7 +2538,13 @@ export const ROOM_LOOKUP = {
     ],
     "switches": [
       {
-        "id": "side-plate",
+        "id": "inventory-visible-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      },
+      {
+        "id": "inventory-hidden-plate",
         "layer": 1,
         "x": 3,
         "y": 3
@@ -1160,20 +2552,21 @@ export const ROOM_LOOKUP = {
     ],
     "doors": [
       {
-        "id": "side-door",
+        "id": "inventory-shutter",
         "layer": 0,
         "x": 3,
         "y": 2,
         "switchIds": [
-          "side-plate"
+          "inventory-visible-plate",
+          "inventory-hidden-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Reinforce transfer by hiding the switch on a different layer.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players hunt for a walking path to the plate instead of moving the parcel onto it."
+      "intendedLesson": "Cap the market by splitting visible and hidden door logic across two parcels.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players try to solve the visible plate first and only then look for the hidden plate, which leaves too much route still unopened."
     }
   },
   "greenhouse-01": {
@@ -1253,6 +2646,392 @@ export const ROOM_LOOKUP = {
       "targetDifficulty": 3,
       "expectedSolveMinutes": 4,
       "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+    }
+  },
+  "greenhouse-side-01": {
+    "id": "greenhouse-side-01",
+    "districtId": "greenhouse",
+    "title": "Graft Line",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Use the lantern's offset beam to patch the tear and cross to the mailbox.",
+    "blurb": "Not every bridge blooms directly underneath the lantern.",
+    "intro": [
+      {
+        "speaker": "Gardener",
+        "text": "Silver thread bends the light. Sometimes the bloom lands one square away from the lamp itself."
+      }
+    ],
+    "hintTiers": [
+      "This lantern does not bridge the square directly below it.",
+      "Push the lantern one step to the right so its offset beam lands on the tear.",
+      "Push the lantern right once, walk to the stitch, switch sheets, and use the offset bridge tile near the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "graft-top",
+        "name": "Graft Top",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "graft-bottom",
+        "name": "Graft Bottom",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#...~G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 3,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "lantern-offset",
+        "type": "projector",
+        "layer": 0,
+        "x": 2,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 1,
+            "dx": 1,
+            "dy": -1
+          }
+        ]
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Show that a lantern's projection can use an offset target instead of matching coordinates exactly.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 4,
+      "commonMisunderstanding": "Players line the lantern up with the tear directly instead of accounting for the shifted beam."
+    }
+  },
+  "greenhouse-02": {
+    "id": "greenhouse-02",
+    "districtId": "greenhouse",
+    "title": "Overgrowth",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Grow a two-tile bridge across the wider tear and reach the mailbox.",
+    "blurb": "Some greenhouse tears ask for more than a single square of light.",
+    "intro": [
+      {
+        "speaker": "Gardener",
+        "text": "This bed tore wider than the others. One lamp can still cover it, but only if the bloom stretches far enough."
+      }
+    ],
+    "hintTiers": [
+      "This lantern can grow more than one bridge tile at once.",
+      "The lantern needs to stop one row higher so both projected tiles span the tear together.",
+      "Push the lantern upward into the center lane, switch sheets, and cross the two-tile bridge to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "overgrowth-top",
+        "name": "Overgrowth Top",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "overgrowth-bottom",
+        "name": "Overgrowth Bottom",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.~~.G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "lantern-wide",
+        "type": "projector",
+        "layer": 0,
+        "x": 2,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 1,
+            "dx": 0,
+            "dy": 0
+          },
+          {
+            "layer": 1,
+            "dx": 1,
+            "dy": 0
+          }
+        ]
+      }
+    ],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach multi-tile projection so wider tears read as one placement puzzle instead of many.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 5,
+      "commonMisunderstanding": "Players align the lantern to only one missing tile and overlook that the same lamp can cover both."
+    }
+  },
+  "greenhouse-03": {
+    "id": "greenhouse-03",
+    "districtId": "greenhouse",
+    "title": "Misted Gate",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Hold the gate open, grow the bridge, and cross to the mailbox.",
+    "blurb": "The lantern route and the pressure gate have to be solved in the right order.",
+    "intro": [
+      {
+        "speaker": "Gardener",
+        "text": "The gate and the vine bridge answer different tools. Set the parcel first so the lamp can do the rest."
+      }
+    ],
+    "hintTiers": [
+      "The parcel should stay on the switch while you work on the lantern.",
+      "Park the parcel first, then push the lantern into place before you switch layers.",
+      "Push the parcel onto the floor plate, lift the lantern onto the tear line, walk to the stitch, switch sheets, and cross the bridge through the opened gate."
+    ],
+    "layers": [
+      {
+        "id": "mist-top",
+        "name": "Mist Top",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "mist-bottom",
+        "name": "Mist Bottom",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#..~.G#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "parcel-mist",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "lantern-mist",
+        "type": "projector",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 1,
+            "dx": 0,
+            "dy": 0
+          }
+        ]
+      }
+    ],
+    "switches": [
+      {
+        "id": "mist-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "mist-door",
+        "layer": 1,
+        "x": 4,
+        "y": 2,
+        "switchIds": [
+          "mist-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine earlier door logic with projection while still keeping the lantern placement readable.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 6,
+      "commonMisunderstanding": "Players try to solve the bridge first and only later realize the gate still needs the parcel parked on its switch."
+    }
+  },
+  "greenhouse-04": {
+    "id": "greenhouse-04",
+    "districtId": "greenhouse",
+    "title": "Festival Draft",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Hold the gate, bloom the bridge, climb through the middle sheet, and restore the greenhouse finale route.",
+    "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
+      }
+    ],
+    "achievementId": "demo-complete",
+    "hintTiers": [
+      "Treat this like two setup problems before it becomes a travel problem: gate first, lantern second.",
+      "Park the parcel on the top switch, push the lantern into the tear line, switch to the middle sheet at the top stitch, then descend to the lower stitch.",
+      "Push the parcel onto the top-left switch, lift the lantern into the bridge position, switch to the middle sheet at the upper stitch, travel down to the lower stitch, switch to the final sheet, and cross the opened gate and bridge to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "draft-roof",
+        "name": "Draft Roof",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#.....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "draft-middle",
+        "name": "Draft Middle",
+        "tiles": [
+          "#######",
+          "#..S..#",
+          "#.....#",
+          "#.....#",
+          "#S....#",
+          "#######"
+        ]
+      },
+      {
+        "id": "draft-floor",
+        "name": "Draft Floor",
+        "tiles": [
+          "#######",
+          "#.....#",
+          "#..~.G#",
+          "#.....#",
+          "#S....#",
+          "#######"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 5,
+      "y": 4,
+      "facing": "left"
+    },
+    "entities": [
+      {
+        "id": "parcel-draft",
+        "type": "parcel",
+        "layer": 0,
+        "x": 2,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "lantern-draft",
+        "type": "projector",
+        "layer": 0,
+        "x": 3,
+        "y": 3,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": 0,
+            "dy": 0
+          }
+        ]
+      }
+    ],
+    "switches": [
+      {
+        "id": "draft-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 4
+      }
+    ],
+    "doors": [
+      {
+        "id": "draft-door",
+        "layer": 2,
+        "x": 4,
+        "y": 2,
+        "switchIds": [
+          "draft-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Cap the demo slice with three-sheet traversal layered on top of parcel parking and projection.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 7,
+      "commonMisunderstanding": "Players keep looking for the goal on the middle sheet instead of treating it as the route between the setup layer and the final layer."
     }
   },
   "clocktower-01": {
@@ -1548,7 +3327,7 @@ export const ROOM_LOOKUP = {
     "title": "Dustline",
     "optional": true,
     "unlockCost": 0,
-    "postmarks": 1,
+    "postmarks": 0,
     "objective": "Latch the hidden switch with your shadow, then climb into the rafters.",
     "blurb": "A secret bonus room built around one permanent switch.",
     "intro": [
@@ -1647,6 +3426,11 @@ export const CAMPAIGN_INDEX = {
       "description": "Solve an optional side room."
     },
     {
+      "id": "demo-complete",
+      "title": "Festival Preview",
+      "description": "Finish the first three districts and glimpse the routes ahead."
+    },
+    {
       "id": "festival-line",
       "title": "Festival Line",
       "description": "Reach the Rooftops and restore the final delivery lane."
@@ -1663,7 +3447,7 @@ export const CAMPAIGN_INDEX = {
       "title": "Mailroom",
       "subtitle": "The first tears in the paper",
       "unlockPostmarks": 0,
-      "summary": "Learn how stitched sheets overlap and how to step through them cleanly.",
+      "summary": "Learn how stitched sheets overlap, when to transfer a parcel, and how a route can fold back on itself.",
       "journalTitle": "Mina's Starter Journal",
       "journalBody": "The storm did not break the town so much as peel it apart. Mina says a good postkeeper does not force paper flat. They learn the folds, the little stubborn bulges, and work with them."
     },
@@ -1671,8 +3455,8 @@ export const CAMPAIGN_INDEX = {
       "id": "market",
       "title": "Market",
       "subtitle": "Routes braided through stalls and awnings",
-      "unlockPostmarks": 1,
-      "summary": "Transfer parcels between layers and use them to hold doors open or reveal shortcuts.",
+      "unlockPostmarks": 2,
+      "summary": "Transfer parcels between layers and use them to hold shutters open, even when the switch is hidden.",
       "journalTitle": "Market Sketches",
       "journalBody": "The market vendors patched their awnings before their roofs. Priorities. Every route is now tied to every other route, so fixing one usually means fixing three."
     },
@@ -1680,8 +3464,8 @@ export const CAMPAIGN_INDEX = {
       "id": "greenhouse",
       "title": "Greenhouse",
       "subtitle": "Lantern light and vine projections",
-      "unlockPostmarks": 2,
-      "summary": "Projection lanterns cast temporary bridges onto neighboring layers.",
+      "unlockPostmarks": 5,
+      "summary": "Projection lanterns cast temporary bridges onto neighboring layers, then combine with doors and multi-sheet routes.",
       "journalTitle": "Greenhouse Notes",
       "journalBody": "Some paper is seeded with silver thread. Mina calls it greenhouse stock. Shine a lamp through it and the next layer blooms into shape."
     },
@@ -1689,7 +3473,7 @@ export const CAMPAIGN_INDEX = {
       "id": "clocktower",
       "title": "Clocktower",
       "subtitle": "Timing made visible",
-      "unlockPostmarks": 3,
+      "unlockPostmarks": 11,
       "summary": "Echo couriers repeat your previous move one beat later.",
       "journalTitle": "Clocktower Timing",
       "journalBody": "The tower's routes are delayed by one bell. If I move now, my echo steps a moment later. It is unsettling to solve puzzles with my own future in the room."
@@ -1698,7 +3482,7 @@ export const CAMPAIGN_INDEX = {
       "id": "theater",
       "title": "Theater",
       "subtitle": "Shadows on the backdrops",
-      "unlockPostmarks": 4,
+      "unlockPostmarks": 12,
       "summary": "Shadow couriers mirror your movements and can latch hidden mechanisms.",
       "journalTitle": "Theater Blocking",
       "journalBody": "Every prop in the theater has a partner behind the curtain. Nothing moves alone, especially not under the footlights."
@@ -1707,7 +3491,7 @@ export const CAMPAIGN_INDEX = {
       "id": "rooftops",
       "title": "Rooftops",
       "subtitle": "The festival line",
-      "unlockPostmarks": 5,
+      "unlockPostmarks": 13,
       "summary": "Mix switches, projection, and layer travel in one final route.",
       "journalTitle": "Rooftop Draft",
       "journalBody": "When the routes finally align, the whole town reads like one folded letter. Rooftops first, festival after."
@@ -1716,7 +3500,7 @@ export const CAMPAIGN_INDEX = {
       "id": "attic",
       "title": "Attic",
       "subtitle": "A hidden route tucked into the rafters",
-      "unlockPostmarks": 6,
+      "unlockPostmarks": 14,
       "summary": "A secret bonus room for players who want one more twist.",
       "journalTitle": "Attic Margin",
       "journalBody": "There is always one route Mina forgets to mention aloud. She says every town deserves one secret line for the people who still look up."
@@ -1859,6 +3643,218 @@ export const CAMPAIGN_INDEX = {
       }
     },
     {
+      "id": "mailroom-03",
+      "districtId": "mailroom",
+      "title": "Forwarding Fold",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Nudge the parcel aside, switch sheets, and take the shortcut to the mailbox.",
+      "blurb": "The quickest route only opens once the crease is clear.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "Sometimes you push first and transfer second. Clear the lane, then use the stitch at the end."
+        }
+      ],
+      "hintTiers": [
+        "You only need the parcel out of the stitched lane, not far away from it.",
+        "Push the parcel once so you can stand beside it, then transfer it before stepping on the stitch.",
+        "Move right twice, transfer the parcel to the back sheet, walk onto the stitch, switch layers, and climb straight to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "crease-front",
+          "name": "Crease Front",
+          "tiles": [
+            "#######",
+            "#.....#",
+            "#.###.#",
+            "#....S#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "crease-back",
+          "name": "Crease Back",
+          "tiles": [
+            "#######",
+            "#....G#",
+            "#.###.#",
+            "#....S#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 3,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-forward",
+          "type": "parcel",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Recombine a single push, a transfer, and a stitch into one clean route.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players push the parcel again instead of transferring it once it has been nudged into position."
+      }
+    },
+    {
+      "id": "mailroom-side-01",
+      "districtId": "mailroom",
+      "title": "Return Receipt",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Switch to the back sheet, travel to the lower stitch, and return on the right layer.",
+      "blurb": "A side route that rewards noticing the second stitch before the goal.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "Some routes ask you to fold the room twice before they make sense."
+        }
+      ],
+      "hintTiers": [
+        "The first stitch is not the end of the route. It only gets you to the right sheet.",
+        "Use the top stitch first, then travel downward on the back sheet until you find the second stitch.",
+        "Walk to the top stitch, switch to the back sheet, climb down to the lower stitch, switch back, and finish on the front sheet."
+      ],
+      "layers": [
+        {
+          "id": "receipt-front",
+          "name": "Receipt Front",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.###.#",
+            "#.....#",
+            "#..S.G#",
+            "#######"
+          ]
+        },
+        {
+          "id": "receipt-back",
+          "name": "Receipt Back",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#..S..#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach that the shortest mailroom routes can alternate between sheets twice.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is effectively solved."
+      }
+    },
+    {
+      "id": "mailroom-04",
+      "districtId": "mailroom",
+      "title": "Backdated Route",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Free the stitch lane, climb to the top fold, then return on the front sheet to the mailbox.",
+      "blurb": "The final mailroom route loops through the back sheet before it is readable.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "This one folds back on itself. Clear the lower stitch first, then look for the older route above it."
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "Good. The market shutters care less about neat folds and more about what you leave parked on a plate."
+        }
+      ],
+      "hintTiers": [
+        "The stitch at the far right gets you onto the correct sheet, but not yet to the goal.",
+        "Transfer the parcel away from the lower stitch, switch there, then travel to the upper stitch on the back sheet.",
+        "Move right twice, transfer the parcel, switch at the lower stitch, climb to the upper stitch on the back sheet, switch again, and finish on the front."
+      ],
+      "layers": [
+        {
+          "id": "dated-front",
+          "name": "Dated Front",
+          "tiles": [
+            "#######",
+            "#..S.G#",
+            "#.###.#",
+            "#....S#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "dated-back",
+          "name": "Dated Back",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#....S#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 3,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-dated",
+          "type": "parcel",
+          "layer": 0,
+          "x": 4,
+          "y": 3,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Cap the mailroom by chaining transfer with two distinct sheet swaps.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players switch at the lower stitch and then look for the goal immediately instead of climbing to the upper stitch first."
+      }
+    },
+    {
       "id": "market-01",
       "districtId": "market",
       "title": "Counterweight",
@@ -1950,28 +3946,117 @@ export const CAMPAIGN_INDEX = {
     {
       "id": "market-side-01",
       "districtId": "market",
-      "title": "Tied Parcel",
+      "title": "Stall Shortcut",
       "optional": true,
       "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Transfer the parcel onto the hidden plate to open the side route.",
-      "blurb": "An optional room that rewards reading both layers at once.",
+      "postmarks": 0,
+      "objective": "Park the parcel on the plate, switch layers, and take the reopened shortcut above the stalls.",
+      "blurb": "A side route that asks you to read a shutter and a stitch at the same time.",
       "intro": [
         {
-          "speaker": "Mina",
-          "text": "Some side routes only ask whether you noticed the second layer at all."
+          "speaker": "Market Clerk",
+          "text": "The side lane is lighter than the main route. Prop the shutter and steal the short way across."
         }
       ],
       "achievementId": "side-route",
       "hintTiers": [
-        "The door opens from a plate you cannot reach directly.",
-        "The parcel already sits above the hidden switch. Try transferring it instead of walking it there.",
-        "Move next to the parcel in the front sheet, transfer it to the back sheet, then return to the front route and walk through the opened door."
+        "The shortcut only matters after the plate is already held down.",
+        "Push the parcel onto the front plate first, then climb to the stitch instead of heading for the goal immediately.",
+        "Push the parcel onto the plate at the lower left, walk to the stitch on the top lane, switch to the back sheet, and take the reopened shortcut to the mailbox."
       ],
       "layers": [
         {
-          "id": "front",
-          "name": "Front Stall",
+          "id": "stall-front",
+          "name": "Stall Front",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "stall-back",
+          "name": "Stall Back",
+          "tiles": [
+            "#######",
+            "#..S.G#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "parcel-stall",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "stall-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "stall-door",
+          "layer": 1,
+          "x": 4,
+          "y": 1,
+          "switchIds": [
+            "stall-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Reinforce visible plates and door logic in a shorter optional room.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players head for the stitch first and only later realize the shortcut itself is still closed."
+      }
+    },
+    {
+      "id": "market-02",
+      "districtId": "market",
+      "title": "Counter Slot",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Send the parcel through the hidden counter slot and walk through the raised shutter.",
+      "blurb": "Some market plates live on the back sheet, far from the player.",
+      "intro": [
+        {
+          "speaker": "Market Clerk",
+          "text": "The switch is behind the counter, but the parcel still fits through the slot. Use that instead of looking for another hallway."
+        }
+      ],
+      "hintTiers": [
+        "The shutter opens from a place you cannot stand on yourself.",
+        "Move next to the parcel and transfer it onto the switch behind the counter before walking to the door.",
+        "Step right once, transfer the parcel to the back sheet, then walk up and across the opened shutter to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "counter-front",
+          "name": "Counter Front",
           "tiles": [
             "#######",
             "#.....#",
@@ -1982,8 +4067,8 @@ export const CAMPAIGN_INDEX = {
           ]
         },
         {
-          "id": "back",
-          "name": "Back Stall",
+          "id": "counter-back",
+          "name": "Counter Back",
           "tiles": [
             "#######",
             "#.....#",
@@ -1997,12 +4082,205 @@ export const CAMPAIGN_INDEX = {
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 2,
+        "y": 4,
         "facing": "right"
       },
       "entities": [
         {
-          "id": "parcel-c",
+          "id": "parcel-slot",
+          "type": "parcel",
+          "layer": 0,
+          "x": 3,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "counter-hidden-plate",
+          "layer": 1,
+          "x": 3,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "counter-shutter",
+          "layer": 0,
+          "x": 3,
+          "y": 2,
+          "switchIds": [
+            "counter-hidden-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Teach that a transfer can activate a switch the player will never physically touch.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players search for a walking path behind the counter instead of treating the parcel as the route's stand-in."
+      }
+    },
+    {
+      "id": "market-side-02",
+      "districtId": "market",
+      "title": "Ledger Slip",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Transfer the parcel onto the hidden plate, switch layers, and use the back-lane shutter.",
+      "blurb": "A side room that mixes the counter-slot trick with a stitched shortcut.",
+      "intro": [
+        {
+          "speaker": "Market Clerk",
+          "text": "The back-lane shutter lifts from the same hidden plate, but now you still have to get onto the right sheet."
+        }
+      ],
+      "hintTiers": [
+        "The parcel belongs on the hidden switch before you ever touch the stitch.",
+        "Transfer the parcel first, then walk to the stitch on the front sheet and switch to the back lane.",
+        "Move right once, transfer the parcel onto the hidden plate, climb to the stitch on the front sheet, switch layers, and take the opened back-lane route to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "ledger-front",
+          "name": "Ledger Front",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "ledger-back",
+          "name": "Ledger Back",
+          "tiles": [
+            "#######",
+            "#..S.G#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-ledger",
+          "type": "parcel",
+          "layer": 0,
+          "x": 3,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "ledger-hidden-plate",
+          "layer": 1,
+          "x": 3,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "ledger-door",
+          "layer": 1,
+          "x": 4,
+          "y": 1,
+          "switchIds": [
+            "ledger-hidden-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Show that hidden switches can matter on a different layer than the route they open.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players head to the stitch before the hidden plate is active and arrive on the back lane too early."
+      }
+    },
+    {
+      "id": "market-03",
+      "districtId": "market",
+      "title": "Inventory Check",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Use one parcel for the visible plate and another for the hidden plate, then walk through the central shutter.",
+      "blurb": "The final market route asks you to think about both sheets at once.",
+      "intro": [
+        {
+          "speaker": "Market Clerk",
+          "text": "One parcel props the shutter in plain sight. The other has to disappear behind the counter. Sort them before you walk."
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "Gardener",
+          "text": "The greenhouse routes do not stay still either. Bring those steady hands over when you are done here."
+        }
+      ],
+      "hintTiers": [
+        "You have one parcel for each switch. Decide which one belongs to the hidden plate first.",
+        "Transfer the upper parcel to the back sheet, then push the lower parcel onto the visible floor plate before heading to the door.",
+        "Move up and left to transfer the upper parcel, return to the lower lane to push the second parcel onto the visible plate, then walk up through the opened shutter to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "inventory-front",
+          "name": "Inventory Front",
+          "tiles": [
+            "#######",
+            "#.....#",
+            "#....G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "inventory-back",
+          "name": "Inventory Back",
+          "tiles": [
+            "#######",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "parcel-visible",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-hidden",
           "type": "parcel",
           "layer": 0,
           "x": 3,
@@ -2013,7 +4291,13 @@ export const CAMPAIGN_INDEX = {
       ],
       "switches": [
         {
-          "id": "side-plate",
+          "id": "inventory-visible-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        },
+        {
+          "id": "inventory-hidden-plate",
           "layer": 1,
           "x": 3,
           "y": 3
@@ -2021,20 +4305,21 @@ export const CAMPAIGN_INDEX = {
       ],
       "doors": [
         {
-          "id": "side-door",
+          "id": "inventory-shutter",
           "layer": 0,
           "x": 3,
           "y": 2,
           "switchIds": [
-            "side-plate"
+            "inventory-visible-plate",
+            "inventory-hidden-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Reinforce transfer by hiding the switch on a different layer.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players hunt for a walking path to the plate instead of moving the parcel onto it."
+        "intendedLesson": "Cap the market by splitting visible and hidden door logic across two parcels.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players try to solve the visible plate first and only then look for the hidden plate, which leaves too much route still unopened."
       }
     },
     {
@@ -2114,6 +4399,392 @@ export const CAMPAIGN_INDEX = {
         "targetDifficulty": 3,
         "expectedSolveMinutes": 4,
         "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+      }
+    },
+    {
+      "id": "greenhouse-side-01",
+      "districtId": "greenhouse",
+      "title": "Graft Line",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Use the lantern's offset beam to patch the tear and cross to the mailbox.",
+      "blurb": "Not every bridge blooms directly underneath the lantern.",
+      "intro": [
+        {
+          "speaker": "Gardener",
+          "text": "Silver thread bends the light. Sometimes the bloom lands one square away from the lamp itself."
+        }
+      ],
+      "hintTiers": [
+        "This lantern does not bridge the square directly below it.",
+        "Push the lantern one step to the right so its offset beam lands on the tear.",
+        "Push the lantern right once, walk to the stitch, switch sheets, and use the offset bridge tile near the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "graft-top",
+          "name": "Graft Top",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "graft-bottom",
+          "name": "Graft Bottom",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#...~G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 3,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "lantern-offset",
+          "type": "projector",
+          "layer": 0,
+          "x": 2,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 1,
+              "dx": 1,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Show that a lantern's projection can use an offset target instead of matching coordinates exactly.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players line the lantern up with the tear directly instead of accounting for the shifted beam."
+      }
+    },
+    {
+      "id": "greenhouse-02",
+      "districtId": "greenhouse",
+      "title": "Overgrowth",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Grow a two-tile bridge across the wider tear and reach the mailbox.",
+      "blurb": "Some greenhouse tears ask for more than a single square of light.",
+      "intro": [
+        {
+          "speaker": "Gardener",
+          "text": "This bed tore wider than the others. One lamp can still cover it, but only if the bloom stretches far enough."
+        }
+      ],
+      "hintTiers": [
+        "This lantern can grow more than one bridge tile at once.",
+        "The lantern needs to stop one row higher so both projected tiles span the tear together.",
+        "Push the lantern upward into the center lane, switch sheets, and cross the two-tile bridge to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "overgrowth-top",
+          "name": "Overgrowth Top",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "overgrowth-bottom",
+          "name": "Overgrowth Bottom",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.~~.G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "lantern-wide",
+          "type": "projector",
+          "layer": 0,
+          "x": 2,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 1,
+              "dx": 0,
+              "dy": 0
+            },
+            {
+              "layer": 1,
+              "dx": 1,
+              "dy": 0
+            }
+          ]
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach multi-tile projection so wider tears read as one placement puzzle instead of many.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players align the lantern to only one missing tile and overlook that the same lamp can cover both."
+      }
+    },
+    {
+      "id": "greenhouse-03",
+      "districtId": "greenhouse",
+      "title": "Misted Gate",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Hold the gate open, grow the bridge, and cross to the mailbox.",
+      "blurb": "The lantern route and the pressure gate have to be solved in the right order.",
+      "intro": [
+        {
+          "speaker": "Gardener",
+          "text": "The gate and the vine bridge answer different tools. Set the parcel first so the lamp can do the rest."
+        }
+      ],
+      "hintTiers": [
+        "The parcel should stay on the switch while you work on the lantern.",
+        "Park the parcel first, then push the lantern into place before you switch layers.",
+        "Push the parcel onto the floor plate, lift the lantern onto the tear line, walk to the stitch, switch sheets, and cross the bridge through the opened gate."
+      ],
+      "layers": [
+        {
+          "id": "mist-top",
+          "name": "Mist Top",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "mist-bottom",
+          "name": "Mist Bottom",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#..~.G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "parcel-mist",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "lantern-mist",
+          "type": "projector",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 1,
+              "dx": 0,
+              "dy": 0
+            }
+          ]
+        }
+      ],
+      "switches": [
+        {
+          "id": "mist-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "mist-door",
+          "layer": 1,
+          "x": 4,
+          "y": 2,
+          "switchIds": [
+            "mist-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine earlier door logic with projection while still keeping the lantern placement readable.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 6,
+        "commonMisunderstanding": "Players try to solve the bridge first and only later realize the gate still needs the parcel parked on its switch."
+      }
+    },
+    {
+      "id": "greenhouse-04",
+      "districtId": "greenhouse",
+      "title": "Festival Draft",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Hold the gate, bloom the bridge, climb through the middle sheet, and restore the greenhouse finale route.",
+      "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
+        }
+      ],
+      "achievementId": "demo-complete",
+      "hintTiers": [
+        "Treat this like two setup problems before it becomes a travel problem: gate first, lantern second.",
+        "Park the parcel on the top switch, push the lantern into the tear line, switch to the middle sheet at the top stitch, then descend to the lower stitch.",
+        "Push the parcel onto the top-left switch, lift the lantern into the bridge position, switch to the middle sheet at the upper stitch, travel down to the lower stitch, switch to the final sheet, and cross the opened gate and bridge to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "draft-roof",
+          "name": "Draft Roof",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "draft-middle",
+          "name": "Draft Middle",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#S....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "draft-floor",
+          "name": "Draft Floor",
+          "tiles": [
+            "#######",
+            "#.....#",
+            "#..~.G#",
+            "#.....#",
+            "#S....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "parcel-draft",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "lantern-draft",
+          "type": "projector",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": 0,
+              "dy": 0
+            }
+          ]
+        }
+      ],
+      "switches": [
+        {
+          "id": "draft-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "draft-door",
+          "layer": 2,
+          "x": 4,
+          "y": 2,
+          "switchIds": [
+            "draft-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Cap the demo slice with three-sheet traversal layered on top of parcel parking and projection.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 7,
+        "commonMisunderstanding": "Players keep looking for the goal on the middle sheet instead of treating it as the route between the setup layer and the final layer."
       }
     },
     {
@@ -2409,7 +5080,7 @@ export const CAMPAIGN_INDEX = {
       "title": "Dustline",
       "optional": true,
       "unlockCost": 0,
-      "postmarks": 1,
+      "postmarks": 0,
       "objective": "Latch the hidden switch with your shadow, then climb into the rafters.",
       "blurb": "A secret bonus room built around one permanent switch.",
       "intro": [
@@ -2495,6 +5166,48 @@ export const CAMPAIGN_INDEX = {
       }
     }
   ],
+  "demo": {
+    "title": "Festival Route Demo",
+    "districtIds": [
+      "mailroom",
+      "market",
+      "greenhouse"
+    ],
+    "mainRoomIds": [
+      "mailroom-01",
+      "mailroom-02",
+      "mailroom-03",
+      "mailroom-04",
+      "market-01",
+      "market-02",
+      "market-03",
+      "greenhouse-01",
+      "greenhouse-02",
+      "greenhouse-03",
+      "greenhouse-04"
+    ],
+    "optionalRoomIds": [
+      "mailroom-side-01",
+      "market-side-01",
+      "market-side-02",
+      "greenhouse-side-01"
+    ],
+    "finalRoomId": "greenhouse-04",
+    "ending": {
+      "title": "Demo Route Complete",
+      "subtitle": "The greenhouse line is lit and the festival preview route is back in circulation.",
+      "body": "The full campaign pushes the same paper-layer rules into delayed echoes, mirrored shadows, and a final rooftop delivery lane.",
+      "beat": {
+        "speaker": "Mina",
+        "text": "That is the last lantern route for the demo. Next come bell echoes, stage shadows, and the rooftop line itself."
+      }
+    },
+    "teaserLines": [
+      "Clocktower: Echo couriers repeat your previous move one beat later.",
+      "Theater: Shadow couriers mirror you across a second sheet.",
+      "Rooftops: Doors, bridges, and transfers braid into one final lane."
+    ]
+  },
   "roomsById": {
     "mailroom-01": {
       "id": "mailroom-01",
@@ -2631,6 +5344,218 @@ export const CAMPAIGN_INDEX = {
         "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
       }
     },
+    "mailroom-03": {
+      "id": "mailroom-03",
+      "districtId": "mailroom",
+      "title": "Forwarding Fold",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Nudge the parcel aside, switch sheets, and take the shortcut to the mailbox.",
+      "blurb": "The quickest route only opens once the crease is clear.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "Sometimes you push first and transfer second. Clear the lane, then use the stitch at the end."
+        }
+      ],
+      "hintTiers": [
+        "You only need the parcel out of the stitched lane, not far away from it.",
+        "Push the parcel once so you can stand beside it, then transfer it before stepping on the stitch.",
+        "Move right twice, transfer the parcel to the back sheet, walk onto the stitch, switch layers, and climb straight to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "crease-front",
+          "name": "Crease Front",
+          "tiles": [
+            "#######",
+            "#.....#",
+            "#.###.#",
+            "#....S#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "crease-back",
+          "name": "Crease Back",
+          "tiles": [
+            "#######",
+            "#....G#",
+            "#.###.#",
+            "#....S#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 3,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-forward",
+          "type": "parcel",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Recombine a single push, a transfer, and a stitch into one clean route.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players push the parcel again instead of transferring it once it has been nudged into position."
+      }
+    },
+    "mailroom-side-01": {
+      "id": "mailroom-side-01",
+      "districtId": "mailroom",
+      "title": "Return Receipt",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Switch to the back sheet, travel to the lower stitch, and return on the right layer.",
+      "blurb": "A side route that rewards noticing the second stitch before the goal.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "Some routes ask you to fold the room twice before they make sense."
+        }
+      ],
+      "hintTiers": [
+        "The first stitch is not the end of the route. It only gets you to the right sheet.",
+        "Use the top stitch first, then travel downward on the back sheet until you find the second stitch.",
+        "Walk to the top stitch, switch to the back sheet, climb down to the lower stitch, switch back, and finish on the front sheet."
+      ],
+      "layers": [
+        {
+          "id": "receipt-front",
+          "name": "Receipt Front",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.###.#",
+            "#.....#",
+            "#..S.G#",
+            "#######"
+          ]
+        },
+        {
+          "id": "receipt-back",
+          "name": "Receipt Back",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#..S..#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach that the shortest mailroom routes can alternate between sheets twice.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is effectively solved."
+      }
+    },
+    "mailroom-04": {
+      "id": "mailroom-04",
+      "districtId": "mailroom",
+      "title": "Backdated Route",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Free the stitch lane, climb to the top fold, then return on the front sheet to the mailbox.",
+      "blurb": "The final mailroom route loops through the back sheet before it is readable.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "This one folds back on itself. Clear the lower stitch first, then look for the older route above it."
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "Good. The market shutters care less about neat folds and more about what you leave parked on a plate."
+        }
+      ],
+      "hintTiers": [
+        "The stitch at the far right gets you onto the correct sheet, but not yet to the goal.",
+        "Transfer the parcel away from the lower stitch, switch there, then travel to the upper stitch on the back sheet.",
+        "Move right twice, transfer the parcel, switch at the lower stitch, climb to the upper stitch on the back sheet, switch again, and finish on the front."
+      ],
+      "layers": [
+        {
+          "id": "dated-front",
+          "name": "Dated Front",
+          "tiles": [
+            "#######",
+            "#..S.G#",
+            "#.###.#",
+            "#....S#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "dated-back",
+          "name": "Dated Back",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#....S#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 3,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-dated",
+          "type": "parcel",
+          "layer": 0,
+          "x": 4,
+          "y": 3,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Cap the mailroom by chaining transfer with two distinct sheet swaps.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players switch at the lower stitch and then look for the goal immediately instead of climbing to the upper stitch first."
+      }
+    },
     "market-01": {
       "id": "market-01",
       "districtId": "market",
@@ -2723,28 +5648,117 @@ export const CAMPAIGN_INDEX = {
     "market-side-01": {
       "id": "market-side-01",
       "districtId": "market",
-      "title": "Tied Parcel",
+      "title": "Stall Shortcut",
       "optional": true,
       "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Transfer the parcel onto the hidden plate to open the side route.",
-      "blurb": "An optional room that rewards reading both layers at once.",
+      "postmarks": 0,
+      "objective": "Park the parcel on the plate, switch layers, and take the reopened shortcut above the stalls.",
+      "blurb": "A side route that asks you to read a shutter and a stitch at the same time.",
       "intro": [
         {
-          "speaker": "Mina",
-          "text": "Some side routes only ask whether you noticed the second layer at all."
+          "speaker": "Market Clerk",
+          "text": "The side lane is lighter than the main route. Prop the shutter and steal the short way across."
         }
       ],
       "achievementId": "side-route",
       "hintTiers": [
-        "The door opens from a plate you cannot reach directly.",
-        "The parcel already sits above the hidden switch. Try transferring it instead of walking it there.",
-        "Move next to the parcel in the front sheet, transfer it to the back sheet, then return to the front route and walk through the opened door."
+        "The shortcut only matters after the plate is already held down.",
+        "Push the parcel onto the front plate first, then climb to the stitch instead of heading for the goal immediately.",
+        "Push the parcel onto the plate at the lower left, walk to the stitch on the top lane, switch to the back sheet, and take the reopened shortcut to the mailbox."
       ],
       "layers": [
         {
-          "id": "front",
-          "name": "Front Stall",
+          "id": "stall-front",
+          "name": "Stall Front",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "stall-back",
+          "name": "Stall Back",
+          "tiles": [
+            "#######",
+            "#..S.G#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "parcel-stall",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "stall-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "stall-door",
+          "layer": 1,
+          "x": 4,
+          "y": 1,
+          "switchIds": [
+            "stall-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Reinforce visible plates and door logic in a shorter optional room.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 3,
+        "commonMisunderstanding": "Players head for the stitch first and only later realize the shortcut itself is still closed."
+      }
+    },
+    "market-02": {
+      "id": "market-02",
+      "districtId": "market",
+      "title": "Counter Slot",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Send the parcel through the hidden counter slot and walk through the raised shutter.",
+      "blurb": "Some market plates live on the back sheet, far from the player.",
+      "intro": [
+        {
+          "speaker": "Market Clerk",
+          "text": "The switch is behind the counter, but the parcel still fits through the slot. Use that instead of looking for another hallway."
+        }
+      ],
+      "hintTiers": [
+        "The shutter opens from a place you cannot stand on yourself.",
+        "Move next to the parcel and transfer it onto the switch behind the counter before walking to the door.",
+        "Step right once, transfer the parcel to the back sheet, then walk up and across the opened shutter to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "counter-front",
+          "name": "Counter Front",
           "tiles": [
             "#######",
             "#.....#",
@@ -2755,8 +5769,8 @@ export const CAMPAIGN_INDEX = {
           ]
         },
         {
-          "id": "back",
-          "name": "Back Stall",
+          "id": "counter-back",
+          "name": "Counter Back",
           "tiles": [
             "#######",
             "#.....#",
@@ -2770,12 +5784,205 @@ export const CAMPAIGN_INDEX = {
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 2,
+        "y": 4,
         "facing": "right"
       },
       "entities": [
         {
-          "id": "parcel-c",
+          "id": "parcel-slot",
+          "type": "parcel",
+          "layer": 0,
+          "x": 3,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "counter-hidden-plate",
+          "layer": 1,
+          "x": 3,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "counter-shutter",
+          "layer": 0,
+          "x": 3,
+          "y": 2,
+          "switchIds": [
+            "counter-hidden-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Teach that a transfer can activate a switch the player will never physically touch.",
+        "targetDifficulty": 2,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players search for a walking path behind the counter instead of treating the parcel as the route's stand-in."
+      }
+    },
+    "market-side-02": {
+      "id": "market-side-02",
+      "districtId": "market",
+      "title": "Ledger Slip",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Transfer the parcel onto the hidden plate, switch layers, and use the back-lane shutter.",
+      "blurb": "A side room that mixes the counter-slot trick with a stitched shortcut.",
+      "intro": [
+        {
+          "speaker": "Market Clerk",
+          "text": "The back-lane shutter lifts from the same hidden plate, but now you still have to get onto the right sheet."
+        }
+      ],
+      "hintTiers": [
+        "The parcel belongs on the hidden switch before you ever touch the stitch.",
+        "Transfer the parcel first, then walk to the stitch on the front sheet and switch to the back lane.",
+        "Move right once, transfer the parcel onto the hidden plate, climb to the stitch on the front sheet, switch layers, and take the opened back-lane route to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "ledger-front",
+          "name": "Ledger Front",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "ledger-back",
+          "name": "Ledger Back",
+          "tiles": [
+            "#######",
+            "#..S.G#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 4,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-ledger",
+          "type": "parcel",
+          "layer": 0,
+          "x": 3,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "ledger-hidden-plate",
+          "layer": 1,
+          "x": 3,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "ledger-door",
+          "layer": 1,
+          "x": 4,
+          "y": 1,
+          "switchIds": [
+            "ledger-hidden-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Show that hidden switches can matter on a different layer than the route they open.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players head to the stitch before the hidden plate is active and arrive on the back lane too early."
+      }
+    },
+    "market-03": {
+      "id": "market-03",
+      "districtId": "market",
+      "title": "Inventory Check",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Use one parcel for the visible plate and another for the hidden plate, then walk through the central shutter.",
+      "blurb": "The final market route asks you to think about both sheets at once.",
+      "intro": [
+        {
+          "speaker": "Market Clerk",
+          "text": "One parcel props the shutter in plain sight. The other has to disappear behind the counter. Sort them before you walk."
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "Gardener",
+          "text": "The greenhouse routes do not stay still either. Bring those steady hands over when you are done here."
+        }
+      ],
+      "hintTiers": [
+        "You have one parcel for each switch. Decide which one belongs to the hidden plate first.",
+        "Transfer the upper parcel to the back sheet, then push the lower parcel onto the visible floor plate before heading to the door.",
+        "Move up and left to transfer the upper parcel, return to the lower lane to push the second parcel onto the visible plate, then walk up through the opened shutter to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "inventory-front",
+          "name": "Inventory Front",
+          "tiles": [
+            "#######",
+            "#.....#",
+            "#....G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "inventory-back",
+          "name": "Inventory Back",
+          "tiles": [
+            "#######",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "parcel-visible",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-hidden",
           "type": "parcel",
           "layer": 0,
           "x": 3,
@@ -2786,7 +5993,13 @@ export const CAMPAIGN_INDEX = {
       ],
       "switches": [
         {
-          "id": "side-plate",
+          "id": "inventory-visible-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        },
+        {
+          "id": "inventory-hidden-plate",
           "layer": 1,
           "x": 3,
           "y": 3
@@ -2794,20 +6007,21 @@ export const CAMPAIGN_INDEX = {
       ],
       "doors": [
         {
-          "id": "side-door",
+          "id": "inventory-shutter",
           "layer": 0,
           "x": 3,
           "y": 2,
           "switchIds": [
-            "side-plate"
+            "inventory-visible-plate",
+            "inventory-hidden-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Reinforce transfer by hiding the switch on a different layer.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players hunt for a walking path to the plate instead of moving the parcel onto it."
+        "intendedLesson": "Cap the market by splitting visible and hidden door logic across two parcels.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players try to solve the visible plate first and only then look for the hidden plate, which leaves too much route still unopened."
       }
     },
     "greenhouse-01": {
@@ -2887,6 +6101,392 @@ export const CAMPAIGN_INDEX = {
         "targetDifficulty": 3,
         "expectedSolveMinutes": 4,
         "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+      }
+    },
+    "greenhouse-side-01": {
+      "id": "greenhouse-side-01",
+      "districtId": "greenhouse",
+      "title": "Graft Line",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Use the lantern's offset beam to patch the tear and cross to the mailbox.",
+      "blurb": "Not every bridge blooms directly underneath the lantern.",
+      "intro": [
+        {
+          "speaker": "Gardener",
+          "text": "Silver thread bends the light. Sometimes the bloom lands one square away from the lamp itself."
+        }
+      ],
+      "hintTiers": [
+        "This lantern does not bridge the square directly below it.",
+        "Push the lantern one step to the right so its offset beam lands on the tear.",
+        "Push the lantern right once, walk to the stitch, switch sheets, and use the offset bridge tile near the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "graft-top",
+          "name": "Graft Top",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "graft-bottom",
+          "name": "Graft Bottom",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#...~G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 3,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "lantern-offset",
+          "type": "projector",
+          "layer": 0,
+          "x": 2,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 1,
+              "dx": 1,
+              "dy": -1
+            }
+          ]
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Show that a lantern's projection can use an offset target instead of matching coordinates exactly.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 4,
+        "commonMisunderstanding": "Players line the lantern up with the tear directly instead of accounting for the shifted beam."
+      }
+    },
+    "greenhouse-02": {
+      "id": "greenhouse-02",
+      "districtId": "greenhouse",
+      "title": "Overgrowth",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Grow a two-tile bridge across the wider tear and reach the mailbox.",
+      "blurb": "Some greenhouse tears ask for more than a single square of light.",
+      "intro": [
+        {
+          "speaker": "Gardener",
+          "text": "This bed tore wider than the others. One lamp can still cover it, but only if the bloom stretches far enough."
+        }
+      ],
+      "hintTiers": [
+        "This lantern can grow more than one bridge tile at once.",
+        "The lantern needs to stop one row higher so both projected tiles span the tear together.",
+        "Push the lantern upward into the center lane, switch sheets, and cross the two-tile bridge to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "overgrowth-top",
+          "name": "Overgrowth Top",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "overgrowth-bottom",
+          "name": "Overgrowth Bottom",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.~~.G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "lantern-wide",
+          "type": "projector",
+          "layer": 0,
+          "x": 2,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 1,
+              "dx": 0,
+              "dy": 0
+            },
+            {
+              "layer": 1,
+              "dx": 1,
+              "dy": 0
+            }
+          ]
+        }
+      ],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach multi-tile projection so wider tears read as one placement puzzle instead of many.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 5,
+        "commonMisunderstanding": "Players align the lantern to only one missing tile and overlook that the same lamp can cover both."
+      }
+    },
+    "greenhouse-03": {
+      "id": "greenhouse-03",
+      "districtId": "greenhouse",
+      "title": "Misted Gate",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Hold the gate open, grow the bridge, and cross to the mailbox.",
+      "blurb": "The lantern route and the pressure gate have to be solved in the right order.",
+      "intro": [
+        {
+          "speaker": "Gardener",
+          "text": "The gate and the vine bridge answer different tools. Set the parcel first so the lamp can do the rest."
+        }
+      ],
+      "hintTiers": [
+        "The parcel should stay on the switch while you work on the lantern.",
+        "Park the parcel first, then push the lantern into place before you switch layers.",
+        "Push the parcel onto the floor plate, lift the lantern onto the tear line, walk to the stitch, switch sheets, and cross the bridge through the opened gate."
+      ],
+      "layers": [
+        {
+          "id": "mist-top",
+          "name": "Mist Top",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "mist-bottom",
+          "name": "Mist Bottom",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#..~.G#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "parcel-mist",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "lantern-mist",
+          "type": "projector",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 1,
+              "dx": 0,
+              "dy": 0
+            }
+          ]
+        }
+      ],
+      "switches": [
+        {
+          "id": "mist-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "mist-door",
+          "layer": 1,
+          "x": 4,
+          "y": 2,
+          "switchIds": [
+            "mist-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine earlier door logic with projection while still keeping the lantern placement readable.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 6,
+        "commonMisunderstanding": "Players try to solve the bridge first and only later realize the gate still needs the parcel parked on its switch."
+      }
+    },
+    "greenhouse-04": {
+      "id": "greenhouse-04",
+      "districtId": "greenhouse",
+      "title": "Festival Draft",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Hold the gate, bloom the bridge, climb through the middle sheet, and restore the greenhouse finale route.",
+      "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
+        }
+      ],
+      "achievementId": "demo-complete",
+      "hintTiers": [
+        "Treat this like two setup problems before it becomes a travel problem: gate first, lantern second.",
+        "Park the parcel on the top switch, push the lantern into the tear line, switch to the middle sheet at the top stitch, then descend to the lower stitch.",
+        "Push the parcel onto the top-left switch, lift the lantern into the bridge position, switch to the middle sheet at the upper stitch, travel down to the lower stitch, switch to the final sheet, and cross the opened gate and bridge to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "draft-roof",
+          "name": "Draft Roof",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#.....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "draft-middle",
+          "name": "Draft Middle",
+          "tiles": [
+            "#######",
+            "#..S..#",
+            "#.....#",
+            "#.....#",
+            "#S....#",
+            "#######"
+          ]
+        },
+        {
+          "id": "draft-floor",
+          "name": "Draft Floor",
+          "tiles": [
+            "#######",
+            "#.....#",
+            "#..~.G#",
+            "#.....#",
+            "#S....#",
+            "#######"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 5,
+        "y": 4,
+        "facing": "left"
+      },
+      "entities": [
+        {
+          "id": "parcel-draft",
+          "type": "parcel",
+          "layer": 0,
+          "x": 2,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "lantern-draft",
+          "type": "projector",
+          "layer": 0,
+          "x": 3,
+          "y": 3,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": 0,
+              "dy": 0
+            }
+          ]
+        }
+      ],
+      "switches": [
+        {
+          "id": "draft-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "doors": [
+        {
+          "id": "draft-door",
+          "layer": 2,
+          "x": 4,
+          "y": 2,
+          "switchIds": [
+            "draft-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Cap the demo slice with three-sheet traversal layered on top of parcel parking and projection.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 7,
+        "commonMisunderstanding": "Players keep looking for the goal on the middle sheet instead of treating it as the route between the setup layer and the final layer."
       }
     },
     "clocktower-01": {
@@ -3182,7 +6782,7 @@ export const CAMPAIGN_INDEX = {
       "title": "Dustline",
       "optional": true,
       "unlockCost": 0,
-      "postmarks": 1,
+      "postmarks": 0,
       "objective": "Latch the hidden switch with your shadow, then climb into the rafters.",
       "blurb": "A secret bonus room built around one permanent switch.",
       "intro": [

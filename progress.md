@@ -101,9 +101,28 @@ Notes
 - Batch 4 status:
   - complete for the current demo-support scope
 
+- Batch 5 progress:
+  - expanded the shared campaign source into a 19-room campaign with a 15-room demo slice across Mailroom, Market, and Greenhouse
+  - retuned district unlock thresholds so the first three districts form a cleaner public-demo arc and Clocktower unlocks after the demo finale
+  - added Batch 5 demo metadata to the shared campaign source and generation pipeline so both runtimes can surface demo-slice progress and ending hooks
+  - added 11 demo main rooms and 4 optional rooms with refreshed intros, hint tiers, balance metadata, and district handoff beats
+  - upgraded the Godot shell with:
+    - demo route progress in the HUD
+    - room outro dialogue support
+    - a demo completion overlay and finale teaser beat
+  - bumped the content/save version to Batch 5 in the Godot runtime
+  - added browser-side regression coverage for Batch 5 demo metadata in `tests/room-regressions.test.js`
+  - added native Batch 5 regression coverage in `godot/scripts/tests/run_batch5_demo_tests.gd`
+  - expanded `scripts/run-godot-tests.mjs` so `npm run test:godot` now runs Batch 1 through Batch 5 coverage
+  - documented the public demo slice in `docs/batch-5-demo-slice.md`
+  - verified `npm test`, `npm run test:godot`, and `npm run verify:godot` after the Batch 5 content and runtime changes
+
+- Batch 5 status:
+  - complete for the current public-demo slice scope
+
 TODO
-- Expand the prototype into the full planned campaign size with many more rooms, district beats, and difficulty ramps.
+- Expand the prototype into the full planned campaign size with Clocktower, Theater, Rooftops, and Attic content that matches the new demo-slice quality bar.
 - Add richer room-editor ergonomics over time, such as drag placement, copy/paste, and faster layer inspection, if content production exposes pain points.
-- Push into Batch 5 with more Mailroom, Market, and Greenhouse content so the now-polished support systems sit behind a stronger public demo.
+- Push into Batch 6 with late-game route planning, optional mastery branches, and the planned cross-district secret line.
 - Decide how much of the browser prototype UI should continue to evolve versus freezing it as a mechanics reference while Godot becomes the clear primary runtime.
 - Replace the current Steam bridge stub with a live Steamworks plugin integration in a later batch.

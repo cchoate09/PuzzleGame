@@ -1,6 +1,6 @@
 # Patchwork Post Godot Runtime
 
-This directory is the native Godot 4 runtime for Patchwork Post. Batch 1 established the production base, Batch 2 delivered the first near-final vertical-slice presentation pass, Batch 3 added the internal content-production toolchain, and Batch 4 hardened the player-support systems for a public demo.
+This directory is the native Godot 4 runtime for Patchwork Post. Batch 1 established the production base, Batch 2 delivered the first near-final vertical-slice presentation pass, Batch 3 added the internal content-production toolchain, Batch 4 hardened the player-support systems for a public demo, and Batch 5 expanded the first three districts into a real 15-room demo slice.
 
 ## Current Scope
 
@@ -18,7 +18,8 @@ This directory is the native Godot 4 runtime for Patchwork Post. Batch 1 establi
 - progressive hint UX with guided openings
 - saved keyboard/controller remapping plus controller-first menu navigation
 - demo/full save carryover scaffolding and Steam support stubs
-- headless regression runner for canonical solutions, UI smoke coverage, authoring-tool coverage, and demo-support coverage
+- demo progress surfacing, room handoff beats, and a demo completion overlay
+- headless regression runner for canonical solutions, UI smoke coverage, authoring-tool coverage, support-system coverage, and Batch 5 demo coverage
 
 ## Commands
 
@@ -43,6 +44,7 @@ To open the runtime manually, launch the Godot editor against [project.godot](C:
 - This runtime is now the primary vertical-slice surface for presentation work.
 - Authoring workflow details are documented in [batch-3-authoring-workflow.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-3-authoring-workflow.md).
 - Demo-support details are documented in [batch-4-support-systems.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-4-support-systems.md).
+- Demo-slice content and pacing details are documented in [batch-5-demo-slice.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-5-demo-slice.md).
 - Visual and audio direction notes are documented in:
   - [batch-2-ui-style-guide.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-2-ui-style-guide.md)
   - [batch-2-audio-style-guide.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-2-audio-style-guide.md)

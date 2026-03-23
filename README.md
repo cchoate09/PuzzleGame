@@ -5,9 +5,9 @@ Patchwork Post is a 2D logic-puzzle game prototype built around layered paper ro
 The repo currently contains:
 
 - a browser prototype used as the mechanic reference
-- a Godot 4 native runtime that now carries the Batch 4 demo-support layer
+- a Godot 4 native runtime that now carries the Batch 5 demo slice
 - shared JSON content sources that generate browser and Godot data outputs
-- regression tests for canonical puzzle solutions, UI smoke coverage, authoring tools, and demo-support systems
+- regression tests for canonical puzzle solutions, UI smoke coverage, authoring tools, support systems, and the Batch 5 demo flow
 
 ## Commands
 
@@ -44,4 +44,6 @@ npm run install:godot-templates
 - Batch 3 workflow notes live in [batch-3-authoring-workflow.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-3-authoring-workflow.md).
 - Batch 4 is implemented in the Godot runtime: progressive hint UX, control remapping, controller-first menu support, demo/full save carryover scaffolding, and Steam-support stubs.
 - Batch 4 notes live in [batch-4-support-systems.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-4-support-systems.md).
-- Batch 5 is the next major focus: expand the public demo slice with more early-game content and stronger onboarding.
+- Batch 5 is implemented: the first three districts now form a 15-room public-demo slice with 11 main rooms, 4 optional rooms, room handoff beats, a demo completion overlay, and updated progression gating.
+- Batch 5 notes live in [batch-5-demo-slice.md](C:/Users/cchoa/Codex_Sandbox/apps/puzzle-game/docs/batch-5-demo-slice.md).
+- Batch 6 is the next major focus: expand the back half of the campaign and carry the same production quality into Clocktower, Theater, Rooftops, and Attic.
