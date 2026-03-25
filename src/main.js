@@ -32,6 +32,8 @@ const state = {
   boardLayout: [],
   lastRenderTime: performance.now(),
   gamepadState: {},
+  solveBannerTimer: 0,
+  solveBannerShown: false,
 };
 
 const elements = {
@@ -86,6 +88,8 @@ function ensureRoomLoaded(roomId) {
   const snapshot = getRoomProgress(profile, roomId).lastSnapshot;
   engine.loadRoom(roomId, snapshot);
   state.currentRoomId = roomId;
+  state.solveBannerShown = false;
+  state.solveBannerTimer = 0;
   profile.lastRoomId = roomId;
   saveProfile(profile);
 }
@@ -96,6 +100,28 @@ function roomSolved(roomId) {
 
 function isDistrictUnlocked(district) {
   return getPostmarkCount(profile, campaign) >= district.unlockPostmarks;
+}
+
+function getRoomLockReason(room, district, districtUnlocked) {
+  if (!districtUnlocked) {
+    return `Locked: collect ${district.unlockPostmarks} postmarks to unlock ${district.title}.`;
+  }
+  const districtRooms = getRoomsForDistrict(room.districtId);
+  const mandatoryRooms = districtRooms.filter((r) => !r.optional);
+  if (room.optional) {
+    if (mandatoryRooms.length && !mandatoryRooms.some((r) => roomSolved(r.id))) {
+      return `Locked: solve any main room in ${district.title} first.`;
+    }
+    return "Locked.";
+  }
+  const roomIndex = mandatoryRooms.findIndex((r) => r.id === room.id);
+  if (roomIndex > 0) {
+    const prev = mandatoryRooms[roomIndex - 1];
+    if (!roomSolved(prev.id)) {
+      return `Locked: solve "${prev.title}" first.`;
+    }
+  }
+  return "Locked.";
 }
 
 function isRoomUnlocked(room) {
@@ -147,6 +173,8 @@ function onRoomSolved() {
     unlockAchievement(profile, "careful-hands");
   }
   saveProfile(profile);
+  state.solveBannerTimer = 5000;
+  state.solveBannerShown = true;
 }
 
 function performAction(action) {
@@ -201,10 +229,18 @@ function renderDistrictList() {
       button.className = `room-button ${room.id === state.currentRoomId ? "active" : ""} ${roomSolved(room.id) ? "solved" : ""} ${unlockedRoom ? "" : "locked"}`;
       button.disabled = !unlockedRoom;
       button.dataset.roomId = room.id;
+      const solved = roomSolved(room.id);
+      const icon = solved ? "✓ " : (unlockedRoom ? "" : "");
       button.innerHTML = `
-        <span>${room.title}</span>
+        <span>${icon}${room.title}</span>
         <span class="badge ${room.optional ? "optional" : "mandatory"}">${room.optional ? "Side" : "Main"}</span>
       `;
+      if (!unlockedRoom) {
+        const lockReason = getRoomLockReason(room, district, unlocked);
+        if (lockReason) {
+          button.title = lockReason;
+        }
+      }
       roomList.append(button);
     }
 
@@ -406,9 +442,22 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
   ctx.shadowBlur = active ? 18 : 8;
   ctx.shadowOffsetY = active ? 12 : 8;
   ctx.fillStyle = active ? "#fffdf8" : "#f5ebd5";
-  drawRoundedRect(boardX - 18, boardY - 54, boardWidth + 36, boardHeight + 76, 28);
+  const cardX = boardX - 18;
+  const cardY = boardY - 54;
+  const cardW = boardWidth + 36;
+  const cardH = boardHeight + 62;
+  drawRoundedRect(cardX, cardY, cardW, cardH, 28);
   ctx.fill();
   ctx.restore();
+
+  if (active) {
+    ctx.save();
+    ctx.strokeStyle = "#d39b34";
+    ctx.lineWidth = 3;
+    drawRoundedRect(cardX + 1, cardY + 1, cardW - 2, cardH - 2, 27);
+    ctx.stroke();
+    ctx.restore();
+  }
 
   ctx.fillStyle = active ? "#5d301f" : "#7d6853";
   ctx.font = active ? "700 22px Georgia" : "600 18px Georgia";
@@ -428,10 +477,25 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
         ctx.fillRect(screenX + 6, screenY + 6, tileSize - 14, tileSize - 14);
       }
       if (tile === "S") {
+        ctx.fillStyle = "rgba(247, 224, 161, 0.35)";
+        ctx.fillRect(screenX + 8, screenY + 8, tileSize - 18, tileSize - 18);
         ctx.strokeStyle = "#7d3f29";
-        ctx.setLineDash([5, 4]);
-        ctx.strokeRect(screenX + 10, screenY + 10, tileSize - 22, tileSize - 22);
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 4]);
+        ctx.strokeRect(screenX + 8, screenY + 8, tileSize - 18, tileSize - 18);
         ctx.setLineDash([]);
+        ctx.lineWidth = 1;
+        ctx.fillStyle = "#7d3f29";
+        const cx = screenX + tileSize / 2;
+        const cy = screenY + tileSize / 2;
+        const d = 5;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - d);
+        ctx.lineTo(cx + d, cy);
+        ctx.lineTo(cx, cy + d);
+        ctx.lineTo(cx - d, cy);
+        ctx.closePath();
+        ctx.fill();
       }
       if (tile === "~" && !runtime.dynamicState.bridges.has(`${layerIndex}:${x}:${y}`)) {
         ctx.strokeStyle = "#a98964";
@@ -562,7 +626,7 @@ function renderCanvas() {
   const tileSize = Math.min(78, Math.max(54, Math.floor((rect.width - 240) / (width * layerCount + 6))));
   const totalBoardWidth = layerCount * (width * tileSize + 48) - 48;
   const startX = Math.max(56, (rect.width - totalBoardWidth) / 2);
-  const startY = Math.max(140, (rect.height - (height * tileSize + 90)) / 2);
+  const startY = Math.max(150, (rect.height - (height * tileSize + 90)) / 2);
 
   room.layers.forEach((_, index) => {
     const boardX = startX + index * (width * tileSize + 48);
@@ -572,22 +636,74 @@ function renderCanvas() {
 
   ctx.fillStyle = "#5d301f";
   ctx.font = "700 32px Georgia";
-  ctx.fillText(room.title, 56, 72);
+  ctx.fillText(room.title, 56, 52);
   ctx.font = "16px Trebuchet MS";
   ctx.fillStyle = "#7d6853";
-  ctx.fillText(room.blurb, 56, 100);
+  ctx.fillText(room.blurb, 56, 78);
 
-  if (runtime.solved) {
+  if (runtime.solved && state.solveBannerShown) {
+    const bannerAlpha = Math.min(1, state.solveBannerTimer / 800);
+    if (bannerAlpha > 0) {
+      ctx.save();
+      ctx.globalAlpha = bannerAlpha;
+      const bannerW = 340;
+      const bannerH = 110;
+      const bannerX = (rect.width - bannerW) / 2;
+      const bannerY = 16;
+      ctx.fillStyle = "rgba(255, 248, 228, 0.96)";
+      ctx.shadowColor = "rgba(74, 43, 17, 0.22)";
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 6;
+      drawRoundedRect(bannerX, bannerY, bannerW, bannerH, 22);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetY = 0;
+      ctx.fillStyle = "#5d301f";
+      ctx.font = "700 26px Georgia";
+      ctx.textAlign = "center";
+      ctx.fillText("Route Restored", rect.width / 2, bannerY + 36);
+      const roomProgress = getRoomProgress(profile, room.id);
+      const moves = runtime.moveCount;
+      const best = roomProgress.bestMoves;
+      const hints = roomProgress.hintsRevealed || 0;
+      ctx.font = "15px Trebuchet MS";
+      ctx.fillStyle = "#7d6853";
+      const isNewBest = best != null && moves <= best;
+      const bestText = best != null ? `Best: ${best}${isNewBest ? " ★" : ""}` : "";
+      ctx.fillText(`${moves} moves${bestText ? "  ·  " + bestText : ""}  ·  Hints: ${hints}`, rect.width / 2, bannerY + 62);
+      ctx.font = "14px Trebuchet MS";
+      ctx.fillStyle = "#a08870";
+      ctx.fillText("Pick another room from the map.", rect.width / 2, bannerY + 86);
+      ctx.textAlign = "left";
+      ctx.restore();
+    }
+  }
+
+  if (engine.replayState) {
     ctx.save();
-    ctx.fillStyle = "rgba(255, 248, 228, 0.94)";
-    drawRoundedRect(rect.width - 330, 34, 270, 92, 22);
+    ctx.fillStyle = "rgba(255, 248, 228, 0.88)";
+    const replayW = 180;
+    const replayX = (rect.width - replayW) / 2;
+    drawRoundedRect(replayX, 16, replayW, 40, 14);
     ctx.fill();
     ctx.fillStyle = "#5d301f";
-    ctx.font = "700 28px Georgia";
-    ctx.fillText("Route Restored", rect.width - 302, 74);
-    ctx.font = "16px Trebuchet MS";
-    ctx.fillStyle = "#7d6853";
-    ctx.fillText("Pick another room from the map.", rect.width - 302, 102);
+    ctx.font = "600 15px Trebuchet MS";
+    ctx.textAlign = "center";
+    const step = engine.replayState.index;
+    const total = engine.replayState.actions.length;
+    ctx.fillText(`Replaying... ${step}/${total}`, rect.width / 2, 42);
+    ctx.textAlign = "left";
+    ctx.restore();
+  }
+
+  if (!runtime.solved && !engine.replayState) {
+    ctx.save();
+    ctx.font = "12px Trebuchet MS";
+    ctx.fillStyle = "rgba(125, 104, 83, 0.55)";
+    const shortcuts = "Arrows: Move  ·  Tab: Switch Layer  ·  X: Transfer  ·  Z/Y: Undo/Redo  ·  R: Reset  ·  P: Replay";
+    ctx.textAlign = "center";
+    ctx.fillText(shortcuts, rect.width / 2, rect.height - 12);
+    ctx.textAlign = "left";
     ctx.restore();
   }
 }
@@ -829,6 +945,12 @@ function updateLoop(now) {
   const delta = now - state.lastRenderTime;
   state.lastRenderTime = now;
   engine.update(profile.settings.reducedMotion ? Math.max(delta, 260) : delta);
+  if (state.solveBannerTimer > 0) {
+    state.solveBannerTimer = Math.max(0, state.solveBannerTimer - delta);
+    if (state.solveBannerTimer <= 0) {
+      state.solveBannerShown = false;
+    }
+  }
   pollGamepad();
   renderCanvas();
   requestAnimationFrame(updateLoop);

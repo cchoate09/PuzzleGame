@@ -234,6 +234,7 @@ kbd {
 
 .room-button.solved {
   border-color: rgba(95, 132, 81, 0.5);
+  background: linear-gradient(135deg, #eaf3e2, #f0f6ea);
 }
 
 .room-button.locked {
