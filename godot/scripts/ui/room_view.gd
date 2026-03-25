@@ -29,6 +29,9 @@ var reduced_motion := false
 var displayed_active_layer := 0.0
 var enter_progress := 1.0
 var solve_flash := 0.0
+var _idle_time := 0.0
+var stamp_ring_progress := 0.0
+var confetti_particles: Array = []
 
 func _ready() -> void:
 	custom_minimum_size = Vector2(860, 620)
@@ -40,15 +43,41 @@ func set_accessibility(high_contrast_enabled: bool, reduced_motion_enabled: bool
 	if reduced_motion and not runtime.is_empty():
 		displayed_active_layer = float(int(runtime.get("activeLayer", 0)))
 		enter_progress = 1.0
+		_idle_time = 0.0
 	queue_redraw()
 
 func begin_room_intro() -> void:
 	enter_progress = 1.0 if reduced_motion else 0.0
+	_idle_time = 0.0
 	queue_redraw()
 
 func trigger_solve_flash() -> void:
 	solve_flash = 0.45 if reduced_motion else 1.0
+	if not reduced_motion:
+		stamp_ring_progress = 1.0
+		confetti_particles = _make_confetti()
 	queue_redraw()
+
+func _make_confetti() -> Array:
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	var palette := _get_palette(String(room.get("districtId", "")))
+	var colors := [palette["goal"], palette["parcel"], palette["active_strip"], palette["stitch"]]
+	var origin := size * 0.5
+	var result: Array = []
+	for i in range(10):
+		var base_color: Color = colors[i % colors.size()]
+		result.append({
+			"pos": origin + Vector2(rng.randf_range(-100.0, 100.0), rng.randf_range(-70.0, 50.0)),
+			"vel": Vector2(rng.randf_range(-30.0, 30.0), rng.randf_range(-80.0, -20.0)),
+			"rot": rng.randf_range(0.0, TAU),
+			"rot_speed": rng.randf_range(-4.0, 4.0),
+			"alpha": 1.0,
+			"w": rng.randf_range(6.0, 13.0),
+			"h": rng.randf_range(3.0, 6.0),
+			"color": base_color,
+		})
+	return result
 
 func set_room_state(room_data: Dictionary, runtime_state: Dictionary) -> void:
 	var previous_room_id := String(room.get("id", ""))
@@ -78,6 +107,31 @@ func _process(delta: float) -> void:
 		needs_redraw = true
 	if solve_flash > 0.0:
 		solve_flash = maxf(0.0, solve_flash - delta * (5.0 if reduced_motion else 1.9))
+		needs_redraw = true
+
+	if not reduced_motion and not runtime.is_empty():
+		_idle_time += delta
+		needs_redraw = true
+
+	if stamp_ring_progress > 0.0:
+		stamp_ring_progress = maxf(0.0, stamp_ring_progress - delta * 1.6)
+		needs_redraw = true
+
+	if not confetti_particles.is_empty():
+		var i := confetti_particles.size() - 1
+		while i >= 0:
+			var p: Dictionary = confetti_particles[i]
+			var pos: Vector2 = p["pos"]
+			var vel: Vector2 = p["vel"]
+			pos += vel * delta
+			vel.y += 110.0 * delta
+			p["pos"] = pos
+			p["vel"] = vel
+			p["rot"] = float(p["rot"]) + float(p["rot_speed"]) * delta
+			p["alpha"] = maxf(0.0, float(p["alpha"]) - delta * 1.2)
+			if float(p["alpha"]) <= 0.0:
+				confetti_particles.remove_at(i)
+			i -= 1
 		needs_redraw = true
 
 	if needs_redraw:
@@ -114,7 +168,10 @@ func _draw() -> void:
 		var focus := clampf(1.0 - absf(displayed_active_layer - float(layer_index)), 0.0, 1.0)
 		var lift := lerpf(10.0, -24.0, focus)
 		var intro_offset := (1.0 - enter_progress) * (30.0 + float(layer_index) * 6.0)
-		var board_origin: Vector2 = Vector2(start_x + layer_index * (board_width + board_gap), start_y + lift + intro_offset)
+		var idle_y := 0.0
+		if not reduced_motion:
+			idle_y = sin(_idle_time * 0.8 + float(layer_index) * 1.2) * 1.4 * (1.0 - focus)
+		var board_origin: Vector2 = Vector2(start_x + layer_index * (board_width + board_gap), start_y + lift + intro_offset + idle_y)
 		board_data.append({
 			"index": layer_index,
 			"origin": board_origin,
@@ -125,6 +182,19 @@ func _draw() -> void:
 	_draw_stitch_threads(board_data, palette)
 	if solve_flash > 0.0:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(palette["goal"].r, palette["goal"].g, palette["goal"].b, solve_flash * 0.12), true)
+	if stamp_ring_progress > 0.0:
+		var ring_t := 1.0 - stamp_ring_progress
+		var ring_radius := ring_t * tile_size * 2.8
+		var ring_alpha := stamp_ring_progress * 0.7
+		draw_arc(size * 0.5, ring_radius, 0.0, TAU, 48, Color(palette["goal"].r, palette["goal"].g, palette["goal"].b, ring_alpha), 4.0)
+	for p in confetti_particles:
+		var hw: float = float(p["w"]) * 0.5
+		var hh: float = float(p["h"]) * 0.5
+		var t := Transform2D(float(p["rot"]), p["pos"])
+		var verts := PackedVector2Array([t * Vector2(-hw, -hh), t * Vector2(hw, -hh), t * Vector2(hw, hh), t * Vector2(-hw, hh)])
+		var base_col: Color = p["color"]
+		var col := Color(base_col.r, base_col.g, base_col.b, float(p["alpha"]) * 0.88)
+		draw_colored_polygon(verts, PackedColorArray([col, col, col, col]))
 
 func _draw_backdrop(palette: Dictionary) -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), palette["desk"], true)
@@ -332,9 +402,16 @@ func _draw_parcel(center: Vector2, tile_size: float, palette: Dictionary) -> voi
 	_draw_panel(box_rect, palette["parcel"], Color("8a4a31"), 8, 1)
 	draw_line(Vector2(center.x, box_rect.position.y + 4), Vector2(center.x, box_rect.position.y + box_rect.size.y - 4), Color("fff2dc"), 2.0)
 	draw_line(Vector2(box_rect.position.x + 4, center.y), Vector2(box_rect.position.x + box_rect.size.x - 4, center.y), Color("fff2dc"), 2.0)
+	# String bow on top — two tails meeting at a knot
+	var knot := Vector2(center.x, box_rect.position.y + 2.0)
+	draw_line(knot, knot + Vector2(-tile_size * 0.1, -tile_size * 0.08), Color("8a4a31"), 1.5)
+	draw_line(knot, knot + Vector2(tile_size * 0.1, -tile_size * 0.08), Color("8a4a31"), 1.5)
+	draw_circle(knot, tile_size * 0.04, Color("6b3520"))
 	draw_circle(center + Vector2(0, tile_size * 0.22), tile_size * 0.06, Color(0, 0, 0, 0.08))
 
 func _draw_projector(center: Vector2, tile_size: float, palette: Dictionary) -> void:
+	# Glow halo behind body (drawn first so body renders on top)
+	draw_circle(center + Vector2(tile_size * 0.07, 0), tile_size * 0.22, Color(palette["goal"].r, palette["goal"].g, palette["goal"].b, 0.1))
 	draw_polygon(PackedVector2Array([
 		center + Vector2(-tile_size * 0.1, tile_size * 0.1),
 		center + Vector2(tile_size * 0.18, tile_size * 0.02),
@@ -344,16 +421,29 @@ func _draw_projector(center: Vector2, tile_size: float, palette: Dictionary) -> 
 	_draw_panel(body_rect, palette["projector"], Color("7c6429"), 8, 1)
 	draw_circle(center + Vector2(tile_size * 0.07, 0), tile_size * 0.11, Color("f8edc0"))
 	draw_line(center + Vector2(-tile_size * 0.04, tile_size * 0.16), center + Vector2(tile_size * 0.12, tile_size * 0.16), Color("7c6429"), 2.0)
+	# Light rays from cone tip
+	var ray_origin := center + Vector2(tile_size * 0.18, tile_size * 0.1)
+	draw_line(ray_origin, ray_origin + Vector2(tile_size * 0.14, -tile_size * 0.12), Color(palette["goal"].r, palette["goal"].g, palette["goal"].b, 0.5), 1.5)
+	draw_line(ray_origin, ray_origin + Vector2(tile_size * 0.15, tile_size * 0.08), Color(palette["goal"].r, palette["goal"].g, palette["goal"].b, 0.5), 1.5)
 
 func _draw_echo(center: Vector2, tile_size: float, palette: Dictionary) -> void:
-	draw_circle(center, tile_size * 0.24, Color(palette["echo"].r, palette["echo"].g, palette["echo"].b, 0.62))
-	draw_arc(center, tile_size * 0.18, 0, TAU, 20, Color("ecf3ff"), 2.0)
-	draw_circle(center + Vector2(tile_size * 0.08, -tile_size * 0.06), tile_size * 0.04, Color("ecf3ff"))
+	# Outer ring as primary shape — suggests ripple/echo delay
+	draw_arc(center, tile_size * 0.26, 0.0, TAU, 32, Color(palette["echo"].r, palette["echo"].g, palette["echo"].b, 0.88), 3.0)
+	# Subtle fill
+	draw_circle(center, tile_size * 0.22, Color(palette["echo"].r, palette["echo"].g, palette["echo"].b, 0.20))
+	# Inner ring (secondary pulse)
+	draw_arc(center, tile_size * 0.14, 0.0, TAU, 20, Color(palette["echo"].r, palette["echo"].g, palette["echo"].b, 0.55), 1.5)
+	# Center dot
+	draw_circle(center, tile_size * 0.04, Color("ecf3ff"))
 
 func _draw_shadow(center: Vector2, tile_size: float, palette: Dictionary) -> void:
-	draw_circle(center + Vector2(0, tile_size * 0.05), tile_size * 0.26, Color(palette["shadow"].r, palette["shadow"].g, palette["shadow"].b, 0.9))
-	draw_circle(center + Vector2(-tile_size * 0.1, -tile_size * 0.12), tile_size * 0.1, Color(palette["shadow"].r, palette["shadow"].g, palette["shadow"].b, 0.85))
-	draw_circle(center + Vector2(tile_size * 0.08, -tile_size * 0.12), tile_size * 0.08, Color(palette["shadow"].r, palette["shadow"].g, palette["shadow"].b, 0.85))
+	# Body silhouette — clearer person shape
+	draw_circle(center + Vector2(0, tile_size * 0.05), tile_size * 0.24, Color(palette["shadow"].r, palette["shadow"].g, palette["shadow"].b, 0.90))
+	# Head
+	draw_circle(center + Vector2(0, -tile_size * 0.14), tile_size * 0.12, Color(palette["shadow"].r, palette["shadow"].g, palette["shadow"].b, 0.86))
+	# Mirror axis indicators — faint inward lines at sides suggest mirrored movement
+	draw_line(center + Vector2(-tile_size * 0.28, 0), center + Vector2(-tile_size * 0.18, 0), Color(palette["shadow"].r, palette["shadow"].g, palette["shadow"].b, 0.28), 1.5)
+	draw_line(center + Vector2(tile_size * 0.28, 0), center + Vector2(tile_size * 0.18, 0), Color(palette["shadow"].r, palette["shadow"].g, palette["shadow"].b, 0.28), 1.5)
 
 func _draw_player(layer_index: int, board_origin: Vector2, tile_size: float, palette: Dictionary) -> void:
 	var player: Dictionary = runtime.get("player", {})

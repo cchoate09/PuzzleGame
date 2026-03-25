@@ -41,6 +41,8 @@ static func create_default_profile() -> Dictionary:
 			"highContrast": false,
 			"reducedMotion": false,
 			"fontScale": 1.0,
+			"masterVolume": 0.0,
+			"sfxVolume": 0.0,
 			"controls": InputBindings.create_default_controls(),
 		},
 	}
@@ -83,6 +85,8 @@ static func hydrate_profile(raw: Variant) -> Dictionary:
 			"highContrast": false,
 			"reducedMotion": false,
 			"fontScale": 1.0,
+			"masterVolume": 0.0,
+			"sfxVolume": 0.0,
 			"controls": InputBindings.create_default_controls(),
 		},
 	}
@@ -103,6 +107,8 @@ static func hydrate_profile(raw: Variant) -> Dictionary:
 	settings["highContrast"] = raw_settings.get("highContrast", false)
 	settings["reducedMotion"] = raw_settings.get("reducedMotion", false)
 	settings["fontScale"] = raw_settings.get("fontScale", 1.0)
+	settings["masterVolume"] = float(raw_settings.get("masterVolume", 0.0))
+	settings["sfxVolume"] = float(raw_settings.get("sfxVolume", 0.0))
 	settings["controls"] = InputBindings.hydrate_controls(raw_settings.get("controls", {}))
 
 	var raw_steam: Dictionary = raw_dict.get("steam", {})

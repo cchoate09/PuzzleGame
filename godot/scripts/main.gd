@@ -72,6 +72,8 @@ var setting_contrast_button: CheckButton
 var setting_motion_button: CheckButton
 var setting_font_scale_slider: HSlider
 var setting_font_scale_value: Label
+var setting_master_volume_slider: HSlider
+var setting_sfx_volume_slider: HSlider
 var remap_rows: Dictionary = {}
 var steam_status_label: Label
 var save_status_label: Label
@@ -88,6 +90,8 @@ var toast_label: Label
 var solve_panel: PanelContainer
 var solve_title_label: Label
 var solve_subtitle_label: Label
+var solve_record_label: Label
+var solve_replay_button: Button
 var demo_panel: PanelContainer
 var demo_title_label: Label
 var demo_body_label: Label
@@ -387,6 +391,22 @@ func _build_ui() -> void:
 	solve_subtitle_label.text = "Pick another room from the map."
 	solve_body.add_child(solve_subtitle_label)
 
+	var solve_divider := ColorRect.new()
+	solve_divider.custom_minimum_size = Vector2(0, 1)
+	solve_divider.color = Color("d3a74b")
+	solve_divider.modulate.a = 0.4
+	solve_body.add_child(solve_divider)
+
+	solve_record_label = _create_body_label(13, ACCENT_MUTED)
+	solve_record_label.text = ""
+	solve_body.add_child(solve_record_label)
+
+	solve_replay_button = Button.new()
+	solve_replay_button.text = "Replay Solution"
+	solve_replay_button.pressed.connect(_play_replay)
+	_style_button(solve_replay_button, Color("eaf0e2"), Color("a9c089"), ACCENT_INK)
+	solve_body.add_child(solve_replay_button)
+
 	demo_panel = PanelContainer.new()
 	demo_panel.set_anchors_preset(Control.PRESET_CENTER)
 	demo_panel.custom_minimum_size = Vector2(440, 0)
@@ -549,6 +569,40 @@ func _build_ui() -> void:
 	setting_font_scale_value = _create_body_label(13, ACCENT_MUTED)
 	setting_font_scale_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	font_row.add_child(setting_font_scale_value)
+
+	var master_volume_row := HBoxContainer.new()
+	master_volume_row.add_theme_constant_override("separation", 10)
+	settings_card["body"].add_child(master_volume_row)
+
+	var master_volume_label := _create_body_label(14, ACCENT_INK)
+	master_volume_label.text = "Master Vol"
+	master_volume_row.add_child(master_volume_label)
+
+	setting_master_volume_slider = HSlider.new()
+	setting_master_volume_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	setting_master_volume_slider.min_value = -30.0
+	setting_master_volume_slider.max_value = 0.0
+	setting_master_volume_slider.step = 1.0
+	setting_master_volume_slider.focus_mode = Control.FOCUS_ALL
+	setting_master_volume_slider.value_changed.connect(_handle_master_volume_changed)
+	master_volume_row.add_child(setting_master_volume_slider)
+
+	var sfx_volume_row := HBoxContainer.new()
+	sfx_volume_row.add_theme_constant_override("separation", 10)
+	settings_card["body"].add_child(sfx_volume_row)
+
+	var sfx_volume_label := _create_body_label(14, ACCENT_INK)
+	sfx_volume_label.text = "SFX Vol"
+	sfx_volume_row.add_child(sfx_volume_label)
+
+	setting_sfx_volume_slider = HSlider.new()
+	setting_sfx_volume_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	setting_sfx_volume_slider.min_value = -30.0
+	setting_sfx_volume_slider.max_value = 0.0
+	setting_sfx_volume_slider.step = 1.0
+	setting_sfx_volume_slider.focus_mode = Control.FOCUS_ALL
+	setting_sfx_volume_slider.value_changed.connect(_handle_sfx_volume_changed)
+	sfx_volume_row.add_child(setting_sfx_volume_slider)
 
 	input_mode_label = _create_body_label(13, ACCENT_RUST)
 	settings_card["body"].add_child(input_mode_label)
@@ -1570,6 +1624,14 @@ func _apply_settings_ui() -> void:
 		setting_font_scale_slider.set_block_signals(false)
 	if setting_font_scale_value != null:
 		setting_font_scale_value.text = "%d%%" % int(round(float(profile.get("settings", {}).get("fontScale", 1.0)) * 100.0))
+	if setting_master_volume_slider != null:
+		setting_master_volume_slider.set_block_signals(true)
+		setting_master_volume_slider.value = float(profile.get("settings", {}).get("masterVolume", 0.0))
+		setting_master_volume_slider.set_block_signals(false)
+	if setting_sfx_volume_slider != null:
+		setting_sfx_volume_slider.set_block_signals(true)
+		setting_sfx_volume_slider.value = float(profile.get("settings", {}).get("sfxVolume", 0.0))
+		setting_sfx_volume_slider.set_block_signals(false)
 
 func _apply_profile_settings() -> void:
 	current_font_scale = clampf(float(profile.get("settings", {}).get("fontScale", 1.0)), 0.9, 1.35)
@@ -1584,6 +1646,9 @@ func _apply_profile_settings() -> void:
 		bool(profile.get("settings", {}).get("highContrast", false)),
 		bool(profile.get("settings", {}).get("reducedMotion", false))
 	)
+	if audio_manager != null:
+		audio_manager.set_master_volume_db(float(profile.get("settings", {}).get("masterVolume", 0.0)))
+		audio_manager.set_sfx_volume_db(float(profile.get("settings", {}).get("sfxVolume", 0.0)))
 	_apply_settings_ui()
 
 func _sync_steam_state() -> void:
@@ -1612,6 +1677,18 @@ func _handle_font_scale_changed(value: float) -> void:
 	SaveRuntime.save_profile(profile)
 	_apply_profile_settings()
 	_refresh_ui()
+
+func _handle_master_volume_changed(db: float) -> void:
+	profile.get("settings", {})["masterVolume"] = db
+	SaveRuntime.save_profile(profile)
+	if audio_manager != null:
+		audio_manager.set_master_volume_db(db)
+
+func _handle_sfx_volume_changed(db: float) -> void:
+	profile.get("settings", {})["sfxVolume"] = db
+	SaveRuntime.save_profile(profile)
+	if audio_manager != null:
+		audio_manager.set_sfx_volume_db(db)
 
 func _apply_district_palette(district_id: String) -> void:
 	var accent := ACCENT_RUST
@@ -1757,10 +1834,25 @@ func _show_toast(message: String) -> void:
 	toast_time_left = 3.2 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 2.2
 
 func _show_solve_banner(room: Dictionary) -> void:
+	var reduced_motion := bool(profile.get("settings", {}).get("reducedMotion", false))
 	solve_title_label.text = "Route Restored"
 	solve_subtitle_label.text = "%s is back in circulation." % room.get("title", "The route")
+
+	var room_id: String = String(room.get("id", ""))
+	var progress: Dictionary = SaveRuntime.get_room_progress(profile, room_id)
+	var move_count: int = int(engine.get_runtime().get("moveCount", 0))
+	var best_moves = progress.get("bestMoves", null)
+	var hints_revealed: int = int(progress.get("hintsRevealed", 0))
+
+	var move_text := "Solved in %d move%s" % [move_count, "s" if move_count != 1 else ""]
+	if best_moves != null and int(best_moves) == move_count:
+		move_text += "  \u2022  New best!"
+	var hint_text := "No hints used" if hints_revealed == 0 else "%d hint%s used" % [hints_revealed, "s" if hints_revealed != 1 else ""]
+	solve_record_label.text = "%s\n%s" % [move_text, hint_text]
+
 	solve_panel.visible = true
-	solve_time_left = 2.2 if not bool(profile.get("settings", {}).get("reducedMotion", false)) else 1.0
+	solve_panel.modulate.a = 0.0
+	solve_time_left = 4.0 if not reduced_motion else 2.5
 	if audio_manager != null:
 		audio_manager.play_event("solve")
 

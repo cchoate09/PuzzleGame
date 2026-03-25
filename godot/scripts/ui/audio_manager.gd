@@ -2,12 +2,19 @@ class_name AudioManager
 extends Node
 
 const MIX_RATE := 44100
-const MASTER_VOLUME_DB := -8.0
+const SFX_BUS_NAME := &"SFX"
+const SFX_DEFAULT_DB := -8.0
 
 var stream_cache: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if AudioServer.get_bus_index(SFX_BUS_NAME) == -1:
+		var sfx_idx := AudioServer.bus_count
+		AudioServer.add_bus(sfx_idx)
+		AudioServer.set_bus_name(sfx_idx, SFX_BUS_NAME)
+		AudioServer.set_bus_send(sfx_idx, &"Master")
+		AudioServer.set_bus_volume_db(sfx_idx, SFX_DEFAULT_DB)
 
 func _exit_tree() -> void:
 	for child in get_children():
@@ -24,12 +31,19 @@ func play_event(event_name: String) -> void:
 		return
 
 	var player := AudioStreamPlayer.new()
-	player.bus = &"Master"
-	player.volume_db = MASTER_VOLUME_DB
+	player.bus = SFX_BUS_NAME
 	player.stream = stream
 	player.finished.connect(player.queue_free)
 	add_child(player)
 	player.play()
+
+func set_master_volume_db(db: float) -> void:
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(&"Master"), db)
+
+func set_sfx_volume_db(db: float) -> void:
+	var idx := AudioServer.get_bus_index(SFX_BUS_NAME)
+	if idx != -1:
+		AudioServer.set_bus_volume_db(idx, db)
 
 func _get_stream(event_name: String) -> AudioStreamWAV:
 	if not stream_cache.has(event_name):
