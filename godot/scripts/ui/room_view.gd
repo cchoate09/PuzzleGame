@@ -26,6 +26,7 @@ var room: Dictionary = {}
 var runtime: Dictionary = {}
 var high_contrast := false
 var reduced_motion := false
+var colorblind_mode := "none"
 var displayed_active_layer := 0.0
 var enter_progress := 1.0
 var solve_flash := 0.0
@@ -36,6 +37,10 @@ var confetti_particles: Array = []
 func _ready() -> void:
 	custom_minimum_size = Vector2(860, 620)
 	set_process(true)
+
+func set_colorblind_mode(mode: String) -> void:
+	colorblind_mode = mode
+	queue_redraw()
 
 func set_accessibility(high_contrast_enabled: bool, reduced_motion_enabled: bool) -> void:
 	high_contrast = high_contrast_enabled
@@ -194,7 +199,7 @@ func _draw() -> void:
 		var verts := PackedVector2Array([t * Vector2(-hw, -hh), t * Vector2(hw, -hh), t * Vector2(hw, hh), t * Vector2(-hw, hh)])
 		var base_col: Color = p["color"]
 		var col := Color(base_col.r, base_col.g, base_col.b, float(p["alpha"]) * 0.88)
-		draw_colored_polygon(verts, PackedColorArray([col, col, col, col]))
+		draw_colored_polygon(verts, col)
 
 func _draw_backdrop(palette: Dictionary) -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), palette["desk"], true)
@@ -566,4 +571,27 @@ func _get_palette(district_id: String) -> Dictionary:
 		palette["shadow"] = Color("111111")
 		palette["routing"] = Color("b1411e")
 		palette["grid_line"] = Color("7d6951")
+
+	if colorblind_mode == "deuteranopia":
+		palette["player"] = Color("0072b2")
+		palette["parcel"] = Color("d55e00")
+		palette["echo"] = Color("cc79a7")
+		palette["shadow"] = Color("222222")
+		palette["goal"] = Color("f0e442")
+		palette["bridge"] = Color("009e73")
+	elif colorblind_mode == "protanopia":
+		palette["player"] = Color("0072b2")
+		palette["parcel"] = Color("e69f00")
+		palette["echo"] = Color("cc79a7")
+		palette["shadow"] = Color("222222")
+		palette["goal"] = Color("f0e442")
+		palette["bridge"] = Color("56b4e9")
+	elif colorblind_mode == "tritanopia":
+		palette["player"] = Color("d55e00")
+		palette["parcel"] = Color("0072b2")
+		palette["echo"] = Color("cc79a7")
+		palette["shadow"] = Color("222222")
+		palette["goal"] = Color("e69f00")
+		palette["bridge"] = Color("009e73")
+
 	return palette

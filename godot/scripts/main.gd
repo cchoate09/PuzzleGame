@@ -72,6 +72,7 @@ var setting_contrast_button: CheckButton
 var setting_motion_button: CheckButton
 var setting_font_scale_slider: HSlider
 var setting_font_scale_value: Label
+var setting_colorblind_option: OptionButton
 var setting_master_volume_slider: HSlider
 var setting_sfx_volume_slider: HSlider
 var remap_rows: Dictionary = {}
@@ -96,6 +97,8 @@ var demo_panel: PanelContainer
 var demo_title_label: Label
 var demo_body_label: Label
 var demo_teaser_label: Label
+var pause_panel: PanelContainer
+var pause_resume_button: Button
 var transition_overlay: ColorRect
 var card_title_labels: Array = []
 var scalable_controls: Array = []
@@ -169,6 +172,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		_toggle_developer_tools()
 		return
 	if not remap_pending_action.is_empty():
+		return
+	if event.is_action_pressed("ui_cancel"):
+		_toggle_pause()
 		return
 	var focus_owner: Control = get_viewport().gui_get_focus_owner()
 	var ui_focus_locked: bool = focus_owner != null and focus_owner != room_view
@@ -549,6 +555,25 @@ func _build_ui() -> void:
 	setting_motion_button.toggled.connect(_handle_reduced_motion_toggled)
 	settings_card["body"].add_child(setting_motion_button)
 
+	var colorblind_row := HBoxContainer.new()
+	colorblind_row.add_theme_constant_override("separation", 10)
+	settings_card["body"].add_child(colorblind_row)
+
+	var colorblind_label := _create_body_label(14, ACCENT_INK)
+	colorblind_label.text = "Colorblind Mode"
+	colorblind_row.add_child(colorblind_label)
+
+	setting_colorblind_option = OptionButton.new()
+	setting_colorblind_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	setting_colorblind_option.focus_mode = Control.FOCUS_ALL
+	setting_colorblind_option.add_item("None", 0)
+	setting_colorblind_option.add_item("Deuteranopia", 1)
+	setting_colorblind_option.add_item("Protanopia", 2)
+	setting_colorblind_option.add_item("Tritanopia", 3)
+	_register_scaled_font(setting_colorblind_option, 13)
+	setting_colorblind_option.item_selected.connect(_handle_colorblind_mode_changed)
+	colorblind_row.add_child(setting_colorblind_option)
+
 	var font_row := HBoxContainer.new()
 	font_row.add_theme_constant_override("separation", 10)
 	settings_card["body"].add_child(font_row)
@@ -618,6 +643,14 @@ func _build_ui() -> void:
 	_style_button(reset_controls_button, Color("f0e7d4"), CARD_BORDER, ACCENT_INK)
 	settings_card["body"].add_child(reset_controls_button)
 
+	var accessibility_card: Dictionary = _create_card("Accessibility")
+	side_column.add_child(accessibility_card["panel"])
+
+	var accessibility_info := _create_body_label(13, ACCENT_MUTED)
+	accessibility_info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	accessibility_info.text = "High Contrast: Increases color separation for all game elements.\n\nReduced Motion: Disables animations; transitions play instantly.\n\nFont Scale: Adjusts text size throughout the game.\n\nColorblind Modes: Optimized color palettes for common color vision deficiencies (deuteranopia, protanopia, tritanopia).\n\nVolume Controls: Independent master and SFX volume sliders.\n\nKeyboard Remapping: All controls can be rebound in the Controls section above."
+	accessibility_card["body"].add_child(accessibility_info)
+
 	var support_card: Dictionary = _create_card("Steam And Saves")
 	side_column.add_child(support_card["panel"])
 
@@ -665,6 +698,55 @@ func _build_ui() -> void:
 	_register_scaled_font(footer_label, 13)
 	footer_label.add_theme_color_override("font_color", ACCENT_MUTED)
 	layout.add_child(footer_label)
+
+	pause_panel = PanelContainer.new()
+	pause_panel.set_anchors_preset(Control.PRESET_CENTER)
+	pause_panel.custom_minimum_size = Vector2(280, 0)
+	pause_panel.position = Vector2(-140, -120)
+	pause_panel.visible = false
+	pause_panel.z_index = 50
+	pause_panel.add_theme_stylebox_override("panel", _make_card_style(Color("fff8ef"), Color("d6bd96"), 24))
+	add_child(pause_panel)
+
+	var pause_margin := MarginContainer.new()
+	pause_margin.add_theme_constant_override("margin_left", 20)
+	pause_margin.add_theme_constant_override("margin_top", 18)
+	pause_margin.add_theme_constant_override("margin_right", 20)
+	pause_margin.add_theme_constant_override("margin_bottom", 18)
+	pause_panel.add_child(pause_margin)
+
+	var pause_body := VBoxContainer.new()
+	pause_body.add_theme_constant_override("separation", 8)
+	pause_margin.add_child(pause_body)
+
+	var pause_title := _create_body_label(16, ACCENT_INK)
+	pause_title.text = "Paused"
+	pause_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pause_body.add_child(pause_title)
+
+	pause_resume_button = Button.new()
+	pause_resume_button.text = "Resume"
+	pause_resume_button.pressed.connect(_toggle_pause)
+	_style_button(pause_resume_button, Color("f0e7d4"), CARD_BORDER, ACCENT_INK)
+	pause_body.add_child(pause_resume_button)
+
+	var pause_reset_button := Button.new()
+	pause_reset_button.text = "Reset Room"
+	pause_reset_button.pressed.connect(func(): _toggle_pause(); _dispatch_room_action({"type": "reset"}))
+	_style_button(pause_reset_button, Color("f0e7d4"), CARD_BORDER, ACCENT_INK)
+	pause_body.add_child(pause_reset_button)
+
+	var pause_hint_button := Button.new()
+	pause_hint_button.text = "Hints"
+	pause_hint_button.pressed.connect(func(): _toggle_pause(); _pause_reveal_hint())
+	_style_button(pause_hint_button, Color("f0e7d4"), CARD_BORDER, ACCENT_INK)
+	pause_body.add_child(pause_hint_button)
+
+	var pause_map_button := Button.new()
+	pause_map_button.text = "Back to Map"
+	pause_map_button.pressed.connect(func(): _toggle_pause(); _scroll_to_route_list())
+	_style_button(pause_map_button, Color("f0e7d4"), CARD_BORDER, ACCENT_INK)
+	pause_body.add_child(pause_map_button)
 
 	remap_overlay = PanelContainer.new()
 	remap_overlay.set_anchors_preset(Control.PRESET_CENTER)
@@ -1362,6 +1444,7 @@ func _refresh_ui() -> void:
 		bool(profile.get("settings", {}).get("highContrast", false)),
 		bool(profile.get("settings", {}).get("reducedMotion", false))
 	)
+	room_view.set_colorblind_mode(String(profile.get("settings", {}).get("colorblindMode", "none")))
 	room_view.set_room_state(room, runtime)
 
 	var district_id: String = String(room.get("districtId", ""))
@@ -1562,12 +1645,28 @@ func _build_notes_text(room: Dictionary, district: Dictionary, player: Dictionar
 		var intro_beat: Dictionary = room.get("intro", [])[0]
 		intro_line = "%s: %s" % [intro_beat.get("speaker", "Guide"), intro_beat.get("text", "")]
 	var lines: Array = [intro_line, String(district.get("journalBody", "The town still reads like folded paper."))]
-	var hidden_entries := _get_unlocked_journal_entries_for_district(String(room.get("districtId", "")))
-	if not hidden_entries.is_empty():
+	var current_district_id := String(room.get("districtId", ""))
+	var hidden_entries := _get_unlocked_journal_entries_for_district(current_district_id)
+	var unlocked_ids: Array = profile.get("journalEntriesUnlocked", [])
+	var total_district_entries := 0
+	var unlocked_district_count := 0
+	for entry in _get_journal_entries():
+		var entry_district := String(entry.get("districtId", ""))
+		if entry_district == current_district_id or (entry_district.is_empty() and current_district_id.is_empty()):
+			total_district_entries += 1
+			if unlocked_ids.has(String(entry.get("id", ""))):
+				unlocked_district_count += 1
+	if not hidden_entries.is_empty() or total_district_entries > 0:
 		var hidden_lines: Array = []
 		for entry in hidden_entries:
 			hidden_lines.append("%s: %s" % [entry.get("title", "Margin Note"), entry.get("body", "")])
-		lines.append("Hidden threads:\n%s" % "\n\n".join(hidden_lines))
+		var undiscovered := total_district_entries - unlocked_district_count
+		for i in range(undiscovered):
+			hidden_lines.append("??? — A hidden thread awaits...")
+		if total_district_entries > 0:
+			hidden_lines.append("Journal entries: %d of %d discovered" % [unlocked_district_count, total_district_entries])
+		if not hidden_lines.is_empty():
+			lines.append("Hidden threads:\n%s" % "\n\n".join(hidden_lines))
 	lines.append("Courier position: (%d, %d), facing %s." % [
 		int(player.get("x", 0)),
 		int(player.get("y", 0)),
@@ -1618,6 +1717,12 @@ func _apply_settings_ui() -> void:
 		setting_motion_button.set_block_signals(true)
 		setting_motion_button.button_pressed = bool(profile.get("settings", {}).get("reducedMotion", false))
 		setting_motion_button.set_block_signals(false)
+	if setting_colorblind_option != null:
+		setting_colorblind_option.set_block_signals(true)
+		var cb_mode := String(profile.get("settings", {}).get("colorblindMode", "none"))
+		var cb_modes: Array = ["none", "deuteranopia", "protanopia", "tritanopia"]
+		setting_colorblind_option.selected = cb_modes.find(cb_mode) if cb_modes.has(cb_mode) else 0
+		setting_colorblind_option.set_block_signals(false)
 	if setting_font_scale_slider != null:
 		setting_font_scale_slider.set_block_signals(true)
 		setting_font_scale_slider.value = float(profile.get("settings", {}).get("fontScale", 1.0))
@@ -1646,6 +1751,7 @@ func _apply_profile_settings() -> void:
 		bool(profile.get("settings", {}).get("highContrast", false)),
 		bool(profile.get("settings", {}).get("reducedMotion", false))
 	)
+	room_view.set_colorblind_mode(String(profile.get("settings", {}).get("colorblindMode", "none")))
 	if audio_manager != null:
 		audio_manager.set_master_volume_db(float(profile.get("settings", {}).get("masterVolume", 0.0)))
 		audio_manager.set_sfx_volume_db(float(profile.get("settings", {}).get("sfxVolume", 0.0)))
@@ -1689,6 +1795,34 @@ func _handle_sfx_volume_changed(db: float) -> void:
 	SaveRuntime.save_profile(profile)
 	if audio_manager != null:
 		audio_manager.set_sfx_volume_db(db)
+
+func _toggle_pause() -> void:
+	if pause_panel == null:
+		return
+	pause_panel.visible = not pause_panel.visible
+	if pause_panel.visible and pause_resume_button != null:
+		pause_resume_button.grab_focus()
+	elif not pause_panel.visible:
+		room_view.grab_focus()
+
+func _scroll_to_route_list() -> void:
+	if district_list != null and district_list.get_child_count() > 0:
+		district_list.get_child(0).grab_focus()
+
+func _pause_reveal_hint() -> void:
+	var room: Dictionary = engine.get_room()
+	var room_id := String(room.get("id", ""))
+	var progress := SaveRuntime.get_room_progress(profile, room_id)
+	var next_tier := int(progress.get("hintsRevealed", 0)) + 1
+	_handle_hint_request(next_tier)
+
+func _handle_colorblind_mode_changed(index: int) -> void:
+	var modes: Array = ["none", "deuteranopia", "protanopia", "tritanopia"]
+	var mode: String = String(modes[clampi(index, 0, modes.size() - 1)])
+	profile.get("settings", {})["colorblindMode"] = mode
+	SaveRuntime.save_profile(profile)
+	_apply_profile_settings()
+	_refresh_ui()
 
 func _apply_district_palette(district_id: String) -> void:
 	var accent := ACCENT_RUST
@@ -1782,22 +1916,35 @@ func _rebuild_route_list(current_room_id: String) -> void:
 			var room_id := String(room.get("id", ""))
 			var room_unlocked := unlocked and _is_room_unlocked(room)
 			var room_solved := _room_solved(room_id)
-			var room_role := "Secret" if room.get("secret", false) else ("Side" if room.get("optional", false) else "Main")
-			var room_state := "Solved" if room_solved else ("Locked" if not room_unlocked else "Open")
+			var is_secret: bool = room.get("secret", false)
+			var is_optional: bool = room.get("optional", false)
 			var room_lock := _get_lock_label(room.get("requiresRooms", []))
-			button.text = "[%s | %s] %s%s" % [
-				room_role,
-				room_state,
-				room.get("title", room_id),
-				"" if room_lock.is_empty() or room_unlocked else " (%s)" % room_lock,
-			]
+
+			var icon := ""
+			if is_secret:
+				icon = "★ " if room_solved else "☆ "
+			elif is_optional:
+				icon = "◆ " if room_solved else "◇ "
+			else:
+				icon = "● " if room_solved else ("◌ " if not room_unlocked else "○ ")
+			var suffix := ""
+			if room_solved:
+				suffix = " ✓"
+			elif not room_unlocked and not room_lock.is_empty():
+				suffix = " (%s)" % room_lock
+
+			button.text = "%s%s%s" % [icon, room.get("title", room_id), suffix]
 			button.disabled = not room_unlocked
 			button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-			var fill := Color("eef3df") if room_solved else Color("f4ead1")
-			if room_id == current_room_id:
-				fill = Color("f7eed6")
+			var fill: Color
 			if not room_unlocked:
 				fill = Color("e9decd")
+			elif room_id == current_room_id:
+				fill = Color("f7eed6")
+			elif room_solved:
+				fill = Color("e8f0d6") if (is_optional or is_secret) else Color("eef3df")
+			else:
+				fill = Color("f5e8d0") if (is_optional or is_secret) else Color("f4ead1")
 			var border := ACCENT_GOLD if room_id == current_room_id else (ACCENT_GREEN if room_solved else CARD_BORDER)
 			_style_button(button, fill, border, ACCENT_INK)
 			button.pressed.connect(_load_room.bind(room_id, true))

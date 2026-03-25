@@ -40,6 +40,7 @@ static func create_default_profile() -> Dictionary:
 		"settings": {
 			"highContrast": false,
 			"reducedMotion": false,
+			"colorblindMode": "none",
 			"fontScale": 1.0,
 			"masterVolume": 0.0,
 			"sfxVolume": 0.0,
@@ -84,6 +85,7 @@ static func hydrate_profile(raw: Variant) -> Dictionary:
 		"settings": {
 			"highContrast": false,
 			"reducedMotion": false,
+			"colorblindMode": "none",
 			"fontScale": 1.0,
 			"masterVolume": 0.0,
 			"sfxVolume": 0.0,
@@ -106,6 +108,7 @@ static func hydrate_profile(raw: Variant) -> Dictionary:
 	var settings: Dictionary = profile["settings"]
 	settings["highContrast"] = raw_settings.get("highContrast", false)
 	settings["reducedMotion"] = raw_settings.get("reducedMotion", false)
+	settings["colorblindMode"] = String(raw_settings.get("colorblindMode", "none"))
 	settings["fontScale"] = raw_settings.get("fontScale", 1.0)
 	settings["masterVolume"] = float(raw_settings.get("masterVolume", 0.0))
 	settings["sfxVolume"] = float(raw_settings.get("sfxVolume", 0.0))
