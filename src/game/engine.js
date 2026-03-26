@@ -7,6 +7,25 @@ const DIRECTIONS = {
   right: { dx: 1, dy: 0, facing: "right" },
 };
 
+// One-way gate tiles: the character indicates which direction you CAN enter from
+const ONE_WAY_TILES = {
+  ">": { dx: 1, dy: 0 },   // can only move through going right
+  "<": { dx: -1, dy: 0 },   // can only move through going left
+  "^": { dx: 0, dy: -1 },   // can only move through going up
+  "v": { dx: 0, dy: 1 },    // can only move through going down
+};
+
+// Conveyor belt tiles: push player/entities in a direction after they step on
+const CONVEYOR_TILES = {
+  "R": { dx: 1, dy: 0 },   // push right
+  "L": { dx: -1, dy: 0 },  // push left
+  "U": { dx: 0, dy: -1 },  // push up
+  "D": { dx: 0, dy: 1 },   // push down
+};
+
+// Key colors for key/lock mechanics
+const KEY_COLORS = ["red", "blue", "green", "yellow"];
+
 function coordKey(layer, x, y) {
   return `${layer}:${x}:${y}`;
 }
@@ -76,6 +95,7 @@ export class PatchworkEngine {
       history: [],
       future: [],
       latchedSwitches: [],
+      collectedKeys: [],
       notifications: [],
     };
 
@@ -87,6 +107,7 @@ export class PatchworkEngine {
       base.solved = !!snapshot.solved;
       base.actionLog = clone(snapshot.actionLog || []);
       base.latchedSwitches = clone(snapshot.latchedSwitches || []);
+      base.collectedKeys = clone(snapshot.collectedKeys || []);
     }
 
     this.ensureCompanionState(base.entities);
@@ -123,6 +144,7 @@ export class PatchworkEngine {
       solved: this.runtime.solved,
       actionLog: clone(this.runtime.actionLog),
       latchedSwitches: clone(this.runtime.latchedSwitches),
+      collectedKeys: clone(this.runtime.collectedKeys || []),
     };
   }
 
@@ -181,6 +203,7 @@ export class PatchworkEngine {
     this.runtime.solved = snapshot.solved;
     this.runtime.actionLog = clone(snapshot.actionLog || []);
     this.runtime.latchedSwitches = clone(snapshot.latchedSwitches || []);
+    this.runtime.collectedKeys = clone(snapshot.collectedKeys || []);
     this.runtime.notifications = [];
     this.ensureCompanionState(this.runtime.entities);
     this.updateDynamicState(this.runtime);
@@ -410,6 +433,16 @@ export class PatchworkEngine {
   tryMoveActor(actor, dx, dy, canPush) {
     const targetX = actor.x + dx;
     const targetY = actor.y + dy;
+
+    // One-way gate check: can only enter if movement direction matches gate direction
+    const targetTile = this.getTile(actor.layer, targetX, targetY);
+    if (targetTile && targetTile in ONE_WAY_TILES) {
+      const gate = ONE_WAY_TILES[targetTile];
+      if (dx !== gate.dx || dy !== gate.dy) {
+        return false;
+      }
+    }
+
     const blockingEntity = this.findEntityAt(actor.layer, targetX, targetY, {
       solidOnly: true,
       ignoreEntityId: actor.id,
@@ -421,12 +454,12 @@ export class PatchworkEngine {
       }
       const beyondX = targetX + dx;
       const beyondY = targetY + dy;
-      if (!this.isPassable(actor.layer, beyondX, beyondY, { ignoreEntityId: blockingEntity.id })) {
+      if (!this.isPassable(actor.layer, beyondX, beyondY, { ignoreEntityId: blockingEntity.id, moveDx: dx, moveDy: dy })) {
         return false;
       }
       blockingEntity.x = beyondX;
       blockingEntity.y = beyondY;
-    } else if (!this.isPassable(actor.layer, targetX, targetY, { ignoreEntityId: actor.id, ignorePlayer: actor !== this.runtime.player })) {
+    } else if (!this.isPassable(actor.layer, targetX, targetY, { ignoreEntityId: actor.id, ignorePlayer: actor !== this.runtime.player, moveDx: dx, moveDy: dy })) {
       return false;
     }
 
@@ -435,7 +468,175 @@ export class PatchworkEngine {
     if (actor === this.runtime.player) {
       this.runtime.activeLayer = actor.layer;
     }
+
+    // Ice slide: keep moving in same direction until blocked
+    if (targetTile === "I") {
+      this.slideOnIce(actor, dx, dy, canPush);
+    }
+
+    // Teleporter: warp to paired teleporter
+    if (targetTile === "T" && actor === this.runtime.player) {
+      this.applyTeleport(actor);
+    }
+
+    // Gravity tile: fall downward until blocked
+    const currentTile = this.getTile(actor.layer, actor.x, actor.y);
+    if (currentTile === "F") {
+      this.applyGravity(actor, canPush);
+    }
+
+    // Conveyor belt: push one tile in belt direction
+    if (currentTile && currentTile in CONVEYOR_TILES) {
+      this.applyConveyor(actor, currentTile, canPush);
+    }
+
+    // Key pickup (player only)
+    if (actor === this.runtime.player) {
+      this.tryCollectKey(actor);
+    }
+
     return true;
+  }
+
+  slideOnIce(actor, dx, dy, canPush) {
+    // Slide until we can't move or land on a non-ice tile
+    const maxSlide = 20; // safety limit
+    for (let i = 0; i < maxSlide; i++) {
+      const nextX = actor.x + dx;
+      const nextY = actor.y + dy;
+      const nextTile = this.getTile(actor.layer, nextX, nextY);
+
+      // Check one-way gate
+      if (nextTile && nextTile in ONE_WAY_TILES) {
+        const gate = ONE_WAY_TILES[nextTile];
+        if (dx !== gate.dx || dy !== gate.dy) break;
+      }
+
+      // Check if we can move there (no pushing while sliding)
+      if (!this.isPassable(actor.layer, nextX, nextY, {
+        ignoreEntityId: actor.id,
+        ignorePlayer: actor !== this.runtime.player,
+        moveDx: dx,
+        moveDy: dy,
+      })) break;
+
+      // Check for blocking entities
+      const blocker = this.findEntityAt(actor.layer, nextX, nextY, {
+        solidOnly: true,
+        ignoreEntityId: actor.id,
+      });
+      if (blocker) break;
+
+      actor.x = nextX;
+      actor.y = nextY;
+      if (actor === this.runtime.player) {
+        this.runtime.activeLayer = actor.layer;
+      }
+
+      // Stop sliding if we land on a non-ice tile
+      if (nextTile !== "I") break;
+    }
+  }
+
+  applyGravity(actor, canPush) {
+    const maxFall = 20;
+    for (let i = 0; i < maxFall; i++) {
+      const nextX = actor.x;
+      const nextY = actor.y + 1;
+      const nextTile = this.getTile(actor.layer, nextX, nextY);
+      if (!nextTile || nextTile === "#") break;
+
+      // Check for blocking entities
+      const blocker = this.findEntityAt(actor.layer, nextX, nextY, {
+        solidOnly: true,
+        ignoreEntityId: actor.id,
+      });
+      if (blocker) break;
+
+      if (!this.isPassable(actor.layer, nextX, nextY, {
+        ignoreEntityId: actor.id,
+        ignorePlayer: actor !== this.runtime.player,
+        moveDx: 0,
+        moveDy: 1,
+      })) break;
+
+      actor.x = nextX;
+      actor.y = nextY;
+      if (actor === this.runtime.player) {
+        this.runtime.activeLayer = actor.layer;
+      }
+      // Stop if we land on a non-gravity tile
+      if (this.getTile(actor.layer, actor.x, actor.y) !== "F") break;
+    }
+  }
+
+  applyConveyor(actor, tile, canPush) {
+    const dir = CONVEYOR_TILES[tile];
+    if (!dir) return;
+    const nextX = actor.x + dir.dx;
+    const nextY = actor.y + dir.dy;
+
+    // Check one-way gate
+    const nextTile = this.getTile(actor.layer, nextX, nextY);
+    if (nextTile && nextTile in ONE_WAY_TILES) {
+      const gate = ONE_WAY_TILES[nextTile];
+      if (dir.dx !== gate.dx || dir.dy !== gate.dy) return;
+    }
+
+    // Check for blocking entity
+    const blocker = this.findEntityAt(actor.layer, nextX, nextY, {
+      solidOnly: true,
+      ignoreEntityId: actor.id,
+    });
+    if (blocker) return;
+
+    if (!this.isPassable(actor.layer, nextX, nextY, {
+      ignoreEntityId: actor.id,
+      ignorePlayer: actor !== this.runtime.player,
+      moveDx: dir.dx,
+      moveDy: dir.dy,
+    })) return;
+
+    actor.x = nextX;
+    actor.y = nextY;
+    if (actor === this.runtime.player) {
+      this.runtime.activeLayer = actor.layer;
+    }
+  }
+
+  tryCollectKey(actor) {
+    const keyEntity = this.runtime.entities.find(
+      (e) => e.type === "key" && e.layer === actor.layer && e.x === actor.x && e.y === actor.y
+    );
+    if (!keyEntity) return;
+    // Collect the key
+    if (!this.runtime.collectedKeys.includes(keyEntity.color)) {
+      this.runtime.collectedKeys.push(keyEntity.color);
+    }
+    // Remove the key entity from play
+    this.runtime.entities = this.runtime.entities.filter((e) => e !== keyEntity);
+    this.runtime.notifications.push({ type: "key_collected", color: keyEntity.color });
+  }
+
+  applyTeleport(actor) {
+    const teleporters = this.room.teleporters || [];
+    const current = teleporters.find(
+      (t) => t.layer === actor.layer && t.x === actor.x && t.y === actor.y
+    );
+    if (!current || !current.pairId) return;
+    const dest = teleporters.find(
+      (t) => t.id === current.pairId
+    );
+    if (!dest) return;
+    // Only teleport if destination is passable
+    if (this.isPassable(dest.layer, dest.x, dest.y, { ignorePlayer: true })) {
+      actor.layer = dest.layer;
+      actor.x = dest.x;
+      actor.y = dest.y;
+      if (actor === this.runtime.player) {
+        this.runtime.activeLayer = dest.layer;
+      }
+    }
   }
 
   isPassable(layer, x, y, options = {}) {
@@ -447,8 +648,22 @@ export class PatchworkEngine {
       return false;
     }
 
+    // One-way gate: only passable if movement direction matches
+    if (tile in ONE_WAY_TILES && options.moveDx != null && options.moveDy != null) {
+      const gate = ONE_WAY_TILES[tile];
+      if (options.moveDx !== gate.dx || options.moveDy !== gate.dy) {
+        return false;
+      }
+    }
+
     const door = this.findDoorAt(layer, x, y);
     if (door && !this.runtime.dynamicState.openDoors.has(door.id)) {
+      return false;
+    }
+
+    // Color lock tiles: passable only if player has matching key
+    const lock = this.findLockAt(layer, x, y);
+    if (lock && !this.runtime.dynamicState.openLocks.has(lock.id)) {
       return false;
     }
 
@@ -513,9 +728,18 @@ export class PatchworkEngine {
       }
     }
 
+    // Locks: open if player has collected the matching color key
+    const openLocks = new Set();
+    for (const lock of this.room.locks || []) {
+      if ((runtime.collectedKeys || []).includes(lock.color)) {
+        openLocks.add(lock.id);
+      }
+    }
+
     runtime.dynamicState = {
       activeSwitches,
       openDoors,
+      openLocks,
       bridges,
     };
   }
@@ -548,6 +772,10 @@ export class PatchworkEngine {
 
   findDoorAt(layer, x, y) {
     return (this.room.doors || []).find((door) => door.layer === layer && door.x === x && door.y === y) || null;
+  }
+
+  findLockAt(layer, x, y) {
+    return (this.room.locks || []).find((lock) => lock.layer === layer && lock.x === x && lock.y === y) || null;
   }
 
   getTile(layer, x, y) {
@@ -609,6 +837,15 @@ export class PatchworkEngine {
         direction: stamp.direction,
         appliesTo: [...(stamp.appliesTo || [])],
       })),
+      locks: (this.room.locks || []).map((lock) => ({
+        id: lock.id,
+        layer: lock.layer,
+        x: lock.x,
+        y: lock.y,
+        color: lock.color,
+        open: this.runtime.dynamicState.openLocks.has(lock.id),
+      })),
+      collectedKeys: clone(this.runtime.collectedKeys || []),
       moveCount: this.runtime.moveCount,
       solved: this.runtime.solved,
       availableActions: [

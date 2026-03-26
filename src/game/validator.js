@@ -12,8 +12,8 @@ export function validateRoom(room) {
     return ["No room data loaded."];
   }
 
-  if (!Array.isArray(room.layers) || room.layers.length < 2 || room.layers.length > 3) {
-    issues.push("Room should define two or three layers.");
+  if (!Array.isArray(room.layers) || room.layers.length < 2 || room.layers.length > 4) {
+    issues.push("Room should define two to four layers.");
     return issues;
   }
 
@@ -29,7 +29,7 @@ export function validateRoom(room) {
         issues.push(`Layer ${index} row ${rowIndex} has an inconsistent width.`);
       }
       for (const character of row) {
-        if (!["#", ".", "S", "G", "~"].includes(character)) {
+        if (!["#", ".", "S", "G", "~", "I", "T", ">", "<", "^", "v", "F", "R", "L", "U", "D"].includes(character)) {
           issues.push(`Layer ${index} contains an unsupported tile '${character}'.`);
         }
       }

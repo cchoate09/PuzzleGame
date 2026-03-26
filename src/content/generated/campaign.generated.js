@@ -63,7 +63,7 @@ export const DISTRICTS = [
     "title": "Market",
     "subtitle": "Routes braided through stalls and awnings",
     "unlockPostmarks": 2,
-    "summary": "Transfer parcels between layers and use them to hold shutters open, even when the switch is hidden.",
+    "summary": "Transfer parcels between layers and use them to hold shutters open, even when the switch is hidden. Ice-slicked corridors add momentum puzzles.",
     "journalTitle": "Market Sketches",
     "journalBody": "The market vendors patched their awnings before their roofs. Priorities. Every route is now tied to every other route, so fixing one usually means fixing three."
   },
@@ -72,7 +72,7 @@ export const DISTRICTS = [
     "title": "Greenhouse",
     "subtitle": "Lantern light and vine projections",
     "unlockPostmarks": 5,
-    "summary": "Projection lanterns cast temporary bridges onto neighboring layers, then combine with doors and multi-sheet routes.",
+    "summary": "Projection lanterns cast temporary bridges onto neighboring layers, then combine with doors, one-way gates, and multi-sheet routes.",
     "journalTitle": "Greenhouse Notes",
     "journalBody": "Some paper is seeded with silver thread. Mina calls it greenhouse stock. Shine a lamp through it and the next layer blooms into shape."
   },
@@ -81,7 +81,7 @@ export const DISTRICTS = [
     "title": "Clocktower",
     "subtitle": "Timing made visible",
     "unlockPostmarks": 11,
-    "summary": "Echo couriers, rerouted stitch exits, and one optional side route hidden inside the bell frame.",
+    "summary": "Echo couriers, teleporter shortcuts, rerouted stitch exits, and one optional side route hidden inside the bell frame.",
     "journalTitle": "Clocktower Timing",
     "journalBody": "The tower's routes are delayed by one bell. If I move now, my echo steps a moment later. It is unsettling to solve puzzles with my own future in the room."
   },
@@ -90,7 +90,7 @@ export const DISTRICTS = [
     "title": "Theater",
     "subtitle": "Shadows on the backdrops",
     "unlockPostmarks": 14,
-    "summary": "Shadow couriers latch hidden marks, then combine with rerouted stitch landings across the stage.",
+    "summary": "Shadow couriers latch hidden marks, then combine with ice, one-way gates, and rerouted stitch landings across the stage.",
     "journalTitle": "Theater Blocking",
     "journalBody": "Every prop in the theater has a partner behind the curtain. Nothing moves alone, especially not under the footlights."
   },
@@ -99,7 +99,7 @@ export const DISTRICTS = [
     "title": "Rooftops",
     "subtitle": "The festival line",
     "unlockPostmarks": 17,
-    "summary": "Projection and transfer stamps reshape the final rooftop lanes before the festival route reconnects.",
+    "summary": "Projection and transfer stamps reshape the final rooftop lanes before the festival route reconnects. All mechanics converge.",
     "journalTitle": "Rooftop Draft",
     "journalBody": "When the routes finally align, the whole town reads like one folded letter. Rooftops first, festival after."
   },
@@ -134,35 +134,47 @@ export const ROOM_DEFS = [
         "text": "Stitch markers connect identical coordinates. Stand on one and flip the room over."
       }
     ],
-    "achievementId": "first-stamp",
     "hintTiers": [
-      "You do not need every corridor on the first sheet. Look for the stitched square.",
-      "The stitch in the top layer lines up with another stitch below it. Switch layers from there.",
-      "Walk to the stitch on the front sheet, switch to the back sheet, then take the open route to the mailbox."
+      "The front sheet is a winding maze. Find the stitch hidden in the corridors.",
+      "Navigate to the center of the front maze, find the stitch at column 4 row 3, then switch layers.",
+      "From start go right, right, down, down, right, right, up to reach the stitch. Switch layers, then go right, down, down, right, up to the mailbox."
     ],
+    "achievementId": "first-stamp",
     "layers": [
       {
         "id": "front",
         "name": "Front Sheet",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.###.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "############",
+          "#..........#",
+          "#.####.###.#",
+          "#.#..#.....#",
+          "#.#..#.###.#",
+          "#....#.#SS.#",
+          "#.##.#.#.#.#",
+          "#....#...#.#",
+          "#.####.###.#",
+          "#.#........#",
+          "#.#.######.#",
+          "############"
         ]
       },
       {
         "id": "back",
         "name": "Address Sheet",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.###G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "############",
+          "#.###....#.#",
+          "#.....##.#.#",
+          "#.###.#..#.#",
+          "#.#...#.##.#",
+          "#.#.###.SS.#",
+          "#.#.....##.#",
+          "#.###.#..#.#",
+          "#.....#.##.#",
+          "#.###.#....#",
+          "#.....#..G.#",
+          "############"
         ]
       }
     ],
@@ -176,9 +188,9 @@ export const ROOM_DEFS = [
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach stitched layer switching as the core route-solving verb.",
-      "targetDifficulty": 1,
-      "expectedSolveMinutes": 2,
+      "intendedLesson": "Teach stitched layer switching through a winding dual-layer maze.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 8,
       "commonMisunderstanding": "Players over-search the front sheet instead of treating the stitch as required progress."
     }
   },
@@ -189,8 +201,8 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Transfer the parcel out of your path and reach the mailbox.",
-    "blurb": "The parcel is in the right place on the wrong sheet.",
+    "objective": "Transfer both parcels and navigate past the blocked corridors to reach the mailbox.",
+    "blurb": "Two parcels block the only corridors wide enough for a postkeeper.",
     "intro": [
       {
         "speaker": "Mina",
@@ -198,40 +210,48 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "This parcel is not meant to be pushed down the hall.",
-      "Stand next to the parcel and transfer it to the other layer instead of shoving it forward.",
-      "Move to the tile left of the parcel, press transfer, then walk through the cleared lane to the mailbox."
+      "Both parcels block critical corridors. You need to transfer them, not push them into dead ends.",
+      "Transfer parcel A first to clear the lower corridor, then navigate up to transfer parcel B and reach the stitch.",
+      "Go right twice, transfer parcel A to the back sheet, go up twice, right twice, transfer parcel B, go up to the stitch, switch layers, then navigate down and right to the mailbox."
     ],
     "layers": [
       {
         "id": "front",
         "name": "Front Sheet",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.###.#",
-          "#...G.#",
-          "#.....#",
-          "#######"
+          "############",
+          "#....S...#.#",
+          "#.####.#...#",
+          "#.#......#.#",
+          "#.#.##.#.#.#",
+          "#......#...#",
+          "#.##.###.#.#",
+          "#........#.#",
+          "#.####.....#",
+          "############"
         ]
       },
       {
         "id": "back",
         "name": "Back Sheet",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.###.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "############",
+          "#....S.....#",
+          "#.#..####..#",
+          "#.#......#.#",
+          "#.####.#.#.#",
+          "#......#...#",
+          "#.##.#.###.#",
+          "#....#.....#",
+          "#.####...G.#",
+          "############"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 3,
+      "y": 8,
       "facing": "right"
     },
     "entities": [
@@ -240,7 +260,25 @@ export const ROOM_DEFS = [
         "type": "parcel",
         "layer": 0,
         "x": 3,
+        "y": 5,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 7,
         "y": 3,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-c",
+        "type": "parcel",
+        "layer": 0,
+        "x": 5,
+        "y": 7,
         "pushable": true,
         "solid": true
       }
@@ -248,10 +286,10 @@ export const ROOM_DEFS = [
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach parcel transfer as a cleaner alternative to pushing.",
-      "targetDifficulty": 1,
-      "expectedSolveMinutes": 2,
-      "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
+      "intendedLesson": "Teach parcel transfer with three parcels blocking critical corridors.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 10,
+      "commonMisunderstanding": "Players try to push parcels into dead ends rather than transferring them between layers."
     }
   },
   {
@@ -261,114 +299,66 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Nudge the parcel aside, switch sheets, and take the shortcut to the mailbox.",
-    "blurb": "The quickest route only opens once the crease is clear.",
+    "objective": "Find the one working stitch path through the maze of decoy stitches.",
+    "blurb": "Multiple stitches dot both sheets, but only one sequence leads to the mailbox.",
     "intro": [
       {
         "speaker": "Mina",
-        "text": "Sometimes you push first and transfer second. Clear the lane, then use the stitch at the end."
+        "text": "Not every stitch leads somewhere useful. Some drop you into dead ends on the other sheet. Read both sides before you jump."
       }
     ],
     "hintTiers": [
-      "You only need the parcel out of the stitched lane, not far away from it.",
-      "Push the parcel once so you can stand beside it, then transfer it before stepping on the stitch.",
-      "Move right twice, transfer the parcel to the back sheet, walk onto the stitch, switch layers, and climb straight to the mailbox."
+      "Three stitches are visible but only one sequence avoids dead ends on the back sheet.",
+      "The leftmost stitch drops you into a walled corner. The center stitch is the correct first jump. Then navigate to the second stitch on the back sheet.",
+      "Navigate right and up to the center stitch at (4,2), switch layers, go down and left to the lower stitch at (2,5), switch back, then go right to the mailbox."
     ],
     "layers": [
       {
         "id": "crease-front",
         "name": "Crease Front",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.###.#",
-          "#....S#",
-          "#.....#",
-          "#######"
+          "############",
+          "#.#....#...#",
+          "#...##.#.#.#",
+          "#.#.#..S.#.#",
+          "#.#.#.##...#",
+          "#.#.S....#.#",
+          "#...#.##.#.#",
+          "#.#S#....#.#",
+          "#.#....##..#",
+          "############"
+        ]
+      },
+      {
+        "id": "crease-mid",
+        "name": "Crease Middle",
+        "tiles": [
+          "############",
+          "#.###..#...#",
+          "#......#.#.#",
+          "#.#.#..S.#.#",
+          "#.#.#.##...#",
+          "#.#.S..#.#.#",
+          "#...####.#.#",
+          "#.#S#....#.#",
+          "#.#......#.#",
+          "############"
         ]
       },
       {
         "id": "crease-back",
         "name": "Crease Back",
         "tiles": [
-          "#######",
-          "#....G#",
-          "#.###.#",
-          "#....S#",
-          "#.....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 3,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "parcel-forward",
-        "type": "parcel",
-        "layer": 0,
-        "x": 3,
-        "y": 3,
-        "pushable": true,
-        "solid": true
-      }
-    ],
-    "switches": [],
-    "doors": [],
-    "balance": {
-      "intendedLesson": "Recombine a single push, a transfer, and a stitch into one clean route.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players push the parcel again instead of transferring it once it has been nudged into position."
-    }
-  },
-  {
-    "id": "mailroom-side-01",
-    "districtId": "mailroom",
-    "title": "Return Receipt",
-    "optional": true,
-    "unlockCost": 0,
-    "postmarks": 0,
-    "objective": "Switch to the back sheet, travel to the lower stitch, and return on the right layer.",
-    "blurb": "A side route that rewards noticing the second stitch before the goal.",
-    "intro": [
-      {
-        "speaker": "Mina",
-        "text": "Some routes ask you to fold the room twice before they make sense."
-      }
-    ],
-    "hintTiers": [
-      "The first stitch is not the end of the route. It only gets you to the right sheet.",
-      "Use the top stitch first, then travel downward on the back sheet until you find the second stitch.",
-      "Walk to the top stitch, switch to the back sheet, climb down to the lower stitch, switch back, and finish on the front sheet."
-    ],
-    "layers": [
-      {
-        "id": "receipt-front",
-        "name": "Receipt Front",
-        "tiles": [
-          "#######",
-          "#..S..#",
-          "#.###.#",
-          "#.....#",
-          "#..S.G#",
-          "#######"
-        ]
-      },
-      {
-        "id": "receipt-back",
-        "name": "Receipt Back",
-        "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#..S..#",
-          "#######"
+          "############",
+          "#.#.##.#...#",
+          "#......#.#.#",
+          "#.###..S.#.#",
+          "#.#...##...#",
+          "#.#.S..#.#.#",
+          "#.#.####.#.#",
+          "#.#S#......#",
+          "#.#..#.#..G#",
+          "############"
         ]
       }
     ],
@@ -382,10 +372,96 @@ export const ROOM_DEFS = [
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach that the shortest mailroom routes can alternate between sheets twice.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is effectively solved."
+      "intendedLesson": "Teach players to read three layers before committing to a stitch path.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 12,
+      "commonMisunderstanding": "Players jump at the first stitch they find and end up trapped."
+    }
+  },
+  {
+    "id": "mailroom-side-01",
+    "districtId": "mailroom",
+    "title": "Return Receipt",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Switch layers three times using the winding stitch network to reach the goal.",
+    "blurb": "A side route that rewards noticing every stitch before choosing your path.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "Some routes ask you to fold the room twice before they make sense."
+      }
+    ],
+    "hintTiers": [
+      "You need to use three different stitches, alternating layers each time.",
+      "Start on the front sheet, take the top-left stitch, navigate down on the back sheet to the center stitch, switch back, then find the bottom stitch.",
+      "Go right to stitch at (3,1), switch layers, go down through corridors to stitch at (5,4), switch back, navigate left and down to stitch at (2,6), switch layers, go right to mailbox."
+    ],
+    "layers": [
+      {
+        "id": "receipt-front",
+        "name": "Receipt Front",
+        "tiles": [
+          "############",
+          "#..S.....#.#",
+          "#.###.##...#",
+          "#.....#..#.#",
+          "#.###.#.##.#",
+          "#.#...S..#.#",
+          "#.#.###....#",
+          "#.....#.##.#",
+          "#.#S#......#",
+          "############"
+        ]
+      },
+      {
+        "id": "receipt-mid",
+        "name": "Receipt Middle",
+        "tiles": [
+          "############",
+          "#..S..##.#.#",
+          "#.......#..#",
+          "#.###.#..#.#",
+          "#.#...####.#",
+          "#.#...S....#",
+          "#.###.#.##.#",
+          "#.....#..#.#",
+          "#.#S#..#...#",
+          "############"
+        ]
+      },
+      {
+        "id": "receipt-back",
+        "name": "Receipt Back",
+        "tiles": [
+          "############",
+          "#..S.#...#.#",
+          "#.#....#...#",
+          "#.###.##.#.#",
+          "#.#......#.#",
+          "#.#.#.S.##.#",
+          "#.....#....#",
+          "#.###.####.#",
+          "#.#S#.....G#",
+          "############"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach routes alternating between three sheets with stitch planning.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 12,
+      "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is solved."
     }
   },
   {
@@ -395,8 +471,8 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Free the stitch lane, climb to the top fold, then return on the front sheet to the mailbox.",
-    "blurb": "The final mailroom route loops through the back sheet before it is readable.",
+    "objective": "Push parcels onto switches across both layers to open the door blocking the mailbox.",
+    "blurb": "The final mailroom route demands parcel management across winding corridors and two layers.",
     "intro": [
       {
         "speaker": "Mina",
@@ -410,60 +486,141 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "The stitch at the far right gets you onto the correct sheet, but not yet to the goal.",
-      "Transfer the parcel away from the lower stitch, switch there, then travel to the upper stitch on the back sheet.",
-      "Move right twice, transfer the parcel, switch at the lower stitch, climb to the upper stitch on the back sheet, switch again, and finish on the front."
+      "One parcel goes on the visible switch, the other must be transferred to the back sheet's switch.",
+      "Push parcel A left onto the front switch first, then navigate to parcel B and transfer it to the back sheet where it lands on the hidden switch.",
+      "Push parcel A left onto switch at (1,6), go up and right to parcel B, transfer it to the back layer where it lands on the switch at (6,3), use the stitch, navigate through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "dated-front",
         "name": "Dated Front",
         "tiles": [
-          "#######",
-          "#..S.G#",
-          "#.###.#",
-          "#....S#",
-          "#.....#",
-          "#######"
+          "############",
+          "#...S....#.#",
+          "#.####.#...#",
+          "#.#......#.#",
+          "#.#.##.#.#.#",
+          "#......#...#",
+          "#.##.###.#.#",
+          "#........#.#",
+          "#.####.#...#",
+          "############"
+        ]
+      },
+      {
+        "id": "dated-mid",
+        "name": "Dated Middle",
+        "tiles": [
+          "############",
+          "#...S......#",
+          "#.#..####..#",
+          "#.#......#.#",
+          "#.####.#.#.#",
+          "#......S.S.#",
+          "#.##.#.###.#",
+          "#....#.....#",
+          "#.####.#...#",
+          "############"
         ]
       },
       {
         "id": "dated-back",
         "name": "Dated Back",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#....S#",
-          "#.....#",
-          "#######"
+          "############",
+          "#...S......#",
+          "#.#.####.#.#",
+          "#.#......#.#",
+          "#...##.#.#.#",
+          "#.#..#.S.S.#",
+          "#.####.###.#",
+          "#......#...#",
+          "#.##.#...G.#",
+          "############"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 3,
+      "y": 8,
       "facing": "right"
     },
     "entities": [
       {
-        "id": "parcel-dated",
+        "id": "parcel-a",
         "type": "parcel",
         "layer": 0,
-        "x": 4,
+        "x": 3,
+        "y": 7,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 7,
         "y": 3,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-c",
+        "type": "parcel",
+        "layer": 1,
+        "x": 6,
+        "y": 7,
         "pushable": true,
         "solid": true
       }
     ],
-    "switches": [],
-    "doors": [],
+    "switches": [
+      {
+        "id": "front-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 7
+      },
+      {
+        "id": "mid-plate",
+        "layer": 1,
+        "x": 8,
+        "y": 3
+      },
+      {
+        "id": "back-plate",
+        "layer": 2,
+        "x": 5,
+        "y": 7
+      }
+    ],
+    "doors": [
+      {
+        "id": "dated-door-a",
+        "layer": 1,
+        "x": 9,
+        "y": 5,
+        "switchIds": [
+          "front-plate",
+          "mid-plate"
+        ]
+      },
+      {
+        "id": "dated-door-b",
+        "layer": 2,
+        "x": 9,
+        "y": 8,
+        "switchIds": [
+          "back-plate"
+        ]
+      }
+    ],
     "balance": {
-      "intendedLesson": "Cap the mailroom by chaining transfer with two distinct sheet swaps.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players switch at the lower stitch and then look for the goal immediately instead of climbing to the upper stitch first."
+      "intendedLesson": "Cap the mailroom with three-layer traversal and triple-switch door logic.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players switch too early without managing all parcels first."
     }
   },
   {
@@ -473,86 +630,110 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Leave a parcel on the plate, switch layers, and use the opened route.",
-    "blurb": "The market lifts its shutters with simple pressure plates.",
+    "objective": "Slide across ice to reach the switch, park the parcel, and take the opened route.",
+    "blurb": "The market lifts its shutters with pressure plates, but the floor is slick with ice.",
     "intro": [
       {
         "speaker": "Market Clerk",
-        "text": "A good parcel is sometimes more useful parked on a plate than delivered."
+        "text": "Ice corridors slide you until you hit something solid. Plan your approach before you step onto the frost."
       }
     ],
     "hintTiers": [
-      "The plate is meant to stay pressed while you move away from it.",
-      "Push the parcel onto the plate first, then go use the stitch marker.",
-      "Move the parcel onto the floor plate in the front sheet, walk to the stitch, switch to the back sheet, and use the now-open door."
+      "The ice corridor slides you all the way across. You need something solid to stop against.",
+      "Push the parcel into the ice lane first so it acts as a stopping block, then slide into position near the switch.",
+      "Push parcel right onto ice, slide right to stop against it, push it right onto the switch, navigate up to the stitch, switch layers, go through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "awnings",
         "name": "Awnings",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#....S.....#.#",
+          "#.####.###...#",
+          "#.#........#.#",
+          "#.#.##.#.#.#.#",
+          "#......#IIII.#",
+          "#.##.###.#.#.#",
+          "#........#.#.#",
+          "#.####.#.....#",
+          "##############"
         ]
       },
       {
         "id": "arcade",
         "name": "Arcade",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#....S.....#.#",
+          "#.#....###...#",
+          "#.#.##.....#.#",
+          "#......#.#.#.#",
+          "#.####.#.....#",
+          "#.#..###.#.#.#",
+          "#.#......#.#.#",
+          "#.####.....G.#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 8,
+      "facing": "right"
     },
     "entities": [
+      {
+        "id": "parcel-a",
+        "type": "parcel",
+        "layer": 0,
+        "x": 4,
+        "y": 5,
+        "pushable": true,
+        "solid": true
+      },
       {
         "id": "parcel-b",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 6,
+        "y": 3,
         "pushable": true,
         "solid": true
       }
     ],
     "switches": [
       {
-        "id": "market-plate",
+        "id": "market-plate-a",
         "layer": 0,
-        "x": 1,
-        "y": 4
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": "market-plate-b",
+        "layer": 1,
+        "x": 6,
+        "y": 3
       }
     ],
     "doors": [
       {
         "id": "market-door",
         "layer": 1,
-        "x": 3,
-        "y": 2,
+        "x": 11,
+        "y": 8,
         "switchIds": [
-          "market-plate"
+          "market-plate-a",
+          "market-plate-b"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Teach persistent door pressure with parcels and cross-layer route payoff.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players carry the parcel around instead of parking it on the plate first."
+      "intendedLesson": "Introduce ice tiles with parcel-as-blocker and dual switches.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 12,
+      "commonMisunderstanding": "Players step onto ice without a stopping block."
     }
   },
   {
@@ -562,59 +743,67 @@ export const ROOM_DEFS = [
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "objective": "Park the parcel on the plate, switch layers, and take the reopened shortcut above the stalls.",
-    "blurb": "A side route that asks you to read a shutter and a stitch at the same time.",
+    "objective": "Push the parcel across ice to land on the distant plate, then take the shortcut.",
+    "blurb": "A side route that asks you to aim a parcel slide precisely.",
     "intro": [
       {
         "speaker": "Market Clerk",
         "text": "The side lane is lighter than the main route. Prop the shutter and steal the short way across."
       }
     ],
-    "achievementId": "side-route",
     "hintTiers": [
-      "The shortcut only matters after the plate is already held down.",
-      "Push the parcel onto the front plate first, then climb to the stitch instead of heading for the goal immediately.",
-      "Push the parcel onto the plate at the lower left, walk to the stitch on the top lane, switch to the back sheet, and take the reopened shortcut to the mailbox."
+      "The parcel must slide across ice and stop exactly on the switch. Plan your push direction.",
+      "Push the parcel downward so it slides on ice and stops against the far wall, landing on the switch.",
+      "Navigate above the parcel, push it down onto the ice lane where it slides to the switch at (3,6). Use the stitch, switch layers, and cross through the opened door to the mailbox."
     ],
+    "achievementId": "side-route",
     "layers": [
       {
         "id": "stall-front",
         "name": "Stall Front",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#....S.....#.#",
+          "#.####.###...#",
+          "#.#........#.#",
+          "#.#I##.#.#.#.#",
+          "#..I...#.....#",
+          "#.#I.###.#.#.#",
+          "#..I.....#.#.#",
+          "#.#I##.#.....#",
+          "##############"
         ]
       },
       {
         "id": "stall-back",
         "name": "Stall Back",
         "tiles": [
-          "#######",
-          "#..S.G#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#....S.....#.#",
+          "#.####.###...#",
+          "#.#........G.#",
+          "#.#.##.#.#.#.#",
+          "#......#.....#",
+          "#.##.###.#.#.#",
+          "#........#.#.#",
+          "#.####.#.....#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 1,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "parcel-stall",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 3,
+        "y": 3,
         "pushable": true,
         "solid": true
       }
@@ -623,26 +812,26 @@ export const ROOM_DEFS = [
       {
         "id": "stall-plate",
         "layer": 0,
-        "x": 1,
-        "y": 4
+        "x": 3,
+        "y": 8
       }
     ],
     "doors": [
       {
         "id": "stall-door",
         "layer": 1,
-        "x": 4,
-        "y": 1,
+        "x": 11,
+        "y": 3,
         "switchIds": [
           "stall-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Reinforce visible plates and door logic in a shorter optional room.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players head for the stitch first and only later realize the shortcut itself is still closed."
+      "intendedLesson": "Reinforce ice-slide physics with precise parcel aiming.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 10,
+      "commonMisunderstanding": "Players push the parcel sideways instead of down the ice column."
     }
   },
   {
@@ -652,7 +841,7 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Send the parcel through the hidden counter slot and walk through the raised shutter.",
+    "objective": "Use ice lanes and two switches to open the path. One parcel slides, one parks.",
     "blurb": "Some market plates live on the back sheet, far from the player.",
     "intro": [
       {
@@ -661,40 +850,70 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "The shutter opens from a place you cannot stand on yourself.",
-      "Move next to the parcel and transfer it onto the switch behind the counter before walking to the door.",
-      "Step right once, transfer the parcel to the back sheet, then walk up and across the opened shutter to the mailbox."
+      "Two switches control the door. One is visible on ice, the other is hidden on the back layer.",
+      "Slide one parcel across ice onto the visible switch, then transfer the other parcel to land on the hidden switch.",
+      "Push parcel A right across ice to the visible switch. Navigate to parcel B and transfer it to the back layer where it lands on the hidden switch. Use the stitch, walk through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "counter-front",
         "name": "Counter Front",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#...S......#.#",
+          "#.####.###...#",
+          "#.#........#.#",
+          "#.#.##.#.#.#.#",
+          "#......#IIII.#",
+          "#.##.###.#.#.#",
+          "#........#.#.#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####.....#",
+          "##############"
+        ]
+      },
+      {
+        "id": "counter-mid",
+        "name": "Counter Middle",
+        "tiles": [
+          "##############",
+          "#...S......#.#",
+          "#.#.##.###...#",
+          "#.#........#.#",
+          "#.####.#.#.#.#",
+          "#......#.S...#",
+          "#.##.###.#.#.#",
+          "#........#.S.#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####.....#",
+          "##############"
         ]
       },
       {
         "id": "counter-back",
         "name": "Counter Back",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#...S......#.#",
+          "#.#..####....#",
+          "#.#........#.#",
+          "#...##.#.#.#.#",
+          "#.#..#.#.S...#",
+          "#.####.###.#.#",
+          "#......#...S.#",
+          "#.##.#...#.#.#",
+          "#.#....#.#.#.#",
+          "#.####.....G.#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 10,
       "facing": "right"
     },
     "entities": [
@@ -703,35 +922,75 @@ export const ROOM_DEFS = [
         "type": "parcel",
         "layer": 0,
         "x": 3,
-        "y": 4,
+        "y": 5,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-counter",
+        "type": "parcel",
+        "layer": 0,
+        "x": 6,
+        "y": 9,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-hidden",
+        "type": "parcel",
+        "layer": 1,
+        "x": 8,
+        "y": 3,
         "pushable": true,
         "solid": true
       }
     ],
     "switches": [
       {
-        "id": "counter-hidden-plate",
+        "id": "counter-visible-plate",
+        "layer": 0,
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": "counter-mid-plate",
         "layer": 1,
-        "x": 3,
-        "y": 4
+        "x": 6,
+        "y": 9
+      },
+      {
+        "id": "counter-hidden-plate",
+        "layer": 2,
+        "x": 8,
+        "y": 3
       }
     ],
     "doors": [
       {
-        "id": "counter-shutter",
-        "layer": 0,
-        "x": 3,
-        "y": 2,
+        "id": "counter-shutter-a",
+        "layer": 1,
+        "x": 10,
+        "y": 7,
         "switchIds": [
+          "counter-visible-plate"
+        ]
+      },
+      {
+        "id": "counter-shutter-b",
+        "layer": 2,
+        "x": 11,
+        "y": 10,
+        "switchIds": [
+          "counter-mid-plate",
           "counter-hidden-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Teach that a transfer can activate a switch the player will never physically touch.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players search for a walking path behind the counter instead of treating the parcel as the route's stand-in."
+      "intendedLesson": "Combine ice sliding with cross-layer switch activation using three parcels.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players search for a walking path behind the counter."
     }
   },
   {
@@ -741,8 +1000,8 @@ export const ROOM_DEFS = [
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "objective": "Transfer the parcel onto the hidden plate, switch layers, and use the back-lane shutter.",
-    "blurb": "A side room that mixes the counter-slot trick with a stitched shortcut.",
+    "objective": "Navigate an ice maze that spans both layers, using stitches to bypass blocked corridors.",
+    "blurb": "A side room that turns the entire floor into a sliding puzzle across two sheets.",
     "intro": [
       {
         "speaker": "Market Clerk",
@@ -750,77 +1009,58 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "The parcel belongs on the hidden switch before you ever touch the stitch.",
-      "Transfer the parcel first, then walk to the stitch on the front sheet and switch to the back lane.",
-      "Move right once, transfer the parcel onto the hidden plate, climb to the stitch on the front sheet, switch layers, and take the opened back-lane route to the mailbox."
+      "The ice fills most of both layers. You need walls and stitches as stopping points.",
+      "Slide right on ice, stop at the wall, then slide down to the stitch. Switch layers and navigate the back ice maze.",
+      "Slide right to wall, slide down to stitch at (7,4), switch layers, slide left to wall at (1,4), slide down to (1,6), slide right to wall, slide up to mailbox."
     ],
     "layers": [
       {
         "id": "ledger-front",
         "name": "Ledger Front",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#III#IIIIIIII#",
+          "#I#II...#I..I#",
+          "#I......#I#.I#",
+          "#III#I.ISI..I#",
+          "#I#II..#I#..I#",
+          "#I.......I#.I#",
+          "#I##.#I..I..I#",
+          "#I.......IIII#",
+          "##############"
         ]
       },
       {
         "id": "ledger-back",
         "name": "Ledger Back",
         "tiles": [
-          "#######",
-          "#..S.G#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#III#IIIIIIII#",
+          "#I...#II..I.I#",
+          "#I#I.....GI.I#",
+          "#I.II#.ISI..I#",
+          "#I.....#I...I#",
+          "#I###....I#.I#",
+          "#I......#I..I#",
+          "#IIIIIIIIIII.#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 1,
       "facing": "right"
     },
-    "entities": [
-      {
-        "id": "parcel-ledger",
-        "type": "parcel",
-        "layer": 0,
-        "x": 3,
-        "y": 4,
-        "pushable": true,
-        "solid": true
-      }
-    ],
-    "switches": [
-      {
-        "id": "ledger-hidden-plate",
-        "layer": 1,
-        "x": 3,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "ledger-door",
-        "layer": 1,
-        "x": 4,
-        "y": 1,
-        "switchIds": [
-          "ledger-hidden-plate"
-        ]
-      }
-    ],
+    "entities": [],
+    "switches": [],
+    "doors": [],
     "balance": {
-      "intendedLesson": "Show that hidden switches can matter on a different layer than the route they open.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players head to the stitch before the hidden plate is active and arrive on the back lane too early."
+      "intendedLesson": "Pure ice navigation puzzle requiring both layers.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 14,
+      "commonMisunderstanding": "Players try to navigate only on one layer."
     }
   },
   {
@@ -830,7 +1070,7 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Use one parcel for the visible plate and another for the hidden plate, then walk through the central shutter.",
+    "objective": "Use ice lanes, two parcels, and two switches across both layers to open the central shutter.",
     "blurb": "The final market route asks you to think about both sheets at once.",
     "intro": [
       {
@@ -845,49 +1085,79 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "You have one parcel for each switch. Decide which one belongs to the hidden plate first.",
-      "Transfer the upper parcel to the back sheet, then push the lower parcel onto the visible floor plate before heading to the door.",
-      "Move up and left to transfer the upper parcel, return to the lower lane to push the second parcel onto the visible plate, then walk up through the opened shutter to the mailbox."
+      "You have one parcel for each switch. The ice complicates positioning. Decide which goes where first.",
+      "Slide parcel A across ice onto the visible switch. Transfer parcel B to the back sheet where it must be pushed onto the hidden switch. Then use the stitch.",
+      "Push parcel A right across ice row to the visible switch at (8,5). Navigate to parcel B and transfer it to back layer. Use the stitch, push the transferred parcel onto the hidden switch at (2,7), then navigate through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "inventory-front",
         "name": "Inventory Front",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#...S......#.#",
+          "#.####.###...#",
+          "#.#........#.#",
+          "#.#.##.#.#.#.#",
+          "#......#IIII.#",
+          "#.##.###.#.#.#",
+          "#........#.#.#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####.....#",
+          "##############"
+        ]
+      },
+      {
+        "id": "inventory-mid",
+        "name": "Inventory Middle",
+        "tiles": [
+          "##############",
+          "#...S......#.#",
+          "#.#.##.###.S.#",
+          "#.#........#.#",
+          "#.####.#.#.#.#",
+          "#......#.....#",
+          "#.##.###.#.#.#",
+          "#........#...#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####.....#",
+          "##############"
         ]
       },
       {
         "id": "inventory-back",
         "name": "Inventory Back",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#..........#.#",
+          "#.####.###.S.#",
+          "#.#........#.#",
+          "#.#.##.#.#.#.#",
+          "#......#.....#",
+          "#.##.###.#.#.#",
+          "#........#...#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####...G.#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 10,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "parcel-visible",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 3,
+        "y": 5,
         "pushable": true,
         "solid": true
       },
@@ -895,8 +1165,17 @@ export const ROOM_DEFS = [
         "id": "parcel-hidden",
         "type": "parcel",
         "layer": 0,
-        "x": 3,
-        "y": 3,
+        "x": 5,
+        "y": 9,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-deep",
+        "type": "parcel",
+        "layer": 1,
+        "x": 7,
+        "y": 7,
         "pushable": true,
         "solid": true
       }
@@ -905,33 +1184,48 @@ export const ROOM_DEFS = [
       {
         "id": "inventory-visible-plate",
         "layer": 0,
-        "x": 1,
-        "y": 4
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": "inventory-mid-plate",
+        "layer": 1,
+        "x": 5,
+        "y": 9
       },
       {
         "id": "inventory-hidden-plate",
-        "layer": 1,
-        "x": 3,
-        "y": 3
+        "layer": 2,
+        "x": 7,
+        "y": 7
       }
     ],
     "doors": [
       {
-        "id": "inventory-shutter",
-        "layer": 0,
-        "x": 3,
+        "id": "inventory-shutter-a",
+        "layer": 1,
+        "x": 12,
         "y": 2,
         "switchIds": [
-          "inventory-visible-plate",
+          "inventory-visible-plate"
+        ]
+      },
+      {
+        "id": "inventory-shutter-b",
+        "layer": 2,
+        "x": 11,
+        "y": 10,
+        "switchIds": [
+          "inventory-mid-plate",
           "inventory-hidden-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Cap the market by splitting visible and hidden door logic across two parcels.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players try to solve the visible plate first and only then look for the hidden plate, which leaves too much route still unopened."
+      "intendedLesson": "Cap the market with three-layer parcel management and triple switch logic.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 18,
+      "commonMisunderstanding": "Players try to solve the visible plate first."
     }
   },
   {
@@ -941,65 +1235,95 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Project a bridge onto the lower sheet and cross the gap.",
-    "blurb": "Lanterns draw temporary structure where the paper has torn away.",
+    "objective": "Push the projector into position, navigate one-way gates, and cross the projected bridge.",
+    "blurb": "Lanterns draw temporary structure where the paper has torn away. One-way gates restrict your path.",
     "intro": [
       {
         "speaker": "Gardener",
-        "text": "Line the lamp up with the tear. The next layer will grow a bridge where the light lands."
+        "text": "Line the lamp up with the tear. The next layer will grow a bridge where the light lands. And mind the one-way gates."
       }
     ],
     "hintTiers": [
-      "The lamp affects the same coordinates in the other layer.",
-      "The pit sits at the same x and y as the square where the lamp should stop.",
-      "Push the lantern to the center lane at x3 y2 on the top sheet, switch layers, and walk across the projected bridge."
+      "The one-way gates force you to circle around. Push the projector before you commit to the gate path.",
+      "Push the projector left to align it with the gap on the other layer, then take the one-way gate circuit to the stitch.",
+      "Push projector left to (2,4), go up through the right-only gate, navigate around to the stitch at (3,1), switch layers, follow the one-way path down across the bridge to the mailbox."
     ],
     "layers": [
       {
         "id": "lantern-bed",
         "name": "Lantern Bed",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#....S.......#.#",
+          "#.####.###.#...#",
+          "#.>........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#....#...#...#",
+          "#.##.###.#.#.#.#",
+          "#.v......#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####......<#",
+          "################"
+        ]
+      },
+      {
+        "id": "vine-mid",
+        "name": "Vine Middle",
+        "tiles": [
+          "################",
+          "#....S.......#.#",
+          "#.#.##.###.#...#",
+          "#.v........#.#.#",
+          "#.####.#.#.S.#.#",
+          "#......#.S.#...#",
+          "#.##.###.#.#.#.#",
+          "#.^......#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       },
       {
         "id": "vine-bed",
         "name": "Vine Bed",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#..~.G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#............#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#~##.#.#.S.#.#",
+          "#.#....#.S.#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####......G#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 10,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "lantern-a",
         "type": "projector",
         "layer": 0,
-        "x": 2,
-        "y": 3,
+        "x": 4,
+        "y": 5,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 1,
+            "layer": 2,
             "dx": 0,
-            "dy": 0
+            "dy": -1
           }
         ]
       }
@@ -1007,10 +1331,10 @@ export const ROOM_DEFS = [
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach projector alignment and same-coordinate bridge projection.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+      "intendedLesson": "Introduce one-way gates alongside projector alignment across three layers.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 14,
+      "commonMisunderstanding": "Players go through one-way gates the wrong direction."
     }
   },
   {
@@ -1020,8 +1344,8 @@ export const ROOM_DEFS = [
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "objective": "Use the lantern's offset beam to patch the tear and cross to the mailbox.",
-    "blurb": "Not every bridge blooms directly underneath the lantern.",
+    "objective": "Combine projector placement with ice sliding and one-way gates to bridge the gap.",
+    "blurb": "Not every bridge blooms directly underneath the lantern. Ice complicates the approach.",
     "intro": [
       {
         "speaker": "Gardener",
@@ -1029,40 +1353,70 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "This lantern does not bridge the square directly below it.",
-      "Push the lantern one step to the right so its offset beam lands on the tear.",
-      "Push the lantern right once, walk to the stitch, switch sheets, and use the offset bridge tile near the mailbox."
+      "The projector has an offset beam. It bridges one tile away from where it stands.",
+      "Slide the projector across ice to the right position, then navigate the one-way gates to the stitch.",
+      "Push projector right onto ice where it slides to (5,4). Its offset beam bridges the gap at (6,3) on the back layer. Navigate the one-way loop to the stitch, switch layers, cross the bridge to the mailbox."
     ],
     "layers": [
       {
         "id": "graft-top",
         "name": "Graft Top",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#.>..S.......#.#",
+          "#.#.##.###.#...#",
+          "#.v........#.#.#",
+          "#.#.II.#.#...#.#",
+          "#.#.II.#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#.<.#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "graft-mid",
+        "name": "Graft Middle",
+        "tiles": [
+          "################",
+          "#....S.......#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#.##.#.#.S.#.#",
+          "#.#....#.S.#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       },
       {
         "id": "graft-bottom",
         "name": "Graft Bottom",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#...~G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#............#.#",
+          "#.####.###.#...#",
+          "#......~...#.#.#",
+          "#.#.##.#.#.S.#.#",
+          "#.#....#.S.#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#G#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 3,
+      "y": 10,
       "facing": "right"
     },
     "entities": [
@@ -1070,14 +1424,14 @@ export const ROOM_DEFS = [
         "id": "lantern-offset",
         "type": "projector",
         "layer": 0,
-        "x": 2,
-        "y": 3,
+        "x": 3,
+        "y": 4,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 1,
-            "dx": 1,
+            "layer": 2,
+            "dx": 3,
             "dy": -1
           }
         ]
@@ -1086,10 +1440,10 @@ export const ROOM_DEFS = [
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Show that a lantern's projection can use an offset target instead of matching coordinates exactly.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players line the lantern up with the tear directly instead of accounting for the shifted beam."
+      "intendedLesson": "Combine offset projection with ice and one-way gates across three layers.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players line the lantern up directly instead of accounting for the shifted beam."
     }
   },
   {
@@ -1099,70 +1453,111 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Grow a two-tile bridge across the wider tear and reach the mailbox.",
-    "blurb": "Some greenhouse tears ask for more than a single square of light.",
+    "objective": "Project bridges across 3 layers using two projectors to create a connected path.",
+    "blurb": "Some greenhouse tears ask for more than a single square of light across multiple sheets.",
     "intro": [
       {
         "speaker": "Gardener",
-        "text": "This bed tore wider than the others. One lamp can still cover it, but only if the bloom stretches far enough."
+        "text": "This bed tore wider than the others. Two lamps, three sheets. Every bridge matters."
       }
     ],
     "hintTiers": [
-      "This lantern can grow more than one bridge tile at once.",
-      "The lantern needs to stop one row higher so both projected tiles span the tear together.",
-      "Push the lantern upward into the center lane, switch sheets, and cross the two-tile bridge to the mailbox."
+      "Each projector bridges a different layer. Position them both before traveling down.",
+      "Projector A bridges layer 0 to layer 1. Projector B bridges layer 1 to layer 2. Push both into alignment first.",
+      "Push projector A up to (3,2) bridging the gap on layer 1. Push projector B right to (6,4) bridging the gap on layer 2. Use the stitch at top, descend through layers using bridges."
     ],
     "layers": [
       {
         "id": "overgrowth-top",
         "name": "Overgrowth Top",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#....S.......#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#....#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "overgrowth-middle",
+        "name": "Overgrowth Middle",
+        "tiles": [
+          "################",
+          "#....S.....#.#.#",
+          "#.#.~####.#....#",
+          "#.#........#.#.#",
+          "#......#.#.S.#.#",
+          "#.###.##...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       },
       {
         "id": "overgrowth-bottom",
         "name": "Overgrowth Bottom",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.~~.G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#............#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#..~.#.#.S.#.#",
+          "#.#.##.#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.#.####......G#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 10,
+      "facing": "right"
     },
     "entities": [
       {
-        "id": "lantern-wide",
+        "id": "lantern-a",
         "type": "projector",
         "layer": 0,
-        "x": 2,
+        "x": 5,
         "y": 3,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
             "layer": 1,
-            "dx": 0,
-            "dy": 0
-          },
+            "dx": -2,
+            "dy": -1
+          }
+        ]
+      },
+      {
+        "id": "lantern-b",
+        "type": "projector",
+        "layer": 0,
+        "x": 8,
+        "y": 6,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
           {
-            "layer": 1,
-            "dx": 1,
-            "dy": 0
+            "layer": 2,
+            "dx": -3,
+            "dy": -2
           }
         ]
       }
@@ -1170,10 +1565,10 @@ export const ROOM_DEFS = [
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach multi-tile projection so wider tears read as one placement puzzle instead of many.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players align the lantern to only one missing tile and overlook that the same lamp can cover both."
+      "intendedLesson": "Three-layer projection requiring two projectors with offset beams.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 16,
+      "commonMisunderstanding": "Players align one projector and forget the second bridge."
     }
   },
   {
@@ -1183,7 +1578,7 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Hold the gate open, grow the bridge, and cross to the mailbox.",
+    "objective": "Combine one-way gates, ice, a projector, and a switch to open the path across three layers.",
     "blurb": "The lantern route and the pressure gate have to be solved in the right order.",
     "intro": [
       {
@@ -1192,49 +1587,79 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "The parcel should stay on the switch while you work on the lantern.",
-      "Park the parcel first, then push the lantern into place before you switch layers.",
-      "Push the parcel onto the floor plate, lift the lantern onto the tear line, walk to the stitch, switch sheets, and cross the bridge through the opened gate."
+      "The parcel must reach the switch, the projector must bridge the gap, and you must navigate one-way gates in the right order.",
+      "Push the parcel across ice onto the switch first, then position the projector, then navigate through the one-way gates to descend through layers.",
+      "Push parcel left across ice onto the switch at (1,5). Push projector up to (4,2). Navigate through one-way gates to the top stitch. Descend through middle layer to lower stitch. Cross the bridge through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "mist-top",
         "name": "Mist Top",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#...S.......#..#",
+          "#.####.###.#...#",
+          "#.>........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#II....#...#...#",
+          "#.##.###.#.#v#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#.<.#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "mist-middle",
+        "name": "Mist Middle",
+        "tiles": [
+          "################",
+          "#...S.......#..#",
+          "#.#.####.#.#...#",
+          "#..........#.#.#",
+          "#.###.##.#.S.#.#",
+          "#......#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       },
       {
         "id": "mist-bottom",
         "name": "Mist Bottom",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#..~.G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#...........#..#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#~##.#.#.S.#.#",
+          "#.#.##.#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.###.####...G.#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 10,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "parcel-mist",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 4,
+        "y": 5,
         "pushable": true,
         "solid": true
       },
@@ -1242,7 +1667,182 @@ export const ROOM_DEFS = [
         "id": "lantern-mist",
         "type": "projector",
         "layer": 0,
+        "x": 6,
+        "y": 4,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": -2,
+            "dy": 0
+          }
+        ]
+      },
+      {
+        "id": "parcel-mist-b",
+        "type": "parcel",
+        "layer": 1,
+        "x": 5,
+        "y": 9,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "mist-plate-a",
+        "layer": 0,
+        "x": 1,
+        "y": 5
+      },
+      {
+        "id": "mist-plate-b",
+        "layer": 1,
+        "x": 5,
+        "y": 9
+      }
+    ],
+    "doors": [
+      {
+        "id": "mist-door-a",
+        "layer": 2,
+        "x": 7,
+        "y": 10,
+        "switchIds": [
+          "mist-plate-a"
+        ]
+      },
+      {
+        "id": "mist-door-b",
+        "layer": 2,
+        "x": 12,
+        "y": 4,
+        "switchIds": [
+          "mist-plate-b"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine one-way gates, ice, projection, and dual switches across three layers.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 18,
+      "commonMisunderstanding": "Players try to solve the bridge first."
+    }
+  },
+  {
+    "id": "greenhouse-04",
+    "districtId": "greenhouse",
+    "title": "Festival Draft",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Use two projectors and a parcel across three layers to restore the greenhouse finale route.",
+    "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
+      }
+    ],
+    "hintTiers": [
+      "Treat this like two setup problems before it becomes a travel problem: gate first, lanterns second.",
+      "Park the parcel on the switch, push both projectors into their bridge positions, then descend through all three layers.",
+      "Push parcel onto switch at (1,8). Push projector A to bridge gap on layer 1. Push projector B to bridge gap on layer 2. Use top stitch, descend through middle layer, use lower stitch, cross both bridges through the opened door to the mailbox."
+    ],
+    "achievementId": "demo-complete",
+    "layers": [
+      {
+        "id": "draft-roof",
+        "name": "Draft Roof",
+        "tiles": [
+          "################",
+          "#...S..........#",
+          "#.########.#...#",
+          "#..............#",
+          "#.#..#.#.#.#...#",
+          "#.#.##.........#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "#.########.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "draft-middle",
+        "name": "Draft Middle",
+        "tiles": [
+          "################",
+          "#...S..........#",
+          "#.#.######.#...#",
+          "#.#..~......#..#",
+          "#......#.#.S...#",
+          "#.###.##.......#",
+          "#..............#",
+          "#.####.S.#.#...#",
+          "#..............#",
+          "#.########.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "draft-floor",
+        "name": "Draft Floor",
+        "tiles": [
+          "################",
+          "#..............#",
+          "#.########.#...#",
+          "#..............#",
+          "#.#..~.#.#.S.#.#",
+          "#.#.##....#....#",
+          "#..............#",
+          "#.####.S.#.#...#",
+          "#..............#",
+          "#.########.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#.#########..G.#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 12,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-draft",
+        "type": "parcel",
+        "layer": 0,
         "x": 3,
+        "y": 12,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-draft-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 8,
+        "y": 6,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "lantern-draft-a",
+        "type": "projector",
+        "layer": 0,
+        "x": 6,
         "y": 3,
         "pushable": true,
         "solid": true,
@@ -1253,150 +1853,63 @@ export const ROOM_DEFS = [
             "dy": 0
           }
         ]
-      }
-    ],
-    "switches": [
-      {
-        "id": "mist-plate",
-        "layer": 0,
-        "x": 1,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "mist-door",
-        "layer": 1,
-        "x": 4,
-        "y": 2,
-        "switchIds": [
-          "mist-plate"
-        ]
-      }
-    ],
-    "balance": {
-      "intendedLesson": "Combine earlier door logic with projection while still keeping the lantern placement readable.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 6,
-      "commonMisunderstanding": "Players try to solve the bridge first and only later realize the gate still needs the parcel parked on its switch."
-    }
-  },
-  {
-    "id": "greenhouse-04",
-    "districtId": "greenhouse",
-    "title": "Festival Draft",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Hold the gate, bloom the bridge, climb through the middle sheet, and restore the greenhouse finale route.",
-    "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
-    "intro": [
-      {
-        "speaker": "Mina",
-        "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
-      }
-    ],
-    "achievementId": "demo-complete",
-    "hintTiers": [
-      "Treat this like two setup problems before it becomes a travel problem: gate first, lantern second.",
-      "Park the parcel on the top switch, push the lantern into the tear line, switch to the middle sheet at the top stitch, then descend to the lower stitch.",
-      "Push the parcel onto the top-left switch, lift the lantern into the bridge position, switch to the middle sheet at the upper stitch, travel down to the lower stitch, switch to the final sheet, and cross the opened gate and bridge to the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "draft-roof",
-        "name": "Draft Roof",
-        "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
       },
       {
-        "id": "draft-middle",
-        "name": "Draft Middle",
-        "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#S....#",
-          "#######"
-        ]
-      },
-      {
-        "id": "draft-floor",
-        "name": "Draft Floor",
-        "tiles": [
-          "#######",
-          "#.....#",
-          "#..~.G#",
-          "#.....#",
-          "#S....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
-    },
-    "entities": [
-      {
-        "id": "parcel-draft",
-        "type": "parcel",
-        "layer": 0,
-        "x": 2,
-        "y": 4,
-        "pushable": true,
-        "solid": true
-      },
-      {
-        "id": "lantern-draft",
+        "id": "lantern-draft-b",
         "type": "projector",
         "layer": 0,
-        "x": 3,
-        "y": 3,
+        "x": 10,
+        "y": 8,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
             "layer": 2,
-            "dx": 0,
-            "dy": 0
+            "dx": -5,
+            "dy": -4
           }
         ]
       }
     ],
     "switches": [
       {
-        "id": "draft-plate",
+        "id": "draft-plate-a",
         "layer": 0,
         "x": 1,
-        "y": 4
+        "y": 12
+      },
+      {
+        "id": "draft-plate-b",
+        "layer": 0,
+        "x": 8,
+        "y": 10
       }
     ],
     "doors": [
       {
-        "id": "draft-door",
+        "id": "draft-door-a",
         "layer": 2,
-        "x": 4,
-        "y": 2,
+        "x": 13,
+        "y": 12,
         "switchIds": [
-          "draft-plate"
+          "draft-plate-a"
+        ]
+      },
+      {
+        "id": "draft-door-b",
+        "layer": 1,
+        "x": 12,
+        "y": 3,
+        "switchIds": [
+          "draft-plate-b"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Cap the demo slice with three-sheet traversal layered on top of parcel parking and projection.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 7,
-      "commonMisunderstanding": "Players keep looking for the goal on the middle sheet instead of treating it as the route between the setup layer and the final layer."
+      "intendedLesson": "Cap the demo slice with three-sheet traversal and dual projection.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 22,
+      "commonMisunderstanding": "Players keep looking for the goal on the middle sheet."
     }
   },
   {
@@ -1406,133 +1919,72 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Use the echo courier to hold the door long enough to pass.",
-    "blurb": "Your last move returns as a delayed helper on another sheet.",
+    "objective": "Use the echo courier and a teleporter to hold the door long enough to pass.",
+    "blurb": "Your last move returns as a delayed helper, now with teleporter shortcuts.",
     "intro": [
       {
         "speaker": "Bell Keeper",
-        "text": "The echo courier repeats your previous move exactly one turn later. Give it a beat to catch up."
+        "text": "The echo courier repeats your previous move exactly one turn later. Give it a beat to catch up. And the old bell tubes still work."
       }
     ],
     "hintTiers": [
-      "The echo courier needs one turn before it copies your first move.",
-      "Move once, wait once, then take advantage of the opened door while the echo stays on the switch.",
-      "Walk right, wait, walk right through the opened door, then walk right again to the mailbox."
+      "The echo needs to reach the switch via the teleporter. Time your moves so the echo warps to the right spot.",
+      "Move right to queue the echo, wait so it steps onto the teleporter, which sends it near the switch. Then pass through the door.",
+      "Walk right, wait for the echo to teleport near the switch, walk right through the opened door, then navigate the maze to the mailbox."
     ],
     "layers": [
       {
         "id": "clock-face",
         "name": "Clock Face",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#...G.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#..........#...#",
+          "#.####.###.#.#.#",
+          "#......#...#...#",
+          "#.#..#.#.#...#.#",
+          "#.#.##.......#.#",
+          "#..........#.#.#",
+          "#.####.#.#.#...#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#............G.#",
+          "################"
         ]
       },
       {
         "id": "inner-works",
         "name": "Inner Works",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 2,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "echo-a",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
-      }
-    ],
-    "switches": [
-      {
-        "id": "clock-plate",
-        "layer": 1,
-        "x": 2,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "clock-door",
-        "layer": 0,
-        "x": 3,
-        "y": 2,
-        "switchIds": [
-          "clock-plate"
-        ]
-      }
-    ],
-    "balance": {
-      "intendedLesson": "Teach echo timing and the value of a wait action.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
-    }
-  },
-  {
-    "id": "clocktower-02",
-    "districtId": "clocktower",
-    "title": "Borrowed Bell",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Let the echo hold the gate, reach the stitch, and climb to the mailbox.",
-    "blurb": "A delayed footstep can hold the route open long enough to fold through it.",
-    "intro": [
-      {
-        "speaker": "Bell Keeper",
-        "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
-      }
-    ],
-    "hintTiers": [
-      "You do not need the echo to escort you forever. You only need the door open for one crossing.",
-      "Move once to queue the echo, wait so it can stand on the plate, then cross the opened gate and keep climbing.",
-      "Walk right, wait, walk right through the door, walk right onto the stitch, switch sheets, then step right into the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "clock-borrowed-front",
-        "name": "Borrowed Face",
-        "tiles": [
-          "########",
-          "#..D.S.#",
-          "#.####.#",
-          "#......#",
-          "#......#",
-          "########"
+          "################",
+          "#..........#...#",
+          "#.####.###.#.#.#",
+          "#..T...#...#...#",
+          "#.#..#.#.#...#.#",
+          "#.#.##.......#.#",
+          "#..........#.#.#",
+          "#.####.#.#.#.T.#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#..............#",
+          "################"
         ]
       },
       {
-        "id": "clock-borrowed-back",
-        "name": "Bell Frame",
+        "id": "bell-gear",
+        "name": "Bell Gear",
         "tiles": [
-          "########",
-          "#....SG#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "################",
+          "#..........#...#",
+          "#.####.###.#.#.#",
+          "#......#F..#...#",
+          "#.#..#.#F#...#.#",
+          "#.#.##..F....#.#",
+          "#..........#.#.#",
+          "#.####.#.#.#...#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#..............#",
+          "################"
         ]
       }
     ],
@@ -1544,11 +1996,11 @@ export const ROOM_DEFS = [
     },
     "entities": [
       {
-        "id": "echo-borrowed",
+        "id": "echo-a",
         "type": "echo",
         "layer": 1,
         "x": 1,
-        "y": 4,
+        "y": 9,
         "solid": true,
         "pushable": false,
         "echoDelay": 1,
@@ -1557,29 +2009,230 @@ export const ROOM_DEFS = [
     ],
     "switches": [
       {
-        "id": "clock-borrowed-plate",
+        "id": "clock-plate",
         "layer": 1,
-        "x": 2,
-        "y": 4
+        "x": 13,
+        "y": 7
       }
     ],
     "doors": [
       {
-        "id": "clock-borrowed-door",
+        "id": "clock-door",
         "layer": 0,
-        "x": 3,
-        "y": 1,
+        "x": 8,
+        "y": 9,
         "switchIds": [
-          "clock-borrowed-plate"
+          "clock-plate"
         ]
       }
     ],
-    "routingStamps": [],
+    "teleporters": [
+      {
+        "id": "tp-clock-a1",
+        "layer": 1,
+        "x": 3,
+        "y": 3,
+        "pairId": "tp-clock-a2"
+      },
+      {
+        "id": "tp-clock-a2",
+        "layer": 1,
+        "x": 13,
+        "y": 7,
+        "pairId": "tp-clock-a1"
+      }
+    ],
     "balance": {
-      "intendedLesson": "Extend echo timing into a stitched route instead of a single hallway crossing.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players often switch too early and forget the echo still has to open the first gate."
+      "intendedLesson": "Teach echo timing with teleporter mechanics and gravity tiles.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players move too quickly and forget the echo delay."
+    }
+  },
+  {
+    "id": "clocktower-02",
+    "districtId": "clocktower",
+    "title": "Borrowed Bell",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Combine the echo, a parcel, and cross-layer teleporters to open the route.",
+    "blurb": "A delayed footstep can hold the route open while the parcel crosses between layers.",
+    "intro": [
+      {
+        "speaker": "Bell Keeper",
+        "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
+      }
+    ],
+    "hintTiers": [
+      "The echo holds the door while you push the parcel onto the teleporter to activate the far switch.",
+      "Time the echo to stay on the near switch while you push the parcel through the teleporter to land on the far switch.",
+      "Move right to queue echo, wait for it to reach the switch, push parcel right onto teleporter which sends it to back layer switch. Go through both opened doors to the stitch, switch layers, navigate to the mailbox."
+    ],
+    "routingStamps": [],
+    "layers": [
+      {
+        "id": "clock-borrowed-front",
+        "name": "Borrowed Face",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#....#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "clock-borrowed-mid",
+        "name": "Bell Mechanism",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.#.##.###.#...#",
+          "#..........#.#.#",
+          "#.####.#.#.S.#.#",
+          "#......#...#.S.#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "clock-borrowed-back",
+        "name": "Bell Frame",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.#..####.#....#",
+          "#.#........#.G.#",
+          "#...##.#.#.S.#.#",
+          "#.#..#.#...#.S.#",
+          "#.####.###.#.#.#",
+          "#......#.#.#.#.#",
+          "#.##.#.#.#...#.#",
+          "#.#......#.#...#",
+          "#.####.........#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 10,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "echo-borrowed",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 9,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      },
+      {
+        "id": "parcel-bell",
+        "type": "parcel",
+        "layer": 0,
+        "x": 6,
+        "y": 8,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-bell-b",
+        "type": "parcel",
+        "layer": 1,
+        "x": 8,
+        "y": 3,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "clock-echo-plate",
+        "layer": 1,
+        "x": 5,
+        "y": 9
+      },
+      {
+        "id": "clock-parcel-plate",
+        "layer": 1,
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": "clock-back-plate",
+        "layer": 2,
+        "x": 8,
+        "y": 3
+      }
+    ],
+    "doors": [
+      {
+        "id": "clock-door-a",
+        "layer": 0,
+        "x": 5,
+        "y": 3,
+        "switchIds": [
+          "clock-echo-plate"
+        ]
+      },
+      {
+        "id": "clock-door-b",
+        "layer": 1,
+        "x": 13,
+        "y": 5,
+        "switchIds": [
+          "clock-parcel-plate"
+        ]
+      },
+      {
+        "id": "clock-door-c",
+        "layer": 2,
+        "x": 12,
+        "y": 3,
+        "switchIds": [
+          "clock-back-plate"
+        ]
+      }
+    ],
+    "teleporters": [
+      {
+        "id": "tp-bell-a1",
+        "layer": 0,
+        "x": 10,
+        "y": 8,
+        "pairId": "tp-bell-a2"
+      },
+      {
+        "id": "tp-bell-a2",
+        "layer": 1,
+        "x": 12,
+        "y": 3,
+        "pairId": "tp-bell-a1"
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine echo timing with dual parcel management and cross-layer teleportation.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 18,
+      "commonMisunderstanding": "Players switch too early and forget the echo."
     }
   },
   {
@@ -1589,42 +2242,72 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Use the routing stamp to land exactly where the mailbox route resumes.",
-    "blurb": "Some stitched exits arrive somewhere else entirely once they pass under the clock stamp.",
+    "objective": "Chain teleporters across three layers to reach the mailbox at the bottom.",
+    "blurb": "The clocktower's tube system spans all three sheets of the bell mechanism.",
     "intro": [
       {
         "speaker": "Bell Keeper",
-        "text": "That stamp reroutes a stitch exit the instant you land. Read the arrow, not just the stitch."
+        "text": "The bell tubes connect all three sheets. Each teleporter drops you one layer deeper. Read the chain before you step in."
       }
     ],
     "hintTiers": [
-      "The goal is not a walk after the stitch. The stitch itself is the final delivery hop.",
-      "Switch on the marked stitch. The routing stamp on the destination sheet will slide the exit to the right.",
-      "Walk right twice onto the stitch, then switch sheets. The routing stamp sends you directly to the mailbox."
+      "The teleporters form a chain: layer 0 to layer 1, then layer 1 to layer 2. But walls block direct paths.",
+      "Use the first teleporter to reach layer 1, navigate the maze there, use the second teleporter to reach layer 2, then find the mailbox.",
+      "Navigate to teleporter at (7,2) on layer 0, warp to layer 1 at (2,5), navigate the middle maze to teleporter at (6,6), warp to layer 2 at (3,2), navigate down and right to the mailbox."
     ],
     "layers": [
       {
         "id": "clock-stamp-front",
-        "name": "Clock Front",
+        "name": "Clock Top",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.###.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#..#.........#.#",
+          "#.##.#.T.###...#",
+          "#..........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#RRR.#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "clock-stamp-middle",
+        "name": "Clock Middle",
+        "tiles": [
+          "################",
+          "#....#.......#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#..#.#.#...#.#",
+          "#.T.##.......#.#",
+          "#..........T.#.#",
+          "#.####.#.#.#...#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#..............#",
+          "################"
         ]
       },
       {
         "id": "clock-stamp-back",
-        "name": "Clock Stamp",
+        "name": "Clock Bottom",
         "tiles": [
-          "#######",
-          "#..S.G#",
-          "#.###.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#............#.#",
+          "#.#T####.#.#...#",
+          "#.#........#.#.#",
+          "#...#.##.#...#.#",
+          "#.#.##.......#.#",
+          "#......DDD.#.#.#",
+          "#.####.#.#.#...#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#.............G#",
+          "################"
         ]
       }
     ],
@@ -1637,24 +2320,41 @@ export const ROOM_DEFS = [
     "entities": [],
     "switches": [],
     "doors": [],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "clock-switch-stamp",
+        "id": "tp-chain-a1",
+        "layer": 0,
+        "x": 7,
+        "y": 2,
+        "pairId": "tp-chain-a2"
+      },
+      {
+        "id": "tp-chain-a2",
         "layer": 1,
+        "x": 2,
+        "y": 5,
+        "pairId": "tp-chain-a1"
+      },
+      {
+        "id": "tp-chain-b1",
+        "layer": 1,
+        "x": 11,
+        "y": 6,
+        "pairId": "tp-chain-b2"
+      },
+      {
+        "id": "tp-chain-b2",
+        "layer": 2,
         "x": 3,
-        "y": 1,
-        "direction": "right",
-        "distance": 2,
-        "appliesTo": [
-          "switch"
-        ]
+        "y": 2,
+        "pairId": "tp-chain-b1"
       }
     ],
     "balance": {
-      "intendedLesson": "Introduce routing stamps through a clean stitched exit instead of layering them onto multiple other systems at once.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players step on the stitch and still expect to move manually afterward instead of trusting the reroute."
+      "intendedLesson": "Multi-layer teleporter chains with conveyor belts.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 16,
+      "commonMisunderstanding": "Players get disoriented across layers."
     }
   },
   {
@@ -1664,10 +2364,7 @@ export const ROOM_DEFS = [
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "requiresRooms": [
-      "clocktower-03"
-    ],
-    "objective": "Borrow a beat, fall through the rerouted stitch, and ride the lower route to the mailbox.",
+    "objective": "Combine echo timing, teleporters, and one-way gates across three layers.",
     "blurb": "A side route that turns one rerouted stitch into a full three-sheet descent.",
     "intro": [
       {
@@ -1676,57 +2373,665 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "The first stitch is not the destination. It is the drop point for the second switch.",
-      "Use the echo to open the first door, then let the routing stamp drop you onto the lower stitch before you switch again.",
-      "Walk right, wait, walk right three more times to the stitch, switch to the middle sheet, switch again at the lower stitch, then go right and climb to the mailbox."
+      "The echo must reach the switch via the teleporter while you navigate one-way gates across three layers.",
+      "Time the echo to teleport onto the switch, then navigate through one-way gates, use the stitch to layer 2, use a second teleporter to reach the final area.",
+      "Move right to queue echo, navigate up through one-way gates while echo teleports to switch. Go through opened door, use stitch to middle layer, navigate to teleporter, warp to layer 2, navigate maze to mailbox."
+    ],
+    "requiresRooms": [
+      "clocktower-03"
     ],
     "layers": [
       {
         "id": "clock-pendulum-front",
         "name": "Pendulum Face",
         "tiles": [
-          "########",
-          "#..D.S.#",
-          "#.####.#",
-          "#......#",
-          "#......#",
-          "########"
+          "################",
+          "#...S......#...#",
+          "#.####.###.....#",
+          "#.>..........#.#",
+          "#.#..#..#.#.#..#",
+          "#.#.##....#.#..#",
+          "#.........#.#..#",
+          "#.####.#....#..#",
+          "#.......#.#.#..#",
+          "#.####.###.<...#",
+          "#..............#",
+          "################"
         ]
       },
       {
         "id": "clock-pendulum-middle",
         "name": "Pendulum Frame",
         "tiles": [
-          "########",
-          "#....S.#",
-          "#.####.#",
-          "#......#",
-          "#....S.#",
-          "########"
+          "################",
+          "#...S..T.....#.#",
+          "#.#.####.###...#",
+          "#.v..........^.#",
+          "#......#.#..#..#",
+          "#.###.##..#.#..#",
+          "#.........#.#..#",
+          "#.####.#....#..#",
+          "#.......#.#.#..#",
+          "#.####.###.S...#",
+          "#..............#",
+          "################"
         ]
       },
       {
         "id": "clock-pendulum-back",
         "name": "Bell Route",
         "tiles": [
-          "########",
-          "#.....G#",
-          "#.####.#",
-          "#......#",
-          "#....S.#",
-          "########"
+          "################",
+          "#............G.#",
+          "#.####.###.#...#",
+          "#.T..........^.#",
+          "#.#..#..#.#.#..#",
+          "#.#.##....#.#..#",
+          "#.........#.#..#",
+          "#.####.#....#..#",
+          "#.......#.#.#..#",
+          "#.####.###.S...#",
+          "#..............#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 1,
+      "y": 10,
       "facing": "right"
     },
     "entities": [
       {
         "id": "echo-pendulum",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 10,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      }
+    ],
+    "switches": [
+      {
+        "id": "clock-pendulum-plate",
+        "layer": 1,
+        "x": 12,
+        "y": 1
+      }
+    ],
+    "doors": [
+      {
+        "id": "clock-pendulum-door",
+        "layer": 0,
+        "x": 7,
+        "y": 1,
+        "switchIds": [
+          "clock-pendulum-plate"
+        ]
+      }
+    ],
+    "teleporters": [
+      {
+        "id": "tp-pend-a1",
+        "layer": 1,
+        "x": 7,
+        "y": 1,
+        "pairId": "tp-pend-a2"
+      },
+      {
+        "id": "tp-pend-a2",
+        "layer": 1,
+        "x": 12,
+        "y": 3,
+        "pairId": "tp-pend-a1"
+      },
+      {
+        "id": "tp-pend-b1",
+        "layer": 1,
+        "x": 3,
+        "y": 8,
+        "pairId": "tp-pend-b2"
+      },
+      {
+        "id": "tp-pend-b2",
+        "layer": 2,
+        "x": 3,
+        "y": 3,
+        "pairId": "tp-pend-b1"
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine echo timing with teleporter chains and one-way gates across three layers.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 20,
+      "commonMisunderstanding": "Players forget the final climb."
+    }
+  },
+  {
+    "id": "theater-01",
+    "districtId": "theater",
+    "title": "Understudy",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Guide your shadow to the switch while navigating walls and corridors.",
+    "blurb": "The stage mirrors movement even when the audience cannot see it.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "Your shadow moves in the opposite direction across its own sheet. Think about where it lands, not where you do."
+      }
+    ],
+    "hintTiers": [
+      "The shadow mirrors your movement. Every step right sends it left. Plan a path that places it on the switch.",
+      "You need to move so the shadow hits the switch while you can still reach the door. The maze layout means not every move is mirrored cleanly.",
+      "Move right twice, down once (shadow goes left twice, up once onto the switch). Walk through the opened door and navigate the corridors to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "stage",
+        "name": "Stage",
+        "tiles": [
+          "################",
+          "#..........#...#",
+          "#.####.###.#.#.#",
+          "#.#......#.#...#",
+          "#.#.##.#...#.#.#",
+          "#......#.#...#.#",
+          "#.##.###.#.#.#.#",
+          "#........#.#...#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####......G#",
+          "################"
+        ]
+      },
+      {
+        "id": "backdrop",
+        "name": "Backdrop",
+        "tiles": [
+          "################",
+          "#..........#...#",
+          "#.#.####.#.#.#.#",
+          "#.#......#.#...#",
+          "#.#..#.#...#.#.#",
+          "#...##.#.#...#.#",
+          "#.##.###.#.#.#.#",
+          "#........#.#...#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "wings",
+        "name": "Wings",
+        "tiles": [
+          "################",
+          "#II........#...#",
+          "#I####.###.#.#.#",
+          "#I#......#.#...#",
+          "#I#.##.#...#.#.#",
+          "#I.....#.#...#.#",
+          "#I##.###.#.#.#.#",
+          "#I.......#.#...#",
+          "#I####.#.#...#.#",
+          "#I#......#.#...#",
+          "#I#.####.......#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 3,
+      "y": 5,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-a",
+        "type": "shadow",
+        "layer": 1,
+        "x": 12,
+        "y": 5,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-plate",
+        "layer": 1,
+        "x": 8,
+        "y": 2
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-door",
+        "layer": 0,
+        "x": 8,
+        "y": 5,
+        "switchIds": [
+          "stage-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Teach mirrored shadow movement with larger maze and ice wings layer.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players track their own movement but not the shadow."
+    }
+  },
+  {
+    "id": "theater-02",
+    "districtId": "theater",
+    "title": "Latch Cue",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Navigate ice corridors while guiding your shadow to latch the switch across three layers.",
+    "blurb": "The stage route stays open once the understudy hits the mark, but ice changes everything.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
+      }
+    ],
+    "hintTiers": [
+      "The shadow must latch the switch while you slide on ice. Ice affects you but not the shadow.",
+      "Plan your ice slides so the mirrored shadow movement lands on the latch. Then descend through layers.",
+      "Slide right on ice (shadow goes left to switch). Navigate down to stitch, switch to middle layer, descend to lower stitch, switch to layer 2, push parcel to open final path, reach mailbox."
+    ],
+    "routingStamps": [],
+    "layers": [
+      {
+        "id": "stage-latch-front",
+        "name": "Stage",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.####.###.#...#",
+          "#.......II.#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#....#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-latch-middle",
+        "name": "Wings",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.#.####.#.#...#",
+          "#..........#.#.#",
+          "#.####.#.#.S.#.#",
+          "#......#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-latch-back",
+        "name": "Backstage",
+        "tiles": [
+          "################",
+          "#...........#..#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#..#.#.#.S.#.#",
+          "#.#.##.#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.###.####...G.#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 10,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-latch",
+        "type": "shadow",
+        "layer": 1,
+        "x": 14,
+        "y": 10,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
+      {
+        "id": "parcel-stage",
+        "type": "parcel",
+        "layer": 2,
+        "x": 6,
+        "y": 8,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-latch-switch",
+        "layer": 1,
+        "x": 4,
+        "y": 3,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-latch-door",
+        "layer": 2,
+        "x": 11,
+        "y": 10,
+        "switchIds": [
+          "stage-latch-switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine shadow latching with ice physics and three-layer navigation.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 18,
+      "commonMisunderstanding": "Players assume the shadow must keep standing on the switch."
+    }
+  },
+  {
+    "id": "theater-03",
+    "districtId": "theater",
+    "title": "Marked Landing",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Guide two shadows through one-way gates to latch two switches simultaneously.",
+    "blurb": "The spotlight stamp only helps if both shadows have already unlocked their respective doors.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "Two shadows, two marks. Both must hit their cues before the scene opens."
+      }
+    ],
+    "hintTiers": [
+      "Two shadows mirror you on two different layers. Each must reach its own switch.",
+      "Plan a movement sequence that places both shadows on their respective switches while navigating one-way gates.",
+      "Move right twice (both shadows go left). Move down once (both go up). Shadow A reaches switch on layer 1, shadow B reaches switch on layer 2. Navigate through both opened doors via one-way gate circuit to the mailbox."
+    ],
+    "achievementId": "stage-route",
+    "layers": [
+      {
+        "id": "stage-mark-front",
+        "name": "Stage Floor",
+        "tiles": [
+          "################",
+          "#...S......#...#",
+          "#.>###.###.....#",
+          "#.#........v...#",
+          "#...#.##.#..#..#",
+          "#.#.##...#..#..#",
+          "#......<.......#",
+          "#.####.###..#..#",
+          "#..........#...#",
+          "#.#.####.......#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-mark-mid",
+        "name": "Wing Grid",
+        "tiles": [
+          "################",
+          "#...S......#...#",
+          "#.#.####.###...#",
+          "#..............#",
+          "#.....##.#..#..#",
+          "#.###.....#.#..#",
+          "#..............#",
+          "#.####.###..#..#",
+          "#..........#...#",
+          "#.#.####.......#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-mark-back",
+        "name": "Spotlight Grid",
+        "tiles": [
+          "################",
+          "#...S......#...#",
+          "#.####.###.....#",
+          "#..............#",
+          "#.#..#.##.#.#..#",
+          "#.#.##...#..#..#",
+          "#..............#",
+          "#.####.###..#..#",
+          "#..........#...#",
+          "#.#.####.......#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-mark-deep",
+        "name": "Deep Stage",
+        "tiles": [
+          "################",
+          "#...S........G.#",
+          "#.####.###.#...#",
+          "#..............#",
+          "#.#..#.##.#.#..#",
+          "#.#.##...#..#..#",
+          "#..............#",
+          "#.####.###..#..#",
+          "#..........#...#",
+          "#.#.####.......#",
+          "#..............#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 3,
+      "y": 7,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-mark-a",
+        "type": "shadow",
+        "layer": 1,
+        "x": 12,
+        "y": 8,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
+      {
+        "id": "shadow-mark-b",
+        "type": "shadow",
+        "layer": 2,
+        "x": 12,
+        "y": 8,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-mark-switch-a",
+        "layer": 1,
+        "x": 6,
+        "y": 3,
+        "sticky": true
+      },
+      {
+        "id": "stage-mark-switch-b",
+        "layer": 2,
+        "x": 6,
+        "y": 3,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-mark-door-a",
+        "layer": 0,
+        "x": 8,
+        "y": 1,
+        "switchIds": [
+          "stage-mark-switch-a"
+        ]
+      },
+      {
+        "id": "stage-mark-door-b",
+        "layer": 3,
+        "x": 13,
+        "y": 1,
+        "switchIds": [
+          "stage-mark-switch-b"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Dual shadow coordination with one-way gates across four layers.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 22,
+      "commonMisunderstanding": "Players plan for one shadow and forget the other."
+    }
+  },
+  {
+    "id": "theater-side-01",
+    "districtId": "theater",
+    "title": "Backstage Fold",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Combine shadow, echo, and teleporters across three layers for the ultimate stage puzzle.",
+    "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
+      }
+    ],
+    "hintTiers": [
+      "The shadow latches one door, the echo holds another, and teleporters connect all three layers.",
+      "Move to latch the shadow switch first. Then time the echo to hold the second door while you teleport between layers.",
+      "Move right to latch shadow switch. Navigate to echo timing position. Move right to queue echo onto switch via teleporter. Pass through both opened doors. Use teleporter to layer 2. Navigate the final maze to the mailbox."
+    ],
+    "requiresRooms": [
+      "theater-03"
+    ],
+    "layers": [
+      {
+        "id": "stage-fold-front",
+        "name": "Front Curtain",
+        "tiles": [
+          "################",
+          "#...S..........#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "#.#..#.#.#.#...#",
+          "#.#.##.........#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-fold-middle",
+        "name": "Backstage Grid",
+        "tiles": [
+          "################",
+          "#...S..T.......#",
+          "#.#.####.#.#...#",
+          "#..............#",
+          "#......#.#.#...#",
+          "#.###.#S.......#",
+          "#.T............#",
+          "#.####.S.#.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-fold-back",
+        "name": "Fly Loft",
+        "tiles": [
+          "################",
+          "#.T............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "#.#..#.#.#.#...#",
+          "#.#.##.S.......#",
+          "#..............#",
+          "#.####.S.#.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#............G.#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 12,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-fold",
+        "type": "shadow",
+        "layer": 1,
+        "x": 14,
+        "y": 12,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
+      {
+        "id": "echo-fold",
         "type": "echo",
         "layer": 1,
         "x": 1,
@@ -1739,447 +3044,74 @@ export const ROOM_DEFS = [
     ],
     "switches": [
       {
-        "id": "clock-pendulum-plate",
+        "id": "stage-fold-shadow-switch",
+        "layer": 1,
+        "x": 6,
+        "y": 4,
+        "sticky": true
+      },
+      {
+        "id": "stage-fold-echo-switch",
+        "layer": 1,
+        "x": 12,
+        "y": 1
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-fold-door-a",
+        "layer": 0,
+        "x": 7,
+        "y": 1,
+        "switchIds": [
+          "stage-fold-shadow-switch"
+        ]
+      },
+      {
+        "id": "stage-fold-door-b",
+        "layer": 1,
+        "x": 13,
+        "y": 4,
+        "switchIds": [
+          "stage-fold-echo-switch"
+        ]
+      }
+    ],
+    "teleporters": [
+      {
+        "id": "tp-fold-a1",
+        "layer": 1,
+        "x": 7,
+        "y": 1,
+        "pairId": "tp-fold-a2"
+      },
+      {
+        "id": "tp-fold-a2",
         "layer": 1,
         "x": 2,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "clock-pendulum-door",
-        "layer": 0,
-        "x": 3,
-        "y": 1,
-        "switchIds": [
-          "clock-pendulum-plate"
-        ]
-      }
-    ],
-    "routingStamps": [
-      {
-        "id": "clock-pendulum-stamp",
-        "layer": 1,
-        "x": 5,
-        "y": 1,
-        "direction": "down",
-        "distance": 3,
-        "appliesTo": [
-          "switch"
-        ]
-      }
-    ],
-    "balance": {
-      "intendedLesson": "Use one routing stamp to turn a familiar echo-door puzzle into a genuine three-sheet route.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 7,
-      "commonMisunderstanding": "Players often switch once, see the lower stitch, and then forget the final climb still happens on the back sheet."
-    }
-  },
-  {
-    "id": "theater-01",
-    "districtId": "theater",
-    "title": "Understudy",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Let your shadow open the route while you pass through.",
-    "blurb": "The stage mirrors movement even when the audience cannot see it.",
-    "intro": [
-      {
-        "speaker": "Stagehand",
-        "text": "Your shadow moves in the opposite direction across its own sheet. Think about where it lands, not where you do."
-      }
-    ],
-    "hintTiers": [
-      "One move to the right sends the shadow one move to the left.",
-      "The shadow only needs to step on the switch once for you to get through the door.",
-      "Move right to place the shadow on the switch, then continue right through the door before the route closes behind you."
-    ],
-    "layers": [
-      {
-        "id": "stage",
-        "name": "Stage",
-        "tiles": [
-          "#######",
-          "#.....#",
-          "#...G.#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
+        "y": 6,
+        "pairId": "tp-fold-a1"
       },
       {
-        "id": "backdrop",
-        "name": "Backdrop",
-        "tiles": [
-          "#######",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 2,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "shadow-a",
-        "type": "shadow",
+        "id": "tp-fold-b1",
         "layer": 1,
         "x": 5,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
-    "switches": [
-      {
-        "id": "stage-plate",
-        "layer": 1,
-        "x": 4,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "stage-door",
-        "layer": 0,
-        "x": 3,
-        "y": 2,
-        "switchIds": [
-          "stage-plate"
-        ]
-      }
-    ],
-    "balance": {
-      "intendedLesson": "Teach mirrored shadow movement and planning for a separate actor.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
-    }
-  },
-  {
-    "id": "theater-02",
-    "districtId": "theater",
-    "title": "Latch Cue",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Let your shadow latch the hidden switch, then climb through the open route.",
-    "blurb": "The stage route stays open once the understudy hits the mark.",
-    "intro": [
-      {
-        "speaker": "Stagehand",
-        "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
-      }
-    ],
-    "hintTiers": [
-      "The shadow does not need to babysit the switch. It only needs to touch it once.",
-      "Move right once to latch the switch with the shadow, then make your own climb to the stitch.",
-      "Move right, go up three times to the stitch, switch sheets, then go down and cross the now-open route to the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "stage-latch-front",
-        "name": "Stage",
-        "tiles": [
-          "#######",
-          "#.S...#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
+        "y": 12,
+        "pairId": "tp-fold-b2"
       },
       {
-        "id": "stage-latch-back",
-        "name": "Backstage",
-        "tiles": [
-          "#######",
-          "#.S...#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 4,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "shadow-latch",
-        "type": "shadow",
-        "layer": 1,
-        "x": 5,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
-    "switches": [
-      {
-        "id": "stage-latch-switch",
-        "layer": 1,
-        "x": 4,
-        "y": 4,
-        "sticky": true
-      }
-    ],
-    "doors": [
-      {
-        "id": "stage-latch-door",
-        "layer": 1,
-        "x": 3,
-        "y": 2,
-        "switchIds": [
-          "stage-latch-switch"
-        ]
-      }
-    ],
-    "routingStamps": [],
-    "balance": {
-      "intendedLesson": "Introduce sticky latches as a cleaner shadow-planning escalation before the routed shadow rooms.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players often assume the shadow must keep standing on the switch and overcomplicate the route."
-    }
-  },
-  {
-    "id": "theater-03",
-    "districtId": "theater",
-    "title": "Marked Landing",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Latch the mark, switch sheets, and let the stamp drop you through the open landing.",
-    "blurb": "The spotlight stamp only helps if the shadow has already unlocked the door it lands on.",
-    "intro": [
-      {
-        "speaker": "Stagehand",
-        "text": "The stamp lands you on a different mark, but the landing only matters if the shadow has opened the prop door first."
-      }
-    ],
-    "hintTiers": [
-      "The shadow action happens before the stitched landing pays off.",
-      "Step right once to latch the switch with the shadow, then climb to the stitch and trust the rerouted landing.",
-      "Move right, go up three times, move right onto the stitch, switch sheets, and step right into the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "stage-mark-front",
-        "name": "Stage Floor",
-        "tiles": [
-          "########",
-          "#..S...#",
-          "#..##..#",
-          "#......#",
-          "#......#",
-          "########"
-        ]
-      },
-      {
-        "id": "stage-mark-back",
-        "name": "Spotlight Grid",
-        "tiles": [
-          "########",
-          "#..S.DG#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 4,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "shadow-mark",
-        "type": "shadow",
-        "layer": 1,
-        "x": 5,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
-    "switches": [
-      {
-        "id": "stage-mark-switch",
-        "layer": 1,
-        "x": 4,
-        "y": 4,
-        "sticky": true
-      }
-    ],
-    "doors": [
-      {
-        "id": "stage-mark-door",
-        "layer": 1,
-        "x": 5,
-        "y": 1,
-        "switchIds": [
-          "stage-mark-switch"
-        ]
-      }
-    ],
-    "routingStamps": [
-      {
-        "id": "stage-mark-stamp",
-        "layer": 1,
-        "x": 3,
-        "y": 1,
-        "direction": "right",
-        "distance": 2,
-        "appliesTo": [
-          "switch"
-        ]
-      }
-    ],
-    "achievementId": "stage-route",
-    "balance": {
-      "intendedLesson": "Combine sticky shadow setup with a routed stitch landing that only works because the shadow solved the destination first.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 6,
-      "commonMisunderstanding": "Players often climb correctly but forget to move right once at the start, so the landing stays blocked."
-    }
-  },
-  {
-    "id": "theater-side-01",
-    "districtId": "theater",
-    "title": "Backstage Fold",
-    "optional": true,
-    "unlockCost": 0,
-    "postmarks": 0,
-    "requiresRooms": [
-      "theater-03"
-    ],
-    "objective": "Latch the cue, fall through the rerouted stitch, and take the hidden backstage climb.",
-    "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
-    "intro": [
-      {
-        "speaker": "Stagehand",
-        "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
-      }
-    ],
-    "hintTiers": [
-      "The first stitch is the setup. The second stitch is the route.",
-      "Move right once so the shadow latches the cue, then use the routed stitch to drop onto the lower switch point.",
-      "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "stage-fold-front",
-        "name": "Front Curtain",
-        "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
-        ]
-      },
-      {
-        "id": "stage-fold-middle",
-        "name": "Backstage Grid",
-        "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#..S...#",
-          "########"
-        ]
-      },
-      {
-        "id": "stage-fold-back",
-        "name": "Fly Loft",
-        "tiles": [
-          "########",
-          "#....DG#",
-          "#......#",
-          "#......#",
-          "#..S...#",
-          "########"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 4,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "shadow-fold",
-        "type": "shadow",
-        "layer": 1,
-        "x": 5,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
-    "switches": [
-      {
-        "id": "stage-fold-switch",
-        "layer": 1,
-        "x": 4,
-        "y": 4,
-        "sticky": true
-      }
-    ],
-    "doors": [
-      {
-        "id": "stage-fold-door",
+        "id": "tp-fold-b2",
         "layer": 2,
-        "x": 5,
+        "x": 2,
         "y": 1,
-        "switchIds": [
-          "stage-fold-switch"
-        ]
-      }
-    ],
-    "routingStamps": [
-      {
-        "id": "stage-fold-stamp",
-        "layer": 1,
-        "x": 3,
-        "y": 1,
-        "direction": "down",
-        "distance": 3,
-        "appliesTo": [
-          "switch"
-        ]
+        "pairId": "tp-fold-b1"
       }
     ],
     "balance": {
-      "intendedLesson": "Push the routed shadow idea into a three-layer secret path that still hinges on one readable fold.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 8,
-      "commonMisunderstanding": "Players often keep searching the middle sheet for the goal instead of treating it as the folded route into the loft."
+      "intendedLesson": "The ultimate theater challenge combining shadow, echo, and teleporters.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 25,
+      "commonMisunderstanding": "Players keep searching the middle sheet for the goal."
     }
   },
   {
@@ -2189,58 +3121,118 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Hold the door, project the bridge, and restore the final delivery lane.",
-    "blurb": "This is the first true mixed-mechanic route in the prototype.",
+    "objective": "Use two parcels, a projector, ice, one-way gates, and switches across three layers.",
+    "blurb": "This is the first true mixed-mechanic route in the campaign.",
     "intro": [
       {
         "speaker": "Mina",
         "text": "By now the town expects more than one insight at a time. Hold the line open, then build the bridge."
       }
     ],
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
+      }
+    ],
     "hintTiers": [
-      "One parcel belongs on the switch. The lantern belongs where the tear is.",
-      "Park the parcel on the switch first so you do not have to revisit it after the bridge is ready.",
-      "Push the parcel onto the floor plate, move the lantern to x3 y2, switch layers at the stitch, then walk over the bridge and through the open door to the mailbox."
+      "One parcel for each switch. The projector bridges the gap. One-way gates force a specific circuit.",
+      "Push parcel A across ice to the visible switch. Transfer parcel B to the hidden switch. Push the projector into position. Navigate the one-way circuit.",
+      "Slide parcel A right on ice to switch at (9,5). Transfer parcel B to back layer switch. Push projector up to bridge the gap on layer 2. Navigate one-way gates through all three layers to the mailbox."
     ],
     "layers": [
       {
         "id": "roofline",
         "name": "Roofline",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##################",
+          "#...S..........#.#",
+          "#.####.###.#.#...#",
+          "#.>............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#IIIIII..#.....#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#.<.#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "gutter-mid",
+        "name": "Gutter Middle",
+        "tiles": [
+          "##################",
+          "#...S..........#.#",
+          "#.#.##.###.#.#...#",
+          "#.v............^.#",
+          "#.####.#.#.#.#.#.#",
+          "#......#...#.S...#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.S...#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "gutter",
         "name": "Gutter Route",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#..~.G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##################",
+          "#................#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#~.#.#.#.#.#.#.#",
+          "#.#.##.#...#.S...#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.S...#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 12,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "parcel-d",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 3,
+        "y": 5,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-e",
+        "type": "parcel",
+        "layer": 0,
+        "x": 7,
+        "y": 11,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-f",
+        "type": "parcel",
+        "layer": 1,
+        "x": 9,
+        "y": 7,
         "pushable": true,
         "solid": true
       },
@@ -2248,50 +3240,66 @@ export const ROOM_DEFS = [
         "id": "lantern-b",
         "type": "projector",
         "layer": 0,
-        "x": 2,
+        "x": 5,
         "y": 3,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 1,
-            "dx": 0,
-            "dy": 0
+            "layer": 2,
+            "dx": -1,
+            "dy": 1
           }
         ]
       }
     ],
     "switches": [
       {
-        "id": "roof-plate",
+        "id": "roof-plate-a",
         "layer": 0,
-        "x": 1,
-        "y": 4
+        "x": 15,
+        "y": 5
+      },
+      {
+        "id": "roof-plate-b",
+        "layer": 1,
+        "x": 7,
+        "y": 11
+      },
+      {
+        "id": "roof-plate-c",
+        "layer": 1,
+        "x": 9,
+        "y": 7
       }
     ],
     "doors": [
       {
-        "id": "roof-door",
-        "layer": 1,
-        "x": 4,
-        "y": 2,
+        "id": "roof-door-a",
+        "layer": 2,
+        "x": 15,
+        "y": 12,
         "switchIds": [
-          "roof-plate"
+          "roof-plate-a",
+          "roof-plate-b"
+        ]
+      },
+      {
+        "id": "roof-door-b",
+        "layer": 1,
+        "x": 14,
+        "y": 11,
+        "switchIds": [
+          "roof-plate-c"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Combine parcel parking, layer switching, and projection in one route.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 6,
-      "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
-    },
-    "outro": [
-      {
-        "speaker": "Mina",
-        "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
-      }
-    ]
+      "intendedLesson": "Combine all previous mechanics.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 22,
+      "commonMisunderstanding": "Players solve the bridge first and discover they need the door open."
+    }
   },
   {
     "id": "rooftops-02",
@@ -2300,8 +3308,8 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Push the lantern into line, switch sheets, and cross the rerouted bridge.",
-    "blurb": "The rooftop stamp forwards a bridge one tile farther than the lantern expects.",
+    "objective": "Combine projection, shadow movement, teleporters, and ice across three layers.",
+    "blurb": "The rooftop route demands mastery of projection and shadow coordination.",
     "intro": [
       {
         "speaker": "Mina",
@@ -2309,80 +3317,161 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "Aim the lantern at the stamp tile, not directly at the gap.",
-      "Push the lantern left once so its projection lands on the stamp, then switch sheets and walk over the forwarded bridge.",
-      "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down, then cross right three times to the mailbox."
+      "The shadow latches a switch while the projector bridges the gap. Teleporters connect the layers.",
+      "Move to latch the shadow switch, then push the projector onto ice to slide into position. Use the teleporter to descend.",
+      "Move right to latch shadow. Push projector left onto ice, it slides to bridge position. Navigate to teleporter at layer 0, warp to layer 1, descend to stitch, switch to layer 2, cross bridge through opened door to mailbox."
     ],
     "layers": [
       {
         "id": "roof-forward-top",
         "name": "Roofline",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#II.#.#.#",
+          "#.#.##.......#...#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#...#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "roof-forward-middle",
+        "name": "Forwarded Middle",
+        "tiles": [
+          "##################",
+          "#...S..........#.#",
+          "#.#.####.###.#...#",
+          "#.T............#.#",
+          "#......#.#.S.#.#.#",
+          "#.###.##.......#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.S...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "roof-forward-bottom",
         "name": "Forwarded Span",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#...~.G#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#................#",
+          "#.######.###.#...#",
+          "#.T............#.#",
+          "#.#..~.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.S...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 3,
-      "facing": "left"
+      "x": 1,
+      "y": 12,
+      "facing": "right"
     },
     "entities": [
+      {
+        "id": "shadow-roof",
+        "type": "shadow",
+        "layer": 1,
+        "x": 16,
+        "y": 12,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
       {
         "id": "lantern-forward",
         "type": "projector",
         "layer": 0,
-        "x": 4,
-        "y": 3,
+        "x": 8,
+        "y": 4,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 1,
-            "dx": 0,
-            "dy": -1
+            "layer": 2,
+            "dx": -3,
+            "dy": 0
           }
         ]
       }
     ],
-    "switches": [],
-    "doors": [],
-    "routingStamps": [
+    "switches": [
       {
-        "id": "roof-forward-stamp",
+        "id": "roof-shadow-plate",
         "layer": 1,
-        "x": 3,
-        "y": 2,
-        "direction": "right",
-        "distance": 1,
-        "appliesTo": [
-          "projection"
+        "x": 7,
+        "y": 3,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "roof-forward-door",
+        "layer": 2,
+        "x": 14,
+        "y": 12,
+        "switchIds": [
+          "roof-shadow-plate"
         ]
       }
     ],
+    "teleporters": [
+      {
+        "id": "tp-roof-a1",
+        "layer": 0,
+        "x": 15,
+        "y": 1,
+        "pairId": "tp-roof-a2"
+      },
+      {
+        "id": "tp-roof-a2",
+        "layer": 1,
+        "x": 2,
+        "y": 3,
+        "pairId": "tp-roof-a1"
+      },
+      {
+        "id": "tp-roof-b1",
+        "layer": 1,
+        "x": 15,
+        "y": 9,
+        "pairId": "tp-roof-b2"
+      },
+      {
+        "id": "tp-roof-b2",
+        "layer": 2,
+        "x": 2,
+        "y": 3,
+        "pairId": "tp-roof-b1"
+      }
+    ],
     "balance": {
-      "intendedLesson": "Introduce projection routing as a spatial alignment problem instead of a raw bridge-placement guess.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players push the lantern directly under the gap and miss that the stamp forwards the bridge one tile farther."
+      "intendedLesson": "Combine shadow latching, ice-based projector placement, and teleporter chains.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 22,
+      "commonMisunderstanding": "Players push the lantern directly under the gap."
     }
   },
   {
@@ -2392,7 +3481,7 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Forward the parcel onto the rooftop plate, then climb through the reopened lane.",
+    "objective": "Use two parcels, two switches, and teleporters across three layers to open the final corridor.",
     "blurb": "A transfer stamp can park a parcel exactly where a distant lane needs weight.",
     "intro": [
       {
@@ -2401,90 +3490,183 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "Transfer first. The stamp will handle the final parking spot for the parcel.",
-      "Stand still and transfer the parcel into the other sheet; the stamp there forwards it onto the switch.",
-      "Transfer the parcel, climb to the stitch with three moves up and two right, switch sheets, then walk right three times through the open lane to the mailbox."
+      "Each parcel activates a different switch on a different layer. Teleporters help you reach the distant areas.",
+      "Transfer one parcel to the back layer switch, push the other across the maze to the visible switch. Use teleporters to navigate between layers.",
+      "Transfer parcel A to back layer where it lands on hidden switch. Push parcel B through the maze to visible switch. Use teleporter chain to descend through three layers. Navigate through both opened doors to the mailbox."
     ],
     "layers": [
       {
         "id": "roof-transfer-top",
         "name": "Top Route",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.......#...#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#...#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "roof-transfer-middle",
+        "name": "Middle Route",
+        "tiles": [
+          "##################",
+          "#...S..........#.#",
+          "#.#.####.###.#...#",
+          "#..............#.#",
+          "#......#.#.S.#.#.#",
+          "#.###.##.......#.#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "roof-transfer-bottom",
         "name": "Stamped Lane",
         "tiles": [
-          "########",
-          "#..S.DG#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#................#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 12,
       "facing": "right"
     },
     "entities": [
       {
-        "id": "parcel-stamped",
+        "id": "parcel-stamped-a",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 4,
+        "y": 9,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-stamped-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 10,
+        "y": 3,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-stamped-c",
+        "type": "parcel",
+        "layer": 1,
+        "x": 6,
+        "y": 10,
         "pushable": true,
         "solid": true
       }
     ],
     "switches": [
       {
-        "id": "roof-transfer-plate",
-        "layer": 1,
+        "id": "roof-visible-plate",
+        "layer": 0,
+        "x": 15,
+        "y": 9
+      },
+      {
+        "id": "roof-hidden-plate",
+        "layer": 2,
         "x": 4,
-        "y": 4
+        "y": 8
+      },
+      {
+        "id": "roof-mid-plate",
+        "layer": 1,
+        "x": 6,
+        "y": 10
       }
     ],
     "doors": [
       {
-        "id": "roof-transfer-door",
-        "layer": 1,
-        "x": 5,
-        "y": 1,
+        "id": "roof-door-a",
+        "layer": 2,
+        "x": 14,
+        "y": 12,
         "switchIds": [
-          "roof-transfer-plate"
+          "roof-visible-plate"
+        ]
+      },
+      {
+        "id": "roof-door-b",
+        "layer": 2,
+        "x": 15,
+        "y": 5,
+        "switchIds": [
+          "roof-hidden-plate",
+          "roof-mid-plate"
         ]
       }
     ],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "roof-transfer-stamp",
+        "id": "tp-transfer-a1",
+        "layer": 0,
+        "x": 16,
+        "y": 1,
+        "pairId": "tp-transfer-a2"
+      },
+      {
+        "id": "tp-transfer-a2",
         "layer": 1,
         "x": 2,
-        "y": 4,
-        "direction": "right",
-        "distance": 2,
-        "appliesTo": [
-          "transfer"
-        ]
+        "y": 5,
+        "pairId": "tp-transfer-a1"
+      },
+      {
+        "id": "tp-transfer-b1",
+        "layer": 1,
+        "x": 15,
+        "y": 11,
+        "pairId": "tp-transfer-b2"
+      },
+      {
+        "id": "tp-transfer-b2",
+        "layer": 2,
+        "x": 2,
+        "y": 3,
+        "pairId": "tp-transfer-b1"
       }
     ],
     "balance": {
-      "intendedLesson": "Introduce transfer routing as a way to park a parcel across the fold without a long push setup.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 6,
-      "commonMisunderstanding": "Players often try to walk the parcel to the plate manually instead of trusting the transfer stamp."
+      "intendedLesson": "Triple parcel management across three layers with teleporter-assisted navigation.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 24,
+      "commonMisunderstanding": "Players try to walk the parcel manually."
     }
   },
   {
@@ -2494,10 +3676,7 @@ export const ROOM_DEFS = [
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "requiresRooms": [
-      "rooftops-03"
-    ],
-    "objective": "Push the lantern into line, fold through both stitches, and trace the hidden rooftop note.",
+    "objective": "Combine projector, echo, one-way gates, and ice across three layers for the hidden rooftop note.",
     "blurb": "The skyline keeps one extra route for players who read the stamps and the folds together.",
     "intro": [
       {
@@ -2506,92 +3685,134 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "Set the lantern before you start climbing. The folded route only works once the bridge is already forwarded.",
-      "Push the lantern left once, climb to the top stitch, drop to the lower stitch on the middle sheet, then cross the forwarded bridge on the last sheet.",
-      "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down twice to the lower stitch, switch again, go up once, then cross right three times to the mailbox."
+      "The projector bridges the gap, the echo holds a door, one-way gates force your circuit. Ice adds momentum.",
+      "Push the projector onto ice to slide it into bridge position. Time the echo to hold the door. Navigate the one-way gate circuit through all three layers.",
+      "Push projector right onto ice where it slides to bridge position. Navigate one-way loop to echo timing area. Queue echo, wait for it to reach switch. Pass through door, descend via stitches, cross bridge to mailbox."
+    ],
+    "requiresRooms": [
+      "rooftops-03"
     ],
     "layers": [
       {
         "id": "sky-postscript-top",
         "name": "Upper Roof",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.######.###.#...#",
+          "#.>............#.#",
+          "#.#..#.#.#II.#.#.#",
+          "#.#.##.......#...#",
+          "#.v..###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.<.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#...#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "sky-postscript-middle",
         "name": "Margin Route",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#..S...#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.#.####.###.#...#",
+          "#..............#.#",
+          "#......#.#.S.#.#.#",
+          "#.###.##.......#.#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "sky-postscript-bottom",
         "name": "Skyline Note",
         "tiles": [
-          "########",
-          "#......#",
-          "#...~.G#",
-          "#..S...#",
-          "#......#",
-          "########"
+          "##################",
+          "#................#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..~.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 3,
-      "facing": "left"
+      "x": 1,
+      "y": 12,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "lantern-postscript",
         "type": "projector",
         "layer": 0,
-        "x": 4,
-        "y": 3,
+        "x": 7,
+        "y": 5,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
             "layer": 2,
-            "dx": 0,
-            "dy": -1
+            "dx": -2,
+            "dy": 0
           }
         ]
+      },
+      {
+        "id": "echo-sky",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
       }
     ],
-    "switches": [],
-    "doors": [],
-    "routingStamps": [
+    "switches": [
       {
-        "id": "sky-postscript-stamp",
+        "id": "sky-echo-plate",
+        "layer": 1,
+        "x": 14,
+        "y": 1
+      }
+    ],
+    "doors": [
+      {
+        "id": "sky-door",
         "layer": 2,
-        "x": 3,
-        "y": 2,
-        "direction": "right",
-        "distance": 1,
-        "appliesTo": [
-          "projection"
+        "x": 14,
+        "y": 12,
+        "switchIds": [
+          "sky-echo-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Turn projection routing into a longer folded route that still hinges on one bridge-placement insight.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 8,
-      "commonMisunderstanding": "Players often reach the lower stitch correctly but forget the bridge was forwarded one tile farther than the lamp suggests."
+      "intendedLesson": "Combine projector, echo timing, ice, and one-way gates.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 25,
+      "commonMisunderstanding": "Players forget the bridge was forwarded."
     }
   },
   {
@@ -2601,8 +3822,8 @@ export const ROOM_DEFS = [
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Park the parcel, trust the forwarded lantern bridge, and reconnect the full rooftop line.",
-    "blurb": "The final rooftop route ties pressure, projection, and three stitched sheets into one letter-long climb.",
+    "objective": "Master all mechanics across four layers to reconnect the full rooftop delivery line.",
+    "blurb": "The final rooftop route ties every mechanic into one grand puzzle across four sheets.",
     "intro": [
       {
         "speaker": "Mina",
@@ -2616,9 +3837,9 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "Treat this as setup first and travel second. The parcel and lantern should be ready before you start climbing.",
-      "Push the parcel onto the plate, use the upper stitch to reach the middle sheet, then descend to the lower stitch before you cross the bridge.",
-      "Move left three times to park the parcel, climb to the upper stitch, switch to the middle sheet, descend to the lower stitch, switch again, then go up twice and right three times through the bridge and door."
+      "Four layers, multiple entities, all mechanics. Solve the setup on layer 0 before descending.",
+      "Push parcel onto switch, align projector, latch the shadow switch, then descend through all four layers using stitches and teleporters.",
+      "Push parcel to switch at (1,10). Push projector to bridge position. Move to latch shadow. Use top stitch to layer 1, navigate to teleporter, warp to layer 2, use stitch to layer 3, cross bridge through opened doors to the mailbox."
     ],
     "achievementId": "festival-line",
     "layers": [
@@ -2626,52 +3847,113 @@ export const ROOM_DEFS = [
         "id": "festival-line-top",
         "name": "Festival Roof",
         "tiles": [
-          "########",
-          "#.S....#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.........#.#",
+          "#.>...........v..#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
         ]
       },
       {
-        "id": "festival-line-middle",
-        "name": "Carrier Fold",
+        "id": "festival-line-mid1",
+        "name": "Carrier Fold A",
         "tiles": [
-          "########",
-          "#.S....#",
-          "#......#",
-          "#......#",
-          "#.S....#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.#.######.###...#",
+          "#..............#.#",
+          "#......#.#.#.#.#.#",
+          "#.###.##.......#.#",
+          "#.<...........^..#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
+        ]
+      },
+      {
+        "id": "festival-line-mid2",
+        "name": "Carrier Fold B",
+        "tiles": [
+          "##################",
+          "#.T..............#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.........#.#",
+          "#................#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
         ]
       },
       {
         "id": "festival-line-bottom",
         "name": "Delivery Lane",
         "tiles": [
-          "########",
-          "#......#",
-          "#..~DG.#",
-          "#......#",
-          "#.S....#",
-          "########"
+          "##################",
+          "#.T..............#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..~.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#................#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#...............G#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 14,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "festival-parcel",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 4,
+        "y": 14,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "festival-parcel-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 8,
+        "y": 8,
         "pushable": true,
         "solid": true
       },
@@ -2679,56 +3961,106 @@ export const ROOM_DEFS = [
         "id": "festival-lantern",
         "type": "projector",
         "layer": 0,
-        "x": 3,
+        "x": 8,
         "y": 3,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 2,
-            "dx": -1,
-            "dy": -1
+            "layer": 3,
+            "dx": -3,
+            "dy": 1
           }
         ]
+      },
+      {
+        "id": "festival-shadow",
+        "type": "shadow",
+        "layer": 1,
+        "x": 16,
+        "y": 14,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
       }
     ],
     "switches": [
       {
-        "id": "festival-line-plate",
+        "id": "festival-parcel-plate",
         "layer": 0,
         "x": 1,
-        "y": 4
+        "y": 14
+      },
+      {
+        "id": "festival-parcel-plate-b",
+        "layer": 0,
+        "x": 8,
+        "y": 12
+      },
+      {
+        "id": "festival-shadow-plate",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
       }
     ],
     "doors": [
       {
-        "id": "festival-line-door",
-        "layer": 2,
-        "x": 4,
-        "y": 2,
+        "id": "festival-door-a",
+        "layer": 3,
+        "x": 15,
+        "y": 14,
         "switchIds": [
-          "festival-line-plate"
+          "festival-parcel-plate",
+          "festival-parcel-plate-b"
+        ]
+      },
+      {
+        "id": "festival-door-b",
+        "layer": 3,
+        "x": 8,
+        "y": 3,
+        "switchIds": [
+          "festival-shadow-plate"
         ]
       }
     ],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "festival-line-stamp",
+        "id": "tp-festival-a1",
+        "layer": 1,
+        "x": 15,
+        "y": 1,
+        "pairId": "tp-festival-a2"
+      },
+      {
+        "id": "tp-festival-a2",
         "layer": 2,
         "x": 2,
-        "y": 2,
-        "direction": "right",
-        "distance": 1,
-        "appliesTo": [
-          "projection"
-        ]
+        "y": 1,
+        "pairId": "tp-festival-a1"
+      },
+      {
+        "id": "tp-festival-b1",
+        "layer": 2,
+        "x": 15,
+        "y": 12,
+        "pairId": "tp-festival-b2"
+      },
+      {
+        "id": "tp-festival-b2",
+        "layer": 3,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-festival-b1"
       }
     ],
     "balance": {
-      "intendedLesson": "Deliver a real finale by braiding parcel parking, forwarded projection, and three-layer travel into one readable route.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 9,
-      "commonMisunderstanding": "Players often start climbing before the parcel is parked and then have to unravel the whole route when the final door is still shut."
+      "intendedLesson": "The ultimate mixed-mechanic challenge across four layers.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 30,
+      "commonMisunderstanding": "Players start climbing before the parcel is parked."
     }
   },
   {
@@ -2738,49 +4070,118 @@ export const ROOM_DEFS = [
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "objective": "Latch the hidden switch with your shadow, then climb into the rafters.",
-    "blurb": "A secret bonus room built around one permanent switch.",
+    "objective": "Use shadow, teleporters, ice, and one-way gates across three layers to reach the hidden mailbox.",
+    "blurb": "A secret bonus room built around shadow coordination with teleporter shortcuts.",
     "intro": [
       {
         "speaker": "Mina",
         "text": "You found the attic route. The old latch still works, if your shadow can reach it first."
       }
     ],
-    "hintTiers": [
-      "The switch only needs to be touched once.",
-      "Use your first move to the right to send the shadow onto the latch, then focus on reaching the stitch.",
-      "Move right to trigger the shadow latch, head for the stitch at the top, switch to the attic sheet, and follow the now-open route to the mailbox."
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+      }
     ],
+    "hintTiers": [
+      "The shadow must latch the switch via one-way gates while you navigate ice corridors and teleporters.",
+      "Move to place the shadow on the latch via one-way gate routing. Then use the teleporter to descend through layers.",
+      "Move right to send shadow left through one-way gate onto latch. Navigate the ice corridor to teleporter. Warp to layer 1, navigate maze to stitch, switch to layer 2, cross through opened door to mailbox."
+    ],
+    "achievementId": "attic-secret",
+    "requiresRooms": [
+      "clocktower-side-01",
+      "theater-side-01",
+      "rooftops-side-01"
+    ],
+    "secret": true,
     "layers": [
       {
         "id": "rafters-front",
         "name": "Rafters Front",
         "tiles": [
-          "#######",
-          "#.S...#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##################",
+          "#...S..........#.#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#II.#.#.#",
+          "#.#.##.......#...#",
+          "#.<..###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#...#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "rafters-mid1",
+        "name": "Rafters Middle A",
+        "tiles": [
+          "##################",
+          "#...S..T.......#.#",
+          "#.#.####.###.#...#",
+          "#..............#.#",
+          "#......#.#.#.#.#.#",
+          "#.###.##.......#.#",
+          "#.>........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "rafters-mid2",
+        "name": "Rafters Middle B",
+        "tiles": [
+          "##################",
+          "#................#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "rafters-back",
         "name": "Rafters Back",
         "tiles": [
-          "#######",
-          "#.S...#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##################",
+          "#.T..............#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 12,
       "facing": "right"
     },
     "entities": [
@@ -2788,66 +4189,98 @@ export const ROOM_DEFS = [
         "id": "shadow-b",
         "type": "shadow",
         "layer": 1,
-        "x": 5,
-        "y": 4,
+        "x": 16,
+        "y": 12,
         "solid": true,
         "pushable": false,
         "mirrorAxis": "vertical"
+      },
+      {
+        "id": "key-red-attic",
+        "type": "key",
+        "layer": 2,
+        "x": 10,
+        "y": 3,
+        "color": "red",
+        "solid": false,
+        "pushable": false
       }
     ],
     "switches": [
       {
         "id": "attic-latch",
         "layer": 1,
-        "x": 4,
-        "y": 4,
+        "x": 5,
+        "y": 3,
         "sticky": true
       }
     ],
     "doors": [
       {
         "id": "attic-door",
-        "layer": 1,
-        "x": 3,
-        "y": 2,
+        "layer": 3,
+        "x": 14,
+        "y": 12,
         "switchIds": [
           "attic-latch"
         ]
       }
     ],
-    "balance": {
-      "intendedLesson": "Teach sticky latches plus shadow setup in a short optional mastery room.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
-    },
-    "secret": true,
-    "achievementId": "attic-secret",
-    "outro": [
+    "teleporters": [
       {
-        "speaker": "Mina",
-        "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+        "id": "tp-attic-a1",
+        "layer": 0,
+        "x": 15,
+        "y": 1,
+        "pairId": "tp-attic-a2"
+      },
+      {
+        "id": "tp-attic-a2",
+        "layer": 1,
+        "x": 7,
+        "y": 1,
+        "pairId": "tp-attic-a1"
+      },
+      {
+        "id": "tp-attic-b1",
+        "layer": 1,
+        "x": 4,
+        "y": 9,
+        "pairId": "tp-attic-b2"
+      },
+      {
+        "id": "tp-attic-b2",
+        "layer": 3,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-attic-b1"
       }
     ],
-    "requiresRooms": [
-      "clocktower-side-01",
-      "theater-side-01",
-      "rooftops-side-01"
-    ]
+    "locks": [
+      {
+        "id": "lock-red-attic",
+        "layer": 3,
+        "x": 10,
+        "y": 8,
+        "color": "red"
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Shadow latching with ice, one-way gates, teleporters, and key/lock across four layers.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 25,
+      "commonMisunderstanding": "Players assume the shadow must keep standing on the switch."
+    }
   },
   {
     "id": "attic-02",
     "districtId": "attic",
     "title": "Folded Ledger",
     "optional": true,
-    "secret": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "requiresRooms": [
-      "attic-01"
-    ],
-    "objective": "Latch the shadow cue, drop through the rerouted stitch, and climb the ledger route.",
-    "blurb": "One hidden route folds through a second stitch only after the shadow has opened the door at the top.",
+    "objective": "Combine shadow, echo, two parcels, and all mechanics across three layers.",
+    "blurb": "One hidden route folds through complex machinery requiring every skill learned.",
     "intro": [
       {
         "speaker": "Mina",
@@ -2855,52 +4288,108 @@ export const ROOM_DEFS = [
       }
     ],
     "hintTiers": [
-      "The shadow setup happens before the stitched drop matters.",
-      "Move right once to latch the switch with the shadow, then climb to the stitch and let the routing stamp drop you to the lower one.",
-      "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+      "Shadow latches one door, echo holds another, both parcels must reach their switches. Everything happens across three layers.",
+      "Latch the shadow switch first. Time the echo for the second door. Transfer one parcel, push the other. Descend via stitches and teleporters.",
+      "Move right to latch shadow. Navigate to echo timing area, queue it toward switch via teleporter. Transfer parcel A to back layer switch. Push parcel B to visible switch. Descend through all three layers to the mailbox."
     ],
+    "requiresRooms": [
+      "attic-01"
+    ],
+    "secret": true,
     "layers": [
       {
         "id": "attic-ledger-top",
         "name": "Ledger Top",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.........#.#",
+          "#.>...........v..#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
         ]
       },
       {
-        "id": "attic-ledger-middle",
-        "name": "Ledger Fold",
+        "id": "attic-ledger-mid1",
+        "name": "Ledger Fold A",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#..S...#",
-          "########"
+          "##################",
+          "#...S..T.......#.#",
+          "#.#.######.###...#",
+          "#..............#.#",
+          "#......#.#.#.#.#.#",
+          "#.###.##.......#.#",
+          "#.<...........^..#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
+        ]
+      },
+      {
+        "id": "attic-ledger-mid2",
+        "name": "Ledger Fold B",
+        "tiles": [
+          "##################",
+          "#.T..............#",
+          "#.########.###...#",
+          "#.......RRRR..#..#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.S.......#.#",
+          "#................#",
+          "#.####.S.#.#.#.#.#",
+          "#..........F...#.#",
+          "#.########.F##...#",
+          "#..........F...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
         ]
       },
       {
         "id": "attic-ledger-bottom",
         "name": "Ledger Back",
         "tiles": [
-          "########",
-          "#....DG#",
-          "#......#",
-          "#......#",
-          "#..S...#",
-          "########"
+          "##################",
+          "#.T..............#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.S.......#.#",
+          "#................#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###..G#",
+          "#................#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 14,
       "facing": "right"
     },
     "entities": [
@@ -2908,51 +4397,167 @@ export const ROOM_DEFS = [
         "id": "shadow-ledger",
         "type": "shadow",
         "layer": 1,
-        "x": 5,
-        "y": 4,
+        "x": 16,
+        "y": 14,
         "solid": true,
         "pushable": false,
         "mirrorAxis": "vertical"
+      },
+      {
+        "id": "echo-ledger",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      },
+      {
+        "id": "parcel-ledger-a",
+        "type": "parcel",
+        "layer": 0,
+        "x": 6,
+        "y": 12,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-ledger-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 10,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "key-blue-ledger",
+        "type": "key",
+        "layer": 2,
+        "x": 14,
+        "y": 4,
+        "color": "blue",
+        "solid": false,
+        "pushable": false
       }
     ],
     "switches": [
       {
-        "id": "attic-ledger-latch",
+        "id": "attic-ledger-shadow-latch",
         "layer": 1,
-        "x": 4,
+        "x": 6,
         "y": 4,
         "sticky": true
+      },
+      {
+        "id": "attic-ledger-echo-switch",
+        "layer": 1,
+        "x": 14,
+        "y": 1
+      },
+      {
+        "id": "attic-ledger-parcel-plate",
+        "layer": 3,
+        "x": 6,
+        "y": 12
+      },
+      {
+        "id": "attic-ledger-visible-plate",
+        "layer": 0,
+        "x": 15,
+        "y": 13
       }
     ],
     "doors": [
       {
-        "id": "attic-ledger-door",
-        "layer": 2,
-        "x": 5,
+        "id": "attic-ledger-door-a",
+        "layer": 0,
+        "x": 7,
         "y": 1,
         "switchIds": [
-          "attic-ledger-latch"
+          "attic-ledger-shadow-latch"
+        ]
+      },
+      {
+        "id": "attic-ledger-door-b",
+        "layer": 1,
+        "x": 14,
+        "y": 4,
+        "switchIds": [
+          "attic-ledger-echo-switch"
+        ]
+      },
+      {
+        "id": "attic-ledger-door-c",
+        "layer": 3,
+        "x": 15,
+        "y": 13,
+        "switchIds": [
+          "attic-ledger-parcel-plate",
+          "attic-ledger-visible-plate"
         ]
       }
     ],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "attic-ledger-stamp",
+        "id": "tp-ledger-a1",
         "layer": 1,
-        "x": 3,
+        "x": 7,
         "y": 1,
-        "direction": "down",
-        "distance": 3,
-        "appliesTo": [
-          "switch"
-        ]
+        "pairId": "tp-ledger-a2"
+      },
+      {
+        "id": "tp-ledger-a2",
+        "layer": 1,
+        "x": 14,
+        "y": 8,
+        "pairId": "tp-ledger-a1"
+      },
+      {
+        "id": "tp-ledger-b1",
+        "layer": 1,
+        "x": 4,
+        "y": 12,
+        "pairId": "tp-ledger-b2"
+      },
+      {
+        "id": "tp-ledger-b2",
+        "layer": 2,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-ledger-b1"
+      },
+      {
+        "id": "tp-ledger-c1",
+        "layer": 2,
+        "x": 14,
+        "y": 12,
+        "pairId": "tp-ledger-c2"
+      },
+      {
+        "id": "tp-ledger-c2",
+        "layer": 3,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-ledger-c1"
+      }
+    ],
+    "locks": [
+      {
+        "id": "lock-blue-ledger",
+        "layer": 3,
+        "x": 12,
+        "y": 10,
+        "color": "blue"
       }
     ],
     "balance": {
-      "intendedLesson": "Blend the secret-route shadow latch with a routed drop that converts one stitched entry into a full attic climb.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 9,
-      "commonMisunderstanding": "Players often set the shadow correctly but keep searching the middle sheet for the goal instead of switching again immediately."
+      "intendedLesson": "Full-mechanic challenge with gravity, conveyors, and key/lock across four layers.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 30,
+      "commonMisunderstanding": "Players set the shadow correctly but keep searching the wrong sheet."
     }
   },
   {
@@ -2960,68 +4565,120 @@ export const ROOM_DEFS = [
     "districtId": "attic",
     "title": "Mina's Postscript",
     "optional": true,
-    "secret": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "requiresRooms": [
-      "attic-02"
-    ],
-    "objective": "Latch the final cue, trust both stamps, and carry the attic line to its last mailbox.",
-    "blurb": "The hidden route ends by combining a rerouted stitch with a forwarded lantern bridge.",
+    "objective": "Solve the ultimate puzzle using every mechanic across four layers.",
+    "blurb": "The hidden route ends by combining every mechanic the game has taught.",
     "intro": [
       {
         "speaker": "Mina",
         "text": "This is the one route I never wrote down cleanly. Set the shadow cue, trust the drop, and let the lantern finish the sentence."
       }
     ],
-    "achievementId": "secret-line",
     "hintTiers": [
-      "The first move sets the shadow cue. After that, the stamps do the clever part for you.",
-      "Move right once so the shadow latches the switch, climb to the upper stitch, let it drop you to the lower stitch, then follow the lantern bridge through the final door.",
-      "Move right, go up three times, switch sheets, switch again, go up twice, then cross right three times through the bridge and the opened door to the mailbox."
+      "Four layers, shadow, projector, teleporters, ice, one-way gates. Everything converges here.",
+      "Shadow latches door on layer 1. Projector bridges gap on layer 3. Ice and one-way gates control your path. Teleporters connect the layers.",
+      "Move right to latch shadow. Push projector onto ice to bridge position on layer 3. Navigate one-way circuit to top stitch. Descend: layer 1 stitch to layer 2, teleporter to layer 3, cross bridge through opened door to mailbox."
     ],
+    "achievementId": "secret-line",
+    "requiresRooms": [
+      "attic-02"
+    ],
+    "secret": true,
     "layers": [
       {
         "id": "postscript-top",
         "name": "Postscript Front",
         "tiles": [
-          "########",
-          "#.S....#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.##########.#...#",
+          "#.>............#.#",
+          "#.#..#.#.#.#II.#.#",
+          "#.#.##.........#.#",
+          "#.v..............#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#................#",
+          "##################"
         ]
       },
       {
-        "id": "postscript-middle",
-        "name": "Postscript Fold",
+        "id": "postscript-mid1",
+        "name": "Postscript Fold A",
         "tiles": [
-          "########",
-          "#.S....#",
-          "#......#",
-          "#......#",
-          "#.S....#",
-          "########"
+          "##################",
+          "#...S..T.......#.#",
+          "#.#.########.#...#",
+          "#.<............#.#",
+          "#......#.#.#.#.#.#",
+          "#.###.##.......#.#",
+          "#.^..............#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#................#",
+          "##################"
+        ]
+      },
+      {
+        "id": "postscript-mid2",
+        "name": "Postscript Fold B",
+        "tiles": [
+          "##################",
+          "#.T..............#",
+          "#.##########.#...#",
+          "#...DDDDDD.....#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.........#.#",
+          "#...UUUUUU.......#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#..........F...#.#",
+          "#.####.###.F.#...#",
+          "#..........F...#.#",
+          "#.##########.#...#",
+          "#................#",
+          "##################"
         ]
       },
       {
         "id": "postscript-back",
         "name": "Postscript Route",
         "tiles": [
-          "########",
-          "#......#",
-          "#..~DG.#",
-          "#......#",
-          "#.S....#",
-          "########"
+          "##################",
+          "#.T..............#",
+          "#.##########.#...#",
+          "#..............#.#",
+          "#.#..~.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#................#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#...............G#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 14,
       "facing": "right"
     },
     "entities": [
@@ -3029,8 +4686,8 @@ export const ROOM_DEFS = [
         "id": "shadow-postscript",
         "type": "shadow",
         "layer": 1,
-        "x": 5,
-        "y": 4,
+        "x": 16,
+        "y": 14,
         "solid": true,
         "pushable": false,
         "mirrorAxis": "vertical"
@@ -3039,24 +4696,44 @@ export const ROOM_DEFS = [
         "id": "lantern-postscript",
         "type": "projector",
         "layer": 0,
-        "x": 3,
-        "y": 3,
+        "x": 8,
+        "y": 4,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 2,
-            "dx": -1,
-            "dy": -1
+            "layer": 3,
+            "dx": -3,
+            "dy": 0
           }
         ]
+      },
+      {
+        "id": "key-yellow-post",
+        "type": "key",
+        "layer": 2,
+        "x": 14,
+        "y": 6,
+        "color": "yellow",
+        "solid": false,
+        "pushable": false
+      },
+      {
+        "id": "key-green-post",
+        "type": "key",
+        "layer": 3,
+        "x": 6,
+        "y": 8,
+        "color": "green",
+        "solid": false,
+        "pushable": false
       }
     ],
     "switches": [
       {
         "id": "postscript-latch",
         "layer": 1,
-        "x": 4,
+        "x": 6,
         "y": 4,
         "sticky": true
       }
@@ -3064,43 +4741,79 @@ export const ROOM_DEFS = [
     "doors": [
       {
         "id": "postscript-door",
-        "layer": 2,
-        "x": 4,
-        "y": 2,
+        "layer": 3,
+        "x": 15,
+        "y": 14,
         "switchIds": [
           "postscript-latch"
         ]
       }
     ],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "postscript-switch-stamp",
+        "id": "tp-post-a1",
         "layer": 1,
-        "x": 2,
+        "x": 7,
         "y": 1,
-        "direction": "down",
-        "distance": 3,
-        "appliesTo": [
-          "switch"
-        ]
+        "pairId": "tp-post-a2"
       },
       {
-        "id": "postscript-bridge-stamp",
+        "id": "tp-post-a2",
+        "layer": 1,
+        "x": 14,
+        "y": 8,
+        "pairId": "tp-post-a1"
+      },
+      {
+        "id": "tp-post-b1",
+        "layer": 1,
+        "x": 4,
+        "y": 12,
+        "pairId": "tp-post-b2"
+      },
+      {
+        "id": "tp-post-b2",
         "layer": 2,
         "x": 2,
-        "y": 2,
-        "direction": "right",
-        "distance": 1,
-        "appliesTo": [
-          "projection"
-        ]
+        "y": 1,
+        "pairId": "tp-post-b1"
+      },
+      {
+        "id": "tp-post-c1",
+        "layer": 2,
+        "x": 15,
+        "y": 12,
+        "pairId": "tp-post-c2"
+      },
+      {
+        "id": "tp-post-c2",
+        "layer": 3,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-post-c1"
+      }
+    ],
+    "locks": [
+      {
+        "id": "lock-yellow-post",
+        "layer": 3,
+        "x": 10,
+        "y": 10,
+        "color": "yellow"
+      },
+      {
+        "id": "lock-green-post",
+        "layer": 3,
+        "x": 12,
+        "y": 12,
+        "color": "green"
       }
     ],
     "balance": {
-      "intendedLesson": "Finish the secret route by combining the two routing channels players learned separately into one clean attic postscript.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 10,
-      "commonMisunderstanding": "Players often remember the stitched drop but forget the lantern bridge is also being rerouted by a second stamp."
+      "intendedLesson": "The ultimate finale combining every mechanic across four layers.",
+      "targetDifficulty": 10,
+      "expectedSolveMinutes": 35,
+      "commonMisunderstanding": "Players forget the lantern bridge is being rerouted."
     }
   }
 ];
@@ -3120,35 +4833,47 @@ export const ROOM_LOOKUP = {
         "text": "Stitch markers connect identical coordinates. Stand on one and flip the room over."
       }
     ],
-    "achievementId": "first-stamp",
     "hintTiers": [
-      "You do not need every corridor on the first sheet. Look for the stitched square.",
-      "The stitch in the top layer lines up with another stitch below it. Switch layers from there.",
-      "Walk to the stitch on the front sheet, switch to the back sheet, then take the open route to the mailbox."
+      "The front sheet is a winding maze. Find the stitch hidden in the corridors.",
+      "Navigate to the center of the front maze, find the stitch at column 4 row 3, then switch layers.",
+      "From start go right, right, down, down, right, right, up to reach the stitch. Switch layers, then go right, down, down, right, up to the mailbox."
     ],
+    "achievementId": "first-stamp",
     "layers": [
       {
         "id": "front",
         "name": "Front Sheet",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.###.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "############",
+          "#..........#",
+          "#.####.###.#",
+          "#.#..#.....#",
+          "#.#..#.###.#",
+          "#....#.#SS.#",
+          "#.##.#.#.#.#",
+          "#....#...#.#",
+          "#.####.###.#",
+          "#.#........#",
+          "#.#.######.#",
+          "############"
         ]
       },
       {
         "id": "back",
         "name": "Address Sheet",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.###G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "############",
+          "#.###....#.#",
+          "#.....##.#.#",
+          "#.###.#..#.#",
+          "#.#...#.##.#",
+          "#.#.###.SS.#",
+          "#.#.....##.#",
+          "#.###.#..#.#",
+          "#.....#.##.#",
+          "#.###.#....#",
+          "#.....#..G.#",
+          "############"
         ]
       }
     ],
@@ -3162,9 +4887,9 @@ export const ROOM_LOOKUP = {
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach stitched layer switching as the core route-solving verb.",
-      "targetDifficulty": 1,
-      "expectedSolveMinutes": 2,
+      "intendedLesson": "Teach stitched layer switching through a winding dual-layer maze.",
+      "targetDifficulty": 3,
+      "expectedSolveMinutes": 8,
       "commonMisunderstanding": "Players over-search the front sheet instead of treating the stitch as required progress."
     }
   },
@@ -3175,8 +4900,8 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Transfer the parcel out of your path and reach the mailbox.",
-    "blurb": "The parcel is in the right place on the wrong sheet.",
+    "objective": "Transfer both parcels and navigate past the blocked corridors to reach the mailbox.",
+    "blurb": "Two parcels block the only corridors wide enough for a postkeeper.",
     "intro": [
       {
         "speaker": "Mina",
@@ -3184,40 +4909,48 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "This parcel is not meant to be pushed down the hall.",
-      "Stand next to the parcel and transfer it to the other layer instead of shoving it forward.",
-      "Move to the tile left of the parcel, press transfer, then walk through the cleared lane to the mailbox."
+      "Both parcels block critical corridors. You need to transfer them, not push them into dead ends.",
+      "Transfer parcel A first to clear the lower corridor, then navigate up to transfer parcel B and reach the stitch.",
+      "Go right twice, transfer parcel A to the back sheet, go up twice, right twice, transfer parcel B, go up to the stitch, switch layers, then navigate down and right to the mailbox."
     ],
     "layers": [
       {
         "id": "front",
         "name": "Front Sheet",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.###.#",
-          "#...G.#",
-          "#.....#",
-          "#######"
+          "############",
+          "#....S...#.#",
+          "#.####.#...#",
+          "#.#......#.#",
+          "#.#.##.#.#.#",
+          "#......#...#",
+          "#.##.###.#.#",
+          "#........#.#",
+          "#.####.....#",
+          "############"
         ]
       },
       {
         "id": "back",
         "name": "Back Sheet",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.###.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "############",
+          "#....S.....#",
+          "#.#..####..#",
+          "#.#......#.#",
+          "#.####.#.#.#",
+          "#......#...#",
+          "#.##.#.###.#",
+          "#....#.....#",
+          "#.####...G.#",
+          "############"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 3,
+      "y": 8,
       "facing": "right"
     },
     "entities": [
@@ -3226,7 +4959,25 @@ export const ROOM_LOOKUP = {
         "type": "parcel",
         "layer": 0,
         "x": 3,
+        "y": 5,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 7,
         "y": 3,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-c",
+        "type": "parcel",
+        "layer": 0,
+        "x": 5,
+        "y": 7,
         "pushable": true,
         "solid": true
       }
@@ -3234,10 +4985,10 @@ export const ROOM_LOOKUP = {
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach parcel transfer as a cleaner alternative to pushing.",
-      "targetDifficulty": 1,
-      "expectedSolveMinutes": 2,
-      "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
+      "intendedLesson": "Teach parcel transfer with three parcels blocking critical corridors.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 10,
+      "commonMisunderstanding": "Players try to push parcels into dead ends rather than transferring them between layers."
     }
   },
   "mailroom-03": {
@@ -3247,114 +4998,66 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Nudge the parcel aside, switch sheets, and take the shortcut to the mailbox.",
-    "blurb": "The quickest route only opens once the crease is clear.",
+    "objective": "Find the one working stitch path through the maze of decoy stitches.",
+    "blurb": "Multiple stitches dot both sheets, but only one sequence leads to the mailbox.",
     "intro": [
       {
         "speaker": "Mina",
-        "text": "Sometimes you push first and transfer second. Clear the lane, then use the stitch at the end."
+        "text": "Not every stitch leads somewhere useful. Some drop you into dead ends on the other sheet. Read both sides before you jump."
       }
     ],
     "hintTiers": [
-      "You only need the parcel out of the stitched lane, not far away from it.",
-      "Push the parcel once so you can stand beside it, then transfer it before stepping on the stitch.",
-      "Move right twice, transfer the parcel to the back sheet, walk onto the stitch, switch layers, and climb straight to the mailbox."
+      "Three stitches are visible but only one sequence avoids dead ends on the back sheet.",
+      "The leftmost stitch drops you into a walled corner. The center stitch is the correct first jump. Then navigate to the second stitch on the back sheet.",
+      "Navigate right and up to the center stitch at (4,2), switch layers, go down and left to the lower stitch at (2,5), switch back, then go right to the mailbox."
     ],
     "layers": [
       {
         "id": "crease-front",
         "name": "Crease Front",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.###.#",
-          "#....S#",
-          "#.....#",
-          "#######"
+          "############",
+          "#.#....#...#",
+          "#...##.#.#.#",
+          "#.#.#..S.#.#",
+          "#.#.#.##...#",
+          "#.#.S....#.#",
+          "#...#.##.#.#",
+          "#.#S#....#.#",
+          "#.#....##..#",
+          "############"
+        ]
+      },
+      {
+        "id": "crease-mid",
+        "name": "Crease Middle",
+        "tiles": [
+          "############",
+          "#.###..#...#",
+          "#......#.#.#",
+          "#.#.#..S.#.#",
+          "#.#.#.##...#",
+          "#.#.S..#.#.#",
+          "#...####.#.#",
+          "#.#S#....#.#",
+          "#.#......#.#",
+          "############"
         ]
       },
       {
         "id": "crease-back",
         "name": "Crease Back",
         "tiles": [
-          "#######",
-          "#....G#",
-          "#.###.#",
-          "#....S#",
-          "#.....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 3,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "parcel-forward",
-        "type": "parcel",
-        "layer": 0,
-        "x": 3,
-        "y": 3,
-        "pushable": true,
-        "solid": true
-      }
-    ],
-    "switches": [],
-    "doors": [],
-    "balance": {
-      "intendedLesson": "Recombine a single push, a transfer, and a stitch into one clean route.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players push the parcel again instead of transferring it once it has been nudged into position."
-    }
-  },
-  "mailroom-side-01": {
-    "id": "mailroom-side-01",
-    "districtId": "mailroom",
-    "title": "Return Receipt",
-    "optional": true,
-    "unlockCost": 0,
-    "postmarks": 0,
-    "objective": "Switch to the back sheet, travel to the lower stitch, and return on the right layer.",
-    "blurb": "A side route that rewards noticing the second stitch before the goal.",
-    "intro": [
-      {
-        "speaker": "Mina",
-        "text": "Some routes ask you to fold the room twice before they make sense."
-      }
-    ],
-    "hintTiers": [
-      "The first stitch is not the end of the route. It only gets you to the right sheet.",
-      "Use the top stitch first, then travel downward on the back sheet until you find the second stitch.",
-      "Walk to the top stitch, switch to the back sheet, climb down to the lower stitch, switch back, and finish on the front sheet."
-    ],
-    "layers": [
-      {
-        "id": "receipt-front",
-        "name": "Receipt Front",
-        "tiles": [
-          "#######",
-          "#..S..#",
-          "#.###.#",
-          "#.....#",
-          "#..S.G#",
-          "#######"
-        ]
-      },
-      {
-        "id": "receipt-back",
-        "name": "Receipt Back",
-        "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#..S..#",
-          "#######"
+          "############",
+          "#.#.##.#...#",
+          "#......#.#.#",
+          "#.###..S.#.#",
+          "#.#...##...#",
+          "#.#.S..#.#.#",
+          "#.#.####.#.#",
+          "#.#S#......#",
+          "#.#..#.#..G#",
+          "############"
         ]
       }
     ],
@@ -3368,10 +5071,96 @@ export const ROOM_LOOKUP = {
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach that the shortest mailroom routes can alternate between sheets twice.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is effectively solved."
+      "intendedLesson": "Teach players to read three layers before committing to a stitch path.",
+      "targetDifficulty": 4,
+      "expectedSolveMinutes": 12,
+      "commonMisunderstanding": "Players jump at the first stitch they find and end up trapped."
+    }
+  },
+  "mailroom-side-01": {
+    "id": "mailroom-side-01",
+    "districtId": "mailroom",
+    "title": "Return Receipt",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Switch layers three times using the winding stitch network to reach the goal.",
+    "blurb": "A side route that rewards noticing every stitch before choosing your path.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "Some routes ask you to fold the room twice before they make sense."
+      }
+    ],
+    "hintTiers": [
+      "You need to use three different stitches, alternating layers each time.",
+      "Start on the front sheet, take the top-left stitch, navigate down on the back sheet to the center stitch, switch back, then find the bottom stitch.",
+      "Go right to stitch at (3,1), switch layers, go down through corridors to stitch at (5,4), switch back, navigate left and down to stitch at (2,6), switch layers, go right to mailbox."
+    ],
+    "layers": [
+      {
+        "id": "receipt-front",
+        "name": "Receipt Front",
+        "tiles": [
+          "############",
+          "#..S.....#.#",
+          "#.###.##...#",
+          "#.....#..#.#",
+          "#.###.#.##.#",
+          "#.#...S..#.#",
+          "#.#.###....#",
+          "#.....#.##.#",
+          "#.#S#......#",
+          "############"
+        ]
+      },
+      {
+        "id": "receipt-mid",
+        "name": "Receipt Middle",
+        "tiles": [
+          "############",
+          "#..S..##.#.#",
+          "#.......#..#",
+          "#.###.#..#.#",
+          "#.#...####.#",
+          "#.#...S....#",
+          "#.###.#.##.#",
+          "#.....#..#.#",
+          "#.#S#..#...#",
+          "############"
+        ]
+      },
+      {
+        "id": "receipt-back",
+        "name": "Receipt Back",
+        "tiles": [
+          "############",
+          "#..S.#...#.#",
+          "#.#....#...#",
+          "#.###.##.#.#",
+          "#.#......#.#",
+          "#.#.#.S.##.#",
+          "#.....#....#",
+          "#.###.####.#",
+          "#.#S#.....G#",
+          "############"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 1,
+      "facing": "right"
+    },
+    "entities": [],
+    "switches": [],
+    "doors": [],
+    "balance": {
+      "intendedLesson": "Teach routes alternating between three sheets with stitch planning.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 12,
+      "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is solved."
     }
   },
   "mailroom-04": {
@@ -3381,8 +5170,8 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Free the stitch lane, climb to the top fold, then return on the front sheet to the mailbox.",
-    "blurb": "The final mailroom route loops through the back sheet before it is readable.",
+    "objective": "Push parcels onto switches across both layers to open the door blocking the mailbox.",
+    "blurb": "The final mailroom route demands parcel management across winding corridors and two layers.",
     "intro": [
       {
         "speaker": "Mina",
@@ -3396,60 +5185,141 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "The stitch at the far right gets you onto the correct sheet, but not yet to the goal.",
-      "Transfer the parcel away from the lower stitch, switch there, then travel to the upper stitch on the back sheet.",
-      "Move right twice, transfer the parcel, switch at the lower stitch, climb to the upper stitch on the back sheet, switch again, and finish on the front."
+      "One parcel goes on the visible switch, the other must be transferred to the back sheet's switch.",
+      "Push parcel A left onto the front switch first, then navigate to parcel B and transfer it to the back sheet where it lands on the hidden switch.",
+      "Push parcel A left onto switch at (1,6), go up and right to parcel B, transfer it to the back layer where it lands on the switch at (6,3), use the stitch, navigate through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "dated-front",
         "name": "Dated Front",
         "tiles": [
-          "#######",
-          "#..S.G#",
-          "#.###.#",
-          "#....S#",
-          "#.....#",
-          "#######"
+          "############",
+          "#...S....#.#",
+          "#.####.#...#",
+          "#.#......#.#",
+          "#.#.##.#.#.#",
+          "#......#...#",
+          "#.##.###.#.#",
+          "#........#.#",
+          "#.####.#...#",
+          "############"
+        ]
+      },
+      {
+        "id": "dated-mid",
+        "name": "Dated Middle",
+        "tiles": [
+          "############",
+          "#...S......#",
+          "#.#..####..#",
+          "#.#......#.#",
+          "#.####.#.#.#",
+          "#......S.S.#",
+          "#.##.#.###.#",
+          "#....#.....#",
+          "#.####.#...#",
+          "############"
         ]
       },
       {
         "id": "dated-back",
         "name": "Dated Back",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#....S#",
-          "#.....#",
-          "#######"
+          "############",
+          "#...S......#",
+          "#.#.####.#.#",
+          "#.#......#.#",
+          "#...##.#.#.#",
+          "#.#..#.S.S.#",
+          "#.####.###.#",
+          "#......#...#",
+          "#.##.#...G.#",
+          "############"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 3,
+      "y": 8,
       "facing": "right"
     },
     "entities": [
       {
-        "id": "parcel-dated",
+        "id": "parcel-a",
         "type": "parcel",
         "layer": 0,
-        "x": 4,
+        "x": 3,
+        "y": 7,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 7,
         "y": 3,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-c",
+        "type": "parcel",
+        "layer": 1,
+        "x": 6,
+        "y": 7,
         "pushable": true,
         "solid": true
       }
     ],
-    "switches": [],
-    "doors": [],
+    "switches": [
+      {
+        "id": "front-plate",
+        "layer": 0,
+        "x": 1,
+        "y": 7
+      },
+      {
+        "id": "mid-plate",
+        "layer": 1,
+        "x": 8,
+        "y": 3
+      },
+      {
+        "id": "back-plate",
+        "layer": 2,
+        "x": 5,
+        "y": 7
+      }
+    ],
+    "doors": [
+      {
+        "id": "dated-door-a",
+        "layer": 1,
+        "x": 9,
+        "y": 5,
+        "switchIds": [
+          "front-plate",
+          "mid-plate"
+        ]
+      },
+      {
+        "id": "dated-door-b",
+        "layer": 2,
+        "x": 9,
+        "y": 8,
+        "switchIds": [
+          "back-plate"
+        ]
+      }
+    ],
     "balance": {
-      "intendedLesson": "Cap the mailroom by chaining transfer with two distinct sheet swaps.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players switch at the lower stitch and then look for the goal immediately instead of climbing to the upper stitch first."
+      "intendedLesson": "Cap the mailroom with three-layer traversal and triple-switch door logic.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players switch too early without managing all parcels first."
     }
   },
   "market-01": {
@@ -3459,86 +5329,110 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Leave a parcel on the plate, switch layers, and use the opened route.",
-    "blurb": "The market lifts its shutters with simple pressure plates.",
+    "objective": "Slide across ice to reach the switch, park the parcel, and take the opened route.",
+    "blurb": "The market lifts its shutters with pressure plates, but the floor is slick with ice.",
     "intro": [
       {
         "speaker": "Market Clerk",
-        "text": "A good parcel is sometimes more useful parked on a plate than delivered."
+        "text": "Ice corridors slide you until you hit something solid. Plan your approach before you step onto the frost."
       }
     ],
     "hintTiers": [
-      "The plate is meant to stay pressed while you move away from it.",
-      "Push the parcel onto the plate first, then go use the stitch marker.",
-      "Move the parcel onto the floor plate in the front sheet, walk to the stitch, switch to the back sheet, and use the now-open door."
+      "The ice corridor slides you all the way across. You need something solid to stop against.",
+      "Push the parcel into the ice lane first so it acts as a stopping block, then slide into position near the switch.",
+      "Push parcel right onto ice, slide right to stop against it, push it right onto the switch, navigate up to the stitch, switch layers, go through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "awnings",
         "name": "Awnings",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#....S.....#.#",
+          "#.####.###...#",
+          "#.#........#.#",
+          "#.#.##.#.#.#.#",
+          "#......#IIII.#",
+          "#.##.###.#.#.#",
+          "#........#.#.#",
+          "#.####.#.....#",
+          "##############"
         ]
       },
       {
         "id": "arcade",
         "name": "Arcade",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#....S.....#.#",
+          "#.#....###...#",
+          "#.#.##.....#.#",
+          "#......#.#.#.#",
+          "#.####.#.....#",
+          "#.#..###.#.#.#",
+          "#.#......#.#.#",
+          "#.####.....G.#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 8,
+      "facing": "right"
     },
     "entities": [
+      {
+        "id": "parcel-a",
+        "type": "parcel",
+        "layer": 0,
+        "x": 4,
+        "y": 5,
+        "pushable": true,
+        "solid": true
+      },
       {
         "id": "parcel-b",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 6,
+        "y": 3,
         "pushable": true,
         "solid": true
       }
     ],
     "switches": [
       {
-        "id": "market-plate",
+        "id": "market-plate-a",
         "layer": 0,
-        "x": 1,
-        "y": 4
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": "market-plate-b",
+        "layer": 1,
+        "x": 6,
+        "y": 3
       }
     ],
     "doors": [
       {
         "id": "market-door",
         "layer": 1,
-        "x": 3,
-        "y": 2,
+        "x": 11,
+        "y": 8,
         "switchIds": [
-          "market-plate"
+          "market-plate-a",
+          "market-plate-b"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Teach persistent door pressure with parcels and cross-layer route payoff.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players carry the parcel around instead of parking it on the plate first."
+      "intendedLesson": "Introduce ice tiles with parcel-as-blocker and dual switches.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 12,
+      "commonMisunderstanding": "Players step onto ice without a stopping block."
     }
   },
   "market-side-01": {
@@ -3548,59 +5442,67 @@ export const ROOM_LOOKUP = {
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "objective": "Park the parcel on the plate, switch layers, and take the reopened shortcut above the stalls.",
-    "blurb": "A side route that asks you to read a shutter and a stitch at the same time.",
+    "objective": "Push the parcel across ice to land on the distant plate, then take the shortcut.",
+    "blurb": "A side route that asks you to aim a parcel slide precisely.",
     "intro": [
       {
         "speaker": "Market Clerk",
         "text": "The side lane is lighter than the main route. Prop the shutter and steal the short way across."
       }
     ],
-    "achievementId": "side-route",
     "hintTiers": [
-      "The shortcut only matters after the plate is already held down.",
-      "Push the parcel onto the front plate first, then climb to the stitch instead of heading for the goal immediately.",
-      "Push the parcel onto the plate at the lower left, walk to the stitch on the top lane, switch to the back sheet, and take the reopened shortcut to the mailbox."
+      "The parcel must slide across ice and stop exactly on the switch. Plan your push direction.",
+      "Push the parcel downward so it slides on ice and stops against the far wall, landing on the switch.",
+      "Navigate above the parcel, push it down onto the ice lane where it slides to the switch at (3,6). Use the stitch, switch layers, and cross through the opened door to the mailbox."
     ],
+    "achievementId": "side-route",
     "layers": [
       {
         "id": "stall-front",
         "name": "Stall Front",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#....S.....#.#",
+          "#.####.###...#",
+          "#.#........#.#",
+          "#.#I##.#.#.#.#",
+          "#..I...#.....#",
+          "#.#I.###.#.#.#",
+          "#..I.....#.#.#",
+          "#.#I##.#.....#",
+          "##############"
         ]
       },
       {
         "id": "stall-back",
         "name": "Stall Back",
         "tiles": [
-          "#######",
-          "#..S.G#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#....S.....#.#",
+          "#.####.###...#",
+          "#.#........G.#",
+          "#.#.##.#.#.#.#",
+          "#......#.....#",
+          "#.##.###.#.#.#",
+          "#........#.#.#",
+          "#.####.#.....#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 1,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "parcel-stall",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 3,
+        "y": 3,
         "pushable": true,
         "solid": true
       }
@@ -3609,26 +5511,26 @@ export const ROOM_LOOKUP = {
       {
         "id": "stall-plate",
         "layer": 0,
-        "x": 1,
-        "y": 4
+        "x": 3,
+        "y": 8
       }
     ],
     "doors": [
       {
         "id": "stall-door",
         "layer": 1,
-        "x": 4,
-        "y": 1,
+        "x": 11,
+        "y": 3,
         "switchIds": [
           "stall-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Reinforce visible plates and door logic in a shorter optional room.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players head for the stitch first and only later realize the shortcut itself is still closed."
+      "intendedLesson": "Reinforce ice-slide physics with precise parcel aiming.",
+      "targetDifficulty": 5,
+      "expectedSolveMinutes": 10,
+      "commonMisunderstanding": "Players push the parcel sideways instead of down the ice column."
     }
   },
   "market-02": {
@@ -3638,7 +5540,7 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Send the parcel through the hidden counter slot and walk through the raised shutter.",
+    "objective": "Use ice lanes and two switches to open the path. One parcel slides, one parks.",
     "blurb": "Some market plates live on the back sheet, far from the player.",
     "intro": [
       {
@@ -3647,40 +5549,70 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "The shutter opens from a place you cannot stand on yourself.",
-      "Move next to the parcel and transfer it onto the switch behind the counter before walking to the door.",
-      "Step right once, transfer the parcel to the back sheet, then walk up and across the opened shutter to the mailbox."
+      "Two switches control the door. One is visible on ice, the other is hidden on the back layer.",
+      "Slide one parcel across ice onto the visible switch, then transfer the other parcel to land on the hidden switch.",
+      "Push parcel A right across ice to the visible switch. Navigate to parcel B and transfer it to the back layer where it lands on the hidden switch. Use the stitch, walk through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "counter-front",
         "name": "Counter Front",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#...S......#.#",
+          "#.####.###...#",
+          "#.#........#.#",
+          "#.#.##.#.#.#.#",
+          "#......#IIII.#",
+          "#.##.###.#.#.#",
+          "#........#.#.#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####.....#",
+          "##############"
+        ]
+      },
+      {
+        "id": "counter-mid",
+        "name": "Counter Middle",
+        "tiles": [
+          "##############",
+          "#...S......#.#",
+          "#.#.##.###...#",
+          "#.#........#.#",
+          "#.####.#.#.#.#",
+          "#......#.S...#",
+          "#.##.###.#.#.#",
+          "#........#.S.#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####.....#",
+          "##############"
         ]
       },
       {
         "id": "counter-back",
         "name": "Counter Back",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#...S......#.#",
+          "#.#..####....#",
+          "#.#........#.#",
+          "#...##.#.#.#.#",
+          "#.#..#.#.S...#",
+          "#.####.###.#.#",
+          "#......#...S.#",
+          "#.##.#...#.#.#",
+          "#.#....#.#.#.#",
+          "#.####.....G.#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 10,
       "facing": "right"
     },
     "entities": [
@@ -3689,35 +5621,75 @@ export const ROOM_LOOKUP = {
         "type": "parcel",
         "layer": 0,
         "x": 3,
-        "y": 4,
+        "y": 5,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-counter",
+        "type": "parcel",
+        "layer": 0,
+        "x": 6,
+        "y": 9,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-hidden",
+        "type": "parcel",
+        "layer": 1,
+        "x": 8,
+        "y": 3,
         "pushable": true,
         "solid": true
       }
     ],
     "switches": [
       {
-        "id": "counter-hidden-plate",
+        "id": "counter-visible-plate",
+        "layer": 0,
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": "counter-mid-plate",
         "layer": 1,
-        "x": 3,
-        "y": 4
+        "x": 6,
+        "y": 9
+      },
+      {
+        "id": "counter-hidden-plate",
+        "layer": 2,
+        "x": 8,
+        "y": 3
       }
     ],
     "doors": [
       {
-        "id": "counter-shutter",
-        "layer": 0,
-        "x": 3,
-        "y": 2,
+        "id": "counter-shutter-a",
+        "layer": 1,
+        "x": 10,
+        "y": 7,
         "switchIds": [
+          "counter-visible-plate"
+        ]
+      },
+      {
+        "id": "counter-shutter-b",
+        "layer": 2,
+        "x": 11,
+        "y": 10,
+        "switchIds": [
+          "counter-mid-plate",
           "counter-hidden-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Teach that a transfer can activate a switch the player will never physically touch.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players search for a walking path behind the counter instead of treating the parcel as the route's stand-in."
+      "intendedLesson": "Combine ice sliding with cross-layer switch activation using three parcels.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players search for a walking path behind the counter."
     }
   },
   "market-side-02": {
@@ -3727,8 +5699,8 @@ export const ROOM_LOOKUP = {
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "objective": "Transfer the parcel onto the hidden plate, switch layers, and use the back-lane shutter.",
-    "blurb": "A side room that mixes the counter-slot trick with a stitched shortcut.",
+    "objective": "Navigate an ice maze that spans both layers, using stitches to bypass blocked corridors.",
+    "blurb": "A side room that turns the entire floor into a sliding puzzle across two sheets.",
     "intro": [
       {
         "speaker": "Market Clerk",
@@ -3736,77 +5708,58 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "The parcel belongs on the hidden switch before you ever touch the stitch.",
-      "Transfer the parcel first, then walk to the stitch on the front sheet and switch to the back lane.",
-      "Move right once, transfer the parcel onto the hidden plate, climb to the stitch on the front sheet, switch layers, and take the opened back-lane route to the mailbox."
+      "The ice fills most of both layers. You need walls and stitches as stopping points.",
+      "Slide right on ice, stop at the wall, then slide down to the stitch. Switch layers and navigate the back ice maze.",
+      "Slide right to wall, slide down to stitch at (7,4), switch layers, slide left to wall at (1,4), slide down to (1,6), slide right to wall, slide up to mailbox."
     ],
     "layers": [
       {
         "id": "ledger-front",
         "name": "Ledger Front",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#III#IIIIIIII#",
+          "#I#II...#I..I#",
+          "#I......#I#.I#",
+          "#III#I.ISI..I#",
+          "#I#II..#I#..I#",
+          "#I.......I#.I#",
+          "#I##.#I..I..I#",
+          "#I.......IIII#",
+          "##############"
         ]
       },
       {
         "id": "ledger-back",
         "name": "Ledger Back",
         "tiles": [
-          "#######",
-          "#..S.G#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#III#IIIIIIII#",
+          "#I...#II..I.I#",
+          "#I#I.....GI.I#",
+          "#I.II#.ISI..I#",
+          "#I.....#I...I#",
+          "#I###....I#.I#",
+          "#I......#I..I#",
+          "#IIIIIIIIIII.#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 1,
       "facing": "right"
     },
-    "entities": [
-      {
-        "id": "parcel-ledger",
-        "type": "parcel",
-        "layer": 0,
-        "x": 3,
-        "y": 4,
-        "pushable": true,
-        "solid": true
-      }
-    ],
-    "switches": [
-      {
-        "id": "ledger-hidden-plate",
-        "layer": 1,
-        "x": 3,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "ledger-door",
-        "layer": 1,
-        "x": 4,
-        "y": 1,
-        "switchIds": [
-          "ledger-hidden-plate"
-        ]
-      }
-    ],
+    "entities": [],
+    "switches": [],
+    "doors": [],
     "balance": {
-      "intendedLesson": "Show that hidden switches can matter on a different layer than the route they open.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players head to the stitch before the hidden plate is active and arrive on the back lane too early."
+      "intendedLesson": "Pure ice navigation puzzle requiring both layers.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 14,
+      "commonMisunderstanding": "Players try to navigate only on one layer."
     }
   },
   "market-03": {
@@ -3816,7 +5769,7 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Use one parcel for the visible plate and another for the hidden plate, then walk through the central shutter.",
+    "objective": "Use ice lanes, two parcels, and two switches across both layers to open the central shutter.",
     "blurb": "The final market route asks you to think about both sheets at once.",
     "intro": [
       {
@@ -3831,49 +5784,79 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "You have one parcel for each switch. Decide which one belongs to the hidden plate first.",
-      "Transfer the upper parcel to the back sheet, then push the lower parcel onto the visible floor plate before heading to the door.",
-      "Move up and left to transfer the upper parcel, return to the lower lane to push the second parcel onto the visible plate, then walk up through the opened shutter to the mailbox."
+      "You have one parcel for each switch. The ice complicates positioning. Decide which goes where first.",
+      "Slide parcel A across ice onto the visible switch. Transfer parcel B to the back sheet where it must be pushed onto the hidden switch. Then use the stitch.",
+      "Push parcel A right across ice row to the visible switch at (8,5). Navigate to parcel B and transfer it to back layer. Use the stitch, push the transferred parcel onto the hidden switch at (2,7), then navigate through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "inventory-front",
         "name": "Inventory Front",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#...S......#.#",
+          "#.####.###...#",
+          "#.#........#.#",
+          "#.#.##.#.#.#.#",
+          "#......#IIII.#",
+          "#.##.###.#.#.#",
+          "#........#.#.#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####.....#",
+          "##############"
+        ]
+      },
+      {
+        "id": "inventory-mid",
+        "name": "Inventory Middle",
+        "tiles": [
+          "##############",
+          "#...S......#.#",
+          "#.#.##.###.S.#",
+          "#.#........#.#",
+          "#.####.#.#.#.#",
+          "#......#.....#",
+          "#.##.###.#.#.#",
+          "#........#...#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####.....#",
+          "##############"
         ]
       },
       {
         "id": "inventory-back",
         "name": "Inventory Back",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##############",
+          "#..........#.#",
+          "#.####.###.S.#",
+          "#.#........#.#",
+          "#.#.##.#.#.#.#",
+          "#......#.....#",
+          "#.##.###.#.#.#",
+          "#........#...#",
+          "#.####.#.#...#",
+          "#.#......#.#.#",
+          "#.#.####...G.#",
+          "##############"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 10,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "parcel-visible",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 3,
+        "y": 5,
         "pushable": true,
         "solid": true
       },
@@ -3881,8 +5864,17 @@ export const ROOM_LOOKUP = {
         "id": "parcel-hidden",
         "type": "parcel",
         "layer": 0,
-        "x": 3,
-        "y": 3,
+        "x": 5,
+        "y": 9,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-deep",
+        "type": "parcel",
+        "layer": 1,
+        "x": 7,
+        "y": 7,
         "pushable": true,
         "solid": true
       }
@@ -3891,33 +5883,48 @@ export const ROOM_LOOKUP = {
       {
         "id": "inventory-visible-plate",
         "layer": 0,
-        "x": 1,
-        "y": 4
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": "inventory-mid-plate",
+        "layer": 1,
+        "x": 5,
+        "y": 9
       },
       {
         "id": "inventory-hidden-plate",
-        "layer": 1,
-        "x": 3,
-        "y": 3
+        "layer": 2,
+        "x": 7,
+        "y": 7
       }
     ],
     "doors": [
       {
-        "id": "inventory-shutter",
-        "layer": 0,
-        "x": 3,
+        "id": "inventory-shutter-a",
+        "layer": 1,
+        "x": 12,
         "y": 2,
         "switchIds": [
-          "inventory-visible-plate",
+          "inventory-visible-plate"
+        ]
+      },
+      {
+        "id": "inventory-shutter-b",
+        "layer": 2,
+        "x": 11,
+        "y": 10,
+        "switchIds": [
+          "inventory-mid-plate",
           "inventory-hidden-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Cap the market by splitting visible and hidden door logic across two parcels.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players try to solve the visible plate first and only then look for the hidden plate, which leaves too much route still unopened."
+      "intendedLesson": "Cap the market with three-layer parcel management and triple switch logic.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 18,
+      "commonMisunderstanding": "Players try to solve the visible plate first."
     }
   },
   "greenhouse-01": {
@@ -3927,65 +5934,95 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Project a bridge onto the lower sheet and cross the gap.",
-    "blurb": "Lanterns draw temporary structure where the paper has torn away.",
+    "objective": "Push the projector into position, navigate one-way gates, and cross the projected bridge.",
+    "blurb": "Lanterns draw temporary structure where the paper has torn away. One-way gates restrict your path.",
     "intro": [
       {
         "speaker": "Gardener",
-        "text": "Line the lamp up with the tear. The next layer will grow a bridge where the light lands."
+        "text": "Line the lamp up with the tear. The next layer will grow a bridge where the light lands. And mind the one-way gates."
       }
     ],
     "hintTiers": [
-      "The lamp affects the same coordinates in the other layer.",
-      "The pit sits at the same x and y as the square where the lamp should stop.",
-      "Push the lantern to the center lane at x3 y2 on the top sheet, switch layers, and walk across the projected bridge."
+      "The one-way gates force you to circle around. Push the projector before you commit to the gate path.",
+      "Push the projector left to align it with the gap on the other layer, then take the one-way gate circuit to the stitch.",
+      "Push projector left to (2,4), go up through the right-only gate, navigate around to the stitch at (3,1), switch layers, follow the one-way path down across the bridge to the mailbox."
     ],
     "layers": [
       {
         "id": "lantern-bed",
         "name": "Lantern Bed",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#....S.......#.#",
+          "#.####.###.#...#",
+          "#.>........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#....#...#...#",
+          "#.##.###.#.#.#.#",
+          "#.v......#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####......<#",
+          "################"
+        ]
+      },
+      {
+        "id": "vine-mid",
+        "name": "Vine Middle",
+        "tiles": [
+          "################",
+          "#....S.......#.#",
+          "#.#.##.###.#...#",
+          "#.v........#.#.#",
+          "#.####.#.#.S.#.#",
+          "#......#.S.#...#",
+          "#.##.###.#.#.#.#",
+          "#.^......#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       },
       {
         "id": "vine-bed",
         "name": "Vine Bed",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#..~.G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#............#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#~##.#.#.S.#.#",
+          "#.#....#.S.#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####......G#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 10,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "lantern-a",
         "type": "projector",
         "layer": 0,
-        "x": 2,
-        "y": 3,
+        "x": 4,
+        "y": 5,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 1,
+            "layer": 2,
             "dx": 0,
-            "dy": 0
+            "dy": -1
           }
         ]
       }
@@ -3993,10 +6030,10 @@ export const ROOM_LOOKUP = {
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach projector alignment and same-coordinate bridge projection.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+      "intendedLesson": "Introduce one-way gates alongside projector alignment across three layers.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 14,
+      "commonMisunderstanding": "Players go through one-way gates the wrong direction."
     }
   },
   "greenhouse-side-01": {
@@ -4006,8 +6043,8 @@ export const ROOM_LOOKUP = {
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "objective": "Use the lantern's offset beam to patch the tear and cross to the mailbox.",
-    "blurb": "Not every bridge blooms directly underneath the lantern.",
+    "objective": "Combine projector placement with ice sliding and one-way gates to bridge the gap.",
+    "blurb": "Not every bridge blooms directly underneath the lantern. Ice complicates the approach.",
     "intro": [
       {
         "speaker": "Gardener",
@@ -4015,40 +6052,70 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "This lantern does not bridge the square directly below it.",
-      "Push the lantern one step to the right so its offset beam lands on the tear.",
-      "Push the lantern right once, walk to the stitch, switch sheets, and use the offset bridge tile near the mailbox."
+      "The projector has an offset beam. It bridges one tile away from where it stands.",
+      "Slide the projector across ice to the right position, then navigate the one-way gates to the stitch.",
+      "Push projector right onto ice where it slides to (5,4). Its offset beam bridges the gap at (6,3) on the back layer. Navigate the one-way loop to the stitch, switch layers, cross the bridge to the mailbox."
     ],
     "layers": [
       {
         "id": "graft-top",
         "name": "Graft Top",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#.>..S.......#.#",
+          "#.#.##.###.#...#",
+          "#.v........#.#.#",
+          "#.#.II.#.#...#.#",
+          "#.#.II.#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#.<.#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "graft-mid",
+        "name": "Graft Middle",
+        "tiles": [
+          "################",
+          "#....S.......#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#.##.#.#.S.#.#",
+          "#.#....#.S.#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       },
       {
         "id": "graft-bottom",
         "name": "Graft Bottom",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#...~G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#............#.#",
+          "#.####.###.#...#",
+          "#......~...#.#.#",
+          "#.#.##.#.#.S.#.#",
+          "#.#....#.S.#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#G#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 3,
+      "y": 10,
       "facing": "right"
     },
     "entities": [
@@ -4056,14 +6123,14 @@ export const ROOM_LOOKUP = {
         "id": "lantern-offset",
         "type": "projector",
         "layer": 0,
-        "x": 2,
-        "y": 3,
+        "x": 3,
+        "y": 4,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 1,
-            "dx": 1,
+            "layer": 2,
+            "dx": 3,
             "dy": -1
           }
         ]
@@ -4072,10 +6139,10 @@ export const ROOM_LOOKUP = {
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Show that a lantern's projection can use an offset target instead of matching coordinates exactly.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players line the lantern up with the tear directly instead of accounting for the shifted beam."
+      "intendedLesson": "Combine offset projection with ice and one-way gates across three layers.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players line the lantern up directly instead of accounting for the shifted beam."
     }
   },
   "greenhouse-02": {
@@ -4085,70 +6152,111 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Grow a two-tile bridge across the wider tear and reach the mailbox.",
-    "blurb": "Some greenhouse tears ask for more than a single square of light.",
+    "objective": "Project bridges across 3 layers using two projectors to create a connected path.",
+    "blurb": "Some greenhouse tears ask for more than a single square of light across multiple sheets.",
     "intro": [
       {
         "speaker": "Gardener",
-        "text": "This bed tore wider than the others. One lamp can still cover it, but only if the bloom stretches far enough."
+        "text": "This bed tore wider than the others. Two lamps, three sheets. Every bridge matters."
       }
     ],
     "hintTiers": [
-      "This lantern can grow more than one bridge tile at once.",
-      "The lantern needs to stop one row higher so both projected tiles span the tear together.",
-      "Push the lantern upward into the center lane, switch sheets, and cross the two-tile bridge to the mailbox."
+      "Each projector bridges a different layer. Position them both before traveling down.",
+      "Projector A bridges layer 0 to layer 1. Projector B bridges layer 1 to layer 2. Push both into alignment first.",
+      "Push projector A up to (3,2) bridging the gap on layer 1. Push projector B right to (6,4) bridging the gap on layer 2. Use the stitch at top, descend through layers using bridges."
     ],
     "layers": [
       {
         "id": "overgrowth-top",
         "name": "Overgrowth Top",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#....S.......#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#....#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "overgrowth-middle",
+        "name": "Overgrowth Middle",
+        "tiles": [
+          "################",
+          "#....S.....#.#.#",
+          "#.#.~####.#....#",
+          "#.#........#.#.#",
+          "#......#.#.S.#.#",
+          "#.###.##...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       },
       {
         "id": "overgrowth-bottom",
         "name": "Overgrowth Bottom",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.~~.G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#............#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#..~.#.#.S.#.#",
+          "#.#.##.#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.#.####......G#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 10,
+      "facing": "right"
     },
     "entities": [
       {
-        "id": "lantern-wide",
+        "id": "lantern-a",
         "type": "projector",
         "layer": 0,
-        "x": 2,
+        "x": 5,
         "y": 3,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
             "layer": 1,
-            "dx": 0,
-            "dy": 0
-          },
+            "dx": -2,
+            "dy": -1
+          }
+        ]
+      },
+      {
+        "id": "lantern-b",
+        "type": "projector",
+        "layer": 0,
+        "x": 8,
+        "y": 6,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
           {
-            "layer": 1,
-            "dx": 1,
-            "dy": 0
+            "layer": 2,
+            "dx": -3,
+            "dy": -2
           }
         ]
       }
@@ -4156,10 +6264,10 @@ export const ROOM_LOOKUP = {
     "switches": [],
     "doors": [],
     "balance": {
-      "intendedLesson": "Teach multi-tile projection so wider tears read as one placement puzzle instead of many.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players align the lantern to only one missing tile and overlook that the same lamp can cover both."
+      "intendedLesson": "Three-layer projection requiring two projectors with offset beams.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 16,
+      "commonMisunderstanding": "Players align one projector and forget the second bridge."
     }
   },
   "greenhouse-03": {
@@ -4169,7 +6277,7 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Hold the gate open, grow the bridge, and cross to the mailbox.",
+    "objective": "Combine one-way gates, ice, a projector, and a switch to open the path across three layers.",
     "blurb": "The lantern route and the pressure gate have to be solved in the right order.",
     "intro": [
       {
@@ -4178,49 +6286,79 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "The parcel should stay on the switch while you work on the lantern.",
-      "Park the parcel first, then push the lantern into place before you switch layers.",
-      "Push the parcel onto the floor plate, lift the lantern onto the tear line, walk to the stitch, switch sheets, and cross the bridge through the opened gate."
+      "The parcel must reach the switch, the projector must bridge the gap, and you must navigate one-way gates in the right order.",
+      "Push the parcel across ice onto the switch first, then position the projector, then navigate through the one-way gates to descend through layers.",
+      "Push parcel left across ice onto the switch at (1,5). Push projector up to (4,2). Navigate through one-way gates to the top stitch. Descend through middle layer to lower stitch. Cross the bridge through the opened door to the mailbox."
     ],
     "layers": [
       {
         "id": "mist-top",
         "name": "Mist Top",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#...S.......#..#",
+          "#.####.###.#...#",
+          "#.>........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#II....#...#...#",
+          "#.##.###.#.#v#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#.<.#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "mist-middle",
+        "name": "Mist Middle",
+        "tiles": [
+          "################",
+          "#...S.......#..#",
+          "#.#.####.#.#...#",
+          "#..........#.#.#",
+          "#.###.##.#.S.#.#",
+          "#......#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
         ]
       },
       {
         "id": "mist-bottom",
         "name": "Mist Bottom",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#..~.G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#...........#..#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#~##.#.#.S.#.#",
+          "#.#.##.#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.###.####...G.#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 10,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "parcel-mist",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 4,
+        "y": 5,
         "pushable": true,
         "solid": true
       },
@@ -4228,7 +6366,182 @@ export const ROOM_LOOKUP = {
         "id": "lantern-mist",
         "type": "projector",
         "layer": 0,
+        "x": 6,
+        "y": 4,
+        "pushable": true,
+        "solid": true,
+        "projectionTargets": [
+          {
+            "layer": 2,
+            "dx": -2,
+            "dy": 0
+          }
+        ]
+      },
+      {
+        "id": "parcel-mist-b",
+        "type": "parcel",
+        "layer": 1,
+        "x": 5,
+        "y": 9,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "mist-plate-a",
+        "layer": 0,
+        "x": 1,
+        "y": 5
+      },
+      {
+        "id": "mist-plate-b",
+        "layer": 1,
+        "x": 5,
+        "y": 9
+      }
+    ],
+    "doors": [
+      {
+        "id": "mist-door-a",
+        "layer": 2,
+        "x": 7,
+        "y": 10,
+        "switchIds": [
+          "mist-plate-a"
+        ]
+      },
+      {
+        "id": "mist-door-b",
+        "layer": 2,
+        "x": 12,
+        "y": 4,
+        "switchIds": [
+          "mist-plate-b"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine one-way gates, ice, projection, and dual switches across three layers.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 18,
+      "commonMisunderstanding": "Players try to solve the bridge first."
+    }
+  },
+  "greenhouse-04": {
+    "id": "greenhouse-04",
+    "districtId": "greenhouse",
+    "title": "Festival Draft",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Use two projectors and a parcel across three layers to restore the greenhouse finale route.",
+    "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
+    "intro": [
+      {
+        "speaker": "Mina",
+        "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
+      }
+    ],
+    "hintTiers": [
+      "Treat this like two setup problems before it becomes a travel problem: gate first, lanterns second.",
+      "Park the parcel on the switch, push both projectors into their bridge positions, then descend through all three layers.",
+      "Push parcel onto switch at (1,8). Push projector A to bridge gap on layer 1. Push projector B to bridge gap on layer 2. Use top stitch, descend through middle layer, use lower stitch, cross both bridges through the opened door to the mailbox."
+    ],
+    "achievementId": "demo-complete",
+    "layers": [
+      {
+        "id": "draft-roof",
+        "name": "Draft Roof",
+        "tiles": [
+          "################",
+          "#...S..........#",
+          "#.########.#...#",
+          "#..............#",
+          "#.#..#.#.#.#...#",
+          "#.#.##.........#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "#.########.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "draft-middle",
+        "name": "Draft Middle",
+        "tiles": [
+          "################",
+          "#...S..........#",
+          "#.#.######.#...#",
+          "#.#..~......#..#",
+          "#......#.#.S...#",
+          "#.###.##.......#",
+          "#..............#",
+          "#.####.S.#.#...#",
+          "#..............#",
+          "#.########.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "draft-floor",
+        "name": "Draft Floor",
+        "tiles": [
+          "################",
+          "#..............#",
+          "#.########.#...#",
+          "#..............#",
+          "#.#..~.#.#.S.#.#",
+          "#.#.##....#....#",
+          "#..............#",
+          "#.####.S.#.#...#",
+          "#..............#",
+          "#.########.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#.#########..G.#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 12,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "parcel-draft",
+        "type": "parcel",
+        "layer": 0,
         "x": 3,
+        "y": 12,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-draft-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 8,
+        "y": 6,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "lantern-draft-a",
+        "type": "projector",
+        "layer": 0,
+        "x": 6,
         "y": 3,
         "pushable": true,
         "solid": true,
@@ -4239,150 +6552,63 @@ export const ROOM_LOOKUP = {
             "dy": 0
           }
         ]
-      }
-    ],
-    "switches": [
-      {
-        "id": "mist-plate",
-        "layer": 0,
-        "x": 1,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "mist-door",
-        "layer": 1,
-        "x": 4,
-        "y": 2,
-        "switchIds": [
-          "mist-plate"
-        ]
-      }
-    ],
-    "balance": {
-      "intendedLesson": "Combine earlier door logic with projection while still keeping the lantern placement readable.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 6,
-      "commonMisunderstanding": "Players try to solve the bridge first and only later realize the gate still needs the parcel parked on its switch."
-    }
-  },
-  "greenhouse-04": {
-    "id": "greenhouse-04",
-    "districtId": "greenhouse",
-    "title": "Festival Draft",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Hold the gate, bloom the bridge, climb through the middle sheet, and restore the greenhouse finale route.",
-    "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
-    "intro": [
-      {
-        "speaker": "Mina",
-        "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
-      }
-    ],
-    "achievementId": "demo-complete",
-    "hintTiers": [
-      "Treat this like two setup problems before it becomes a travel problem: gate first, lantern second.",
-      "Park the parcel on the top switch, push the lantern into the tear line, switch to the middle sheet at the top stitch, then descend to the lower stitch.",
-      "Push the parcel onto the top-left switch, lift the lantern into the bridge position, switch to the middle sheet at the upper stitch, travel down to the lower stitch, switch to the final sheet, and cross the opened gate and bridge to the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "draft-roof",
-        "name": "Draft Roof",
-        "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
       },
       {
-        "id": "draft-middle",
-        "name": "Draft Middle",
-        "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#S....#",
-          "#######"
-        ]
-      },
-      {
-        "id": "draft-floor",
-        "name": "Draft Floor",
-        "tiles": [
-          "#######",
-          "#.....#",
-          "#..~.G#",
-          "#.....#",
-          "#S....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
-    },
-    "entities": [
-      {
-        "id": "parcel-draft",
-        "type": "parcel",
-        "layer": 0,
-        "x": 2,
-        "y": 4,
-        "pushable": true,
-        "solid": true
-      },
-      {
-        "id": "lantern-draft",
+        "id": "lantern-draft-b",
         "type": "projector",
         "layer": 0,
-        "x": 3,
-        "y": 3,
+        "x": 10,
+        "y": 8,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
             "layer": 2,
-            "dx": 0,
-            "dy": 0
+            "dx": -5,
+            "dy": -4
           }
         ]
       }
     ],
     "switches": [
       {
-        "id": "draft-plate",
+        "id": "draft-plate-a",
         "layer": 0,
         "x": 1,
-        "y": 4
+        "y": 12
+      },
+      {
+        "id": "draft-plate-b",
+        "layer": 0,
+        "x": 8,
+        "y": 10
       }
     ],
     "doors": [
       {
-        "id": "draft-door",
+        "id": "draft-door-a",
         "layer": 2,
-        "x": 4,
-        "y": 2,
+        "x": 13,
+        "y": 12,
         "switchIds": [
-          "draft-plate"
+          "draft-plate-a"
+        ]
+      },
+      {
+        "id": "draft-door-b",
+        "layer": 1,
+        "x": 12,
+        "y": 3,
+        "switchIds": [
+          "draft-plate-b"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Cap the demo slice with three-sheet traversal layered on top of parcel parking and projection.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 7,
-      "commonMisunderstanding": "Players keep looking for the goal on the middle sheet instead of treating it as the route between the setup layer and the final layer."
+      "intendedLesson": "Cap the demo slice with three-sheet traversal and dual projection.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 22,
+      "commonMisunderstanding": "Players keep looking for the goal on the middle sheet."
     }
   },
   "clocktower-01": {
@@ -4392,133 +6618,72 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Use the echo courier to hold the door long enough to pass.",
-    "blurb": "Your last move returns as a delayed helper on another sheet.",
+    "objective": "Use the echo courier and a teleporter to hold the door long enough to pass.",
+    "blurb": "Your last move returns as a delayed helper, now with teleporter shortcuts.",
     "intro": [
       {
         "speaker": "Bell Keeper",
-        "text": "The echo courier repeats your previous move exactly one turn later. Give it a beat to catch up."
+        "text": "The echo courier repeats your previous move exactly one turn later. Give it a beat to catch up. And the old bell tubes still work."
       }
     ],
     "hintTiers": [
-      "The echo courier needs one turn before it copies your first move.",
-      "Move once, wait once, then take advantage of the opened door while the echo stays on the switch.",
-      "Walk right, wait, walk right through the opened door, then walk right again to the mailbox."
+      "The echo needs to reach the switch via the teleporter. Time your moves so the echo warps to the right spot.",
+      "Move right to queue the echo, wait so it steps onto the teleporter, which sends it near the switch. Then pass through the door.",
+      "Walk right, wait for the echo to teleport near the switch, walk right through the opened door, then navigate the maze to the mailbox."
     ],
     "layers": [
       {
         "id": "clock-face",
         "name": "Clock Face",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#...G.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#..........#...#",
+          "#.####.###.#.#.#",
+          "#......#...#...#",
+          "#.#..#.#.#...#.#",
+          "#.#.##.......#.#",
+          "#..........#.#.#",
+          "#.####.#.#.#...#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#............G.#",
+          "################"
         ]
       },
       {
         "id": "inner-works",
         "name": "Inner Works",
         "tiles": [
-          "#######",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 2,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "echo-a",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
-      }
-    ],
-    "switches": [
-      {
-        "id": "clock-plate",
-        "layer": 1,
-        "x": 2,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "clock-door",
-        "layer": 0,
-        "x": 3,
-        "y": 2,
-        "switchIds": [
-          "clock-plate"
-        ]
-      }
-    ],
-    "balance": {
-      "intendedLesson": "Teach echo timing and the value of a wait action.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
-    }
-  },
-  "clocktower-02": {
-    "id": "clocktower-02",
-    "districtId": "clocktower",
-    "title": "Borrowed Bell",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Let the echo hold the gate, reach the stitch, and climb to the mailbox.",
-    "blurb": "A delayed footstep can hold the route open long enough to fold through it.",
-    "intro": [
-      {
-        "speaker": "Bell Keeper",
-        "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
-      }
-    ],
-    "hintTiers": [
-      "You do not need the echo to escort you forever. You only need the door open for one crossing.",
-      "Move once to queue the echo, wait so it can stand on the plate, then cross the opened gate and keep climbing.",
-      "Walk right, wait, walk right through the door, walk right onto the stitch, switch sheets, then step right into the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "clock-borrowed-front",
-        "name": "Borrowed Face",
-        "tiles": [
-          "########",
-          "#..D.S.#",
-          "#.####.#",
-          "#......#",
-          "#......#",
-          "########"
+          "################",
+          "#..........#...#",
+          "#.####.###.#.#.#",
+          "#..T...#...#...#",
+          "#.#..#.#.#...#.#",
+          "#.#.##.......#.#",
+          "#..........#.#.#",
+          "#.####.#.#.#.T.#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#..............#",
+          "################"
         ]
       },
       {
-        "id": "clock-borrowed-back",
-        "name": "Bell Frame",
+        "id": "bell-gear",
+        "name": "Bell Gear",
         "tiles": [
-          "########",
-          "#....SG#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "################",
+          "#..........#...#",
+          "#.####.###.#.#.#",
+          "#......#F..#...#",
+          "#.#..#.#F#...#.#",
+          "#.#.##..F....#.#",
+          "#..........#.#.#",
+          "#.####.#.#.#...#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#..............#",
+          "################"
         ]
       }
     ],
@@ -4530,11 +6695,11 @@ export const ROOM_LOOKUP = {
     },
     "entities": [
       {
-        "id": "echo-borrowed",
+        "id": "echo-a",
         "type": "echo",
         "layer": 1,
         "x": 1,
-        "y": 4,
+        "y": 9,
         "solid": true,
         "pushable": false,
         "echoDelay": 1,
@@ -4543,29 +6708,230 @@ export const ROOM_LOOKUP = {
     ],
     "switches": [
       {
-        "id": "clock-borrowed-plate",
+        "id": "clock-plate",
         "layer": 1,
-        "x": 2,
-        "y": 4
+        "x": 13,
+        "y": 7
       }
     ],
     "doors": [
       {
-        "id": "clock-borrowed-door",
+        "id": "clock-door",
         "layer": 0,
-        "x": 3,
-        "y": 1,
+        "x": 8,
+        "y": 9,
         "switchIds": [
-          "clock-borrowed-plate"
+          "clock-plate"
         ]
       }
     ],
-    "routingStamps": [],
+    "teleporters": [
+      {
+        "id": "tp-clock-a1",
+        "layer": 1,
+        "x": 3,
+        "y": 3,
+        "pairId": "tp-clock-a2"
+      },
+      {
+        "id": "tp-clock-a2",
+        "layer": 1,
+        "x": 13,
+        "y": 7,
+        "pairId": "tp-clock-a1"
+      }
+    ],
     "balance": {
-      "intendedLesson": "Extend echo timing into a stitched route instead of a single hallway crossing.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players often switch too early and forget the echo still has to open the first gate."
+      "intendedLesson": "Teach echo timing with teleporter mechanics and gravity tiles.",
+      "targetDifficulty": 6,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players move too quickly and forget the echo delay."
+    }
+  },
+  "clocktower-02": {
+    "id": "clocktower-02",
+    "districtId": "clocktower",
+    "title": "Borrowed Bell",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Combine the echo, a parcel, and cross-layer teleporters to open the route.",
+    "blurb": "A delayed footstep can hold the route open while the parcel crosses between layers.",
+    "intro": [
+      {
+        "speaker": "Bell Keeper",
+        "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
+      }
+    ],
+    "hintTiers": [
+      "The echo holds the door while you push the parcel onto the teleporter to activate the far switch.",
+      "Time the echo to stay on the near switch while you push the parcel through the teleporter to land on the far switch.",
+      "Move right to queue echo, wait for it to reach the switch, push parcel right onto teleporter which sends it to back layer switch. Go through both opened doors to the stitch, switch layers, navigate to the mailbox."
+    ],
+    "routingStamps": [],
+    "layers": [
+      {
+        "id": "clock-borrowed-front",
+        "name": "Borrowed Face",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#....#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "clock-borrowed-mid",
+        "name": "Bell Mechanism",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.#.##.###.#...#",
+          "#..........#.#.#",
+          "#.####.#.#.S.#.#",
+          "#......#...#.S.#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "clock-borrowed-back",
+        "name": "Bell Frame",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.#..####.#....#",
+          "#.#........#.G.#",
+          "#...##.#.#.S.#.#",
+          "#.#..#.#...#.S.#",
+          "#.####.###.#.#.#",
+          "#......#.#.#.#.#",
+          "#.##.#.#.#...#.#",
+          "#.#......#.#...#",
+          "#.####.........#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 10,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "echo-borrowed",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 9,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      },
+      {
+        "id": "parcel-bell",
+        "type": "parcel",
+        "layer": 0,
+        "x": 6,
+        "y": 8,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-bell-b",
+        "type": "parcel",
+        "layer": 1,
+        "x": 8,
+        "y": 3,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "clock-echo-plate",
+        "layer": 1,
+        "x": 5,
+        "y": 9
+      },
+      {
+        "id": "clock-parcel-plate",
+        "layer": 1,
+        "x": 12,
+        "y": 5
+      },
+      {
+        "id": "clock-back-plate",
+        "layer": 2,
+        "x": 8,
+        "y": 3
+      }
+    ],
+    "doors": [
+      {
+        "id": "clock-door-a",
+        "layer": 0,
+        "x": 5,
+        "y": 3,
+        "switchIds": [
+          "clock-echo-plate"
+        ]
+      },
+      {
+        "id": "clock-door-b",
+        "layer": 1,
+        "x": 13,
+        "y": 5,
+        "switchIds": [
+          "clock-parcel-plate"
+        ]
+      },
+      {
+        "id": "clock-door-c",
+        "layer": 2,
+        "x": 12,
+        "y": 3,
+        "switchIds": [
+          "clock-back-plate"
+        ]
+      }
+    ],
+    "teleporters": [
+      {
+        "id": "tp-bell-a1",
+        "layer": 0,
+        "x": 10,
+        "y": 8,
+        "pairId": "tp-bell-a2"
+      },
+      {
+        "id": "tp-bell-a2",
+        "layer": 1,
+        "x": 12,
+        "y": 3,
+        "pairId": "tp-bell-a1"
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine echo timing with dual parcel management and cross-layer teleportation.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 18,
+      "commonMisunderstanding": "Players switch too early and forget the echo."
     }
   },
   "clocktower-03": {
@@ -4575,42 +6941,72 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Use the routing stamp to land exactly where the mailbox route resumes.",
-    "blurb": "Some stitched exits arrive somewhere else entirely once they pass under the clock stamp.",
+    "objective": "Chain teleporters across three layers to reach the mailbox at the bottom.",
+    "blurb": "The clocktower's tube system spans all three sheets of the bell mechanism.",
     "intro": [
       {
         "speaker": "Bell Keeper",
-        "text": "That stamp reroutes a stitch exit the instant you land. Read the arrow, not just the stitch."
+        "text": "The bell tubes connect all three sheets. Each teleporter drops you one layer deeper. Read the chain before you step in."
       }
     ],
     "hintTiers": [
-      "The goal is not a walk after the stitch. The stitch itself is the final delivery hop.",
-      "Switch on the marked stitch. The routing stamp on the destination sheet will slide the exit to the right.",
-      "Walk right twice onto the stitch, then switch sheets. The routing stamp sends you directly to the mailbox."
+      "The teleporters form a chain: layer 0 to layer 1, then layer 1 to layer 2. But walls block direct paths.",
+      "Use the first teleporter to reach layer 1, navigate the maze there, use the second teleporter to reach layer 2, then find the mailbox.",
+      "Navigate to teleporter at (7,2) on layer 0, warp to layer 1 at (2,5), navigate the middle maze to teleporter at (6,6), warp to layer 2 at (3,2), navigate down and right to the mailbox."
     ],
     "layers": [
       {
         "id": "clock-stamp-front",
-        "name": "Clock Front",
+        "name": "Clock Top",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.###.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#..#.........#.#",
+          "#.##.#.T.###...#",
+          "#..........#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#RRR.#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "clock-stamp-middle",
+        "name": "Clock Middle",
+        "tiles": [
+          "################",
+          "#....#.......#.#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#..#.#.#...#.#",
+          "#.T.##.......#.#",
+          "#..........T.#.#",
+          "#.####.#.#.#...#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#..............#",
+          "################"
         ]
       },
       {
         "id": "clock-stamp-back",
-        "name": "Clock Stamp",
+        "name": "Clock Bottom",
         "tiles": [
-          "#######",
-          "#..S.G#",
-          "#.###.#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "################",
+          "#............#.#",
+          "#.#T####.#.#...#",
+          "#.#........#.#.#",
+          "#...#.##.#...#.#",
+          "#.#.##.......#.#",
+          "#......DDD.#.#.#",
+          "#.####.#.#.#...#",
+          "#..........#.#.#",
+          "#.####.###.....#",
+          "#.............G#",
+          "################"
         ]
       }
     ],
@@ -4623,24 +7019,41 @@ export const ROOM_LOOKUP = {
     "entities": [],
     "switches": [],
     "doors": [],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "clock-switch-stamp",
+        "id": "tp-chain-a1",
+        "layer": 0,
+        "x": 7,
+        "y": 2,
+        "pairId": "tp-chain-a2"
+      },
+      {
+        "id": "tp-chain-a2",
         "layer": 1,
+        "x": 2,
+        "y": 5,
+        "pairId": "tp-chain-a1"
+      },
+      {
+        "id": "tp-chain-b1",
+        "layer": 1,
+        "x": 11,
+        "y": 6,
+        "pairId": "tp-chain-b2"
+      },
+      {
+        "id": "tp-chain-b2",
+        "layer": 2,
         "x": 3,
-        "y": 1,
-        "direction": "right",
-        "distance": 2,
-        "appliesTo": [
-          "switch"
-        ]
+        "y": 2,
+        "pairId": "tp-chain-b1"
       }
     ],
     "balance": {
-      "intendedLesson": "Introduce routing stamps through a clean stitched exit instead of layering them onto multiple other systems at once.",
-      "targetDifficulty": 2,
-      "expectedSolveMinutes": 3,
-      "commonMisunderstanding": "Players step on the stitch and still expect to move manually afterward instead of trusting the reroute."
+      "intendedLesson": "Multi-layer teleporter chains with conveyor belts.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 16,
+      "commonMisunderstanding": "Players get disoriented across layers."
     }
   },
   "clocktower-side-01": {
@@ -4650,10 +7063,7 @@ export const ROOM_LOOKUP = {
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "requiresRooms": [
-      "clocktower-03"
-    ],
-    "objective": "Borrow a beat, fall through the rerouted stitch, and ride the lower route to the mailbox.",
+    "objective": "Combine echo timing, teleporters, and one-way gates across three layers.",
     "blurb": "A side route that turns one rerouted stitch into a full three-sheet descent.",
     "intro": [
       {
@@ -4662,57 +7072,665 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "The first stitch is not the destination. It is the drop point for the second switch.",
-      "Use the echo to open the first door, then let the routing stamp drop you onto the lower stitch before you switch again.",
-      "Walk right, wait, walk right three more times to the stitch, switch to the middle sheet, switch again at the lower stitch, then go right and climb to the mailbox."
+      "The echo must reach the switch via the teleporter while you navigate one-way gates across three layers.",
+      "Time the echo to teleport onto the switch, then navigate through one-way gates, use the stitch to layer 2, use a second teleporter to reach the final area.",
+      "Move right to queue echo, navigate up through one-way gates while echo teleports to switch. Go through opened door, use stitch to middle layer, navigate to teleporter, warp to layer 2, navigate maze to mailbox."
+    ],
+    "requiresRooms": [
+      "clocktower-03"
     ],
     "layers": [
       {
         "id": "clock-pendulum-front",
         "name": "Pendulum Face",
         "tiles": [
-          "########",
-          "#..D.S.#",
-          "#.####.#",
-          "#......#",
-          "#......#",
-          "########"
+          "################",
+          "#...S......#...#",
+          "#.####.###.....#",
+          "#.>..........#.#",
+          "#.#..#..#.#.#..#",
+          "#.#.##....#.#..#",
+          "#.........#.#..#",
+          "#.####.#....#..#",
+          "#.......#.#.#..#",
+          "#.####.###.<...#",
+          "#..............#",
+          "################"
         ]
       },
       {
         "id": "clock-pendulum-middle",
         "name": "Pendulum Frame",
         "tiles": [
-          "########",
-          "#....S.#",
-          "#.####.#",
-          "#......#",
-          "#....S.#",
-          "########"
+          "################",
+          "#...S..T.....#.#",
+          "#.#.####.###...#",
+          "#.v..........^.#",
+          "#......#.#..#..#",
+          "#.###.##..#.#..#",
+          "#.........#.#..#",
+          "#.####.#....#..#",
+          "#.......#.#.#..#",
+          "#.####.###.S...#",
+          "#..............#",
+          "################"
         ]
       },
       {
         "id": "clock-pendulum-back",
         "name": "Bell Route",
         "tiles": [
-          "########",
-          "#.....G#",
-          "#.####.#",
-          "#......#",
-          "#....S.#",
-          "########"
+          "################",
+          "#............G.#",
+          "#.####.###.#...#",
+          "#.T..........^.#",
+          "#.#..#..#.#.#..#",
+          "#.#.##....#.#..#",
+          "#.........#.#..#",
+          "#.####.#....#..#",
+          "#.......#.#.#..#",
+          "#.####.###.S...#",
+          "#..............#",
+          "################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 1,
+      "y": 10,
       "facing": "right"
     },
     "entities": [
       {
         "id": "echo-pendulum",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 10,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      }
+    ],
+    "switches": [
+      {
+        "id": "clock-pendulum-plate",
+        "layer": 1,
+        "x": 12,
+        "y": 1
+      }
+    ],
+    "doors": [
+      {
+        "id": "clock-pendulum-door",
+        "layer": 0,
+        "x": 7,
+        "y": 1,
+        "switchIds": [
+          "clock-pendulum-plate"
+        ]
+      }
+    ],
+    "teleporters": [
+      {
+        "id": "tp-pend-a1",
+        "layer": 1,
+        "x": 7,
+        "y": 1,
+        "pairId": "tp-pend-a2"
+      },
+      {
+        "id": "tp-pend-a2",
+        "layer": 1,
+        "x": 12,
+        "y": 3,
+        "pairId": "tp-pend-a1"
+      },
+      {
+        "id": "tp-pend-b1",
+        "layer": 1,
+        "x": 3,
+        "y": 8,
+        "pairId": "tp-pend-b2"
+      },
+      {
+        "id": "tp-pend-b2",
+        "layer": 2,
+        "x": 3,
+        "y": 3,
+        "pairId": "tp-pend-b1"
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine echo timing with teleporter chains and one-way gates across three layers.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 20,
+      "commonMisunderstanding": "Players forget the final climb."
+    }
+  },
+  "theater-01": {
+    "id": "theater-01",
+    "districtId": "theater",
+    "title": "Understudy",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Guide your shadow to the switch while navigating walls and corridors.",
+    "blurb": "The stage mirrors movement even when the audience cannot see it.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "Your shadow moves in the opposite direction across its own sheet. Think about where it lands, not where you do."
+      }
+    ],
+    "hintTiers": [
+      "The shadow mirrors your movement. Every step right sends it left. Plan a path that places it on the switch.",
+      "You need to move so the shadow hits the switch while you can still reach the door. The maze layout means not every move is mirrored cleanly.",
+      "Move right twice, down once (shadow goes left twice, up once onto the switch). Walk through the opened door and navigate the corridors to the mailbox."
+    ],
+    "layers": [
+      {
+        "id": "stage",
+        "name": "Stage",
+        "tiles": [
+          "################",
+          "#..........#...#",
+          "#.####.###.#.#.#",
+          "#.#......#.#...#",
+          "#.#.##.#...#.#.#",
+          "#......#.#...#.#",
+          "#.##.###.#.#.#.#",
+          "#........#.#...#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####......G#",
+          "################"
+        ]
+      },
+      {
+        "id": "backdrop",
+        "name": "Backdrop",
+        "tiles": [
+          "################",
+          "#..........#...#",
+          "#.#.####.#.#.#.#",
+          "#.#......#.#...#",
+          "#.#..#.#...#.#.#",
+          "#...##.#.#...#.#",
+          "#.##.###.#.#.#.#",
+          "#........#.#...#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "wings",
+        "name": "Wings",
+        "tiles": [
+          "################",
+          "#II........#...#",
+          "#I####.###.#.#.#",
+          "#I#......#.#...#",
+          "#I#.##.#...#.#.#",
+          "#I.....#.#...#.#",
+          "#I##.###.#.#.#.#",
+          "#I.......#.#...#",
+          "#I####.#.#...#.#",
+          "#I#......#.#...#",
+          "#I#.####.......#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 3,
+      "y": 5,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-a",
+        "type": "shadow",
+        "layer": 1,
+        "x": 12,
+        "y": 5,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-plate",
+        "layer": 1,
+        "x": 8,
+        "y": 2
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-door",
+        "layer": 0,
+        "x": 8,
+        "y": 5,
+        "switchIds": [
+          "stage-plate"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Teach mirrored shadow movement with larger maze and ice wings layer.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 15,
+      "commonMisunderstanding": "Players track their own movement but not the shadow."
+    }
+  },
+  "theater-02": {
+    "id": "theater-02",
+    "districtId": "theater",
+    "title": "Latch Cue",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Navigate ice corridors while guiding your shadow to latch the switch across three layers.",
+    "blurb": "The stage route stays open once the understudy hits the mark, but ice changes everything.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
+      }
+    ],
+    "hintTiers": [
+      "The shadow must latch the switch while you slide on ice. Ice affects you but not the shadow.",
+      "Plan your ice slides so the mirrored shadow movement lands on the latch. Then descend through layers.",
+      "Slide right on ice (shadow goes left to switch). Navigate down to stitch, switch to middle layer, descend to lower stitch, switch to layer 2, push parcel to open final path, reach mailbox."
+    ],
+    "routingStamps": [],
+    "layers": [
+      {
+        "id": "stage-latch-front",
+        "name": "Stage",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.####.###.#...#",
+          "#.......II.#.#.#",
+          "#.#.##.#.#...#.#",
+          "#.#....#...#...#",
+          "#.##.###.#.#.#.#",
+          "#........#.#.#.#",
+          "#.####.#.#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-latch-middle",
+        "name": "Wings",
+        "tiles": [
+          "################",
+          "#..S.........#.#",
+          "#.#.####.#.#...#",
+          "#..........#.#.#",
+          "#.####.#.#.S.#.#",
+          "#......#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.#.####.......#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-latch-back",
+        "name": "Backstage",
+        "tiles": [
+          "################",
+          "#...........#..#",
+          "#.####.###.#...#",
+          "#..........#.#.#",
+          "#.#..#.#.#.S.#.#",
+          "#.#.##.#...#...#",
+          "#..........#.#.#",
+          "#.####.S.#.#.#.#",
+          "#........#...#.#",
+          "#.#......#.#...#",
+          "#.###.####...G.#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 10,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-latch",
+        "type": "shadow",
+        "layer": 1,
+        "x": 14,
+        "y": 10,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
+      {
+        "id": "parcel-stage",
+        "type": "parcel",
+        "layer": 2,
+        "x": 6,
+        "y": 8,
+        "pushable": true,
+        "solid": true
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-latch-switch",
+        "layer": 1,
+        "x": 4,
+        "y": 3,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-latch-door",
+        "layer": 2,
+        "x": 11,
+        "y": 10,
+        "switchIds": [
+          "stage-latch-switch"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Combine shadow latching with ice physics and three-layer navigation.",
+      "targetDifficulty": 7,
+      "expectedSolveMinutes": 18,
+      "commonMisunderstanding": "Players assume the shadow must keep standing on the switch."
+    }
+  },
+  "theater-03": {
+    "id": "theater-03",
+    "districtId": "theater",
+    "title": "Marked Landing",
+    "optional": false,
+    "unlockCost": 0,
+    "postmarks": 1,
+    "objective": "Guide two shadows through one-way gates to latch two switches simultaneously.",
+    "blurb": "The spotlight stamp only helps if both shadows have already unlocked their respective doors.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "Two shadows, two marks. Both must hit their cues before the scene opens."
+      }
+    ],
+    "hintTiers": [
+      "Two shadows mirror you on two different layers. Each must reach its own switch.",
+      "Plan a movement sequence that places both shadows on their respective switches while navigating one-way gates.",
+      "Move right twice (both shadows go left). Move down once (both go up). Shadow A reaches switch on layer 1, shadow B reaches switch on layer 2. Navigate through both opened doors via one-way gate circuit to the mailbox."
+    ],
+    "achievementId": "stage-route",
+    "layers": [
+      {
+        "id": "stage-mark-front",
+        "name": "Stage Floor",
+        "tiles": [
+          "################",
+          "#...S......#...#",
+          "#.>###.###.....#",
+          "#.#........v...#",
+          "#...#.##.#..#..#",
+          "#.#.##...#..#..#",
+          "#......<.......#",
+          "#.####.###..#..#",
+          "#..........#...#",
+          "#.#.####.......#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-mark-mid",
+        "name": "Wing Grid",
+        "tiles": [
+          "################",
+          "#...S......#...#",
+          "#.#.####.###...#",
+          "#..............#",
+          "#.....##.#..#..#",
+          "#.###.....#.#..#",
+          "#..............#",
+          "#.####.###..#..#",
+          "#..........#...#",
+          "#.#.####.......#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-mark-back",
+        "name": "Spotlight Grid",
+        "tiles": [
+          "################",
+          "#...S......#...#",
+          "#.####.###.....#",
+          "#..............#",
+          "#.#..#.##.#.#..#",
+          "#.#.##...#..#..#",
+          "#..............#",
+          "#.####.###..#..#",
+          "#..........#...#",
+          "#.#.####.......#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-mark-deep",
+        "name": "Deep Stage",
+        "tiles": [
+          "################",
+          "#...S........G.#",
+          "#.####.###.#...#",
+          "#..............#",
+          "#.#..#.##.#.#..#",
+          "#.#.##...#..#..#",
+          "#..............#",
+          "#.####.###..#..#",
+          "#..........#...#",
+          "#.#.####.......#",
+          "#..............#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 3,
+      "y": 7,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-mark-a",
+        "type": "shadow",
+        "layer": 1,
+        "x": 12,
+        "y": 8,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
+      {
+        "id": "shadow-mark-b",
+        "type": "shadow",
+        "layer": 2,
+        "x": 12,
+        "y": 8,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      }
+    ],
+    "switches": [
+      {
+        "id": "stage-mark-switch-a",
+        "layer": 1,
+        "x": 6,
+        "y": 3,
+        "sticky": true
+      },
+      {
+        "id": "stage-mark-switch-b",
+        "layer": 2,
+        "x": 6,
+        "y": 3,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-mark-door-a",
+        "layer": 0,
+        "x": 8,
+        "y": 1,
+        "switchIds": [
+          "stage-mark-switch-a"
+        ]
+      },
+      {
+        "id": "stage-mark-door-b",
+        "layer": 3,
+        "x": 13,
+        "y": 1,
+        "switchIds": [
+          "stage-mark-switch-b"
+        ]
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Dual shadow coordination with one-way gates across four layers.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 22,
+      "commonMisunderstanding": "Players plan for one shadow and forget the other."
+    }
+  },
+  "theater-side-01": {
+    "id": "theater-side-01",
+    "districtId": "theater",
+    "title": "Backstage Fold",
+    "optional": true,
+    "unlockCost": 0,
+    "postmarks": 0,
+    "objective": "Combine shadow, echo, and teleporters across three layers for the ultimate stage puzzle.",
+    "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
+    "intro": [
+      {
+        "speaker": "Stagehand",
+        "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
+      }
+    ],
+    "hintTiers": [
+      "The shadow latches one door, the echo holds another, and teleporters connect all three layers.",
+      "Move to latch the shadow switch first. Then time the echo to hold the second door while you teleport between layers.",
+      "Move right to latch shadow switch. Navigate to echo timing position. Move right to queue echo onto switch via teleporter. Pass through both opened doors. Use teleporter to layer 2. Navigate the final maze to the mailbox."
+    ],
+    "requiresRooms": [
+      "theater-03"
+    ],
+    "layers": [
+      {
+        "id": "stage-fold-front",
+        "name": "Front Curtain",
+        "tiles": [
+          "################",
+          "#...S..........#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "#.#..#.#.#.#...#",
+          "#.#.##.........#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-fold-middle",
+        "name": "Backstage Grid",
+        "tiles": [
+          "################",
+          "#...S..T.......#",
+          "#.#.####.#.#...#",
+          "#..............#",
+          "#......#.#.#...#",
+          "#.###.#S.......#",
+          "#.T............#",
+          "#.####.S.#.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "################"
+        ]
+      },
+      {
+        "id": "stage-fold-back",
+        "name": "Fly Loft",
+        "tiles": [
+          "################",
+          "#.T............#",
+          "#.####.#.#.#...#",
+          "#..............#",
+          "#.#..#.#.#.#...#",
+          "#.#.##.S.......#",
+          "#..............#",
+          "#.####.S.#.#...#",
+          "#..............#",
+          "#.####.###.#...#",
+          "#..............#",
+          "#.####.#.#.#...#",
+          "#............G.#",
+          "################"
+        ]
+      }
+    ],
+    "start": {
+      "layer": 0,
+      "x": 1,
+      "y": 12,
+      "facing": "right"
+    },
+    "entities": [
+      {
+        "id": "shadow-fold",
+        "type": "shadow",
+        "layer": 1,
+        "x": 14,
+        "y": 12,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
+      {
+        "id": "echo-fold",
         "type": "echo",
         "layer": 1,
         "x": 1,
@@ -4725,447 +7743,74 @@ export const ROOM_LOOKUP = {
     ],
     "switches": [
       {
-        "id": "clock-pendulum-plate",
+        "id": "stage-fold-shadow-switch",
+        "layer": 1,
+        "x": 6,
+        "y": 4,
+        "sticky": true
+      },
+      {
+        "id": "stage-fold-echo-switch",
+        "layer": 1,
+        "x": 12,
+        "y": 1
+      }
+    ],
+    "doors": [
+      {
+        "id": "stage-fold-door-a",
+        "layer": 0,
+        "x": 7,
+        "y": 1,
+        "switchIds": [
+          "stage-fold-shadow-switch"
+        ]
+      },
+      {
+        "id": "stage-fold-door-b",
+        "layer": 1,
+        "x": 13,
+        "y": 4,
+        "switchIds": [
+          "stage-fold-echo-switch"
+        ]
+      }
+    ],
+    "teleporters": [
+      {
+        "id": "tp-fold-a1",
+        "layer": 1,
+        "x": 7,
+        "y": 1,
+        "pairId": "tp-fold-a2"
+      },
+      {
+        "id": "tp-fold-a2",
         "layer": 1,
         "x": 2,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "clock-pendulum-door",
-        "layer": 0,
-        "x": 3,
-        "y": 1,
-        "switchIds": [
-          "clock-pendulum-plate"
-        ]
-      }
-    ],
-    "routingStamps": [
-      {
-        "id": "clock-pendulum-stamp",
-        "layer": 1,
-        "x": 5,
-        "y": 1,
-        "direction": "down",
-        "distance": 3,
-        "appliesTo": [
-          "switch"
-        ]
-      }
-    ],
-    "balance": {
-      "intendedLesson": "Use one routing stamp to turn a familiar echo-door puzzle into a genuine three-sheet route.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 7,
-      "commonMisunderstanding": "Players often switch once, see the lower stitch, and then forget the final climb still happens on the back sheet."
-    }
-  },
-  "theater-01": {
-    "id": "theater-01",
-    "districtId": "theater",
-    "title": "Understudy",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Let your shadow open the route while you pass through.",
-    "blurb": "The stage mirrors movement even when the audience cannot see it.",
-    "intro": [
-      {
-        "speaker": "Stagehand",
-        "text": "Your shadow moves in the opposite direction across its own sheet. Think about where it lands, not where you do."
-      }
-    ],
-    "hintTiers": [
-      "One move to the right sends the shadow one move to the left.",
-      "The shadow only needs to step on the switch once for you to get through the door.",
-      "Move right to place the shadow on the switch, then continue right through the door before the route closes behind you."
-    ],
-    "layers": [
-      {
-        "id": "stage",
-        "name": "Stage",
-        "tiles": [
-          "#######",
-          "#.....#",
-          "#...G.#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
+        "y": 6,
+        "pairId": "tp-fold-a1"
       },
       {
-        "id": "backdrop",
-        "name": "Backdrop",
-        "tiles": [
-          "#######",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 2,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "shadow-a",
-        "type": "shadow",
+        "id": "tp-fold-b1",
         "layer": 1,
         "x": 5,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
-    "switches": [
-      {
-        "id": "stage-plate",
-        "layer": 1,
-        "x": 4,
-        "y": 4
-      }
-    ],
-    "doors": [
-      {
-        "id": "stage-door",
-        "layer": 0,
-        "x": 3,
-        "y": 2,
-        "switchIds": [
-          "stage-plate"
-        ]
-      }
-    ],
-    "balance": {
-      "intendedLesson": "Teach mirrored shadow movement and planning for a separate actor.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 4,
-      "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
-    }
-  },
-  "theater-02": {
-    "id": "theater-02",
-    "districtId": "theater",
-    "title": "Latch Cue",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Let your shadow latch the hidden switch, then climb through the open route.",
-    "blurb": "The stage route stays open once the understudy hits the mark.",
-    "intro": [
-      {
-        "speaker": "Stagehand",
-        "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
-      }
-    ],
-    "hintTiers": [
-      "The shadow does not need to babysit the switch. It only needs to touch it once.",
-      "Move right once to latch the switch with the shadow, then make your own climb to the stitch.",
-      "Move right, go up three times to the stitch, switch sheets, then go down and cross the now-open route to the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "stage-latch-front",
-        "name": "Stage",
-        "tiles": [
-          "#######",
-          "#.S...#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
+        "y": 12,
+        "pairId": "tp-fold-b2"
       },
       {
-        "id": "stage-latch-back",
-        "name": "Backstage",
-        "tiles": [
-          "#######",
-          "#.S...#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 4,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "shadow-latch",
-        "type": "shadow",
-        "layer": 1,
-        "x": 5,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
-    "switches": [
-      {
-        "id": "stage-latch-switch",
-        "layer": 1,
-        "x": 4,
-        "y": 4,
-        "sticky": true
-      }
-    ],
-    "doors": [
-      {
-        "id": "stage-latch-door",
-        "layer": 1,
-        "x": 3,
-        "y": 2,
-        "switchIds": [
-          "stage-latch-switch"
-        ]
-      }
-    ],
-    "routingStamps": [],
-    "balance": {
-      "intendedLesson": "Introduce sticky latches as a cleaner shadow-planning escalation before the routed shadow rooms.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players often assume the shadow must keep standing on the switch and overcomplicate the route."
-    }
-  },
-  "theater-03": {
-    "id": "theater-03",
-    "districtId": "theater",
-    "title": "Marked Landing",
-    "optional": false,
-    "unlockCost": 0,
-    "postmarks": 1,
-    "objective": "Latch the mark, switch sheets, and let the stamp drop you through the open landing.",
-    "blurb": "The spotlight stamp only helps if the shadow has already unlocked the door it lands on.",
-    "intro": [
-      {
-        "speaker": "Stagehand",
-        "text": "The stamp lands you on a different mark, but the landing only matters if the shadow has opened the prop door first."
-      }
-    ],
-    "hintTiers": [
-      "The shadow action happens before the stitched landing pays off.",
-      "Step right once to latch the switch with the shadow, then climb to the stitch and trust the rerouted landing.",
-      "Move right, go up three times, move right onto the stitch, switch sheets, and step right into the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "stage-mark-front",
-        "name": "Stage Floor",
-        "tiles": [
-          "########",
-          "#..S...#",
-          "#..##..#",
-          "#......#",
-          "#......#",
-          "########"
-        ]
-      },
-      {
-        "id": "stage-mark-back",
-        "name": "Spotlight Grid",
-        "tiles": [
-          "########",
-          "#..S.DG#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 4,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "shadow-mark",
-        "type": "shadow",
-        "layer": 1,
-        "x": 5,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
-    "switches": [
-      {
-        "id": "stage-mark-switch",
-        "layer": 1,
-        "x": 4,
-        "y": 4,
-        "sticky": true
-      }
-    ],
-    "doors": [
-      {
-        "id": "stage-mark-door",
-        "layer": 1,
-        "x": 5,
-        "y": 1,
-        "switchIds": [
-          "stage-mark-switch"
-        ]
-      }
-    ],
-    "routingStamps": [
-      {
-        "id": "stage-mark-stamp",
-        "layer": 1,
-        "x": 3,
-        "y": 1,
-        "direction": "right",
-        "distance": 2,
-        "appliesTo": [
-          "switch"
-        ]
-      }
-    ],
-    "achievementId": "stage-route",
-    "balance": {
-      "intendedLesson": "Combine sticky shadow setup with a routed stitch landing that only works because the shadow solved the destination first.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 6,
-      "commonMisunderstanding": "Players often climb correctly but forget to move right once at the start, so the landing stays blocked."
-    }
-  },
-  "theater-side-01": {
-    "id": "theater-side-01",
-    "districtId": "theater",
-    "title": "Backstage Fold",
-    "optional": true,
-    "unlockCost": 0,
-    "postmarks": 0,
-    "requiresRooms": [
-      "theater-03"
-    ],
-    "objective": "Latch the cue, fall through the rerouted stitch, and take the hidden backstage climb.",
-    "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
-    "intro": [
-      {
-        "speaker": "Stagehand",
-        "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
-      }
-    ],
-    "hintTiers": [
-      "The first stitch is the setup. The second stitch is the route.",
-      "Move right once so the shadow latches the cue, then use the routed stitch to drop onto the lower switch point.",
-      "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
-    ],
-    "layers": [
-      {
-        "id": "stage-fold-front",
-        "name": "Front Curtain",
-        "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
-        ]
-      },
-      {
-        "id": "stage-fold-middle",
-        "name": "Backstage Grid",
-        "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#..S...#",
-          "########"
-        ]
-      },
-      {
-        "id": "stage-fold-back",
-        "name": "Fly Loft",
-        "tiles": [
-          "########",
-          "#....DG#",
-          "#......#",
-          "#......#",
-          "#..S...#",
-          "########"
-        ]
-      }
-    ],
-    "start": {
-      "layer": 0,
-      "x": 1,
-      "y": 4,
-      "facing": "right"
-    },
-    "entities": [
-      {
-        "id": "shadow-fold",
-        "type": "shadow",
-        "layer": 1,
-        "x": 5,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
-    "switches": [
-      {
-        "id": "stage-fold-switch",
-        "layer": 1,
-        "x": 4,
-        "y": 4,
-        "sticky": true
-      }
-    ],
-    "doors": [
-      {
-        "id": "stage-fold-door",
+        "id": "tp-fold-b2",
         "layer": 2,
-        "x": 5,
+        "x": 2,
         "y": 1,
-        "switchIds": [
-          "stage-fold-switch"
-        ]
-      }
-    ],
-    "routingStamps": [
-      {
-        "id": "stage-fold-stamp",
-        "layer": 1,
-        "x": 3,
-        "y": 1,
-        "direction": "down",
-        "distance": 3,
-        "appliesTo": [
-          "switch"
-        ]
+        "pairId": "tp-fold-b1"
       }
     ],
     "balance": {
-      "intendedLesson": "Push the routed shadow idea into a three-layer secret path that still hinges on one readable fold.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 8,
-      "commonMisunderstanding": "Players often keep searching the middle sheet for the goal instead of treating it as the folded route into the loft."
+      "intendedLesson": "The ultimate theater challenge combining shadow, echo, and teleporters.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 25,
+      "commonMisunderstanding": "Players keep searching the middle sheet for the goal."
     }
   },
   "rooftops-01": {
@@ -5175,58 +7820,118 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Hold the door, project the bridge, and restore the final delivery lane.",
-    "blurb": "This is the first true mixed-mechanic route in the prototype.",
+    "objective": "Use two parcels, a projector, ice, one-way gates, and switches across three layers.",
+    "blurb": "This is the first true mixed-mechanic route in the campaign.",
     "intro": [
       {
         "speaker": "Mina",
         "text": "By now the town expects more than one insight at a time. Hold the line open, then build the bridge."
       }
     ],
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
+      }
+    ],
     "hintTiers": [
-      "One parcel belongs on the switch. The lantern belongs where the tear is.",
-      "Park the parcel on the switch first so you do not have to revisit it after the bridge is ready.",
-      "Push the parcel onto the floor plate, move the lantern to x3 y2, switch layers at the stitch, then walk over the bridge and through the open door to the mailbox."
+      "One parcel for each switch. The projector bridges the gap. One-way gates force a specific circuit.",
+      "Push parcel A across ice to the visible switch. Transfer parcel B to the hidden switch. Push the projector into position. Navigate the one-way circuit.",
+      "Slide parcel A right on ice to switch at (9,5). Transfer parcel B to back layer switch. Push projector up to bridge the gap on layer 2. Navigate one-way gates through all three layers to the mailbox."
     ],
     "layers": [
       {
         "id": "roofline",
         "name": "Roofline",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##################",
+          "#...S..........#.#",
+          "#.####.###.#.#...#",
+          "#.>............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#IIIIII..#.....#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#.<.#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "gutter-mid",
+        "name": "Gutter Middle",
+        "tiles": [
+          "##################",
+          "#...S..........#.#",
+          "#.#.##.###.#.#...#",
+          "#.v............^.#",
+          "#.####.#.#.#.#.#.#",
+          "#......#...#.S...#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.S...#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "gutter",
         "name": "Gutter Route",
         "tiles": [
-          "#######",
-          "#..S..#",
-          "#..~.G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##################",
+          "#................#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#~.#.#.#.#.#.#.#",
+          "#.#.##.#...#.S...#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.S...#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 12,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "parcel-d",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 3,
+        "y": 5,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-e",
+        "type": "parcel",
+        "layer": 0,
+        "x": 7,
+        "y": 11,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-f",
+        "type": "parcel",
+        "layer": 1,
+        "x": 9,
+        "y": 7,
         "pushable": true,
         "solid": true
       },
@@ -5234,50 +7939,66 @@ export const ROOM_LOOKUP = {
         "id": "lantern-b",
         "type": "projector",
         "layer": 0,
-        "x": 2,
+        "x": 5,
         "y": 3,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 1,
-            "dx": 0,
-            "dy": 0
+            "layer": 2,
+            "dx": -1,
+            "dy": 1
           }
         ]
       }
     ],
     "switches": [
       {
-        "id": "roof-plate",
+        "id": "roof-plate-a",
         "layer": 0,
-        "x": 1,
-        "y": 4
+        "x": 15,
+        "y": 5
+      },
+      {
+        "id": "roof-plate-b",
+        "layer": 1,
+        "x": 7,
+        "y": 11
+      },
+      {
+        "id": "roof-plate-c",
+        "layer": 1,
+        "x": 9,
+        "y": 7
       }
     ],
     "doors": [
       {
-        "id": "roof-door",
-        "layer": 1,
-        "x": 4,
-        "y": 2,
+        "id": "roof-door-a",
+        "layer": 2,
+        "x": 15,
+        "y": 12,
         "switchIds": [
-          "roof-plate"
+          "roof-plate-a",
+          "roof-plate-b"
+        ]
+      },
+      {
+        "id": "roof-door-b",
+        "layer": 1,
+        "x": 14,
+        "y": 11,
+        "switchIds": [
+          "roof-plate-c"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Combine parcel parking, layer switching, and projection in one route.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 6,
-      "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
-    },
-    "outro": [
-      {
-        "speaker": "Mina",
-        "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
-      }
-    ]
+      "intendedLesson": "Combine all previous mechanics.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 22,
+      "commonMisunderstanding": "Players solve the bridge first and discover they need the door open."
+    }
   },
   "rooftops-02": {
     "id": "rooftops-02",
@@ -5286,8 +8007,8 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Push the lantern into line, switch sheets, and cross the rerouted bridge.",
-    "blurb": "The rooftop stamp forwards a bridge one tile farther than the lantern expects.",
+    "objective": "Combine projection, shadow movement, teleporters, and ice across three layers.",
+    "blurb": "The rooftop route demands mastery of projection and shadow coordination.",
     "intro": [
       {
         "speaker": "Mina",
@@ -5295,80 +8016,161 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "Aim the lantern at the stamp tile, not directly at the gap.",
-      "Push the lantern left once so its projection lands on the stamp, then switch sheets and walk over the forwarded bridge.",
-      "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down, then cross right three times to the mailbox."
+      "The shadow latches a switch while the projector bridges the gap. Teleporters connect the layers.",
+      "Move to latch the shadow switch, then push the projector onto ice to slide into position. Use the teleporter to descend.",
+      "Move right to latch shadow. Push projector left onto ice, it slides to bridge position. Navigate to teleporter at layer 0, warp to layer 1, descend to stitch, switch to layer 2, cross bridge through opened door to mailbox."
     ],
     "layers": [
       {
         "id": "roof-forward-top",
         "name": "Roofline",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#II.#.#.#",
+          "#.#.##.......#...#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#...#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "roof-forward-middle",
+        "name": "Forwarded Middle",
+        "tiles": [
+          "##################",
+          "#...S..........#.#",
+          "#.#.####.###.#...#",
+          "#.T............#.#",
+          "#......#.#.S.#.#.#",
+          "#.###.##.......#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.S...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "roof-forward-bottom",
         "name": "Forwarded Span",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#...~.G#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#................#",
+          "#.######.###.#...#",
+          "#.T............#.#",
+          "#.#..~.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.S...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 3,
-      "facing": "left"
+      "x": 1,
+      "y": 12,
+      "facing": "right"
     },
     "entities": [
+      {
+        "id": "shadow-roof",
+        "type": "shadow",
+        "layer": 1,
+        "x": 16,
+        "y": 12,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
+      },
       {
         "id": "lantern-forward",
         "type": "projector",
         "layer": 0,
-        "x": 4,
-        "y": 3,
+        "x": 8,
+        "y": 4,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 1,
-            "dx": 0,
-            "dy": -1
+            "layer": 2,
+            "dx": -3,
+            "dy": 0
           }
         ]
       }
     ],
-    "switches": [],
-    "doors": [],
-    "routingStamps": [
+    "switches": [
       {
-        "id": "roof-forward-stamp",
+        "id": "roof-shadow-plate",
         "layer": 1,
-        "x": 3,
-        "y": 2,
-        "direction": "right",
-        "distance": 1,
-        "appliesTo": [
-          "projection"
+        "x": 7,
+        "y": 3,
+        "sticky": true
+      }
+    ],
+    "doors": [
+      {
+        "id": "roof-forward-door",
+        "layer": 2,
+        "x": 14,
+        "y": 12,
+        "switchIds": [
+          "roof-shadow-plate"
         ]
       }
     ],
+    "teleporters": [
+      {
+        "id": "tp-roof-a1",
+        "layer": 0,
+        "x": 15,
+        "y": 1,
+        "pairId": "tp-roof-a2"
+      },
+      {
+        "id": "tp-roof-a2",
+        "layer": 1,
+        "x": 2,
+        "y": 3,
+        "pairId": "tp-roof-a1"
+      },
+      {
+        "id": "tp-roof-b1",
+        "layer": 1,
+        "x": 15,
+        "y": 9,
+        "pairId": "tp-roof-b2"
+      },
+      {
+        "id": "tp-roof-b2",
+        "layer": 2,
+        "x": 2,
+        "y": 3,
+        "pairId": "tp-roof-b1"
+      }
+    ],
     "balance": {
-      "intendedLesson": "Introduce projection routing as a spatial alignment problem instead of a raw bridge-placement guess.",
-      "targetDifficulty": 3,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players push the lantern directly under the gap and miss that the stamp forwards the bridge one tile farther."
+      "intendedLesson": "Combine shadow latching, ice-based projector placement, and teleporter chains.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 22,
+      "commonMisunderstanding": "Players push the lantern directly under the gap."
     }
   },
   "rooftops-03": {
@@ -5378,7 +8180,7 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Forward the parcel onto the rooftop plate, then climb through the reopened lane.",
+    "objective": "Use two parcels, two switches, and teleporters across three layers to open the final corridor.",
     "blurb": "A transfer stamp can park a parcel exactly where a distant lane needs weight.",
     "intro": [
       {
@@ -5387,90 +8189,183 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "Transfer first. The stamp will handle the final parking spot for the parcel.",
-      "Stand still and transfer the parcel into the other sheet; the stamp there forwards it onto the switch.",
-      "Transfer the parcel, climb to the stitch with three moves up and two right, switch sheets, then walk right three times through the open lane to the mailbox."
+      "Each parcel activates a different switch on a different layer. Teleporters help you reach the distant areas.",
+      "Transfer one parcel to the back layer switch, push the other across the maze to the visible switch. Use teleporters to navigate between layers.",
+      "Transfer parcel A to back layer where it lands on hidden switch. Push parcel B through the maze to visible switch. Use teleporter chain to descend through three layers. Navigate through both opened doors to the mailbox."
     ],
     "layers": [
       {
         "id": "roof-transfer-top",
         "name": "Top Route",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.......#...#",
+          "#.##.###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#...#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "roof-transfer-middle",
+        "name": "Middle Route",
+        "tiles": [
+          "##################",
+          "#...S..........#.#",
+          "#.#.####.###.#...#",
+          "#..............#.#",
+          "#......#.#.S.#.#.#",
+          "#.###.##.......#.#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "roof-transfer-bottom",
         "name": "Stamped Lane",
         "tiles": [
-          "########",
-          "#..S.DG#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#................#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 12,
       "facing": "right"
     },
     "entities": [
       {
-        "id": "parcel-stamped",
+        "id": "parcel-stamped-a",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 4,
+        "y": 9,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-stamped-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 10,
+        "y": 3,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-stamped-c",
+        "type": "parcel",
+        "layer": 1,
+        "x": 6,
+        "y": 10,
         "pushable": true,
         "solid": true
       }
     ],
     "switches": [
       {
-        "id": "roof-transfer-plate",
-        "layer": 1,
+        "id": "roof-visible-plate",
+        "layer": 0,
+        "x": 15,
+        "y": 9
+      },
+      {
+        "id": "roof-hidden-plate",
+        "layer": 2,
         "x": 4,
-        "y": 4
+        "y": 8
+      },
+      {
+        "id": "roof-mid-plate",
+        "layer": 1,
+        "x": 6,
+        "y": 10
       }
     ],
     "doors": [
       {
-        "id": "roof-transfer-door",
-        "layer": 1,
-        "x": 5,
-        "y": 1,
+        "id": "roof-door-a",
+        "layer": 2,
+        "x": 14,
+        "y": 12,
         "switchIds": [
-          "roof-transfer-plate"
+          "roof-visible-plate"
+        ]
+      },
+      {
+        "id": "roof-door-b",
+        "layer": 2,
+        "x": 15,
+        "y": 5,
+        "switchIds": [
+          "roof-hidden-plate",
+          "roof-mid-plate"
         ]
       }
     ],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "roof-transfer-stamp",
+        "id": "tp-transfer-a1",
+        "layer": 0,
+        "x": 16,
+        "y": 1,
+        "pairId": "tp-transfer-a2"
+      },
+      {
+        "id": "tp-transfer-a2",
         "layer": 1,
         "x": 2,
-        "y": 4,
-        "direction": "right",
-        "distance": 2,
-        "appliesTo": [
-          "transfer"
-        ]
+        "y": 5,
+        "pairId": "tp-transfer-a1"
+      },
+      {
+        "id": "tp-transfer-b1",
+        "layer": 1,
+        "x": 15,
+        "y": 11,
+        "pairId": "tp-transfer-b2"
+      },
+      {
+        "id": "tp-transfer-b2",
+        "layer": 2,
+        "x": 2,
+        "y": 3,
+        "pairId": "tp-transfer-b1"
       }
     ],
     "balance": {
-      "intendedLesson": "Introduce transfer routing as a way to park a parcel across the fold without a long push setup.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 6,
-      "commonMisunderstanding": "Players often try to walk the parcel to the plate manually instead of trusting the transfer stamp."
+      "intendedLesson": "Triple parcel management across three layers with teleporter-assisted navigation.",
+      "targetDifficulty": 8,
+      "expectedSolveMinutes": 24,
+      "commonMisunderstanding": "Players try to walk the parcel manually."
     }
   },
   "rooftops-side-01": {
@@ -5480,10 +8375,7 @@ export const ROOM_LOOKUP = {
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "requiresRooms": [
-      "rooftops-03"
-    ],
-    "objective": "Push the lantern into line, fold through both stitches, and trace the hidden rooftop note.",
+    "objective": "Combine projector, echo, one-way gates, and ice across three layers for the hidden rooftop note.",
     "blurb": "The skyline keeps one extra route for players who read the stamps and the folds together.",
     "intro": [
       {
@@ -5492,92 +8384,134 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "Set the lantern before you start climbing. The folded route only works once the bridge is already forwarded.",
-      "Push the lantern left once, climb to the top stitch, drop to the lower stitch on the middle sheet, then cross the forwarded bridge on the last sheet.",
-      "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down twice to the lower stitch, switch again, go up once, then cross right three times to the mailbox."
+      "The projector bridges the gap, the echo holds a door, one-way gates force your circuit. Ice adds momentum.",
+      "Push the projector onto ice to slide it into bridge position. Time the echo to hold the door. Navigate the one-way gate circuit through all three layers.",
+      "Push projector right onto ice where it slides to bridge position. Navigate one-way loop to echo timing area. Queue echo, wait for it to reach switch. Pass through door, descend via stitches, cross bridge to mailbox."
+    ],
+    "requiresRooms": [
+      "rooftops-03"
     ],
     "layers": [
       {
         "id": "sky-postscript-top",
         "name": "Upper Roof",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.######.###.#...#",
+          "#.>............#.#",
+          "#.#..#.#.#II.#.#.#",
+          "#.#.##.......#...#",
+          "#.v..###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.<.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#...#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "sky-postscript-middle",
         "name": "Margin Route",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#..S...#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.#.####.###.#...#",
+          "#..............#.#",
+          "#......#.#.S.#.#.#",
+          "#.###.##.......#.#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "sky-postscript-bottom",
         "name": "Skyline Note",
         "tiles": [
-          "########",
-          "#......#",
-          "#...~.G#",
-          "#..S...#",
-          "#......#",
-          "########"
+          "##################",
+          "#................#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..~.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 3,
-      "facing": "left"
+      "x": 1,
+      "y": 12,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "lantern-postscript",
         "type": "projector",
         "layer": 0,
-        "x": 4,
-        "y": 3,
+        "x": 7,
+        "y": 5,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
             "layer": 2,
-            "dx": 0,
-            "dy": -1
+            "dx": -2,
+            "dy": 0
           }
         ]
+      },
+      {
+        "id": "echo-sky",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
       }
     ],
-    "switches": [],
-    "doors": [],
-    "routingStamps": [
+    "switches": [
       {
-        "id": "sky-postscript-stamp",
+        "id": "sky-echo-plate",
+        "layer": 1,
+        "x": 14,
+        "y": 1
+      }
+    ],
+    "doors": [
+      {
+        "id": "sky-door",
         "layer": 2,
-        "x": 3,
-        "y": 2,
-        "direction": "right",
-        "distance": 1,
-        "appliesTo": [
-          "projection"
+        "x": 14,
+        "y": 12,
+        "switchIds": [
+          "sky-echo-plate"
         ]
       }
     ],
     "balance": {
-      "intendedLesson": "Turn projection routing into a longer folded route that still hinges on one bridge-placement insight.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 8,
-      "commonMisunderstanding": "Players often reach the lower stitch correctly but forget the bridge was forwarded one tile farther than the lamp suggests."
+      "intendedLesson": "Combine projector, echo timing, ice, and one-way gates.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 25,
+      "commonMisunderstanding": "Players forget the bridge was forwarded."
     }
   },
   "rooftops-04": {
@@ -5587,8 +8521,8 @@ export const ROOM_LOOKUP = {
     "optional": false,
     "unlockCost": 0,
     "postmarks": 1,
-    "objective": "Park the parcel, trust the forwarded lantern bridge, and reconnect the full rooftop line.",
-    "blurb": "The final rooftop route ties pressure, projection, and three stitched sheets into one letter-long climb.",
+    "objective": "Master all mechanics across four layers to reconnect the full rooftop delivery line.",
+    "blurb": "The final rooftop route ties every mechanic into one grand puzzle across four sheets.",
     "intro": [
       {
         "speaker": "Mina",
@@ -5602,9 +8536,9 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "Treat this as setup first and travel second. The parcel and lantern should be ready before you start climbing.",
-      "Push the parcel onto the plate, use the upper stitch to reach the middle sheet, then descend to the lower stitch before you cross the bridge.",
-      "Move left three times to park the parcel, climb to the upper stitch, switch to the middle sheet, descend to the lower stitch, switch again, then go up twice and right three times through the bridge and door."
+      "Four layers, multiple entities, all mechanics. Solve the setup on layer 0 before descending.",
+      "Push parcel onto switch, align projector, latch the shadow switch, then descend through all four layers using stitches and teleporters.",
+      "Push parcel to switch at (1,10). Push projector to bridge position. Move to latch shadow. Use top stitch to layer 1, navigate to teleporter, warp to layer 2, use stitch to layer 3, cross bridge through opened doors to the mailbox."
     ],
     "achievementId": "festival-line",
     "layers": [
@@ -5612,52 +8546,113 @@ export const ROOM_LOOKUP = {
         "id": "festival-line-top",
         "name": "Festival Roof",
         "tiles": [
-          "########",
-          "#.S....#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.........#.#",
+          "#.>...........v..#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
         ]
       },
       {
-        "id": "festival-line-middle",
-        "name": "Carrier Fold",
+        "id": "festival-line-mid1",
+        "name": "Carrier Fold A",
         "tiles": [
-          "########",
-          "#.S....#",
-          "#......#",
-          "#......#",
-          "#.S....#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.#.######.###...#",
+          "#..............#.#",
+          "#......#.#.#.#.#.#",
+          "#.###.##.......#.#",
+          "#.<...........^..#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
+        ]
+      },
+      {
+        "id": "festival-line-mid2",
+        "name": "Carrier Fold B",
+        "tiles": [
+          "##################",
+          "#.T..............#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.........#.#",
+          "#................#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
         ]
       },
       {
         "id": "festival-line-bottom",
         "name": "Delivery Lane",
         "tiles": [
-          "########",
-          "#......#",
-          "#..~DG.#",
-          "#......#",
-          "#.S....#",
-          "########"
+          "##################",
+          "#.T..............#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..~.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#................#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#...............G#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
-      "x": 5,
-      "y": 4,
-      "facing": "left"
+      "x": 1,
+      "y": 14,
+      "facing": "right"
     },
     "entities": [
       {
         "id": "festival-parcel",
         "type": "parcel",
         "layer": 0,
-        "x": 2,
-        "y": 4,
+        "x": 4,
+        "y": 14,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "festival-parcel-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 8,
+        "y": 8,
         "pushable": true,
         "solid": true
       },
@@ -5665,56 +8660,106 @@ export const ROOM_LOOKUP = {
         "id": "festival-lantern",
         "type": "projector",
         "layer": 0,
-        "x": 3,
+        "x": 8,
         "y": 3,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 2,
-            "dx": -1,
-            "dy": -1
+            "layer": 3,
+            "dx": -3,
+            "dy": 1
           }
         ]
+      },
+      {
+        "id": "festival-shadow",
+        "type": "shadow",
+        "layer": 1,
+        "x": 16,
+        "y": 14,
+        "solid": true,
+        "pushable": false,
+        "mirrorAxis": "vertical"
       }
     ],
     "switches": [
       {
-        "id": "festival-line-plate",
+        "id": "festival-parcel-plate",
         "layer": 0,
         "x": 1,
-        "y": 4
+        "y": 14
+      },
+      {
+        "id": "festival-parcel-plate-b",
+        "layer": 0,
+        "x": 8,
+        "y": 12
+      },
+      {
+        "id": "festival-shadow-plate",
+        "layer": 1,
+        "x": 4,
+        "y": 4,
+        "sticky": true
       }
     ],
     "doors": [
       {
-        "id": "festival-line-door",
-        "layer": 2,
-        "x": 4,
-        "y": 2,
+        "id": "festival-door-a",
+        "layer": 3,
+        "x": 15,
+        "y": 14,
         "switchIds": [
-          "festival-line-plate"
+          "festival-parcel-plate",
+          "festival-parcel-plate-b"
+        ]
+      },
+      {
+        "id": "festival-door-b",
+        "layer": 3,
+        "x": 8,
+        "y": 3,
+        "switchIds": [
+          "festival-shadow-plate"
         ]
       }
     ],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "festival-line-stamp",
+        "id": "tp-festival-a1",
+        "layer": 1,
+        "x": 15,
+        "y": 1,
+        "pairId": "tp-festival-a2"
+      },
+      {
+        "id": "tp-festival-a2",
         "layer": 2,
         "x": 2,
-        "y": 2,
-        "direction": "right",
-        "distance": 1,
-        "appliesTo": [
-          "projection"
-        ]
+        "y": 1,
+        "pairId": "tp-festival-a1"
+      },
+      {
+        "id": "tp-festival-b1",
+        "layer": 2,
+        "x": 15,
+        "y": 12,
+        "pairId": "tp-festival-b2"
+      },
+      {
+        "id": "tp-festival-b2",
+        "layer": 3,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-festival-b1"
       }
     ],
     "balance": {
-      "intendedLesson": "Deliver a real finale by braiding parcel parking, forwarded projection, and three-layer travel into one readable route.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 9,
-      "commonMisunderstanding": "Players often start climbing before the parcel is parked and then have to unravel the whole route when the final door is still shut."
+      "intendedLesson": "The ultimate mixed-mechanic challenge across four layers.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 30,
+      "commonMisunderstanding": "Players start climbing before the parcel is parked."
     }
   },
   "attic-01": {
@@ -5724,49 +8769,118 @@ export const ROOM_LOOKUP = {
     "optional": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "objective": "Latch the hidden switch with your shadow, then climb into the rafters.",
-    "blurb": "A secret bonus room built around one permanent switch.",
+    "objective": "Use shadow, teleporters, ice, and one-way gates across three layers to reach the hidden mailbox.",
+    "blurb": "A secret bonus room built around shadow coordination with teleporter shortcuts.",
     "intro": [
       {
         "speaker": "Mina",
         "text": "You found the attic route. The old latch still works, if your shadow can reach it first."
       }
     ],
-    "hintTiers": [
-      "The switch only needs to be touched once.",
-      "Use your first move to the right to send the shadow onto the latch, then focus on reaching the stitch.",
-      "Move right to trigger the shadow latch, head for the stitch at the top, switch to the attic sheet, and follow the now-open route to the mailbox."
+    "outro": [
+      {
+        "speaker": "Mina",
+        "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+      }
     ],
+    "hintTiers": [
+      "The shadow must latch the switch via one-way gates while you navigate ice corridors and teleporters.",
+      "Move to place the shadow on the latch via one-way gate routing. Then use the teleporter to descend through layers.",
+      "Move right to send shadow left through one-way gate onto latch. Navigate the ice corridor to teleporter. Warp to layer 1, navigate maze to stitch, switch to layer 2, cross through opened door to mailbox."
+    ],
+    "achievementId": "attic-secret",
+    "requiresRooms": [
+      "clocktower-side-01",
+      "theater-side-01",
+      "rooftops-side-01"
+    ],
+    "secret": true,
     "layers": [
       {
         "id": "rafters-front",
         "name": "Rafters Front",
         "tiles": [
-          "#######",
-          "#.S...#",
-          "#.....#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##################",
+          "#...S..........#.#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#II.#.#.#",
+          "#.#.##.......#...#",
+          "#.<..###.#.#.#.#.#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#...#.#",
+          "#.#........#.#...#",
+          "#.#.####.#.......#",
+          "#.#........#.#...#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "rafters-mid1",
+        "name": "Rafters Middle A",
+        "tiles": [
+          "##################",
+          "#...S..T.......#.#",
+          "#.#.####.###.#...#",
+          "#..............#.#",
+          "#......#.#.#.#.#.#",
+          "#.###.##.......#.#",
+          "#.>........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
+        ]
+      },
+      {
+        "id": "rafters-mid2",
+        "name": "Rafters Middle B",
+        "tiles": [
+          "##################",
+          "#................#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.S.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.........#",
+          "##################"
         ]
       },
       {
         "id": "rafters-back",
         "name": "Rafters Back",
         "tiles": [
-          "#######",
-          "#.S...#",
-          "#....G#",
-          "#.....#",
-          "#.....#",
-          "#######"
+          "##################",
+          "#.T..............#",
+          "#.######.###.#...#",
+          "#..............#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#..........#.#.#.#",
+          "#.####.#.#.#.#.#.#",
+          "#..........#...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.#.####.#.......#",
+          "#.#.####.......G.#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 12,
       "facing": "right"
     },
     "entities": [
@@ -5774,66 +8888,98 @@ export const ROOM_LOOKUP = {
         "id": "shadow-b",
         "type": "shadow",
         "layer": 1,
-        "x": 5,
-        "y": 4,
+        "x": 16,
+        "y": 12,
         "solid": true,
         "pushable": false,
         "mirrorAxis": "vertical"
+      },
+      {
+        "id": "key-red-attic",
+        "type": "key",
+        "layer": 2,
+        "x": 10,
+        "y": 3,
+        "color": "red",
+        "solid": false,
+        "pushable": false
       }
     ],
     "switches": [
       {
         "id": "attic-latch",
         "layer": 1,
-        "x": 4,
-        "y": 4,
+        "x": 5,
+        "y": 3,
         "sticky": true
       }
     ],
     "doors": [
       {
         "id": "attic-door",
-        "layer": 1,
-        "x": 3,
-        "y": 2,
+        "layer": 3,
+        "x": 14,
+        "y": 12,
         "switchIds": [
           "attic-latch"
         ]
       }
     ],
-    "balance": {
-      "intendedLesson": "Teach sticky latches plus shadow setup in a short optional mastery room.",
-      "targetDifficulty": 4,
-      "expectedSolveMinutes": 5,
-      "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
-    },
-    "secret": true,
-    "achievementId": "attic-secret",
-    "outro": [
+    "teleporters": [
       {
-        "speaker": "Mina",
-        "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+        "id": "tp-attic-a1",
+        "layer": 0,
+        "x": 15,
+        "y": 1,
+        "pairId": "tp-attic-a2"
+      },
+      {
+        "id": "tp-attic-a2",
+        "layer": 1,
+        "x": 7,
+        "y": 1,
+        "pairId": "tp-attic-a1"
+      },
+      {
+        "id": "tp-attic-b1",
+        "layer": 1,
+        "x": 4,
+        "y": 9,
+        "pairId": "tp-attic-b2"
+      },
+      {
+        "id": "tp-attic-b2",
+        "layer": 3,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-attic-b1"
       }
     ],
-    "requiresRooms": [
-      "clocktower-side-01",
-      "theater-side-01",
-      "rooftops-side-01"
-    ]
+    "locks": [
+      {
+        "id": "lock-red-attic",
+        "layer": 3,
+        "x": 10,
+        "y": 8,
+        "color": "red"
+      }
+    ],
+    "balance": {
+      "intendedLesson": "Shadow latching with ice, one-way gates, teleporters, and key/lock across four layers.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 25,
+      "commonMisunderstanding": "Players assume the shadow must keep standing on the switch."
+    }
   },
   "attic-02": {
     "id": "attic-02",
     "districtId": "attic",
     "title": "Folded Ledger",
     "optional": true,
-    "secret": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "requiresRooms": [
-      "attic-01"
-    ],
-    "objective": "Latch the shadow cue, drop through the rerouted stitch, and climb the ledger route.",
-    "blurb": "One hidden route folds through a second stitch only after the shadow has opened the door at the top.",
+    "objective": "Combine shadow, echo, two parcels, and all mechanics across three layers.",
+    "blurb": "One hidden route folds through complex machinery requiring every skill learned.",
     "intro": [
       {
         "speaker": "Mina",
@@ -5841,52 +8987,108 @@ export const ROOM_LOOKUP = {
       }
     ],
     "hintTiers": [
-      "The shadow setup happens before the stitched drop matters.",
-      "Move right once to latch the switch with the shadow, then climb to the stitch and let the routing stamp drop you to the lower one.",
-      "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+      "Shadow latches one door, echo holds another, both parcels must reach their switches. Everything happens across three layers.",
+      "Latch the shadow switch first. Time the echo for the second door. Transfer one parcel, push the other. Descend via stitches and teleporters.",
+      "Move right to latch shadow. Navigate to echo timing area, queue it toward switch via teleporter. Transfer parcel A to back layer switch. Push parcel B to visible switch. Descend through all three layers to the mailbox."
     ],
+    "requiresRooms": [
+      "attic-01"
+    ],
+    "secret": true,
     "layers": [
       {
         "id": "attic-ledger-top",
         "name": "Ledger Top",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.........#.#",
+          "#.>...........v..#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
         ]
       },
       {
-        "id": "attic-ledger-middle",
-        "name": "Ledger Fold",
+        "id": "attic-ledger-mid1",
+        "name": "Ledger Fold A",
         "tiles": [
-          "########",
-          "#..S...#",
-          "#......#",
-          "#......#",
-          "#..S...#",
-          "########"
+          "##################",
+          "#...S..T.......#.#",
+          "#.#.######.###...#",
+          "#..............#.#",
+          "#......#.#.#.#.#.#",
+          "#.###.##.......#.#",
+          "#.<...........^..#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
+        ]
+      },
+      {
+        "id": "attic-ledger-mid2",
+        "name": "Ledger Fold B",
+        "tiles": [
+          "##################",
+          "#.T..............#",
+          "#.########.###...#",
+          "#.......RRRR..#..#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.S.......#.#",
+          "#................#",
+          "#.####.S.#.#.#.#.#",
+          "#..........F...#.#",
+          "#.########.F##...#",
+          "#..........F...#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#................#",
+          "##################"
         ]
       },
       {
         "id": "attic-ledger-bottom",
         "name": "Ledger Back",
         "tiles": [
-          "########",
-          "#....DG#",
-          "#......#",
-          "#......#",
-          "#..S...#",
-          "########"
+          "##################",
+          "#.T..............#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.#..#.#.#.#.#.#.#",
+          "#.#.##.S.......#.#",
+          "#................#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.########.###...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.########.###..G#",
+          "#................#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 14,
       "facing": "right"
     },
     "entities": [
@@ -5894,51 +9096,167 @@ export const ROOM_LOOKUP = {
         "id": "shadow-ledger",
         "type": "shadow",
         "layer": 1,
-        "x": 5,
-        "y": 4,
+        "x": 16,
+        "y": 14,
         "solid": true,
         "pushable": false,
         "mirrorAxis": "vertical"
+      },
+      {
+        "id": "echo-ledger",
+        "type": "echo",
+        "layer": 1,
+        "x": 1,
+        "y": 4,
+        "solid": true,
+        "pushable": false,
+        "echoDelay": 1,
+        "queuedAction": null
+      },
+      {
+        "id": "parcel-ledger-a",
+        "type": "parcel",
+        "layer": 0,
+        "x": 6,
+        "y": 12,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "parcel-ledger-b",
+        "type": "parcel",
+        "layer": 0,
+        "x": 10,
+        "y": 4,
+        "pushable": true,
+        "solid": true
+      },
+      {
+        "id": "key-blue-ledger",
+        "type": "key",
+        "layer": 2,
+        "x": 14,
+        "y": 4,
+        "color": "blue",
+        "solid": false,
+        "pushable": false
       }
     ],
     "switches": [
       {
-        "id": "attic-ledger-latch",
+        "id": "attic-ledger-shadow-latch",
         "layer": 1,
-        "x": 4,
+        "x": 6,
         "y": 4,
         "sticky": true
+      },
+      {
+        "id": "attic-ledger-echo-switch",
+        "layer": 1,
+        "x": 14,
+        "y": 1
+      },
+      {
+        "id": "attic-ledger-parcel-plate",
+        "layer": 3,
+        "x": 6,
+        "y": 12
+      },
+      {
+        "id": "attic-ledger-visible-plate",
+        "layer": 0,
+        "x": 15,
+        "y": 13
       }
     ],
     "doors": [
       {
-        "id": "attic-ledger-door",
-        "layer": 2,
-        "x": 5,
+        "id": "attic-ledger-door-a",
+        "layer": 0,
+        "x": 7,
         "y": 1,
         "switchIds": [
-          "attic-ledger-latch"
+          "attic-ledger-shadow-latch"
+        ]
+      },
+      {
+        "id": "attic-ledger-door-b",
+        "layer": 1,
+        "x": 14,
+        "y": 4,
+        "switchIds": [
+          "attic-ledger-echo-switch"
+        ]
+      },
+      {
+        "id": "attic-ledger-door-c",
+        "layer": 3,
+        "x": 15,
+        "y": 13,
+        "switchIds": [
+          "attic-ledger-parcel-plate",
+          "attic-ledger-visible-plate"
         ]
       }
     ],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "attic-ledger-stamp",
+        "id": "tp-ledger-a1",
         "layer": 1,
-        "x": 3,
+        "x": 7,
         "y": 1,
-        "direction": "down",
-        "distance": 3,
-        "appliesTo": [
-          "switch"
-        ]
+        "pairId": "tp-ledger-a2"
+      },
+      {
+        "id": "tp-ledger-a2",
+        "layer": 1,
+        "x": 14,
+        "y": 8,
+        "pairId": "tp-ledger-a1"
+      },
+      {
+        "id": "tp-ledger-b1",
+        "layer": 1,
+        "x": 4,
+        "y": 12,
+        "pairId": "tp-ledger-b2"
+      },
+      {
+        "id": "tp-ledger-b2",
+        "layer": 2,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-ledger-b1"
+      },
+      {
+        "id": "tp-ledger-c1",
+        "layer": 2,
+        "x": 14,
+        "y": 12,
+        "pairId": "tp-ledger-c2"
+      },
+      {
+        "id": "tp-ledger-c2",
+        "layer": 3,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-ledger-c1"
+      }
+    ],
+    "locks": [
+      {
+        "id": "lock-blue-ledger",
+        "layer": 3,
+        "x": 12,
+        "y": 10,
+        "color": "blue"
       }
     ],
     "balance": {
-      "intendedLesson": "Blend the secret-route shadow latch with a routed drop that converts one stitched entry into a full attic climb.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 9,
-      "commonMisunderstanding": "Players often set the shadow correctly but keep searching the middle sheet for the goal instead of switching again immediately."
+      "intendedLesson": "Full-mechanic challenge with gravity, conveyors, and key/lock across four layers.",
+      "targetDifficulty": 9,
+      "expectedSolveMinutes": 30,
+      "commonMisunderstanding": "Players set the shadow correctly but keep searching the wrong sheet."
     }
   },
   "attic-03": {
@@ -5946,68 +9264,120 @@ export const ROOM_LOOKUP = {
     "districtId": "attic",
     "title": "Mina's Postscript",
     "optional": true,
-    "secret": true,
     "unlockCost": 0,
     "postmarks": 0,
-    "requiresRooms": [
-      "attic-02"
-    ],
-    "objective": "Latch the final cue, trust both stamps, and carry the attic line to its last mailbox.",
-    "blurb": "The hidden route ends by combining a rerouted stitch with a forwarded lantern bridge.",
+    "objective": "Solve the ultimate puzzle using every mechanic across four layers.",
+    "blurb": "The hidden route ends by combining every mechanic the game has taught.",
     "intro": [
       {
         "speaker": "Mina",
         "text": "This is the one route I never wrote down cleanly. Set the shadow cue, trust the drop, and let the lantern finish the sentence."
       }
     ],
-    "achievementId": "secret-line",
     "hintTiers": [
-      "The first move sets the shadow cue. After that, the stamps do the clever part for you.",
-      "Move right once so the shadow latches the switch, climb to the upper stitch, let it drop you to the lower stitch, then follow the lantern bridge through the final door.",
-      "Move right, go up three times, switch sheets, switch again, go up twice, then cross right three times through the bridge and the opened door to the mailbox."
+      "Four layers, shadow, projector, teleporters, ice, one-way gates. Everything converges here.",
+      "Shadow latches door on layer 1. Projector bridges gap on layer 3. Ice and one-way gates control your path. Teleporters connect the layers.",
+      "Move right to latch shadow. Push projector onto ice to bridge position on layer 3. Navigate one-way circuit to top stitch. Descend: layer 1 stitch to layer 2, teleporter to layer 3, cross bridge through opened door to mailbox."
     ],
+    "achievementId": "secret-line",
+    "requiresRooms": [
+      "attic-02"
+    ],
+    "secret": true,
     "layers": [
       {
         "id": "postscript-top",
         "name": "Postscript Front",
         "tiles": [
-          "########",
-          "#.S....#",
-          "#......#",
-          "#......#",
-          "#......#",
-          "########"
+          "##################",
+          "#...S..........#.#",
+          "#.##########.#...#",
+          "#.>............#.#",
+          "#.#..#.#.#.#II.#.#",
+          "#.#.##.........#.#",
+          "#.v..............#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#................#",
+          "##################"
         ]
       },
       {
-        "id": "postscript-middle",
-        "name": "Postscript Fold",
+        "id": "postscript-mid1",
+        "name": "Postscript Fold A",
         "tiles": [
-          "########",
-          "#.S....#",
-          "#......#",
-          "#......#",
-          "#.S....#",
-          "########"
+          "##################",
+          "#...S..T.......#.#",
+          "#.#.########.#...#",
+          "#.<............#.#",
+          "#......#.#.#.#.#.#",
+          "#.###.##.......#.#",
+          "#.^..............#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#................#",
+          "##################"
+        ]
+      },
+      {
+        "id": "postscript-mid2",
+        "name": "Postscript Fold B",
+        "tiles": [
+          "##################",
+          "#.T..............#",
+          "#.##########.#...#",
+          "#...DDDDDD.....#.#",
+          "#.#..#.#.#.S.#.#.#",
+          "#.#.##.........#.#",
+          "#...UUUUUU.......#",
+          "#.####.S.#.#.#.#.#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#..........F...#.#",
+          "#.####.###.F.#...#",
+          "#..........F...#.#",
+          "#.##########.#...#",
+          "#................#",
+          "##################"
         ]
       },
       {
         "id": "postscript-back",
         "name": "Postscript Route",
         "tiles": [
-          "########",
-          "#......#",
-          "#..~DG.#",
-          "#......#",
-          "#.S....#",
-          "########"
+          "##################",
+          "#.T..............#",
+          "#.##########.#...#",
+          "#..............#.#",
+          "#.#..~.#.#.S.#.#.#",
+          "#.#.##.......#...#",
+          "#................#",
+          "#.####.#.#.#.#.#.#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#..............#.#",
+          "#.####.###.#.#...#",
+          "#..............#.#",
+          "#.##########.#...#",
+          "#...............G#",
+          "##################"
         ]
       }
     ],
     "start": {
       "layer": 0,
       "x": 1,
-      "y": 4,
+      "y": 14,
       "facing": "right"
     },
     "entities": [
@@ -6015,8 +9385,8 @@ export const ROOM_LOOKUP = {
         "id": "shadow-postscript",
         "type": "shadow",
         "layer": 1,
-        "x": 5,
-        "y": 4,
+        "x": 16,
+        "y": 14,
         "solid": true,
         "pushable": false,
         "mirrorAxis": "vertical"
@@ -6025,24 +9395,44 @@ export const ROOM_LOOKUP = {
         "id": "lantern-postscript",
         "type": "projector",
         "layer": 0,
-        "x": 3,
-        "y": 3,
+        "x": 8,
+        "y": 4,
         "pushable": true,
         "solid": true,
         "projectionTargets": [
           {
-            "layer": 2,
-            "dx": -1,
-            "dy": -1
+            "layer": 3,
+            "dx": -3,
+            "dy": 0
           }
         ]
+      },
+      {
+        "id": "key-yellow-post",
+        "type": "key",
+        "layer": 2,
+        "x": 14,
+        "y": 6,
+        "color": "yellow",
+        "solid": false,
+        "pushable": false
+      },
+      {
+        "id": "key-green-post",
+        "type": "key",
+        "layer": 3,
+        "x": 6,
+        "y": 8,
+        "color": "green",
+        "solid": false,
+        "pushable": false
       }
     ],
     "switches": [
       {
         "id": "postscript-latch",
         "layer": 1,
-        "x": 4,
+        "x": 6,
         "y": 4,
         "sticky": true
       }
@@ -6050,43 +9440,79 @@ export const ROOM_LOOKUP = {
     "doors": [
       {
         "id": "postscript-door",
-        "layer": 2,
-        "x": 4,
-        "y": 2,
+        "layer": 3,
+        "x": 15,
+        "y": 14,
         "switchIds": [
           "postscript-latch"
         ]
       }
     ],
-    "routingStamps": [
+    "teleporters": [
       {
-        "id": "postscript-switch-stamp",
+        "id": "tp-post-a1",
         "layer": 1,
-        "x": 2,
+        "x": 7,
         "y": 1,
-        "direction": "down",
-        "distance": 3,
-        "appliesTo": [
-          "switch"
-        ]
+        "pairId": "tp-post-a2"
       },
       {
-        "id": "postscript-bridge-stamp",
+        "id": "tp-post-a2",
+        "layer": 1,
+        "x": 14,
+        "y": 8,
+        "pairId": "tp-post-a1"
+      },
+      {
+        "id": "tp-post-b1",
+        "layer": 1,
+        "x": 4,
+        "y": 12,
+        "pairId": "tp-post-b2"
+      },
+      {
+        "id": "tp-post-b2",
         "layer": 2,
         "x": 2,
-        "y": 2,
-        "direction": "right",
-        "distance": 1,
-        "appliesTo": [
-          "projection"
-        ]
+        "y": 1,
+        "pairId": "tp-post-b1"
+      },
+      {
+        "id": "tp-post-c1",
+        "layer": 2,
+        "x": 15,
+        "y": 12,
+        "pairId": "tp-post-c2"
+      },
+      {
+        "id": "tp-post-c2",
+        "layer": 3,
+        "x": 2,
+        "y": 1,
+        "pairId": "tp-post-c1"
+      }
+    ],
+    "locks": [
+      {
+        "id": "lock-yellow-post",
+        "layer": 3,
+        "x": 10,
+        "y": 10,
+        "color": "yellow"
+      },
+      {
+        "id": "lock-green-post",
+        "layer": 3,
+        "x": 12,
+        "y": 12,
+        "color": "green"
       }
     ],
     "balance": {
-      "intendedLesson": "Finish the secret route by combining the two routing channels players learned separately into one clean attic postscript.",
-      "targetDifficulty": 5,
-      "expectedSolveMinutes": 10,
-      "commonMisunderstanding": "Players often remember the stitched drop but forget the lantern bridge is also being rerouted by a second stamp."
+      "intendedLesson": "The ultimate finale combining every mechanic across four layers.",
+      "targetDifficulty": 10,
+      "expectedSolveMinutes": 35,
+      "commonMisunderstanding": "Players forget the lantern bridge is being rerouted."
     }
   }
 };
@@ -6153,7 +9579,7 @@ export const CAMPAIGN_INDEX = {
       "title": "Market",
       "subtitle": "Routes braided through stalls and awnings",
       "unlockPostmarks": 2,
-      "summary": "Transfer parcels between layers and use them to hold shutters open, even when the switch is hidden.",
+      "summary": "Transfer parcels between layers and use them to hold shutters open, even when the switch is hidden. Ice-slicked corridors add momentum puzzles.",
       "journalTitle": "Market Sketches",
       "journalBody": "The market vendors patched their awnings before their roofs. Priorities. Every route is now tied to every other route, so fixing one usually means fixing three."
     },
@@ -6162,7 +9588,7 @@ export const CAMPAIGN_INDEX = {
       "title": "Greenhouse",
       "subtitle": "Lantern light and vine projections",
       "unlockPostmarks": 5,
-      "summary": "Projection lanterns cast temporary bridges onto neighboring layers, then combine with doors and multi-sheet routes.",
+      "summary": "Projection lanterns cast temporary bridges onto neighboring layers, then combine with doors, one-way gates, and multi-sheet routes.",
       "journalTitle": "Greenhouse Notes",
       "journalBody": "Some paper is seeded with silver thread. Mina calls it greenhouse stock. Shine a lamp through it and the next layer blooms into shape."
     },
@@ -6171,7 +9597,7 @@ export const CAMPAIGN_INDEX = {
       "title": "Clocktower",
       "subtitle": "Timing made visible",
       "unlockPostmarks": 11,
-      "summary": "Echo couriers, rerouted stitch exits, and one optional side route hidden inside the bell frame.",
+      "summary": "Echo couriers, teleporter shortcuts, rerouted stitch exits, and one optional side route hidden inside the bell frame.",
       "journalTitle": "Clocktower Timing",
       "journalBody": "The tower's routes are delayed by one bell. If I move now, my echo steps a moment later. It is unsettling to solve puzzles with my own future in the room."
     },
@@ -6180,7 +9606,7 @@ export const CAMPAIGN_INDEX = {
       "title": "Theater",
       "subtitle": "Shadows on the backdrops",
       "unlockPostmarks": 14,
-      "summary": "Shadow couriers latch hidden marks, then combine with rerouted stitch landings across the stage.",
+      "summary": "Shadow couriers latch hidden marks, then combine with ice, one-way gates, and rerouted stitch landings across the stage.",
       "journalTitle": "Theater Blocking",
       "journalBody": "Every prop in the theater has a partner behind the curtain. Nothing moves alone, especially not under the footlights."
     },
@@ -6189,7 +9615,7 @@ export const CAMPAIGN_INDEX = {
       "title": "Rooftops",
       "subtitle": "The festival line",
       "unlockPostmarks": 17,
-      "summary": "Projection and transfer stamps reshape the final rooftop lanes before the festival route reconnects.",
+      "summary": "Projection and transfer stamps reshape the final rooftop lanes before the festival route reconnects. All mechanics converge.",
       "journalTitle": "Rooftop Draft",
       "journalBody": "When the routes finally align, the whole town reads like one folded letter. Rooftops first, festival after."
     },
@@ -6224,35 +9650,47 @@ export const CAMPAIGN_INDEX = {
           "text": "Stitch markers connect identical coordinates. Stand on one and flip the room over."
         }
       ],
-      "achievementId": "first-stamp",
       "hintTiers": [
-        "You do not need every corridor on the first sheet. Look for the stitched square.",
-        "The stitch in the top layer lines up with another stitch below it. Switch layers from there.",
-        "Walk to the stitch on the front sheet, switch to the back sheet, then take the open route to the mailbox."
+        "The front sheet is a winding maze. Find the stitch hidden in the corridors.",
+        "Navigate to the center of the front maze, find the stitch at column 4 row 3, then switch layers.",
+        "From start go right, right, down, down, right, right, up to reach the stitch. Switch layers, then go right, down, down, right, up to the mailbox."
       ],
+      "achievementId": "first-stamp",
       "layers": [
         {
           "id": "front",
           "name": "Front Sheet",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.###.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "############",
+            "#..........#",
+            "#.####.###.#",
+            "#.#..#.....#",
+            "#.#..#.###.#",
+            "#....#.#SS.#",
+            "#.##.#.#.#.#",
+            "#....#...#.#",
+            "#.####.###.#",
+            "#.#........#",
+            "#.#.######.#",
+            "############"
           ]
         },
         {
           "id": "back",
           "name": "Address Sheet",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.###G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "############",
+            "#.###....#.#",
+            "#.....##.#.#",
+            "#.###.#..#.#",
+            "#.#...#.##.#",
+            "#.#.###.SS.#",
+            "#.#.....##.#",
+            "#.###.#..#.#",
+            "#.....#.##.#",
+            "#.###.#....#",
+            "#.....#..G.#",
+            "############"
           ]
         }
       ],
@@ -6266,9 +9704,9 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach stitched layer switching as the core route-solving verb.",
-        "targetDifficulty": 1,
-        "expectedSolveMinutes": 2,
+        "intendedLesson": "Teach stitched layer switching through a winding dual-layer maze.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 8,
         "commonMisunderstanding": "Players over-search the front sheet instead of treating the stitch as required progress."
       }
     },
@@ -6279,8 +9717,8 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Transfer the parcel out of your path and reach the mailbox.",
-      "blurb": "The parcel is in the right place on the wrong sheet.",
+      "objective": "Transfer both parcels and navigate past the blocked corridors to reach the mailbox.",
+      "blurb": "Two parcels block the only corridors wide enough for a postkeeper.",
       "intro": [
         {
           "speaker": "Mina",
@@ -6288,40 +9726,48 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "This parcel is not meant to be pushed down the hall.",
-        "Stand next to the parcel and transfer it to the other layer instead of shoving it forward.",
-        "Move to the tile left of the parcel, press transfer, then walk through the cleared lane to the mailbox."
+        "Both parcels block critical corridors. You need to transfer them, not push them into dead ends.",
+        "Transfer parcel A first to clear the lower corridor, then navigate up to transfer parcel B and reach the stitch.",
+        "Go right twice, transfer parcel A to the back sheet, go up twice, right twice, transfer parcel B, go up to the stitch, switch layers, then navigate down and right to the mailbox."
       ],
       "layers": [
         {
           "id": "front",
           "name": "Front Sheet",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.###.#",
-            "#...G.#",
-            "#.....#",
-            "#######"
+            "############",
+            "#....S...#.#",
+            "#.####.#...#",
+            "#.#......#.#",
+            "#.#.##.#.#.#",
+            "#......#...#",
+            "#.##.###.#.#",
+            "#........#.#",
+            "#.####.....#",
+            "############"
           ]
         },
         {
           "id": "back",
           "name": "Back Sheet",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.###.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "############",
+            "#....S.....#",
+            "#.#..####..#",
+            "#.#......#.#",
+            "#.####.#.#.#",
+            "#......#...#",
+            "#.##.#.###.#",
+            "#....#.....#",
+            "#.####...G.#",
+            "############"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 3,
+        "y": 8,
         "facing": "right"
       },
       "entities": [
@@ -6330,7 +9776,25 @@ export const CAMPAIGN_INDEX = {
           "type": "parcel",
           "layer": 0,
           "x": 3,
+          "y": 5,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 7,
           "y": 3,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-c",
+          "type": "parcel",
+          "layer": 0,
+          "x": 5,
+          "y": 7,
           "pushable": true,
           "solid": true
         }
@@ -6338,10 +9802,10 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach parcel transfer as a cleaner alternative to pushing.",
-        "targetDifficulty": 1,
-        "expectedSolveMinutes": 2,
-        "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
+        "intendedLesson": "Teach parcel transfer with three parcels blocking critical corridors.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 10,
+        "commonMisunderstanding": "Players try to push parcels into dead ends rather than transferring them between layers."
       }
     },
     {
@@ -6351,114 +9815,66 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Nudge the parcel aside, switch sheets, and take the shortcut to the mailbox.",
-      "blurb": "The quickest route only opens once the crease is clear.",
+      "objective": "Find the one working stitch path through the maze of decoy stitches.",
+      "blurb": "Multiple stitches dot both sheets, but only one sequence leads to the mailbox.",
       "intro": [
         {
           "speaker": "Mina",
-          "text": "Sometimes you push first and transfer second. Clear the lane, then use the stitch at the end."
+          "text": "Not every stitch leads somewhere useful. Some drop you into dead ends on the other sheet. Read both sides before you jump."
         }
       ],
       "hintTiers": [
-        "You only need the parcel out of the stitched lane, not far away from it.",
-        "Push the parcel once so you can stand beside it, then transfer it before stepping on the stitch.",
-        "Move right twice, transfer the parcel to the back sheet, walk onto the stitch, switch layers, and climb straight to the mailbox."
+        "Three stitches are visible but only one sequence avoids dead ends on the back sheet.",
+        "The leftmost stitch drops you into a walled corner. The center stitch is the correct first jump. Then navigate to the second stitch on the back sheet.",
+        "Navigate right and up to the center stitch at (4,2), switch layers, go down and left to the lower stitch at (2,5), switch back, then go right to the mailbox."
       ],
       "layers": [
         {
           "id": "crease-front",
           "name": "Crease Front",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.###.#",
-            "#....S#",
-            "#.....#",
-            "#######"
+            "############",
+            "#.#....#...#",
+            "#...##.#.#.#",
+            "#.#.#..S.#.#",
+            "#.#.#.##...#",
+            "#.#.S....#.#",
+            "#...#.##.#.#",
+            "#.#S#....#.#",
+            "#.#....##..#",
+            "############"
+          ]
+        },
+        {
+          "id": "crease-mid",
+          "name": "Crease Middle",
+          "tiles": [
+            "############",
+            "#.###..#...#",
+            "#......#.#.#",
+            "#.#.#..S.#.#",
+            "#.#.#.##...#",
+            "#.#.S..#.#.#",
+            "#...####.#.#",
+            "#.#S#....#.#",
+            "#.#......#.#",
+            "############"
           ]
         },
         {
           "id": "crease-back",
           "name": "Crease Back",
           "tiles": [
-            "#######",
-            "#....G#",
-            "#.###.#",
-            "#....S#",
-            "#.....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 3,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "parcel-forward",
-          "type": "parcel",
-          "layer": 0,
-          "x": 3,
-          "y": 3,
-          "pushable": true,
-          "solid": true
-        }
-      ],
-      "switches": [],
-      "doors": [],
-      "balance": {
-        "intendedLesson": "Recombine a single push, a transfer, and a stitch into one clean route.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players push the parcel again instead of transferring it once it has been nudged into position."
-      }
-    },
-    {
-      "id": "mailroom-side-01",
-      "districtId": "mailroom",
-      "title": "Return Receipt",
-      "optional": true,
-      "unlockCost": 0,
-      "postmarks": 0,
-      "objective": "Switch to the back sheet, travel to the lower stitch, and return on the right layer.",
-      "blurb": "A side route that rewards noticing the second stitch before the goal.",
-      "intro": [
-        {
-          "speaker": "Mina",
-          "text": "Some routes ask you to fold the room twice before they make sense."
-        }
-      ],
-      "hintTiers": [
-        "The first stitch is not the end of the route. It only gets you to the right sheet.",
-        "Use the top stitch first, then travel downward on the back sheet until you find the second stitch.",
-        "Walk to the top stitch, switch to the back sheet, climb down to the lower stitch, switch back, and finish on the front sheet."
-      ],
-      "layers": [
-        {
-          "id": "receipt-front",
-          "name": "Receipt Front",
-          "tiles": [
-            "#######",
-            "#..S..#",
-            "#.###.#",
-            "#.....#",
-            "#..S.G#",
-            "#######"
-          ]
-        },
-        {
-          "id": "receipt-back",
-          "name": "Receipt Back",
-          "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#..S..#",
-            "#######"
+            "############",
+            "#.#.##.#...#",
+            "#......#.#.#",
+            "#.###..S.#.#",
+            "#.#...##...#",
+            "#.#.S..#.#.#",
+            "#.#.####.#.#",
+            "#.#S#......#",
+            "#.#..#.#..G#",
+            "############"
           ]
         }
       ],
@@ -6472,10 +9888,96 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach that the shortest mailroom routes can alternate between sheets twice.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is effectively solved."
+        "intendedLesson": "Teach players to read three layers before committing to a stitch path.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 12,
+        "commonMisunderstanding": "Players jump at the first stitch they find and end up trapped."
+      }
+    },
+    {
+      "id": "mailroom-side-01",
+      "districtId": "mailroom",
+      "title": "Return Receipt",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Switch layers three times using the winding stitch network to reach the goal.",
+      "blurb": "A side route that rewards noticing every stitch before choosing your path.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "Some routes ask you to fold the room twice before they make sense."
+        }
+      ],
+      "hintTiers": [
+        "You need to use three different stitches, alternating layers each time.",
+        "Start on the front sheet, take the top-left stitch, navigate down on the back sheet to the center stitch, switch back, then find the bottom stitch.",
+        "Go right to stitch at (3,1), switch layers, go down through corridors to stitch at (5,4), switch back, navigate left and down to stitch at (2,6), switch layers, go right to mailbox."
+      ],
+      "layers": [
+        {
+          "id": "receipt-front",
+          "name": "Receipt Front",
+          "tiles": [
+            "############",
+            "#..S.....#.#",
+            "#.###.##...#",
+            "#.....#..#.#",
+            "#.###.#.##.#",
+            "#.#...S..#.#",
+            "#.#.###....#",
+            "#.....#.##.#",
+            "#.#S#......#",
+            "############"
+          ]
+        },
+        {
+          "id": "receipt-mid",
+          "name": "Receipt Middle",
+          "tiles": [
+            "############",
+            "#..S..##.#.#",
+            "#.......#..#",
+            "#.###.#..#.#",
+            "#.#...####.#",
+            "#.#...S....#",
+            "#.###.#.##.#",
+            "#.....#..#.#",
+            "#.#S#..#...#",
+            "############"
+          ]
+        },
+        {
+          "id": "receipt-back",
+          "name": "Receipt Back",
+          "tiles": [
+            "############",
+            "#..S.#...#.#",
+            "#.#....#...#",
+            "#.###.##.#.#",
+            "#.#......#.#",
+            "#.#.#.S.##.#",
+            "#.....#....#",
+            "#.###.####.#",
+            "#.#S#.....G#",
+            "############"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach routes alternating between three sheets with stitch planning.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 12,
+        "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is solved."
       }
     },
     {
@@ -6485,8 +9987,8 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Free the stitch lane, climb to the top fold, then return on the front sheet to the mailbox.",
-      "blurb": "The final mailroom route loops through the back sheet before it is readable.",
+      "objective": "Push parcels onto switches across both layers to open the door blocking the mailbox.",
+      "blurb": "The final mailroom route demands parcel management across winding corridors and two layers.",
       "intro": [
         {
           "speaker": "Mina",
@@ -6500,60 +10002,141 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The stitch at the far right gets you onto the correct sheet, but not yet to the goal.",
-        "Transfer the parcel away from the lower stitch, switch there, then travel to the upper stitch on the back sheet.",
-        "Move right twice, transfer the parcel, switch at the lower stitch, climb to the upper stitch on the back sheet, switch again, and finish on the front."
+        "One parcel goes on the visible switch, the other must be transferred to the back sheet's switch.",
+        "Push parcel A left onto the front switch first, then navigate to parcel B and transfer it to the back sheet where it lands on the hidden switch.",
+        "Push parcel A left onto switch at (1,6), go up and right to parcel B, transfer it to the back layer where it lands on the switch at (6,3), use the stitch, navigate through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "dated-front",
           "name": "Dated Front",
           "tiles": [
-            "#######",
-            "#..S.G#",
-            "#.###.#",
-            "#....S#",
-            "#.....#",
-            "#######"
+            "############",
+            "#...S....#.#",
+            "#.####.#...#",
+            "#.#......#.#",
+            "#.#.##.#.#.#",
+            "#......#...#",
+            "#.##.###.#.#",
+            "#........#.#",
+            "#.####.#...#",
+            "############"
+          ]
+        },
+        {
+          "id": "dated-mid",
+          "name": "Dated Middle",
+          "tiles": [
+            "############",
+            "#...S......#",
+            "#.#..####..#",
+            "#.#......#.#",
+            "#.####.#.#.#",
+            "#......S.S.#",
+            "#.##.#.###.#",
+            "#....#.....#",
+            "#.####.#...#",
+            "############"
           ]
         },
         {
           "id": "dated-back",
           "name": "Dated Back",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#....S#",
-            "#.....#",
-            "#######"
+            "############",
+            "#...S......#",
+            "#.#.####.#.#",
+            "#.#......#.#",
+            "#...##.#.#.#",
+            "#.#..#.S.S.#",
+            "#.####.###.#",
+            "#......#...#",
+            "#.##.#...G.#",
+            "############"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 3,
+        "y": 8,
         "facing": "right"
       },
       "entities": [
         {
-          "id": "parcel-dated",
+          "id": "parcel-a",
           "type": "parcel",
           "layer": 0,
-          "x": 4,
+          "x": 3,
+          "y": 7,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 7,
           "y": 3,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-c",
+          "type": "parcel",
+          "layer": 1,
+          "x": 6,
+          "y": 7,
           "pushable": true,
           "solid": true
         }
       ],
-      "switches": [],
-      "doors": [],
+      "switches": [
+        {
+          "id": "front-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 7
+        },
+        {
+          "id": "mid-plate",
+          "layer": 1,
+          "x": 8,
+          "y": 3
+        },
+        {
+          "id": "back-plate",
+          "layer": 2,
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "doors": [
+        {
+          "id": "dated-door-a",
+          "layer": 1,
+          "x": 9,
+          "y": 5,
+          "switchIds": [
+            "front-plate",
+            "mid-plate"
+          ]
+        },
+        {
+          "id": "dated-door-b",
+          "layer": 2,
+          "x": 9,
+          "y": 8,
+          "switchIds": [
+            "back-plate"
+          ]
+        }
+      ],
       "balance": {
-        "intendedLesson": "Cap the mailroom by chaining transfer with two distinct sheet swaps.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players switch at the lower stitch and then look for the goal immediately instead of climbing to the upper stitch first."
+        "intendedLesson": "Cap the mailroom with three-layer traversal and triple-switch door logic.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players switch too early without managing all parcels first."
       }
     },
     {
@@ -6563,86 +10146,110 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Leave a parcel on the plate, switch layers, and use the opened route.",
-      "blurb": "The market lifts its shutters with simple pressure plates.",
+      "objective": "Slide across ice to reach the switch, park the parcel, and take the opened route.",
+      "blurb": "The market lifts its shutters with pressure plates, but the floor is slick with ice.",
       "intro": [
         {
           "speaker": "Market Clerk",
-          "text": "A good parcel is sometimes more useful parked on a plate than delivered."
+          "text": "Ice corridors slide you until you hit something solid. Plan your approach before you step onto the frost."
         }
       ],
       "hintTiers": [
-        "The plate is meant to stay pressed while you move away from it.",
-        "Push the parcel onto the plate first, then go use the stitch marker.",
-        "Move the parcel onto the floor plate in the front sheet, walk to the stitch, switch to the back sheet, and use the now-open door."
+        "The ice corridor slides you all the way across. You need something solid to stop against.",
+        "Push the parcel into the ice lane first so it acts as a stopping block, then slide into position near the switch.",
+        "Push parcel right onto ice, slide right to stop against it, push it right onto the switch, navigate up to the stitch, switch layers, go through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "awnings",
           "name": "Awnings",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#....S.....#.#",
+            "#.####.###...#",
+            "#.#........#.#",
+            "#.#.##.#.#.#.#",
+            "#......#IIII.#",
+            "#.##.###.#.#.#",
+            "#........#.#.#",
+            "#.####.#.....#",
+            "##############"
           ]
         },
         {
           "id": "arcade",
           "name": "Arcade",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#....S.....#.#",
+            "#.#....###...#",
+            "#.#.##.....#.#",
+            "#......#.#.#.#",
+            "#.####.#.....#",
+            "#.#..###.#.#.#",
+            "#.#......#.#.#",
+            "#.####.....G.#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 8,
+        "facing": "right"
       },
       "entities": [
+        {
+          "id": "parcel-a",
+          "type": "parcel",
+          "layer": 0,
+          "x": 4,
+          "y": 5,
+          "pushable": true,
+          "solid": true
+        },
         {
           "id": "parcel-b",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 6,
+          "y": 3,
           "pushable": true,
           "solid": true
         }
       ],
       "switches": [
         {
-          "id": "market-plate",
+          "id": "market-plate-a",
           "layer": 0,
-          "x": 1,
-          "y": 4
+          "x": 12,
+          "y": 5
+        },
+        {
+          "id": "market-plate-b",
+          "layer": 1,
+          "x": 6,
+          "y": 3
         }
       ],
       "doors": [
         {
           "id": "market-door",
           "layer": 1,
-          "x": 3,
-          "y": 2,
+          "x": 11,
+          "y": 8,
           "switchIds": [
-            "market-plate"
+            "market-plate-a",
+            "market-plate-b"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Teach persistent door pressure with parcels and cross-layer route payoff.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players carry the parcel around instead of parking it on the plate first."
+        "intendedLesson": "Introduce ice tiles with parcel-as-blocker and dual switches.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 12,
+        "commonMisunderstanding": "Players step onto ice without a stopping block."
       }
     },
     {
@@ -6652,59 +10259,67 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "objective": "Park the parcel on the plate, switch layers, and take the reopened shortcut above the stalls.",
-      "blurb": "A side route that asks you to read a shutter and a stitch at the same time.",
+      "objective": "Push the parcel across ice to land on the distant plate, then take the shortcut.",
+      "blurb": "A side route that asks you to aim a parcel slide precisely.",
       "intro": [
         {
           "speaker": "Market Clerk",
           "text": "The side lane is lighter than the main route. Prop the shutter and steal the short way across."
         }
       ],
-      "achievementId": "side-route",
       "hintTiers": [
-        "The shortcut only matters after the plate is already held down.",
-        "Push the parcel onto the front plate first, then climb to the stitch instead of heading for the goal immediately.",
-        "Push the parcel onto the plate at the lower left, walk to the stitch on the top lane, switch to the back sheet, and take the reopened shortcut to the mailbox."
+        "The parcel must slide across ice and stop exactly on the switch. Plan your push direction.",
+        "Push the parcel downward so it slides on ice and stops against the far wall, landing on the switch.",
+        "Navigate above the parcel, push it down onto the ice lane where it slides to the switch at (3,6). Use the stitch, switch layers, and cross through the opened door to the mailbox."
       ],
+      "achievementId": "side-route",
       "layers": [
         {
           "id": "stall-front",
           "name": "Stall Front",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#....S.....#.#",
+            "#.####.###...#",
+            "#.#........#.#",
+            "#.#I##.#.#.#.#",
+            "#..I...#.....#",
+            "#.#I.###.#.#.#",
+            "#..I.....#.#.#",
+            "#.#I##.#.....#",
+            "##############"
           ]
         },
         {
           "id": "stall-back",
           "name": "Stall Back",
           "tiles": [
-            "#######",
-            "#..S.G#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#....S.....#.#",
+            "#.####.###...#",
+            "#.#........G.#",
+            "#.#.##.#.#.#.#",
+            "#......#.....#",
+            "#.##.###.#.#.#",
+            "#........#.#.#",
+            "#.####.#.....#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 1,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "parcel-stall",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 3,
+          "y": 3,
           "pushable": true,
           "solid": true
         }
@@ -6713,26 +10328,26 @@ export const CAMPAIGN_INDEX = {
         {
           "id": "stall-plate",
           "layer": 0,
-          "x": 1,
-          "y": 4
+          "x": 3,
+          "y": 8
         }
       ],
       "doors": [
         {
           "id": "stall-door",
           "layer": 1,
-          "x": 4,
-          "y": 1,
+          "x": 11,
+          "y": 3,
           "switchIds": [
             "stall-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Reinforce visible plates and door logic in a shorter optional room.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players head for the stitch first and only later realize the shortcut itself is still closed."
+        "intendedLesson": "Reinforce ice-slide physics with precise parcel aiming.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 10,
+        "commonMisunderstanding": "Players push the parcel sideways instead of down the ice column."
       }
     },
     {
@@ -6742,7 +10357,7 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Send the parcel through the hidden counter slot and walk through the raised shutter.",
+      "objective": "Use ice lanes and two switches to open the path. One parcel slides, one parks.",
       "blurb": "Some market plates live on the back sheet, far from the player.",
       "intro": [
         {
@@ -6751,40 +10366,70 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The shutter opens from a place you cannot stand on yourself.",
-        "Move next to the parcel and transfer it onto the switch behind the counter before walking to the door.",
-        "Step right once, transfer the parcel to the back sheet, then walk up and across the opened shutter to the mailbox."
+        "Two switches control the door. One is visible on ice, the other is hidden on the back layer.",
+        "Slide one parcel across ice onto the visible switch, then transfer the other parcel to land on the hidden switch.",
+        "Push parcel A right across ice to the visible switch. Navigate to parcel B and transfer it to the back layer where it lands on the hidden switch. Use the stitch, walk through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "counter-front",
           "name": "Counter Front",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#...S......#.#",
+            "#.####.###...#",
+            "#.#........#.#",
+            "#.#.##.#.#.#.#",
+            "#......#IIII.#",
+            "#.##.###.#.#.#",
+            "#........#.#.#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####.....#",
+            "##############"
+          ]
+        },
+        {
+          "id": "counter-mid",
+          "name": "Counter Middle",
+          "tiles": [
+            "##############",
+            "#...S......#.#",
+            "#.#.##.###...#",
+            "#.#........#.#",
+            "#.####.#.#.#.#",
+            "#......#.S...#",
+            "#.##.###.#.#.#",
+            "#........#.S.#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####.....#",
+            "##############"
           ]
         },
         {
           "id": "counter-back",
           "name": "Counter Back",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#...S......#.#",
+            "#.#..####....#",
+            "#.#........#.#",
+            "#...##.#.#.#.#",
+            "#.#..#.#.S...#",
+            "#.####.###.#.#",
+            "#......#...S.#",
+            "#.##.#...#.#.#",
+            "#.#....#.#.#.#",
+            "#.####.....G.#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 10,
         "facing": "right"
       },
       "entities": [
@@ -6793,35 +10438,75 @@ export const CAMPAIGN_INDEX = {
           "type": "parcel",
           "layer": 0,
           "x": 3,
-          "y": 4,
+          "y": 5,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-counter",
+          "type": "parcel",
+          "layer": 0,
+          "x": 6,
+          "y": 9,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-hidden",
+          "type": "parcel",
+          "layer": 1,
+          "x": 8,
+          "y": 3,
           "pushable": true,
           "solid": true
         }
       ],
       "switches": [
         {
-          "id": "counter-hidden-plate",
+          "id": "counter-visible-plate",
+          "layer": 0,
+          "x": 12,
+          "y": 5
+        },
+        {
+          "id": "counter-mid-plate",
           "layer": 1,
-          "x": 3,
-          "y": 4
+          "x": 6,
+          "y": 9
+        },
+        {
+          "id": "counter-hidden-plate",
+          "layer": 2,
+          "x": 8,
+          "y": 3
         }
       ],
       "doors": [
         {
-          "id": "counter-shutter",
-          "layer": 0,
-          "x": 3,
-          "y": 2,
+          "id": "counter-shutter-a",
+          "layer": 1,
+          "x": 10,
+          "y": 7,
           "switchIds": [
+            "counter-visible-plate"
+          ]
+        },
+        {
+          "id": "counter-shutter-b",
+          "layer": 2,
+          "x": 11,
+          "y": 10,
+          "switchIds": [
+            "counter-mid-plate",
             "counter-hidden-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Teach that a transfer can activate a switch the player will never physically touch.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players search for a walking path behind the counter instead of treating the parcel as the route's stand-in."
+        "intendedLesson": "Combine ice sliding with cross-layer switch activation using three parcels.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players search for a walking path behind the counter."
       }
     },
     {
@@ -6831,8 +10516,8 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "objective": "Transfer the parcel onto the hidden plate, switch layers, and use the back-lane shutter.",
-      "blurb": "A side room that mixes the counter-slot trick with a stitched shortcut.",
+      "objective": "Navigate an ice maze that spans both layers, using stitches to bypass blocked corridors.",
+      "blurb": "A side room that turns the entire floor into a sliding puzzle across two sheets.",
       "intro": [
         {
           "speaker": "Market Clerk",
@@ -6840,77 +10525,58 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The parcel belongs on the hidden switch before you ever touch the stitch.",
-        "Transfer the parcel first, then walk to the stitch on the front sheet and switch to the back lane.",
-        "Move right once, transfer the parcel onto the hidden plate, climb to the stitch on the front sheet, switch layers, and take the opened back-lane route to the mailbox."
+        "The ice fills most of both layers. You need walls and stitches as stopping points.",
+        "Slide right on ice, stop at the wall, then slide down to the stitch. Switch layers and navigate the back ice maze.",
+        "Slide right to wall, slide down to stitch at (7,4), switch layers, slide left to wall at (1,4), slide down to (1,6), slide right to wall, slide up to mailbox."
       ],
       "layers": [
         {
           "id": "ledger-front",
           "name": "Ledger Front",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#III#IIIIIIII#",
+            "#I#II...#I..I#",
+            "#I......#I#.I#",
+            "#III#I.ISI..I#",
+            "#I#II..#I#..I#",
+            "#I.......I#.I#",
+            "#I##.#I..I..I#",
+            "#I.......IIII#",
+            "##############"
           ]
         },
         {
           "id": "ledger-back",
           "name": "Ledger Back",
           "tiles": [
-            "#######",
-            "#..S.G#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#III#IIIIIIII#",
+            "#I...#II..I.I#",
+            "#I#I.....GI.I#",
+            "#I.II#.ISI..I#",
+            "#I.....#I...I#",
+            "#I###....I#.I#",
+            "#I......#I..I#",
+            "#IIIIIIIIIII.#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 1,
         "facing": "right"
       },
-      "entities": [
-        {
-          "id": "parcel-ledger",
-          "type": "parcel",
-          "layer": 0,
-          "x": 3,
-          "y": 4,
-          "pushable": true,
-          "solid": true
-        }
-      ],
-      "switches": [
-        {
-          "id": "ledger-hidden-plate",
-          "layer": 1,
-          "x": 3,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "ledger-door",
-          "layer": 1,
-          "x": 4,
-          "y": 1,
-          "switchIds": [
-            "ledger-hidden-plate"
-          ]
-        }
-      ],
+      "entities": [],
+      "switches": [],
+      "doors": [],
       "balance": {
-        "intendedLesson": "Show that hidden switches can matter on a different layer than the route they open.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players head to the stitch before the hidden plate is active and arrive on the back lane too early."
+        "intendedLesson": "Pure ice navigation puzzle requiring both layers.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 14,
+        "commonMisunderstanding": "Players try to navigate only on one layer."
       }
     },
     {
@@ -6920,7 +10586,7 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Use one parcel for the visible plate and another for the hidden plate, then walk through the central shutter.",
+      "objective": "Use ice lanes, two parcels, and two switches across both layers to open the central shutter.",
       "blurb": "The final market route asks you to think about both sheets at once.",
       "intro": [
         {
@@ -6935,49 +10601,79 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "You have one parcel for each switch. Decide which one belongs to the hidden plate first.",
-        "Transfer the upper parcel to the back sheet, then push the lower parcel onto the visible floor plate before heading to the door.",
-        "Move up and left to transfer the upper parcel, return to the lower lane to push the second parcel onto the visible plate, then walk up through the opened shutter to the mailbox."
+        "You have one parcel for each switch. The ice complicates positioning. Decide which goes where first.",
+        "Slide parcel A across ice onto the visible switch. Transfer parcel B to the back sheet where it must be pushed onto the hidden switch. Then use the stitch.",
+        "Push parcel A right across ice row to the visible switch at (8,5). Navigate to parcel B and transfer it to back layer. Use the stitch, push the transferred parcel onto the hidden switch at (2,7), then navigate through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "inventory-front",
           "name": "Inventory Front",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#...S......#.#",
+            "#.####.###...#",
+            "#.#........#.#",
+            "#.#.##.#.#.#.#",
+            "#......#IIII.#",
+            "#.##.###.#.#.#",
+            "#........#.#.#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####.....#",
+            "##############"
+          ]
+        },
+        {
+          "id": "inventory-mid",
+          "name": "Inventory Middle",
+          "tiles": [
+            "##############",
+            "#...S......#.#",
+            "#.#.##.###.S.#",
+            "#.#........#.#",
+            "#.####.#.#.#.#",
+            "#......#.....#",
+            "#.##.###.#.#.#",
+            "#........#...#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####.....#",
+            "##############"
           ]
         },
         {
           "id": "inventory-back",
           "name": "Inventory Back",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#..........#.#",
+            "#.####.###.S.#",
+            "#.#........#.#",
+            "#.#.##.#.#.#.#",
+            "#......#.....#",
+            "#.##.###.#.#.#",
+            "#........#...#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####...G.#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 10,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "parcel-visible",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 3,
+          "y": 5,
           "pushable": true,
           "solid": true
         },
@@ -6985,8 +10681,17 @@ export const CAMPAIGN_INDEX = {
           "id": "parcel-hidden",
           "type": "parcel",
           "layer": 0,
-          "x": 3,
-          "y": 3,
+          "x": 5,
+          "y": 9,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-deep",
+          "type": "parcel",
+          "layer": 1,
+          "x": 7,
+          "y": 7,
           "pushable": true,
           "solid": true
         }
@@ -6995,33 +10700,48 @@ export const CAMPAIGN_INDEX = {
         {
           "id": "inventory-visible-plate",
           "layer": 0,
-          "x": 1,
-          "y": 4
+          "x": 12,
+          "y": 5
+        },
+        {
+          "id": "inventory-mid-plate",
+          "layer": 1,
+          "x": 5,
+          "y": 9
         },
         {
           "id": "inventory-hidden-plate",
-          "layer": 1,
-          "x": 3,
-          "y": 3
+          "layer": 2,
+          "x": 7,
+          "y": 7
         }
       ],
       "doors": [
         {
-          "id": "inventory-shutter",
-          "layer": 0,
-          "x": 3,
+          "id": "inventory-shutter-a",
+          "layer": 1,
+          "x": 12,
           "y": 2,
           "switchIds": [
-            "inventory-visible-plate",
+            "inventory-visible-plate"
+          ]
+        },
+        {
+          "id": "inventory-shutter-b",
+          "layer": 2,
+          "x": 11,
+          "y": 10,
+          "switchIds": [
+            "inventory-mid-plate",
             "inventory-hidden-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Cap the market by splitting visible and hidden door logic across two parcels.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players try to solve the visible plate first and only then look for the hidden plate, which leaves too much route still unopened."
+        "intendedLesson": "Cap the market with three-layer parcel management and triple switch logic.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 18,
+        "commonMisunderstanding": "Players try to solve the visible plate first."
       }
     },
     {
@@ -7031,65 +10751,95 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Project a bridge onto the lower sheet and cross the gap.",
-      "blurb": "Lanterns draw temporary structure where the paper has torn away.",
+      "objective": "Push the projector into position, navigate one-way gates, and cross the projected bridge.",
+      "blurb": "Lanterns draw temporary structure where the paper has torn away. One-way gates restrict your path.",
       "intro": [
         {
           "speaker": "Gardener",
-          "text": "Line the lamp up with the tear. The next layer will grow a bridge where the light lands."
+          "text": "Line the lamp up with the tear. The next layer will grow a bridge where the light lands. And mind the one-way gates."
         }
       ],
       "hintTiers": [
-        "The lamp affects the same coordinates in the other layer.",
-        "The pit sits at the same x and y as the square where the lamp should stop.",
-        "Push the lantern to the center lane at x3 y2 on the top sheet, switch layers, and walk across the projected bridge."
+        "The one-way gates force you to circle around. Push the projector before you commit to the gate path.",
+        "Push the projector left to align it with the gap on the other layer, then take the one-way gate circuit to the stitch.",
+        "Push projector left to (2,4), go up through the right-only gate, navigate around to the stitch at (3,1), switch layers, follow the one-way path down across the bridge to the mailbox."
       ],
       "layers": [
         {
           "id": "lantern-bed",
           "name": "Lantern Bed",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#....S.......#.#",
+            "#.####.###.#...#",
+            "#.>........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#....#...#...#",
+            "#.##.###.#.#.#.#",
+            "#.v......#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####......<#",
+            "################"
+          ]
+        },
+        {
+          "id": "vine-mid",
+          "name": "Vine Middle",
+          "tiles": [
+            "################",
+            "#....S.......#.#",
+            "#.#.##.###.#...#",
+            "#.v........#.#.#",
+            "#.####.#.#.S.#.#",
+            "#......#.S.#...#",
+            "#.##.###.#.#.#.#",
+            "#.^......#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         },
         {
           "id": "vine-bed",
           "name": "Vine Bed",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#..~.G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#............#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#~##.#.#.S.#.#",
+            "#.#....#.S.#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####......G#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 10,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "lantern-a",
           "type": "projector",
           "layer": 0,
-          "x": 2,
-          "y": 3,
+          "x": 4,
+          "y": 5,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 1,
+              "layer": 2,
               "dx": 0,
-              "dy": 0
+              "dy": -1
             }
           ]
         }
@@ -7097,10 +10847,10 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach projector alignment and same-coordinate bridge projection.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+        "intendedLesson": "Introduce one-way gates alongside projector alignment across three layers.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 14,
+        "commonMisunderstanding": "Players go through one-way gates the wrong direction."
       }
     },
     {
@@ -7110,8 +10860,8 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "objective": "Use the lantern's offset beam to patch the tear and cross to the mailbox.",
-      "blurb": "Not every bridge blooms directly underneath the lantern.",
+      "objective": "Combine projector placement with ice sliding and one-way gates to bridge the gap.",
+      "blurb": "Not every bridge blooms directly underneath the lantern. Ice complicates the approach.",
       "intro": [
         {
           "speaker": "Gardener",
@@ -7119,40 +10869,70 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "This lantern does not bridge the square directly below it.",
-        "Push the lantern one step to the right so its offset beam lands on the tear.",
-        "Push the lantern right once, walk to the stitch, switch sheets, and use the offset bridge tile near the mailbox."
+        "The projector has an offset beam. It bridges one tile away from where it stands.",
+        "Slide the projector across ice to the right position, then navigate the one-way gates to the stitch.",
+        "Push projector right onto ice where it slides to (5,4). Its offset beam bridges the gap at (6,3) on the back layer. Navigate the one-way loop to the stitch, switch layers, cross the bridge to the mailbox."
       ],
       "layers": [
         {
           "id": "graft-top",
           "name": "Graft Top",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#.>..S.......#.#",
+            "#.#.##.###.#...#",
+            "#.v........#.#.#",
+            "#.#.II.#.#...#.#",
+            "#.#.II.#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#.<.#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "graft-mid",
+          "name": "Graft Middle",
+          "tiles": [
+            "################",
+            "#....S.......#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#.##.#.#.S.#.#",
+            "#.#....#.S.#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         },
         {
           "id": "graft-bottom",
           "name": "Graft Bottom",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#...~G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#............#.#",
+            "#.####.###.#...#",
+            "#......~...#.#.#",
+            "#.#.##.#.#.S.#.#",
+            "#.#....#.S.#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#G#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 3,
+        "y": 10,
         "facing": "right"
       },
       "entities": [
@@ -7160,14 +10940,14 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-offset",
           "type": "projector",
           "layer": 0,
-          "x": 2,
-          "y": 3,
+          "x": 3,
+          "y": 4,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 1,
-              "dx": 1,
+              "layer": 2,
+              "dx": 3,
               "dy": -1
             }
           ]
@@ -7176,10 +10956,10 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Show that a lantern's projection can use an offset target instead of matching coordinates exactly.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players line the lantern up with the tear directly instead of accounting for the shifted beam."
+        "intendedLesson": "Combine offset projection with ice and one-way gates across three layers.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players line the lantern up directly instead of accounting for the shifted beam."
       }
     },
     {
@@ -7189,70 +10969,111 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Grow a two-tile bridge across the wider tear and reach the mailbox.",
-      "blurb": "Some greenhouse tears ask for more than a single square of light.",
+      "objective": "Project bridges across 3 layers using two projectors to create a connected path.",
+      "blurb": "Some greenhouse tears ask for more than a single square of light across multiple sheets.",
       "intro": [
         {
           "speaker": "Gardener",
-          "text": "This bed tore wider than the others. One lamp can still cover it, but only if the bloom stretches far enough."
+          "text": "This bed tore wider than the others. Two lamps, three sheets. Every bridge matters."
         }
       ],
       "hintTiers": [
-        "This lantern can grow more than one bridge tile at once.",
-        "The lantern needs to stop one row higher so both projected tiles span the tear together.",
-        "Push the lantern upward into the center lane, switch sheets, and cross the two-tile bridge to the mailbox."
+        "Each projector bridges a different layer. Position them both before traveling down.",
+        "Projector A bridges layer 0 to layer 1. Projector B bridges layer 1 to layer 2. Push both into alignment first.",
+        "Push projector A up to (3,2) bridging the gap on layer 1. Push projector B right to (6,4) bridging the gap on layer 2. Use the stitch at top, descend through layers using bridges."
       ],
       "layers": [
         {
           "id": "overgrowth-top",
           "name": "Overgrowth Top",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#....S.......#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#....#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "overgrowth-middle",
+          "name": "Overgrowth Middle",
+          "tiles": [
+            "################",
+            "#....S.....#.#.#",
+            "#.#.~####.#....#",
+            "#.#........#.#.#",
+            "#......#.#.S.#.#",
+            "#.###.##...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         },
         {
           "id": "overgrowth-bottom",
           "name": "Overgrowth Bottom",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.~~.G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#............#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#..~.#.#.S.#.#",
+            "#.#.##.#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.#.####......G#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 10,
+        "facing": "right"
       },
       "entities": [
         {
-          "id": "lantern-wide",
+          "id": "lantern-a",
           "type": "projector",
           "layer": 0,
-          "x": 2,
+          "x": 5,
           "y": 3,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
               "layer": 1,
-              "dx": 0,
-              "dy": 0
-            },
+              "dx": -2,
+              "dy": -1
+            }
+          ]
+        },
+        {
+          "id": "lantern-b",
+          "type": "projector",
+          "layer": 0,
+          "x": 8,
+          "y": 6,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
             {
-              "layer": 1,
-              "dx": 1,
-              "dy": 0
+              "layer": 2,
+              "dx": -3,
+              "dy": -2
             }
           ]
         }
@@ -7260,10 +11081,10 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach multi-tile projection so wider tears read as one placement puzzle instead of many.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players align the lantern to only one missing tile and overlook that the same lamp can cover both."
+        "intendedLesson": "Three-layer projection requiring two projectors with offset beams.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 16,
+        "commonMisunderstanding": "Players align one projector and forget the second bridge."
       }
     },
     {
@@ -7273,7 +11094,7 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Hold the gate open, grow the bridge, and cross to the mailbox.",
+      "objective": "Combine one-way gates, ice, a projector, and a switch to open the path across three layers.",
       "blurb": "The lantern route and the pressure gate have to be solved in the right order.",
       "intro": [
         {
@@ -7282,49 +11103,79 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The parcel should stay on the switch while you work on the lantern.",
-        "Park the parcel first, then push the lantern into place before you switch layers.",
-        "Push the parcel onto the floor plate, lift the lantern onto the tear line, walk to the stitch, switch sheets, and cross the bridge through the opened gate."
+        "The parcel must reach the switch, the projector must bridge the gap, and you must navigate one-way gates in the right order.",
+        "Push the parcel across ice onto the switch first, then position the projector, then navigate through the one-way gates to descend through layers.",
+        "Push parcel left across ice onto the switch at (1,5). Push projector up to (4,2). Navigate through one-way gates to the top stitch. Descend through middle layer to lower stitch. Cross the bridge through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "mist-top",
           "name": "Mist Top",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#...S.......#..#",
+            "#.####.###.#...#",
+            "#.>........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#II....#...#...#",
+            "#.##.###.#.#v#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#.<.#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "mist-middle",
+          "name": "Mist Middle",
+          "tiles": [
+            "################",
+            "#...S.......#..#",
+            "#.#.####.#.#...#",
+            "#..........#.#.#",
+            "#.###.##.#.S.#.#",
+            "#......#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         },
         {
           "id": "mist-bottom",
           "name": "Mist Bottom",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#..~.G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#...........#..#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#~##.#.#.S.#.#",
+            "#.#.##.#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.###.####...G.#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 10,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "parcel-mist",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 4,
+          "y": 5,
           "pushable": true,
           "solid": true
         },
@@ -7332,7 +11183,182 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-mist",
           "type": "projector",
           "layer": 0,
+          "x": 6,
+          "y": 4,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": -2,
+              "dy": 0
+            }
+          ]
+        },
+        {
+          "id": "parcel-mist-b",
+          "type": "parcel",
+          "layer": 1,
+          "x": 5,
+          "y": 9,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "mist-plate-a",
+          "layer": 0,
+          "x": 1,
+          "y": 5
+        },
+        {
+          "id": "mist-plate-b",
+          "layer": 1,
+          "x": 5,
+          "y": 9
+        }
+      ],
+      "doors": [
+        {
+          "id": "mist-door-a",
+          "layer": 2,
+          "x": 7,
+          "y": 10,
+          "switchIds": [
+            "mist-plate-a"
+          ]
+        },
+        {
+          "id": "mist-door-b",
+          "layer": 2,
+          "x": 12,
+          "y": 4,
+          "switchIds": [
+            "mist-plate-b"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine one-way gates, ice, projection, and dual switches across three layers.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 18,
+        "commonMisunderstanding": "Players try to solve the bridge first."
+      }
+    },
+    {
+      "id": "greenhouse-04",
+      "districtId": "greenhouse",
+      "title": "Festival Draft",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Use two projectors and a parcel across three layers to restore the greenhouse finale route.",
+      "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
+        }
+      ],
+      "hintTiers": [
+        "Treat this like two setup problems before it becomes a travel problem: gate first, lanterns second.",
+        "Park the parcel on the switch, push both projectors into their bridge positions, then descend through all three layers.",
+        "Push parcel onto switch at (1,8). Push projector A to bridge gap on layer 1. Push projector B to bridge gap on layer 2. Use top stitch, descend through middle layer, use lower stitch, cross both bridges through the opened door to the mailbox."
+      ],
+      "achievementId": "demo-complete",
+      "layers": [
+        {
+          "id": "draft-roof",
+          "name": "Draft Roof",
+          "tiles": [
+            "################",
+            "#...S..........#",
+            "#.########.#...#",
+            "#..............#",
+            "#.#..#.#.#.#...#",
+            "#.#.##.........#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "#.########.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "draft-middle",
+          "name": "Draft Middle",
+          "tiles": [
+            "################",
+            "#...S..........#",
+            "#.#.######.#...#",
+            "#.#..~......#..#",
+            "#......#.#.S...#",
+            "#.###.##.......#",
+            "#..............#",
+            "#.####.S.#.#...#",
+            "#..............#",
+            "#.########.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "draft-floor",
+          "name": "Draft Floor",
+          "tiles": [
+            "################",
+            "#..............#",
+            "#.########.#...#",
+            "#..............#",
+            "#.#..~.#.#.S.#.#",
+            "#.#.##....#....#",
+            "#..............#",
+            "#.####.S.#.#...#",
+            "#..............#",
+            "#.########.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#.#########..G.#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 12,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-draft",
+          "type": "parcel",
+          "layer": 0,
           "x": 3,
+          "y": 12,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-draft-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 8,
+          "y": 6,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "lantern-draft-a",
+          "type": "projector",
+          "layer": 0,
+          "x": 6,
           "y": 3,
           "pushable": true,
           "solid": true,
@@ -7343,150 +11369,63 @@ export const CAMPAIGN_INDEX = {
               "dy": 0
             }
           ]
-        }
-      ],
-      "switches": [
-        {
-          "id": "mist-plate",
-          "layer": 0,
-          "x": 1,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "mist-door",
-          "layer": 1,
-          "x": 4,
-          "y": 2,
-          "switchIds": [
-            "mist-plate"
-          ]
-        }
-      ],
-      "balance": {
-        "intendedLesson": "Combine earlier door logic with projection while still keeping the lantern placement readable.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 6,
-        "commonMisunderstanding": "Players try to solve the bridge first and only later realize the gate still needs the parcel parked on its switch."
-      }
-    },
-    {
-      "id": "greenhouse-04",
-      "districtId": "greenhouse",
-      "title": "Festival Draft",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Hold the gate, bloom the bridge, climb through the middle sheet, and restore the greenhouse finale route.",
-      "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
-      "intro": [
-        {
-          "speaker": "Mina",
-          "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
-        }
-      ],
-      "achievementId": "demo-complete",
-      "hintTiers": [
-        "Treat this like two setup problems before it becomes a travel problem: gate first, lantern second.",
-        "Park the parcel on the top switch, push the lantern into the tear line, switch to the middle sheet at the top stitch, then descend to the lower stitch.",
-        "Push the parcel onto the top-left switch, lift the lantern into the bridge position, switch to the middle sheet at the upper stitch, travel down to the lower stitch, switch to the final sheet, and cross the opened gate and bridge to the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "draft-roof",
-          "name": "Draft Roof",
-          "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
         },
         {
-          "id": "draft-middle",
-          "name": "Draft Middle",
-          "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#S....#",
-            "#######"
-          ]
-        },
-        {
-          "id": "draft-floor",
-          "name": "Draft Floor",
-          "tiles": [
-            "#######",
-            "#.....#",
-            "#..~.G#",
-            "#.....#",
-            "#S....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
-      },
-      "entities": [
-        {
-          "id": "parcel-draft",
-          "type": "parcel",
-          "layer": 0,
-          "x": 2,
-          "y": 4,
-          "pushable": true,
-          "solid": true
-        },
-        {
-          "id": "lantern-draft",
+          "id": "lantern-draft-b",
           "type": "projector",
           "layer": 0,
-          "x": 3,
-          "y": 3,
+          "x": 10,
+          "y": 8,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
               "layer": 2,
-              "dx": 0,
-              "dy": 0
+              "dx": -5,
+              "dy": -4
             }
           ]
         }
       ],
       "switches": [
         {
-          "id": "draft-plate",
+          "id": "draft-plate-a",
           "layer": 0,
           "x": 1,
-          "y": 4
+          "y": 12
+        },
+        {
+          "id": "draft-plate-b",
+          "layer": 0,
+          "x": 8,
+          "y": 10
         }
       ],
       "doors": [
         {
-          "id": "draft-door",
+          "id": "draft-door-a",
           "layer": 2,
-          "x": 4,
-          "y": 2,
+          "x": 13,
+          "y": 12,
           "switchIds": [
-            "draft-plate"
+            "draft-plate-a"
+          ]
+        },
+        {
+          "id": "draft-door-b",
+          "layer": 1,
+          "x": 12,
+          "y": 3,
+          "switchIds": [
+            "draft-plate-b"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Cap the demo slice with three-sheet traversal layered on top of parcel parking and projection.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 7,
-        "commonMisunderstanding": "Players keep looking for the goal on the middle sheet instead of treating it as the route between the setup layer and the final layer."
+        "intendedLesson": "Cap the demo slice with three-sheet traversal and dual projection.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 22,
+        "commonMisunderstanding": "Players keep looking for the goal on the middle sheet."
       }
     },
     {
@@ -7496,133 +11435,72 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Use the echo courier to hold the door long enough to pass.",
-      "blurb": "Your last move returns as a delayed helper on another sheet.",
+      "objective": "Use the echo courier and a teleporter to hold the door long enough to pass.",
+      "blurb": "Your last move returns as a delayed helper, now with teleporter shortcuts.",
       "intro": [
         {
           "speaker": "Bell Keeper",
-          "text": "The echo courier repeats your previous move exactly one turn later. Give it a beat to catch up."
+          "text": "The echo courier repeats your previous move exactly one turn later. Give it a beat to catch up. And the old bell tubes still work."
         }
       ],
       "hintTiers": [
-        "The echo courier needs one turn before it copies your first move.",
-        "Move once, wait once, then take advantage of the opened door while the echo stays on the switch.",
-        "Walk right, wait, walk right through the opened door, then walk right again to the mailbox."
+        "The echo needs to reach the switch via the teleporter. Time your moves so the echo warps to the right spot.",
+        "Move right to queue the echo, wait so it steps onto the teleporter, which sends it near the switch. Then pass through the door.",
+        "Walk right, wait for the echo to teleport near the switch, walk right through the opened door, then navigate the maze to the mailbox."
       ],
       "layers": [
         {
           "id": "clock-face",
           "name": "Clock Face",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#...G.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#..........#...#",
+            "#.####.###.#.#.#",
+            "#......#...#...#",
+            "#.#..#.#.#...#.#",
+            "#.#.##.......#.#",
+            "#..........#.#.#",
+            "#.####.#.#.#...#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#............G.#",
+            "################"
           ]
         },
         {
           "id": "inner-works",
           "name": "Inner Works",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 2,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "echo-a",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
-        }
-      ],
-      "switches": [
-        {
-          "id": "clock-plate",
-          "layer": 1,
-          "x": 2,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "clock-door",
-          "layer": 0,
-          "x": 3,
-          "y": 2,
-          "switchIds": [
-            "clock-plate"
-          ]
-        }
-      ],
-      "balance": {
-        "intendedLesson": "Teach echo timing and the value of a wait action.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
-      }
-    },
-    {
-      "id": "clocktower-02",
-      "districtId": "clocktower",
-      "title": "Borrowed Bell",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Let the echo hold the gate, reach the stitch, and climb to the mailbox.",
-      "blurb": "A delayed footstep can hold the route open long enough to fold through it.",
-      "intro": [
-        {
-          "speaker": "Bell Keeper",
-          "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
-        }
-      ],
-      "hintTiers": [
-        "You do not need the echo to escort you forever. You only need the door open for one crossing.",
-        "Move once to queue the echo, wait so it can stand on the plate, then cross the opened gate and keep climbing.",
-        "Walk right, wait, walk right through the door, walk right onto the stitch, switch sheets, then step right into the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "clock-borrowed-front",
-          "name": "Borrowed Face",
-          "tiles": [
-            "########",
-            "#..D.S.#",
-            "#.####.#",
-            "#......#",
-            "#......#",
-            "########"
+            "################",
+            "#..........#...#",
+            "#.####.###.#.#.#",
+            "#..T...#...#...#",
+            "#.#..#.#.#...#.#",
+            "#.#.##.......#.#",
+            "#..........#.#.#",
+            "#.####.#.#.#.T.#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#..............#",
+            "################"
           ]
         },
         {
-          "id": "clock-borrowed-back",
-          "name": "Bell Frame",
+          "id": "bell-gear",
+          "name": "Bell Gear",
           "tiles": [
-            "########",
-            "#....SG#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "################",
+            "#..........#...#",
+            "#.####.###.#.#.#",
+            "#......#F..#...#",
+            "#.#..#.#F#...#.#",
+            "#.#.##..F....#.#",
+            "#..........#.#.#",
+            "#.####.#.#.#...#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#..............#",
+            "################"
           ]
         }
       ],
@@ -7634,11 +11512,11 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "echo-borrowed",
+          "id": "echo-a",
           "type": "echo",
           "layer": 1,
           "x": 1,
-          "y": 4,
+          "y": 9,
           "solid": true,
           "pushable": false,
           "echoDelay": 1,
@@ -7647,29 +11525,230 @@ export const CAMPAIGN_INDEX = {
       ],
       "switches": [
         {
-          "id": "clock-borrowed-plate",
+          "id": "clock-plate",
           "layer": 1,
-          "x": 2,
-          "y": 4
+          "x": 13,
+          "y": 7
         }
       ],
       "doors": [
         {
-          "id": "clock-borrowed-door",
+          "id": "clock-door",
           "layer": 0,
-          "x": 3,
-          "y": 1,
+          "x": 8,
+          "y": 9,
           "switchIds": [
-            "clock-borrowed-plate"
+            "clock-plate"
           ]
         }
       ],
-      "routingStamps": [],
+      "teleporters": [
+        {
+          "id": "tp-clock-a1",
+          "layer": 1,
+          "x": 3,
+          "y": 3,
+          "pairId": "tp-clock-a2"
+        },
+        {
+          "id": "tp-clock-a2",
+          "layer": 1,
+          "x": 13,
+          "y": 7,
+          "pairId": "tp-clock-a1"
+        }
+      ],
       "balance": {
-        "intendedLesson": "Extend echo timing into a stitched route instead of a single hallway crossing.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players often switch too early and forget the echo still has to open the first gate."
+        "intendedLesson": "Teach echo timing with teleporter mechanics and gravity tiles.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players move too quickly and forget the echo delay."
+      }
+    },
+    {
+      "id": "clocktower-02",
+      "districtId": "clocktower",
+      "title": "Borrowed Bell",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Combine the echo, a parcel, and cross-layer teleporters to open the route.",
+      "blurb": "A delayed footstep can hold the route open while the parcel crosses between layers.",
+      "intro": [
+        {
+          "speaker": "Bell Keeper",
+          "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
+        }
+      ],
+      "hintTiers": [
+        "The echo holds the door while you push the parcel onto the teleporter to activate the far switch.",
+        "Time the echo to stay on the near switch while you push the parcel through the teleporter to land on the far switch.",
+        "Move right to queue echo, wait for it to reach the switch, push parcel right onto teleporter which sends it to back layer switch. Go through both opened doors to the stitch, switch layers, navigate to the mailbox."
+      ],
+      "routingStamps": [],
+      "layers": [
+        {
+          "id": "clock-borrowed-front",
+          "name": "Borrowed Face",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#....#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "clock-borrowed-mid",
+          "name": "Bell Mechanism",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.#.##.###.#...#",
+            "#..........#.#.#",
+            "#.####.#.#.S.#.#",
+            "#......#...#.S.#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "clock-borrowed-back",
+          "name": "Bell Frame",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.#..####.#....#",
+            "#.#........#.G.#",
+            "#...##.#.#.S.#.#",
+            "#.#..#.#...#.S.#",
+            "#.####.###.#.#.#",
+            "#......#.#.#.#.#",
+            "#.##.#.#.#...#.#",
+            "#.#......#.#...#",
+            "#.####.........#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 10,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "echo-borrowed",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 9,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        },
+        {
+          "id": "parcel-bell",
+          "type": "parcel",
+          "layer": 0,
+          "x": 6,
+          "y": 8,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-bell-b",
+          "type": "parcel",
+          "layer": 1,
+          "x": 8,
+          "y": 3,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "clock-echo-plate",
+          "layer": 1,
+          "x": 5,
+          "y": 9
+        },
+        {
+          "id": "clock-parcel-plate",
+          "layer": 1,
+          "x": 12,
+          "y": 5
+        },
+        {
+          "id": "clock-back-plate",
+          "layer": 2,
+          "x": 8,
+          "y": 3
+        }
+      ],
+      "doors": [
+        {
+          "id": "clock-door-a",
+          "layer": 0,
+          "x": 5,
+          "y": 3,
+          "switchIds": [
+            "clock-echo-plate"
+          ]
+        },
+        {
+          "id": "clock-door-b",
+          "layer": 1,
+          "x": 13,
+          "y": 5,
+          "switchIds": [
+            "clock-parcel-plate"
+          ]
+        },
+        {
+          "id": "clock-door-c",
+          "layer": 2,
+          "x": 12,
+          "y": 3,
+          "switchIds": [
+            "clock-back-plate"
+          ]
+        }
+      ],
+      "teleporters": [
+        {
+          "id": "tp-bell-a1",
+          "layer": 0,
+          "x": 10,
+          "y": 8,
+          "pairId": "tp-bell-a2"
+        },
+        {
+          "id": "tp-bell-a2",
+          "layer": 1,
+          "x": 12,
+          "y": 3,
+          "pairId": "tp-bell-a1"
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine echo timing with dual parcel management and cross-layer teleportation.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 18,
+        "commonMisunderstanding": "Players switch too early and forget the echo."
       }
     },
     {
@@ -7679,42 +11758,72 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Use the routing stamp to land exactly where the mailbox route resumes.",
-      "blurb": "Some stitched exits arrive somewhere else entirely once they pass under the clock stamp.",
+      "objective": "Chain teleporters across three layers to reach the mailbox at the bottom.",
+      "blurb": "The clocktower's tube system spans all three sheets of the bell mechanism.",
       "intro": [
         {
           "speaker": "Bell Keeper",
-          "text": "That stamp reroutes a stitch exit the instant you land. Read the arrow, not just the stitch."
+          "text": "The bell tubes connect all three sheets. Each teleporter drops you one layer deeper. Read the chain before you step in."
         }
       ],
       "hintTiers": [
-        "The goal is not a walk after the stitch. The stitch itself is the final delivery hop.",
-        "Switch on the marked stitch. The routing stamp on the destination sheet will slide the exit to the right.",
-        "Walk right twice onto the stitch, then switch sheets. The routing stamp sends you directly to the mailbox."
+        "The teleporters form a chain: layer 0 to layer 1, then layer 1 to layer 2. But walls block direct paths.",
+        "Use the first teleporter to reach layer 1, navigate the maze there, use the second teleporter to reach layer 2, then find the mailbox.",
+        "Navigate to teleporter at (7,2) on layer 0, warp to layer 1 at (2,5), navigate the middle maze to teleporter at (6,6), warp to layer 2 at (3,2), navigate down and right to the mailbox."
       ],
       "layers": [
         {
           "id": "clock-stamp-front",
-          "name": "Clock Front",
+          "name": "Clock Top",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.###.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#..#.........#.#",
+            "#.##.#.T.###...#",
+            "#..........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#RRR.#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "clock-stamp-middle",
+          "name": "Clock Middle",
+          "tiles": [
+            "################",
+            "#....#.......#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#..#.#.#...#.#",
+            "#.T.##.......#.#",
+            "#..........T.#.#",
+            "#.####.#.#.#...#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#..............#",
+            "################"
           ]
         },
         {
           "id": "clock-stamp-back",
-          "name": "Clock Stamp",
+          "name": "Clock Bottom",
           "tiles": [
-            "#######",
-            "#..S.G#",
-            "#.###.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#............#.#",
+            "#.#T####.#.#...#",
+            "#.#........#.#.#",
+            "#...#.##.#...#.#",
+            "#.#.##.......#.#",
+            "#......DDD.#.#.#",
+            "#.####.#.#.#...#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#.............G#",
+            "################"
           ]
         }
       ],
@@ -7727,24 +11836,41 @@ export const CAMPAIGN_INDEX = {
       "entities": [],
       "switches": [],
       "doors": [],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "clock-switch-stamp",
+          "id": "tp-chain-a1",
+          "layer": 0,
+          "x": 7,
+          "y": 2,
+          "pairId": "tp-chain-a2"
+        },
+        {
+          "id": "tp-chain-a2",
           "layer": 1,
+          "x": 2,
+          "y": 5,
+          "pairId": "tp-chain-a1"
+        },
+        {
+          "id": "tp-chain-b1",
+          "layer": 1,
+          "x": 11,
+          "y": 6,
+          "pairId": "tp-chain-b2"
+        },
+        {
+          "id": "tp-chain-b2",
+          "layer": 2,
           "x": 3,
-          "y": 1,
-          "direction": "right",
-          "distance": 2,
-          "appliesTo": [
-            "switch"
-          ]
+          "y": 2,
+          "pairId": "tp-chain-b1"
         }
       ],
       "balance": {
-        "intendedLesson": "Introduce routing stamps through a clean stitched exit instead of layering them onto multiple other systems at once.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players step on the stitch and still expect to move manually afterward instead of trusting the reroute."
+        "intendedLesson": "Multi-layer teleporter chains with conveyor belts.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 16,
+        "commonMisunderstanding": "Players get disoriented across layers."
       }
     },
     {
@@ -7754,10 +11880,7 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "requiresRooms": [
-        "clocktower-03"
-      ],
-      "objective": "Borrow a beat, fall through the rerouted stitch, and ride the lower route to the mailbox.",
+      "objective": "Combine echo timing, teleporters, and one-way gates across three layers.",
       "blurb": "A side route that turns one rerouted stitch into a full three-sheet descent.",
       "intro": [
         {
@@ -7766,57 +11889,665 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The first stitch is not the destination. It is the drop point for the second switch.",
-        "Use the echo to open the first door, then let the routing stamp drop you onto the lower stitch before you switch again.",
-        "Walk right, wait, walk right three more times to the stitch, switch to the middle sheet, switch again at the lower stitch, then go right and climb to the mailbox."
+        "The echo must reach the switch via the teleporter while you navigate one-way gates across three layers.",
+        "Time the echo to teleport onto the switch, then navigate through one-way gates, use the stitch to layer 2, use a second teleporter to reach the final area.",
+        "Move right to queue echo, navigate up through one-way gates while echo teleports to switch. Go through opened door, use stitch to middle layer, navigate to teleporter, warp to layer 2, navigate maze to mailbox."
+      ],
+      "requiresRooms": [
+        "clocktower-03"
       ],
       "layers": [
         {
           "id": "clock-pendulum-front",
           "name": "Pendulum Face",
           "tiles": [
-            "########",
-            "#..D.S.#",
-            "#.####.#",
-            "#......#",
-            "#......#",
-            "########"
+            "################",
+            "#...S......#...#",
+            "#.####.###.....#",
+            "#.>..........#.#",
+            "#.#..#..#.#.#..#",
+            "#.#.##....#.#..#",
+            "#.........#.#..#",
+            "#.####.#....#..#",
+            "#.......#.#.#..#",
+            "#.####.###.<...#",
+            "#..............#",
+            "################"
           ]
         },
         {
           "id": "clock-pendulum-middle",
           "name": "Pendulum Frame",
           "tiles": [
-            "########",
-            "#....S.#",
-            "#.####.#",
-            "#......#",
-            "#....S.#",
-            "########"
+            "################",
+            "#...S..T.....#.#",
+            "#.#.####.###...#",
+            "#.v..........^.#",
+            "#......#.#..#..#",
+            "#.###.##..#.#..#",
+            "#.........#.#..#",
+            "#.####.#....#..#",
+            "#.......#.#.#..#",
+            "#.####.###.S...#",
+            "#..............#",
+            "################"
           ]
         },
         {
           "id": "clock-pendulum-back",
           "name": "Bell Route",
           "tiles": [
-            "########",
-            "#.....G#",
-            "#.####.#",
-            "#......#",
-            "#....S.#",
-            "########"
+            "################",
+            "#............G.#",
+            "#.####.###.#...#",
+            "#.T..........^.#",
+            "#.#..#..#.#.#..#",
+            "#.#.##....#.#..#",
+            "#.........#.#..#",
+            "#.####.#....#..#",
+            "#.......#.#.#..#",
+            "#.####.###.S...#",
+            "#..............#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 1,
+        "y": 10,
         "facing": "right"
       },
       "entities": [
         {
           "id": "echo-pendulum",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 10,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        }
+      ],
+      "switches": [
+        {
+          "id": "clock-pendulum-plate",
+          "layer": 1,
+          "x": 12,
+          "y": 1
+        }
+      ],
+      "doors": [
+        {
+          "id": "clock-pendulum-door",
+          "layer": 0,
+          "x": 7,
+          "y": 1,
+          "switchIds": [
+            "clock-pendulum-plate"
+          ]
+        }
+      ],
+      "teleporters": [
+        {
+          "id": "tp-pend-a1",
+          "layer": 1,
+          "x": 7,
+          "y": 1,
+          "pairId": "tp-pend-a2"
+        },
+        {
+          "id": "tp-pend-a2",
+          "layer": 1,
+          "x": 12,
+          "y": 3,
+          "pairId": "tp-pend-a1"
+        },
+        {
+          "id": "tp-pend-b1",
+          "layer": 1,
+          "x": 3,
+          "y": 8,
+          "pairId": "tp-pend-b2"
+        },
+        {
+          "id": "tp-pend-b2",
+          "layer": 2,
+          "x": 3,
+          "y": 3,
+          "pairId": "tp-pend-b1"
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine echo timing with teleporter chains and one-way gates across three layers.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 20,
+        "commonMisunderstanding": "Players forget the final climb."
+      }
+    },
+    {
+      "id": "theater-01",
+      "districtId": "theater",
+      "title": "Understudy",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Guide your shadow to the switch while navigating walls and corridors.",
+      "blurb": "The stage mirrors movement even when the audience cannot see it.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "Your shadow moves in the opposite direction across its own sheet. Think about where it lands, not where you do."
+        }
+      ],
+      "hintTiers": [
+        "The shadow mirrors your movement. Every step right sends it left. Plan a path that places it on the switch.",
+        "You need to move so the shadow hits the switch while you can still reach the door. The maze layout means not every move is mirrored cleanly.",
+        "Move right twice, down once (shadow goes left twice, up once onto the switch). Walk through the opened door and navigate the corridors to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "stage",
+          "name": "Stage",
+          "tiles": [
+            "################",
+            "#..........#...#",
+            "#.####.###.#.#.#",
+            "#.#......#.#...#",
+            "#.#.##.#...#.#.#",
+            "#......#.#...#.#",
+            "#.##.###.#.#.#.#",
+            "#........#.#...#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####......G#",
+            "################"
+          ]
+        },
+        {
+          "id": "backdrop",
+          "name": "Backdrop",
+          "tiles": [
+            "################",
+            "#..........#...#",
+            "#.#.####.#.#.#.#",
+            "#.#......#.#...#",
+            "#.#..#.#...#.#.#",
+            "#...##.#.#...#.#",
+            "#.##.###.#.#.#.#",
+            "#........#.#...#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "wings",
+          "name": "Wings",
+          "tiles": [
+            "################",
+            "#II........#...#",
+            "#I####.###.#.#.#",
+            "#I#......#.#...#",
+            "#I#.##.#...#.#.#",
+            "#I.....#.#...#.#",
+            "#I##.###.#.#.#.#",
+            "#I.......#.#...#",
+            "#I####.#.#...#.#",
+            "#I#......#.#...#",
+            "#I#.####.......#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 3,
+        "y": 5,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-a",
+          "type": "shadow",
+          "layer": 1,
+          "x": 12,
+          "y": 5,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-plate",
+          "layer": 1,
+          "x": 8,
+          "y": 2
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-door",
+          "layer": 0,
+          "x": 8,
+          "y": 5,
+          "switchIds": [
+            "stage-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Teach mirrored shadow movement with larger maze and ice wings layer.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players track their own movement but not the shadow."
+      }
+    },
+    {
+      "id": "theater-02",
+      "districtId": "theater",
+      "title": "Latch Cue",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Navigate ice corridors while guiding your shadow to latch the switch across three layers.",
+      "blurb": "The stage route stays open once the understudy hits the mark, but ice changes everything.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
+        }
+      ],
+      "hintTiers": [
+        "The shadow must latch the switch while you slide on ice. Ice affects you but not the shadow.",
+        "Plan your ice slides so the mirrored shadow movement lands on the latch. Then descend through layers.",
+        "Slide right on ice (shadow goes left to switch). Navigate down to stitch, switch to middle layer, descend to lower stitch, switch to layer 2, push parcel to open final path, reach mailbox."
+      ],
+      "routingStamps": [],
+      "layers": [
+        {
+          "id": "stage-latch-front",
+          "name": "Stage",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.####.###.#...#",
+            "#.......II.#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#....#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-latch-middle",
+          "name": "Wings",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.#.####.#.#...#",
+            "#..........#.#.#",
+            "#.####.#.#.S.#.#",
+            "#......#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-latch-back",
+          "name": "Backstage",
+          "tiles": [
+            "################",
+            "#...........#..#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#..#.#.#.S.#.#",
+            "#.#.##.#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.###.####...G.#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 10,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-latch",
+          "type": "shadow",
+          "layer": 1,
+          "x": 14,
+          "y": 10,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
+        {
+          "id": "parcel-stage",
+          "type": "parcel",
+          "layer": 2,
+          "x": 6,
+          "y": 8,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-latch-switch",
+          "layer": 1,
+          "x": 4,
+          "y": 3,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-latch-door",
+          "layer": 2,
+          "x": 11,
+          "y": 10,
+          "switchIds": [
+            "stage-latch-switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine shadow latching with ice physics and three-layer navigation.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 18,
+        "commonMisunderstanding": "Players assume the shadow must keep standing on the switch."
+      }
+    },
+    {
+      "id": "theater-03",
+      "districtId": "theater",
+      "title": "Marked Landing",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Guide two shadows through one-way gates to latch two switches simultaneously.",
+      "blurb": "The spotlight stamp only helps if both shadows have already unlocked their respective doors.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "Two shadows, two marks. Both must hit their cues before the scene opens."
+        }
+      ],
+      "hintTiers": [
+        "Two shadows mirror you on two different layers. Each must reach its own switch.",
+        "Plan a movement sequence that places both shadows on their respective switches while navigating one-way gates.",
+        "Move right twice (both shadows go left). Move down once (both go up). Shadow A reaches switch on layer 1, shadow B reaches switch on layer 2. Navigate through both opened doors via one-way gate circuit to the mailbox."
+      ],
+      "achievementId": "stage-route",
+      "layers": [
+        {
+          "id": "stage-mark-front",
+          "name": "Stage Floor",
+          "tiles": [
+            "################",
+            "#...S......#...#",
+            "#.>###.###.....#",
+            "#.#........v...#",
+            "#...#.##.#..#..#",
+            "#.#.##...#..#..#",
+            "#......<.......#",
+            "#.####.###..#..#",
+            "#..........#...#",
+            "#.#.####.......#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-mark-mid",
+          "name": "Wing Grid",
+          "tiles": [
+            "################",
+            "#...S......#...#",
+            "#.#.####.###...#",
+            "#..............#",
+            "#.....##.#..#..#",
+            "#.###.....#.#..#",
+            "#..............#",
+            "#.####.###..#..#",
+            "#..........#...#",
+            "#.#.####.......#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-mark-back",
+          "name": "Spotlight Grid",
+          "tiles": [
+            "################",
+            "#...S......#...#",
+            "#.####.###.....#",
+            "#..............#",
+            "#.#..#.##.#.#..#",
+            "#.#.##...#..#..#",
+            "#..............#",
+            "#.####.###..#..#",
+            "#..........#...#",
+            "#.#.####.......#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-mark-deep",
+          "name": "Deep Stage",
+          "tiles": [
+            "################",
+            "#...S........G.#",
+            "#.####.###.#...#",
+            "#..............#",
+            "#.#..#.##.#.#..#",
+            "#.#.##...#..#..#",
+            "#..............#",
+            "#.####.###..#..#",
+            "#..........#...#",
+            "#.#.####.......#",
+            "#..............#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 3,
+        "y": 7,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-mark-a",
+          "type": "shadow",
+          "layer": 1,
+          "x": 12,
+          "y": 8,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
+        {
+          "id": "shadow-mark-b",
+          "type": "shadow",
+          "layer": 2,
+          "x": 12,
+          "y": 8,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-mark-switch-a",
+          "layer": 1,
+          "x": 6,
+          "y": 3,
+          "sticky": true
+        },
+        {
+          "id": "stage-mark-switch-b",
+          "layer": 2,
+          "x": 6,
+          "y": 3,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-mark-door-a",
+          "layer": 0,
+          "x": 8,
+          "y": 1,
+          "switchIds": [
+            "stage-mark-switch-a"
+          ]
+        },
+        {
+          "id": "stage-mark-door-b",
+          "layer": 3,
+          "x": 13,
+          "y": 1,
+          "switchIds": [
+            "stage-mark-switch-b"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Dual shadow coordination with one-way gates across four layers.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 22,
+        "commonMisunderstanding": "Players plan for one shadow and forget the other."
+      }
+    },
+    {
+      "id": "theater-side-01",
+      "districtId": "theater",
+      "title": "Backstage Fold",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Combine shadow, echo, and teleporters across three layers for the ultimate stage puzzle.",
+      "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
+        }
+      ],
+      "hintTiers": [
+        "The shadow latches one door, the echo holds another, and teleporters connect all three layers.",
+        "Move to latch the shadow switch first. Then time the echo to hold the second door while you teleport between layers.",
+        "Move right to latch shadow switch. Navigate to echo timing position. Move right to queue echo onto switch via teleporter. Pass through both opened doors. Use teleporter to layer 2. Navigate the final maze to the mailbox."
+      ],
+      "requiresRooms": [
+        "theater-03"
+      ],
+      "layers": [
+        {
+          "id": "stage-fold-front",
+          "name": "Front Curtain",
+          "tiles": [
+            "################",
+            "#...S..........#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "#.#..#.#.#.#...#",
+            "#.#.##.........#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-fold-middle",
+          "name": "Backstage Grid",
+          "tiles": [
+            "################",
+            "#...S..T.......#",
+            "#.#.####.#.#...#",
+            "#..............#",
+            "#......#.#.#...#",
+            "#.###.#S.......#",
+            "#.T............#",
+            "#.####.S.#.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-fold-back",
+          "name": "Fly Loft",
+          "tiles": [
+            "################",
+            "#.T............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "#.#..#.#.#.#...#",
+            "#.#.##.S.......#",
+            "#..............#",
+            "#.####.S.#.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#............G.#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 12,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-fold",
+          "type": "shadow",
+          "layer": 1,
+          "x": 14,
+          "y": 12,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
+        {
+          "id": "echo-fold",
           "type": "echo",
           "layer": 1,
           "x": 1,
@@ -7829,447 +12560,74 @@ export const CAMPAIGN_INDEX = {
       ],
       "switches": [
         {
-          "id": "clock-pendulum-plate",
+          "id": "stage-fold-shadow-switch",
+          "layer": 1,
+          "x": 6,
+          "y": 4,
+          "sticky": true
+        },
+        {
+          "id": "stage-fold-echo-switch",
+          "layer": 1,
+          "x": 12,
+          "y": 1
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-fold-door-a",
+          "layer": 0,
+          "x": 7,
+          "y": 1,
+          "switchIds": [
+            "stage-fold-shadow-switch"
+          ]
+        },
+        {
+          "id": "stage-fold-door-b",
+          "layer": 1,
+          "x": 13,
+          "y": 4,
+          "switchIds": [
+            "stage-fold-echo-switch"
+          ]
+        }
+      ],
+      "teleporters": [
+        {
+          "id": "tp-fold-a1",
+          "layer": 1,
+          "x": 7,
+          "y": 1,
+          "pairId": "tp-fold-a2"
+        },
+        {
+          "id": "tp-fold-a2",
           "layer": 1,
           "x": 2,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "clock-pendulum-door",
-          "layer": 0,
-          "x": 3,
-          "y": 1,
-          "switchIds": [
-            "clock-pendulum-plate"
-          ]
-        }
-      ],
-      "routingStamps": [
-        {
-          "id": "clock-pendulum-stamp",
-          "layer": 1,
-          "x": 5,
-          "y": 1,
-          "direction": "down",
-          "distance": 3,
-          "appliesTo": [
-            "switch"
-          ]
-        }
-      ],
-      "balance": {
-        "intendedLesson": "Use one routing stamp to turn a familiar echo-door puzzle into a genuine three-sheet route.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 7,
-        "commonMisunderstanding": "Players often switch once, see the lower stitch, and then forget the final climb still happens on the back sheet."
-      }
-    },
-    {
-      "id": "theater-01",
-      "districtId": "theater",
-      "title": "Understudy",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Let your shadow open the route while you pass through.",
-      "blurb": "The stage mirrors movement even when the audience cannot see it.",
-      "intro": [
-        {
-          "speaker": "Stagehand",
-          "text": "Your shadow moves in the opposite direction across its own sheet. Think about where it lands, not where you do."
-        }
-      ],
-      "hintTiers": [
-        "One move to the right sends the shadow one move to the left.",
-        "The shadow only needs to step on the switch once for you to get through the door.",
-        "Move right to place the shadow on the switch, then continue right through the door before the route closes behind you."
-      ],
-      "layers": [
-        {
-          "id": "stage",
-          "name": "Stage",
-          "tiles": [
-            "#######",
-            "#.....#",
-            "#...G.#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
+          "y": 6,
+          "pairId": "tp-fold-a1"
         },
         {
-          "id": "backdrop",
-          "name": "Backdrop",
-          "tiles": [
-            "#######",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 2,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "shadow-a",
-          "type": "shadow",
+          "id": "tp-fold-b1",
           "layer": 1,
           "x": 5,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
-      "switches": [
-        {
-          "id": "stage-plate",
-          "layer": 1,
-          "x": 4,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "stage-door",
-          "layer": 0,
-          "x": 3,
-          "y": 2,
-          "switchIds": [
-            "stage-plate"
-          ]
-        }
-      ],
-      "balance": {
-        "intendedLesson": "Teach mirrored shadow movement and planning for a separate actor.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
-      }
-    },
-    {
-      "id": "theater-02",
-      "districtId": "theater",
-      "title": "Latch Cue",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Let your shadow latch the hidden switch, then climb through the open route.",
-      "blurb": "The stage route stays open once the understudy hits the mark.",
-      "intro": [
-        {
-          "speaker": "Stagehand",
-          "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
-        }
-      ],
-      "hintTiers": [
-        "The shadow does not need to babysit the switch. It only needs to touch it once.",
-        "Move right once to latch the switch with the shadow, then make your own climb to the stitch.",
-        "Move right, go up three times to the stitch, switch sheets, then go down and cross the now-open route to the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "stage-latch-front",
-          "name": "Stage",
-          "tiles": [
-            "#######",
-            "#.S...#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
+          "y": 12,
+          "pairId": "tp-fold-b2"
         },
         {
-          "id": "stage-latch-back",
-          "name": "Backstage",
-          "tiles": [
-            "#######",
-            "#.S...#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 4,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "shadow-latch",
-          "type": "shadow",
-          "layer": 1,
-          "x": 5,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
-      "switches": [
-        {
-          "id": "stage-latch-switch",
-          "layer": 1,
-          "x": 4,
-          "y": 4,
-          "sticky": true
-        }
-      ],
-      "doors": [
-        {
-          "id": "stage-latch-door",
-          "layer": 1,
-          "x": 3,
-          "y": 2,
-          "switchIds": [
-            "stage-latch-switch"
-          ]
-        }
-      ],
-      "routingStamps": [],
-      "balance": {
-        "intendedLesson": "Introduce sticky latches as a cleaner shadow-planning escalation before the routed shadow rooms.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players often assume the shadow must keep standing on the switch and overcomplicate the route."
-      }
-    },
-    {
-      "id": "theater-03",
-      "districtId": "theater",
-      "title": "Marked Landing",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Latch the mark, switch sheets, and let the stamp drop you through the open landing.",
-      "blurb": "The spotlight stamp only helps if the shadow has already unlocked the door it lands on.",
-      "intro": [
-        {
-          "speaker": "Stagehand",
-          "text": "The stamp lands you on a different mark, but the landing only matters if the shadow has opened the prop door first."
-        }
-      ],
-      "hintTiers": [
-        "The shadow action happens before the stitched landing pays off.",
-        "Step right once to latch the switch with the shadow, then climb to the stitch and trust the rerouted landing.",
-        "Move right, go up three times, move right onto the stitch, switch sheets, and step right into the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "stage-mark-front",
-          "name": "Stage Floor",
-          "tiles": [
-            "########",
-            "#..S...#",
-            "#..##..#",
-            "#......#",
-            "#......#",
-            "########"
-          ]
-        },
-        {
-          "id": "stage-mark-back",
-          "name": "Spotlight Grid",
-          "tiles": [
-            "########",
-            "#..S.DG#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 4,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "shadow-mark",
-          "type": "shadow",
-          "layer": 1,
-          "x": 5,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
-      "switches": [
-        {
-          "id": "stage-mark-switch",
-          "layer": 1,
-          "x": 4,
-          "y": 4,
-          "sticky": true
-        }
-      ],
-      "doors": [
-        {
-          "id": "stage-mark-door",
-          "layer": 1,
-          "x": 5,
-          "y": 1,
-          "switchIds": [
-            "stage-mark-switch"
-          ]
-        }
-      ],
-      "routingStamps": [
-        {
-          "id": "stage-mark-stamp",
-          "layer": 1,
-          "x": 3,
-          "y": 1,
-          "direction": "right",
-          "distance": 2,
-          "appliesTo": [
-            "switch"
-          ]
-        }
-      ],
-      "achievementId": "stage-route",
-      "balance": {
-        "intendedLesson": "Combine sticky shadow setup with a routed stitch landing that only works because the shadow solved the destination first.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 6,
-        "commonMisunderstanding": "Players often climb correctly but forget to move right once at the start, so the landing stays blocked."
-      }
-    },
-    {
-      "id": "theater-side-01",
-      "districtId": "theater",
-      "title": "Backstage Fold",
-      "optional": true,
-      "unlockCost": 0,
-      "postmarks": 0,
-      "requiresRooms": [
-        "theater-03"
-      ],
-      "objective": "Latch the cue, fall through the rerouted stitch, and take the hidden backstage climb.",
-      "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
-      "intro": [
-        {
-          "speaker": "Stagehand",
-          "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
-        }
-      ],
-      "hintTiers": [
-        "The first stitch is the setup. The second stitch is the route.",
-        "Move right once so the shadow latches the cue, then use the routed stitch to drop onto the lower switch point.",
-        "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "stage-fold-front",
-          "name": "Front Curtain",
-          "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
-          ]
-        },
-        {
-          "id": "stage-fold-middle",
-          "name": "Backstage Grid",
-          "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#..S...#",
-            "########"
-          ]
-        },
-        {
-          "id": "stage-fold-back",
-          "name": "Fly Loft",
-          "tiles": [
-            "########",
-            "#....DG#",
-            "#......#",
-            "#......#",
-            "#..S...#",
-            "########"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 4,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "shadow-fold",
-          "type": "shadow",
-          "layer": 1,
-          "x": 5,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
-      "switches": [
-        {
-          "id": "stage-fold-switch",
-          "layer": 1,
-          "x": 4,
-          "y": 4,
-          "sticky": true
-        }
-      ],
-      "doors": [
-        {
-          "id": "stage-fold-door",
+          "id": "tp-fold-b2",
           "layer": 2,
-          "x": 5,
+          "x": 2,
           "y": 1,
-          "switchIds": [
-            "stage-fold-switch"
-          ]
-        }
-      ],
-      "routingStamps": [
-        {
-          "id": "stage-fold-stamp",
-          "layer": 1,
-          "x": 3,
-          "y": 1,
-          "direction": "down",
-          "distance": 3,
-          "appliesTo": [
-            "switch"
-          ]
+          "pairId": "tp-fold-b1"
         }
       ],
       "balance": {
-        "intendedLesson": "Push the routed shadow idea into a three-layer secret path that still hinges on one readable fold.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 8,
-        "commonMisunderstanding": "Players often keep searching the middle sheet for the goal instead of treating it as the folded route into the loft."
+        "intendedLesson": "The ultimate theater challenge combining shadow, echo, and teleporters.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 25,
+        "commonMisunderstanding": "Players keep searching the middle sheet for the goal."
       }
     },
     {
@@ -8279,58 +12637,118 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Hold the door, project the bridge, and restore the final delivery lane.",
-      "blurb": "This is the first true mixed-mechanic route in the prototype.",
+      "objective": "Use two parcels, a projector, ice, one-way gates, and switches across three layers.",
+      "blurb": "This is the first true mixed-mechanic route in the campaign.",
       "intro": [
         {
           "speaker": "Mina",
           "text": "By now the town expects more than one insight at a time. Hold the line open, then build the bridge."
         }
       ],
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
+        }
+      ],
       "hintTiers": [
-        "One parcel belongs on the switch. The lantern belongs where the tear is.",
-        "Park the parcel on the switch first so you do not have to revisit it after the bridge is ready.",
-        "Push the parcel onto the floor plate, move the lantern to x3 y2, switch layers at the stitch, then walk over the bridge and through the open door to the mailbox."
+        "One parcel for each switch. The projector bridges the gap. One-way gates force a specific circuit.",
+        "Push parcel A across ice to the visible switch. Transfer parcel B to the hidden switch. Push the projector into position. Navigate the one-way circuit.",
+        "Slide parcel A right on ice to switch at (9,5). Transfer parcel B to back layer switch. Push projector up to bridge the gap on layer 2. Navigate one-way gates through all three layers to the mailbox."
       ],
       "layers": [
         {
           "id": "roofline",
           "name": "Roofline",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##################",
+            "#...S..........#.#",
+            "#.####.###.#.#...#",
+            "#.>............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#IIIIII..#.....#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#.<.#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "gutter-mid",
+          "name": "Gutter Middle",
+          "tiles": [
+            "##################",
+            "#...S..........#.#",
+            "#.#.##.###.#.#...#",
+            "#.v............^.#",
+            "#.####.#.#.#.#.#.#",
+            "#......#...#.S...#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.S...#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "gutter",
           "name": "Gutter Route",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#..~.G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##################",
+            "#................#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#~.#.#.#.#.#.#.#",
+            "#.#.##.#...#.S...#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.S...#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 12,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "parcel-d",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 3,
+          "y": 5,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-e",
+          "type": "parcel",
+          "layer": 0,
+          "x": 7,
+          "y": 11,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-f",
+          "type": "parcel",
+          "layer": 1,
+          "x": 9,
+          "y": 7,
           "pushable": true,
           "solid": true
         },
@@ -8338,50 +12756,66 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-b",
           "type": "projector",
           "layer": 0,
-          "x": 2,
+          "x": 5,
           "y": 3,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 1,
-              "dx": 0,
-              "dy": 0
+              "layer": 2,
+              "dx": -1,
+              "dy": 1
             }
           ]
         }
       ],
       "switches": [
         {
-          "id": "roof-plate",
+          "id": "roof-plate-a",
           "layer": 0,
-          "x": 1,
-          "y": 4
+          "x": 15,
+          "y": 5
+        },
+        {
+          "id": "roof-plate-b",
+          "layer": 1,
+          "x": 7,
+          "y": 11
+        },
+        {
+          "id": "roof-plate-c",
+          "layer": 1,
+          "x": 9,
+          "y": 7
         }
       ],
       "doors": [
         {
-          "id": "roof-door",
-          "layer": 1,
-          "x": 4,
-          "y": 2,
+          "id": "roof-door-a",
+          "layer": 2,
+          "x": 15,
+          "y": 12,
           "switchIds": [
-            "roof-plate"
+            "roof-plate-a",
+            "roof-plate-b"
+          ]
+        },
+        {
+          "id": "roof-door-b",
+          "layer": 1,
+          "x": 14,
+          "y": 11,
+          "switchIds": [
+            "roof-plate-c"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Combine parcel parking, layer switching, and projection in one route.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 6,
-        "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
-      },
-      "outro": [
-        {
-          "speaker": "Mina",
-          "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
-        }
-      ]
+        "intendedLesson": "Combine all previous mechanics.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 22,
+        "commonMisunderstanding": "Players solve the bridge first and discover they need the door open."
+      }
     },
     {
       "id": "rooftops-02",
@@ -8390,8 +12824,8 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Push the lantern into line, switch sheets, and cross the rerouted bridge.",
-      "blurb": "The rooftop stamp forwards a bridge one tile farther than the lantern expects.",
+      "objective": "Combine projection, shadow movement, teleporters, and ice across three layers.",
+      "blurb": "The rooftop route demands mastery of projection and shadow coordination.",
       "intro": [
         {
           "speaker": "Mina",
@@ -8399,80 +12833,161 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "Aim the lantern at the stamp tile, not directly at the gap.",
-        "Push the lantern left once so its projection lands on the stamp, then switch sheets and walk over the forwarded bridge.",
-        "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down, then cross right three times to the mailbox."
+        "The shadow latches a switch while the projector bridges the gap. Teleporters connect the layers.",
+        "Move to latch the shadow switch, then push the projector onto ice to slide into position. Use the teleporter to descend.",
+        "Move right to latch shadow. Push projector left onto ice, it slides to bridge position. Navigate to teleporter at layer 0, warp to layer 1, descend to stitch, switch to layer 2, cross bridge through opened door to mailbox."
       ],
       "layers": [
         {
           "id": "roof-forward-top",
           "name": "Roofline",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#II.#.#.#",
+            "#.#.##.......#...#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#...#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "roof-forward-middle",
+          "name": "Forwarded Middle",
+          "tiles": [
+            "##################",
+            "#...S..........#.#",
+            "#.#.####.###.#...#",
+            "#.T............#.#",
+            "#......#.#.S.#.#.#",
+            "#.###.##.......#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.S...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "roof-forward-bottom",
           "name": "Forwarded Span",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#...~.G#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#................#",
+            "#.######.###.#...#",
+            "#.T............#.#",
+            "#.#..~.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.S...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 3,
-        "facing": "left"
+        "x": 1,
+        "y": 12,
+        "facing": "right"
       },
       "entities": [
+        {
+          "id": "shadow-roof",
+          "type": "shadow",
+          "layer": 1,
+          "x": 16,
+          "y": 12,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
         {
           "id": "lantern-forward",
           "type": "projector",
           "layer": 0,
-          "x": 4,
-          "y": 3,
+          "x": 8,
+          "y": 4,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 1,
-              "dx": 0,
-              "dy": -1
+              "layer": 2,
+              "dx": -3,
+              "dy": 0
             }
           ]
         }
       ],
-      "switches": [],
-      "doors": [],
-      "routingStamps": [
+      "switches": [
         {
-          "id": "roof-forward-stamp",
+          "id": "roof-shadow-plate",
           "layer": 1,
-          "x": 3,
-          "y": 2,
-          "direction": "right",
-          "distance": 1,
-          "appliesTo": [
-            "projection"
+          "x": 7,
+          "y": 3,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "roof-forward-door",
+          "layer": 2,
+          "x": 14,
+          "y": 12,
+          "switchIds": [
+            "roof-shadow-plate"
           ]
         }
       ],
+      "teleporters": [
+        {
+          "id": "tp-roof-a1",
+          "layer": 0,
+          "x": 15,
+          "y": 1,
+          "pairId": "tp-roof-a2"
+        },
+        {
+          "id": "tp-roof-a2",
+          "layer": 1,
+          "x": 2,
+          "y": 3,
+          "pairId": "tp-roof-a1"
+        },
+        {
+          "id": "tp-roof-b1",
+          "layer": 1,
+          "x": 15,
+          "y": 9,
+          "pairId": "tp-roof-b2"
+        },
+        {
+          "id": "tp-roof-b2",
+          "layer": 2,
+          "x": 2,
+          "y": 3,
+          "pairId": "tp-roof-b1"
+        }
+      ],
       "balance": {
-        "intendedLesson": "Introduce projection routing as a spatial alignment problem instead of a raw bridge-placement guess.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players push the lantern directly under the gap and miss that the stamp forwards the bridge one tile farther."
+        "intendedLesson": "Combine shadow latching, ice-based projector placement, and teleporter chains.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 22,
+        "commonMisunderstanding": "Players push the lantern directly under the gap."
       }
     },
     {
@@ -8482,7 +12997,7 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Forward the parcel onto the rooftop plate, then climb through the reopened lane.",
+      "objective": "Use two parcels, two switches, and teleporters across three layers to open the final corridor.",
       "blurb": "A transfer stamp can park a parcel exactly where a distant lane needs weight.",
       "intro": [
         {
@@ -8491,90 +13006,183 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "Transfer first. The stamp will handle the final parking spot for the parcel.",
-        "Stand still and transfer the parcel into the other sheet; the stamp there forwards it onto the switch.",
-        "Transfer the parcel, climb to the stitch with three moves up and two right, switch sheets, then walk right three times through the open lane to the mailbox."
+        "Each parcel activates a different switch on a different layer. Teleporters help you reach the distant areas.",
+        "Transfer one parcel to the back layer switch, push the other across the maze to the visible switch. Use teleporters to navigate between layers.",
+        "Transfer parcel A to back layer where it lands on hidden switch. Push parcel B through the maze to visible switch. Use teleporter chain to descend through three layers. Navigate through both opened doors to the mailbox."
       ],
       "layers": [
         {
           "id": "roof-transfer-top",
           "name": "Top Route",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.......#...#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#...#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "roof-transfer-middle",
+          "name": "Middle Route",
+          "tiles": [
+            "##################",
+            "#...S..........#.#",
+            "#.#.####.###.#...#",
+            "#..............#.#",
+            "#......#.#.S.#.#.#",
+            "#.###.##.......#.#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "roof-transfer-bottom",
           "name": "Stamped Lane",
           "tiles": [
-            "########",
-            "#..S.DG#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#................#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 12,
         "facing": "right"
       },
       "entities": [
         {
-          "id": "parcel-stamped",
+          "id": "parcel-stamped-a",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 4,
+          "y": 9,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-stamped-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 10,
+          "y": 3,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-stamped-c",
+          "type": "parcel",
+          "layer": 1,
+          "x": 6,
+          "y": 10,
           "pushable": true,
           "solid": true
         }
       ],
       "switches": [
         {
-          "id": "roof-transfer-plate",
-          "layer": 1,
+          "id": "roof-visible-plate",
+          "layer": 0,
+          "x": 15,
+          "y": 9
+        },
+        {
+          "id": "roof-hidden-plate",
+          "layer": 2,
           "x": 4,
-          "y": 4
+          "y": 8
+        },
+        {
+          "id": "roof-mid-plate",
+          "layer": 1,
+          "x": 6,
+          "y": 10
         }
       ],
       "doors": [
         {
-          "id": "roof-transfer-door",
-          "layer": 1,
-          "x": 5,
-          "y": 1,
+          "id": "roof-door-a",
+          "layer": 2,
+          "x": 14,
+          "y": 12,
           "switchIds": [
-            "roof-transfer-plate"
+            "roof-visible-plate"
+          ]
+        },
+        {
+          "id": "roof-door-b",
+          "layer": 2,
+          "x": 15,
+          "y": 5,
+          "switchIds": [
+            "roof-hidden-plate",
+            "roof-mid-plate"
           ]
         }
       ],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "roof-transfer-stamp",
+          "id": "tp-transfer-a1",
+          "layer": 0,
+          "x": 16,
+          "y": 1,
+          "pairId": "tp-transfer-a2"
+        },
+        {
+          "id": "tp-transfer-a2",
           "layer": 1,
           "x": 2,
-          "y": 4,
-          "direction": "right",
-          "distance": 2,
-          "appliesTo": [
-            "transfer"
-          ]
+          "y": 5,
+          "pairId": "tp-transfer-a1"
+        },
+        {
+          "id": "tp-transfer-b1",
+          "layer": 1,
+          "x": 15,
+          "y": 11,
+          "pairId": "tp-transfer-b2"
+        },
+        {
+          "id": "tp-transfer-b2",
+          "layer": 2,
+          "x": 2,
+          "y": 3,
+          "pairId": "tp-transfer-b1"
         }
       ],
       "balance": {
-        "intendedLesson": "Introduce transfer routing as a way to park a parcel across the fold without a long push setup.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 6,
-        "commonMisunderstanding": "Players often try to walk the parcel to the plate manually instead of trusting the transfer stamp."
+        "intendedLesson": "Triple parcel management across three layers with teleporter-assisted navigation.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 24,
+        "commonMisunderstanding": "Players try to walk the parcel manually."
       }
     },
     {
@@ -8584,10 +13192,7 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "requiresRooms": [
-        "rooftops-03"
-      ],
-      "objective": "Push the lantern into line, fold through both stitches, and trace the hidden rooftop note.",
+      "objective": "Combine projector, echo, one-way gates, and ice across three layers for the hidden rooftop note.",
       "blurb": "The skyline keeps one extra route for players who read the stamps and the folds together.",
       "intro": [
         {
@@ -8596,92 +13201,134 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "Set the lantern before you start climbing. The folded route only works once the bridge is already forwarded.",
-        "Push the lantern left once, climb to the top stitch, drop to the lower stitch on the middle sheet, then cross the forwarded bridge on the last sheet.",
-        "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down twice to the lower stitch, switch again, go up once, then cross right three times to the mailbox."
+        "The projector bridges the gap, the echo holds a door, one-way gates force your circuit. Ice adds momentum.",
+        "Push the projector onto ice to slide it into bridge position. Time the echo to hold the door. Navigate the one-way gate circuit through all three layers.",
+        "Push projector right onto ice where it slides to bridge position. Navigate one-way loop to echo timing area. Queue echo, wait for it to reach switch. Pass through door, descend via stitches, cross bridge to mailbox."
+      ],
+      "requiresRooms": [
+        "rooftops-03"
       ],
       "layers": [
         {
           "id": "sky-postscript-top",
           "name": "Upper Roof",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.######.###.#...#",
+            "#.>............#.#",
+            "#.#..#.#.#II.#.#.#",
+            "#.#.##.......#...#",
+            "#.v..###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.<.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#...#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "sky-postscript-middle",
           "name": "Margin Route",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#..S...#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.#.####.###.#...#",
+            "#..............#.#",
+            "#......#.#.S.#.#.#",
+            "#.###.##.......#.#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "sky-postscript-bottom",
           "name": "Skyline Note",
           "tiles": [
-            "########",
-            "#......#",
-            "#...~.G#",
-            "#..S...#",
-            "#......#",
-            "########"
+            "##################",
+            "#................#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..~.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 3,
-        "facing": "left"
+        "x": 1,
+        "y": 12,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "lantern-postscript",
           "type": "projector",
           "layer": 0,
-          "x": 4,
-          "y": 3,
+          "x": 7,
+          "y": 5,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
               "layer": 2,
-              "dx": 0,
-              "dy": -1
+              "dx": -2,
+              "dy": 0
             }
           ]
+        },
+        {
+          "id": "echo-sky",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
         }
       ],
-      "switches": [],
-      "doors": [],
-      "routingStamps": [
+      "switches": [
         {
-          "id": "sky-postscript-stamp",
+          "id": "sky-echo-plate",
+          "layer": 1,
+          "x": 14,
+          "y": 1
+        }
+      ],
+      "doors": [
+        {
+          "id": "sky-door",
           "layer": 2,
-          "x": 3,
-          "y": 2,
-          "direction": "right",
-          "distance": 1,
-          "appliesTo": [
-            "projection"
+          "x": 14,
+          "y": 12,
+          "switchIds": [
+            "sky-echo-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Turn projection routing into a longer folded route that still hinges on one bridge-placement insight.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 8,
-        "commonMisunderstanding": "Players often reach the lower stitch correctly but forget the bridge was forwarded one tile farther than the lamp suggests."
+        "intendedLesson": "Combine projector, echo timing, ice, and one-way gates.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 25,
+        "commonMisunderstanding": "Players forget the bridge was forwarded."
       }
     },
     {
@@ -8691,8 +13338,8 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Park the parcel, trust the forwarded lantern bridge, and reconnect the full rooftop line.",
-      "blurb": "The final rooftop route ties pressure, projection, and three stitched sheets into one letter-long climb.",
+      "objective": "Master all mechanics across four layers to reconnect the full rooftop delivery line.",
+      "blurb": "The final rooftop route ties every mechanic into one grand puzzle across four sheets.",
       "intro": [
         {
           "speaker": "Mina",
@@ -8706,9 +13353,9 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "Treat this as setup first and travel second. The parcel and lantern should be ready before you start climbing.",
-        "Push the parcel onto the plate, use the upper stitch to reach the middle sheet, then descend to the lower stitch before you cross the bridge.",
-        "Move left three times to park the parcel, climb to the upper stitch, switch to the middle sheet, descend to the lower stitch, switch again, then go up twice and right three times through the bridge and door."
+        "Four layers, multiple entities, all mechanics. Solve the setup on layer 0 before descending.",
+        "Push parcel onto switch, align projector, latch the shadow switch, then descend through all four layers using stitches and teleporters.",
+        "Push parcel to switch at (1,10). Push projector to bridge position. Move to latch shadow. Use top stitch to layer 1, navigate to teleporter, warp to layer 2, use stitch to layer 3, cross bridge through opened doors to the mailbox."
       ],
       "achievementId": "festival-line",
       "layers": [
@@ -8716,52 +13363,113 @@ export const CAMPAIGN_INDEX = {
           "id": "festival-line-top",
           "name": "Festival Roof",
           "tiles": [
-            "########",
-            "#.S....#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.........#.#",
+            "#.>...........v..#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
           ]
         },
         {
-          "id": "festival-line-middle",
-          "name": "Carrier Fold",
+          "id": "festival-line-mid1",
+          "name": "Carrier Fold A",
           "tiles": [
-            "########",
-            "#.S....#",
-            "#......#",
-            "#......#",
-            "#.S....#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.#.######.###...#",
+            "#..............#.#",
+            "#......#.#.#.#.#.#",
+            "#.###.##.......#.#",
+            "#.<...........^..#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
+          ]
+        },
+        {
+          "id": "festival-line-mid2",
+          "name": "Carrier Fold B",
+          "tiles": [
+            "##################",
+            "#.T..............#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.........#.#",
+            "#................#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
           ]
         },
         {
           "id": "festival-line-bottom",
           "name": "Delivery Lane",
           "tiles": [
-            "########",
-            "#......#",
-            "#..~DG.#",
-            "#......#",
-            "#.S....#",
-            "########"
+            "##################",
+            "#.T..............#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..~.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#................#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#...............G#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 14,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "festival-parcel",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 4,
+          "y": 14,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "festival-parcel-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 8,
+          "y": 8,
           "pushable": true,
           "solid": true
         },
@@ -8769,56 +13477,106 @@ export const CAMPAIGN_INDEX = {
           "id": "festival-lantern",
           "type": "projector",
           "layer": 0,
-          "x": 3,
+          "x": 8,
           "y": 3,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 2,
-              "dx": -1,
-              "dy": -1
+              "layer": 3,
+              "dx": -3,
+              "dy": 1
             }
           ]
+        },
+        {
+          "id": "festival-shadow",
+          "type": "shadow",
+          "layer": 1,
+          "x": 16,
+          "y": 14,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
         }
       ],
       "switches": [
         {
-          "id": "festival-line-plate",
+          "id": "festival-parcel-plate",
           "layer": 0,
           "x": 1,
-          "y": 4
+          "y": 14
+        },
+        {
+          "id": "festival-parcel-plate-b",
+          "layer": 0,
+          "x": 8,
+          "y": 12
+        },
+        {
+          "id": "festival-shadow-plate",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
         }
       ],
       "doors": [
         {
-          "id": "festival-line-door",
-          "layer": 2,
-          "x": 4,
-          "y": 2,
+          "id": "festival-door-a",
+          "layer": 3,
+          "x": 15,
+          "y": 14,
           "switchIds": [
-            "festival-line-plate"
+            "festival-parcel-plate",
+            "festival-parcel-plate-b"
+          ]
+        },
+        {
+          "id": "festival-door-b",
+          "layer": 3,
+          "x": 8,
+          "y": 3,
+          "switchIds": [
+            "festival-shadow-plate"
           ]
         }
       ],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "festival-line-stamp",
+          "id": "tp-festival-a1",
+          "layer": 1,
+          "x": 15,
+          "y": 1,
+          "pairId": "tp-festival-a2"
+        },
+        {
+          "id": "tp-festival-a2",
           "layer": 2,
           "x": 2,
-          "y": 2,
-          "direction": "right",
-          "distance": 1,
-          "appliesTo": [
-            "projection"
-          ]
+          "y": 1,
+          "pairId": "tp-festival-a1"
+        },
+        {
+          "id": "tp-festival-b1",
+          "layer": 2,
+          "x": 15,
+          "y": 12,
+          "pairId": "tp-festival-b2"
+        },
+        {
+          "id": "tp-festival-b2",
+          "layer": 3,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-festival-b1"
         }
       ],
       "balance": {
-        "intendedLesson": "Deliver a real finale by braiding parcel parking, forwarded projection, and three-layer travel into one readable route.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 9,
-        "commonMisunderstanding": "Players often start climbing before the parcel is parked and then have to unravel the whole route when the final door is still shut."
+        "intendedLesson": "The ultimate mixed-mechanic challenge across four layers.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 30,
+        "commonMisunderstanding": "Players start climbing before the parcel is parked."
       }
     },
     {
@@ -8828,49 +13586,118 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "objective": "Latch the hidden switch with your shadow, then climb into the rafters.",
-      "blurb": "A secret bonus room built around one permanent switch.",
+      "objective": "Use shadow, teleporters, ice, and one-way gates across three layers to reach the hidden mailbox.",
+      "blurb": "A secret bonus room built around shadow coordination with teleporter shortcuts.",
       "intro": [
         {
           "speaker": "Mina",
           "text": "You found the attic route. The old latch still works, if your shadow can reach it first."
         }
       ],
-      "hintTiers": [
-        "The switch only needs to be touched once.",
-        "Use your first move to the right to send the shadow onto the latch, then focus on reaching the stitch.",
-        "Move right to trigger the shadow latch, head for the stitch at the top, switch to the attic sheet, and follow the now-open route to the mailbox."
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+        }
       ],
+      "hintTiers": [
+        "The shadow must latch the switch via one-way gates while you navigate ice corridors and teleporters.",
+        "Move to place the shadow on the latch via one-way gate routing. Then use the teleporter to descend through layers.",
+        "Move right to send shadow left through one-way gate onto latch. Navigate the ice corridor to teleporter. Warp to layer 1, navigate maze to stitch, switch to layer 2, cross through opened door to mailbox."
+      ],
+      "achievementId": "attic-secret",
+      "requiresRooms": [
+        "clocktower-side-01",
+        "theater-side-01",
+        "rooftops-side-01"
+      ],
+      "secret": true,
       "layers": [
         {
           "id": "rafters-front",
           "name": "Rafters Front",
           "tiles": [
-            "#######",
-            "#.S...#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##################",
+            "#...S..........#.#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#II.#.#.#",
+            "#.#.##.......#...#",
+            "#.<..###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#...#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "rafters-mid1",
+          "name": "Rafters Middle A",
+          "tiles": [
+            "##################",
+            "#...S..T.......#.#",
+            "#.#.####.###.#...#",
+            "#..............#.#",
+            "#......#.#.#.#.#.#",
+            "#.###.##.......#.#",
+            "#.>........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "rafters-mid2",
+          "name": "Rafters Middle B",
+          "tiles": [
+            "##################",
+            "#................#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "rafters-back",
           "name": "Rafters Back",
           "tiles": [
-            "#######",
-            "#.S...#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##################",
+            "#.T..............#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 12,
         "facing": "right"
       },
       "entities": [
@@ -8878,66 +13705,98 @@ export const CAMPAIGN_INDEX = {
           "id": "shadow-b",
           "type": "shadow",
           "layer": 1,
-          "x": 5,
-          "y": 4,
+          "x": 16,
+          "y": 12,
           "solid": true,
           "pushable": false,
           "mirrorAxis": "vertical"
+        },
+        {
+          "id": "key-red-attic",
+          "type": "key",
+          "layer": 2,
+          "x": 10,
+          "y": 3,
+          "color": "red",
+          "solid": false,
+          "pushable": false
         }
       ],
       "switches": [
         {
           "id": "attic-latch",
           "layer": 1,
-          "x": 4,
-          "y": 4,
+          "x": 5,
+          "y": 3,
           "sticky": true
         }
       ],
       "doors": [
         {
           "id": "attic-door",
-          "layer": 1,
-          "x": 3,
-          "y": 2,
+          "layer": 3,
+          "x": 14,
+          "y": 12,
           "switchIds": [
             "attic-latch"
           ]
         }
       ],
-      "balance": {
-        "intendedLesson": "Teach sticky latches plus shadow setup in a short optional mastery room.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
-      },
-      "secret": true,
-      "achievementId": "attic-secret",
-      "outro": [
+      "teleporters": [
         {
-          "speaker": "Mina",
-          "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+          "id": "tp-attic-a1",
+          "layer": 0,
+          "x": 15,
+          "y": 1,
+          "pairId": "tp-attic-a2"
+        },
+        {
+          "id": "tp-attic-a2",
+          "layer": 1,
+          "x": 7,
+          "y": 1,
+          "pairId": "tp-attic-a1"
+        },
+        {
+          "id": "tp-attic-b1",
+          "layer": 1,
+          "x": 4,
+          "y": 9,
+          "pairId": "tp-attic-b2"
+        },
+        {
+          "id": "tp-attic-b2",
+          "layer": 3,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-attic-b1"
         }
       ],
-      "requiresRooms": [
-        "clocktower-side-01",
-        "theater-side-01",
-        "rooftops-side-01"
-      ]
+      "locks": [
+        {
+          "id": "lock-red-attic",
+          "layer": 3,
+          "x": 10,
+          "y": 8,
+          "color": "red"
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Shadow latching with ice, one-way gates, teleporters, and key/lock across four layers.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 25,
+        "commonMisunderstanding": "Players assume the shadow must keep standing on the switch."
+      }
     },
     {
       "id": "attic-02",
       "districtId": "attic",
       "title": "Folded Ledger",
       "optional": true,
-      "secret": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "requiresRooms": [
-        "attic-01"
-      ],
-      "objective": "Latch the shadow cue, drop through the rerouted stitch, and climb the ledger route.",
-      "blurb": "One hidden route folds through a second stitch only after the shadow has opened the door at the top.",
+      "objective": "Combine shadow, echo, two parcels, and all mechanics across three layers.",
+      "blurb": "One hidden route folds through complex machinery requiring every skill learned.",
       "intro": [
         {
           "speaker": "Mina",
@@ -8945,52 +13804,108 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The shadow setup happens before the stitched drop matters.",
-        "Move right once to latch the switch with the shadow, then climb to the stitch and let the routing stamp drop you to the lower one.",
-        "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+        "Shadow latches one door, echo holds another, both parcels must reach their switches. Everything happens across three layers.",
+        "Latch the shadow switch first. Time the echo for the second door. Transfer one parcel, push the other. Descend via stitches and teleporters.",
+        "Move right to latch shadow. Navigate to echo timing area, queue it toward switch via teleporter. Transfer parcel A to back layer switch. Push parcel B to visible switch. Descend through all three layers to the mailbox."
       ],
+      "requiresRooms": [
+        "attic-01"
+      ],
+      "secret": true,
       "layers": [
         {
           "id": "attic-ledger-top",
           "name": "Ledger Top",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.........#.#",
+            "#.>...........v..#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
           ]
         },
         {
-          "id": "attic-ledger-middle",
-          "name": "Ledger Fold",
+          "id": "attic-ledger-mid1",
+          "name": "Ledger Fold A",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#..S...#",
-            "########"
+            "##################",
+            "#...S..T.......#.#",
+            "#.#.######.###...#",
+            "#..............#.#",
+            "#......#.#.#.#.#.#",
+            "#.###.##.......#.#",
+            "#.<...........^..#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
+          ]
+        },
+        {
+          "id": "attic-ledger-mid2",
+          "name": "Ledger Fold B",
+          "tiles": [
+            "##################",
+            "#.T..............#",
+            "#.########.###...#",
+            "#.......RRRR..#..#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.S.......#.#",
+            "#................#",
+            "#.####.S.#.#.#.#.#",
+            "#..........F...#.#",
+            "#.########.F##...#",
+            "#..........F...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
           ]
         },
         {
           "id": "attic-ledger-bottom",
           "name": "Ledger Back",
           "tiles": [
-            "########",
-            "#....DG#",
-            "#......#",
-            "#......#",
-            "#..S...#",
-            "########"
+            "##################",
+            "#.T..............#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.S.......#.#",
+            "#................#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###..G#",
+            "#................#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 14,
         "facing": "right"
       },
       "entities": [
@@ -8998,51 +13913,167 @@ export const CAMPAIGN_INDEX = {
           "id": "shadow-ledger",
           "type": "shadow",
           "layer": 1,
-          "x": 5,
-          "y": 4,
+          "x": 16,
+          "y": 14,
           "solid": true,
           "pushable": false,
           "mirrorAxis": "vertical"
+        },
+        {
+          "id": "echo-ledger",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        },
+        {
+          "id": "parcel-ledger-a",
+          "type": "parcel",
+          "layer": 0,
+          "x": 6,
+          "y": 12,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-ledger-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 10,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "key-blue-ledger",
+          "type": "key",
+          "layer": 2,
+          "x": 14,
+          "y": 4,
+          "color": "blue",
+          "solid": false,
+          "pushable": false
         }
       ],
       "switches": [
         {
-          "id": "attic-ledger-latch",
+          "id": "attic-ledger-shadow-latch",
           "layer": 1,
-          "x": 4,
+          "x": 6,
           "y": 4,
           "sticky": true
+        },
+        {
+          "id": "attic-ledger-echo-switch",
+          "layer": 1,
+          "x": 14,
+          "y": 1
+        },
+        {
+          "id": "attic-ledger-parcel-plate",
+          "layer": 3,
+          "x": 6,
+          "y": 12
+        },
+        {
+          "id": "attic-ledger-visible-plate",
+          "layer": 0,
+          "x": 15,
+          "y": 13
         }
       ],
       "doors": [
         {
-          "id": "attic-ledger-door",
-          "layer": 2,
-          "x": 5,
+          "id": "attic-ledger-door-a",
+          "layer": 0,
+          "x": 7,
           "y": 1,
           "switchIds": [
-            "attic-ledger-latch"
+            "attic-ledger-shadow-latch"
+          ]
+        },
+        {
+          "id": "attic-ledger-door-b",
+          "layer": 1,
+          "x": 14,
+          "y": 4,
+          "switchIds": [
+            "attic-ledger-echo-switch"
+          ]
+        },
+        {
+          "id": "attic-ledger-door-c",
+          "layer": 3,
+          "x": 15,
+          "y": 13,
+          "switchIds": [
+            "attic-ledger-parcel-plate",
+            "attic-ledger-visible-plate"
           ]
         }
       ],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "attic-ledger-stamp",
+          "id": "tp-ledger-a1",
           "layer": 1,
-          "x": 3,
+          "x": 7,
           "y": 1,
-          "direction": "down",
-          "distance": 3,
-          "appliesTo": [
-            "switch"
-          ]
+          "pairId": "tp-ledger-a2"
+        },
+        {
+          "id": "tp-ledger-a2",
+          "layer": 1,
+          "x": 14,
+          "y": 8,
+          "pairId": "tp-ledger-a1"
+        },
+        {
+          "id": "tp-ledger-b1",
+          "layer": 1,
+          "x": 4,
+          "y": 12,
+          "pairId": "tp-ledger-b2"
+        },
+        {
+          "id": "tp-ledger-b2",
+          "layer": 2,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-ledger-b1"
+        },
+        {
+          "id": "tp-ledger-c1",
+          "layer": 2,
+          "x": 14,
+          "y": 12,
+          "pairId": "tp-ledger-c2"
+        },
+        {
+          "id": "tp-ledger-c2",
+          "layer": 3,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-ledger-c1"
+        }
+      ],
+      "locks": [
+        {
+          "id": "lock-blue-ledger",
+          "layer": 3,
+          "x": 12,
+          "y": 10,
+          "color": "blue"
         }
       ],
       "balance": {
-        "intendedLesson": "Blend the secret-route shadow latch with a routed drop that converts one stitched entry into a full attic climb.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 9,
-        "commonMisunderstanding": "Players often set the shadow correctly but keep searching the middle sheet for the goal instead of switching again immediately."
+        "intendedLesson": "Full-mechanic challenge with gravity, conveyors, and key/lock across four layers.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 30,
+        "commonMisunderstanding": "Players set the shadow correctly but keep searching the wrong sheet."
       }
     },
     {
@@ -9050,68 +14081,120 @@ export const CAMPAIGN_INDEX = {
       "districtId": "attic",
       "title": "Mina's Postscript",
       "optional": true,
-      "secret": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "requiresRooms": [
-        "attic-02"
-      ],
-      "objective": "Latch the final cue, trust both stamps, and carry the attic line to its last mailbox.",
-      "blurb": "The hidden route ends by combining a rerouted stitch with a forwarded lantern bridge.",
+      "objective": "Solve the ultimate puzzle using every mechanic across four layers.",
+      "blurb": "The hidden route ends by combining every mechanic the game has taught.",
       "intro": [
         {
           "speaker": "Mina",
           "text": "This is the one route I never wrote down cleanly. Set the shadow cue, trust the drop, and let the lantern finish the sentence."
         }
       ],
-      "achievementId": "secret-line",
       "hintTiers": [
-        "The first move sets the shadow cue. After that, the stamps do the clever part for you.",
-        "Move right once so the shadow latches the switch, climb to the upper stitch, let it drop you to the lower stitch, then follow the lantern bridge through the final door.",
-        "Move right, go up three times, switch sheets, switch again, go up twice, then cross right three times through the bridge and the opened door to the mailbox."
+        "Four layers, shadow, projector, teleporters, ice, one-way gates. Everything converges here.",
+        "Shadow latches door on layer 1. Projector bridges gap on layer 3. Ice and one-way gates control your path. Teleporters connect the layers.",
+        "Move right to latch shadow. Push projector onto ice to bridge position on layer 3. Navigate one-way circuit to top stitch. Descend: layer 1 stitch to layer 2, teleporter to layer 3, cross bridge through opened door to mailbox."
       ],
+      "achievementId": "secret-line",
+      "requiresRooms": [
+        "attic-02"
+      ],
+      "secret": true,
       "layers": [
         {
           "id": "postscript-top",
           "name": "Postscript Front",
           "tiles": [
-            "########",
-            "#.S....#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.##########.#...#",
+            "#.>............#.#",
+            "#.#..#.#.#.#II.#.#",
+            "#.#.##.........#.#",
+            "#.v..............#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#................#",
+            "##################"
           ]
         },
         {
-          "id": "postscript-middle",
-          "name": "Postscript Fold",
+          "id": "postscript-mid1",
+          "name": "Postscript Fold A",
           "tiles": [
-            "########",
-            "#.S....#",
-            "#......#",
-            "#......#",
-            "#.S....#",
-            "########"
+            "##################",
+            "#...S..T.......#.#",
+            "#.#.########.#...#",
+            "#.<............#.#",
+            "#......#.#.#.#.#.#",
+            "#.###.##.......#.#",
+            "#.^..............#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#................#",
+            "##################"
+          ]
+        },
+        {
+          "id": "postscript-mid2",
+          "name": "Postscript Fold B",
+          "tiles": [
+            "##################",
+            "#.T..............#",
+            "#.##########.#...#",
+            "#...DDDDDD.....#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.........#.#",
+            "#...UUUUUU.......#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#..........F...#.#",
+            "#.####.###.F.#...#",
+            "#..........F...#.#",
+            "#.##########.#...#",
+            "#................#",
+            "##################"
           ]
         },
         {
           "id": "postscript-back",
           "name": "Postscript Route",
           "tiles": [
-            "########",
-            "#......#",
-            "#..~DG.#",
-            "#......#",
-            "#.S....#",
-            "########"
+            "##################",
+            "#.T..............#",
+            "#.##########.#...#",
+            "#..............#.#",
+            "#.#..~.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#................#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#...............G#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 14,
         "facing": "right"
       },
       "entities": [
@@ -9119,8 +14202,8 @@ export const CAMPAIGN_INDEX = {
           "id": "shadow-postscript",
           "type": "shadow",
           "layer": 1,
-          "x": 5,
-          "y": 4,
+          "x": 16,
+          "y": 14,
           "solid": true,
           "pushable": false,
           "mirrorAxis": "vertical"
@@ -9129,24 +14212,44 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-postscript",
           "type": "projector",
           "layer": 0,
-          "x": 3,
-          "y": 3,
+          "x": 8,
+          "y": 4,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 2,
-              "dx": -1,
-              "dy": -1
+              "layer": 3,
+              "dx": -3,
+              "dy": 0
             }
           ]
+        },
+        {
+          "id": "key-yellow-post",
+          "type": "key",
+          "layer": 2,
+          "x": 14,
+          "y": 6,
+          "color": "yellow",
+          "solid": false,
+          "pushable": false
+        },
+        {
+          "id": "key-green-post",
+          "type": "key",
+          "layer": 3,
+          "x": 6,
+          "y": 8,
+          "color": "green",
+          "solid": false,
+          "pushable": false
         }
       ],
       "switches": [
         {
           "id": "postscript-latch",
           "layer": 1,
-          "x": 4,
+          "x": 6,
           "y": 4,
           "sticky": true
         }
@@ -9154,43 +14257,79 @@ export const CAMPAIGN_INDEX = {
       "doors": [
         {
           "id": "postscript-door",
-          "layer": 2,
-          "x": 4,
-          "y": 2,
+          "layer": 3,
+          "x": 15,
+          "y": 14,
           "switchIds": [
             "postscript-latch"
           ]
         }
       ],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "postscript-switch-stamp",
+          "id": "tp-post-a1",
           "layer": 1,
-          "x": 2,
+          "x": 7,
           "y": 1,
-          "direction": "down",
-          "distance": 3,
-          "appliesTo": [
-            "switch"
-          ]
+          "pairId": "tp-post-a2"
         },
         {
-          "id": "postscript-bridge-stamp",
+          "id": "tp-post-a2",
+          "layer": 1,
+          "x": 14,
+          "y": 8,
+          "pairId": "tp-post-a1"
+        },
+        {
+          "id": "tp-post-b1",
+          "layer": 1,
+          "x": 4,
+          "y": 12,
+          "pairId": "tp-post-b2"
+        },
+        {
+          "id": "tp-post-b2",
           "layer": 2,
           "x": 2,
-          "y": 2,
-          "direction": "right",
-          "distance": 1,
-          "appliesTo": [
-            "projection"
-          ]
+          "y": 1,
+          "pairId": "tp-post-b1"
+        },
+        {
+          "id": "tp-post-c1",
+          "layer": 2,
+          "x": 15,
+          "y": 12,
+          "pairId": "tp-post-c2"
+        },
+        {
+          "id": "tp-post-c2",
+          "layer": 3,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-post-c1"
+        }
+      ],
+      "locks": [
+        {
+          "id": "lock-yellow-post",
+          "layer": 3,
+          "x": 10,
+          "y": 10,
+          "color": "yellow"
+        },
+        {
+          "id": "lock-green-post",
+          "layer": 3,
+          "x": 12,
+          "y": 12,
+          "color": "green"
         }
       ],
       "balance": {
-        "intendedLesson": "Finish the secret route by combining the two routing channels players learned separately into one clean attic postscript.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 10,
-        "commonMisunderstanding": "Players often remember the stitched drop but forget the lantern bridge is also being rerouted by a second stamp."
+        "intendedLesson": "The ultimate finale combining every mechanic across four layers.",
+        "targetDifficulty": 10,
+        "expectedSolveMinutes": 35,
+        "commonMisunderstanding": "Players forget the lantern bridge is being rerouted."
       }
     }
   ],
@@ -9358,35 +14497,47 @@ export const CAMPAIGN_INDEX = {
           "text": "Stitch markers connect identical coordinates. Stand on one and flip the room over."
         }
       ],
-      "achievementId": "first-stamp",
       "hintTiers": [
-        "You do not need every corridor on the first sheet. Look for the stitched square.",
-        "The stitch in the top layer lines up with another stitch below it. Switch layers from there.",
-        "Walk to the stitch on the front sheet, switch to the back sheet, then take the open route to the mailbox."
+        "The front sheet is a winding maze. Find the stitch hidden in the corridors.",
+        "Navigate to the center of the front maze, find the stitch at column 4 row 3, then switch layers.",
+        "From start go right, right, down, down, right, right, up to reach the stitch. Switch layers, then go right, down, down, right, up to the mailbox."
       ],
+      "achievementId": "first-stamp",
       "layers": [
         {
           "id": "front",
           "name": "Front Sheet",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.###.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "############",
+            "#..........#",
+            "#.####.###.#",
+            "#.#..#.....#",
+            "#.#..#.###.#",
+            "#....#.#SS.#",
+            "#.##.#.#.#.#",
+            "#....#...#.#",
+            "#.####.###.#",
+            "#.#........#",
+            "#.#.######.#",
+            "############"
           ]
         },
         {
           "id": "back",
           "name": "Address Sheet",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.###G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "############",
+            "#.###....#.#",
+            "#.....##.#.#",
+            "#.###.#..#.#",
+            "#.#...#.##.#",
+            "#.#.###.SS.#",
+            "#.#.....##.#",
+            "#.###.#..#.#",
+            "#.....#.##.#",
+            "#.###.#....#",
+            "#.....#..G.#",
+            "############"
           ]
         }
       ],
@@ -9400,9 +14551,9 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach stitched layer switching as the core route-solving verb.",
-        "targetDifficulty": 1,
-        "expectedSolveMinutes": 2,
+        "intendedLesson": "Teach stitched layer switching through a winding dual-layer maze.",
+        "targetDifficulty": 3,
+        "expectedSolveMinutes": 8,
         "commonMisunderstanding": "Players over-search the front sheet instead of treating the stitch as required progress."
       }
     },
@@ -9413,8 +14564,8 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Transfer the parcel out of your path and reach the mailbox.",
-      "blurb": "The parcel is in the right place on the wrong sheet.",
+      "objective": "Transfer both parcels and navigate past the blocked corridors to reach the mailbox.",
+      "blurb": "Two parcels block the only corridors wide enough for a postkeeper.",
       "intro": [
         {
           "speaker": "Mina",
@@ -9422,40 +14573,48 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "This parcel is not meant to be pushed down the hall.",
-        "Stand next to the parcel and transfer it to the other layer instead of shoving it forward.",
-        "Move to the tile left of the parcel, press transfer, then walk through the cleared lane to the mailbox."
+        "Both parcels block critical corridors. You need to transfer them, not push them into dead ends.",
+        "Transfer parcel A first to clear the lower corridor, then navigate up to transfer parcel B and reach the stitch.",
+        "Go right twice, transfer parcel A to the back sheet, go up twice, right twice, transfer parcel B, go up to the stitch, switch layers, then navigate down and right to the mailbox."
       ],
       "layers": [
         {
           "id": "front",
           "name": "Front Sheet",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.###.#",
-            "#...G.#",
-            "#.....#",
-            "#######"
+            "############",
+            "#....S...#.#",
+            "#.####.#...#",
+            "#.#......#.#",
+            "#.#.##.#.#.#",
+            "#......#...#",
+            "#.##.###.#.#",
+            "#........#.#",
+            "#.####.....#",
+            "############"
           ]
         },
         {
           "id": "back",
           "name": "Back Sheet",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.###.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "############",
+            "#....S.....#",
+            "#.#..####..#",
+            "#.#......#.#",
+            "#.####.#.#.#",
+            "#......#...#",
+            "#.##.#.###.#",
+            "#....#.....#",
+            "#.####...G.#",
+            "############"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 3,
+        "y": 8,
         "facing": "right"
       },
       "entities": [
@@ -9464,7 +14623,25 @@ export const CAMPAIGN_INDEX = {
           "type": "parcel",
           "layer": 0,
           "x": 3,
+          "y": 5,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 7,
           "y": 3,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-c",
+          "type": "parcel",
+          "layer": 0,
+          "x": 5,
+          "y": 7,
           "pushable": true,
           "solid": true
         }
@@ -9472,10 +14649,10 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach parcel transfer as a cleaner alternative to pushing.",
-        "targetDifficulty": 1,
-        "expectedSolveMinutes": 2,
-        "commonMisunderstanding": "Players try to push the parcel down the lane rather than moving it between layers."
+        "intendedLesson": "Teach parcel transfer with three parcels blocking critical corridors.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 10,
+        "commonMisunderstanding": "Players try to push parcels into dead ends rather than transferring them between layers."
       }
     },
     "mailroom-03": {
@@ -9485,114 +14662,66 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Nudge the parcel aside, switch sheets, and take the shortcut to the mailbox.",
-      "blurb": "The quickest route only opens once the crease is clear.",
+      "objective": "Find the one working stitch path through the maze of decoy stitches.",
+      "blurb": "Multiple stitches dot both sheets, but only one sequence leads to the mailbox.",
       "intro": [
         {
           "speaker": "Mina",
-          "text": "Sometimes you push first and transfer second. Clear the lane, then use the stitch at the end."
+          "text": "Not every stitch leads somewhere useful. Some drop you into dead ends on the other sheet. Read both sides before you jump."
         }
       ],
       "hintTiers": [
-        "You only need the parcel out of the stitched lane, not far away from it.",
-        "Push the parcel once so you can stand beside it, then transfer it before stepping on the stitch.",
-        "Move right twice, transfer the parcel to the back sheet, walk onto the stitch, switch layers, and climb straight to the mailbox."
+        "Three stitches are visible but only one sequence avoids dead ends on the back sheet.",
+        "The leftmost stitch drops you into a walled corner. The center stitch is the correct first jump. Then navigate to the second stitch on the back sheet.",
+        "Navigate right and up to the center stitch at (4,2), switch layers, go down and left to the lower stitch at (2,5), switch back, then go right to the mailbox."
       ],
       "layers": [
         {
           "id": "crease-front",
           "name": "Crease Front",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.###.#",
-            "#....S#",
-            "#.....#",
-            "#######"
+            "############",
+            "#.#....#...#",
+            "#...##.#.#.#",
+            "#.#.#..S.#.#",
+            "#.#.#.##...#",
+            "#.#.S....#.#",
+            "#...#.##.#.#",
+            "#.#S#....#.#",
+            "#.#....##..#",
+            "############"
+          ]
+        },
+        {
+          "id": "crease-mid",
+          "name": "Crease Middle",
+          "tiles": [
+            "############",
+            "#.###..#...#",
+            "#......#.#.#",
+            "#.#.#..S.#.#",
+            "#.#.#.##...#",
+            "#.#.S..#.#.#",
+            "#...####.#.#",
+            "#.#S#....#.#",
+            "#.#......#.#",
+            "############"
           ]
         },
         {
           "id": "crease-back",
           "name": "Crease Back",
           "tiles": [
-            "#######",
-            "#....G#",
-            "#.###.#",
-            "#....S#",
-            "#.....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 3,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "parcel-forward",
-          "type": "parcel",
-          "layer": 0,
-          "x": 3,
-          "y": 3,
-          "pushable": true,
-          "solid": true
-        }
-      ],
-      "switches": [],
-      "doors": [],
-      "balance": {
-        "intendedLesson": "Recombine a single push, a transfer, and a stitch into one clean route.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players push the parcel again instead of transferring it once it has been nudged into position."
-      }
-    },
-    "mailroom-side-01": {
-      "id": "mailroom-side-01",
-      "districtId": "mailroom",
-      "title": "Return Receipt",
-      "optional": true,
-      "unlockCost": 0,
-      "postmarks": 0,
-      "objective": "Switch to the back sheet, travel to the lower stitch, and return on the right layer.",
-      "blurb": "A side route that rewards noticing the second stitch before the goal.",
-      "intro": [
-        {
-          "speaker": "Mina",
-          "text": "Some routes ask you to fold the room twice before they make sense."
-        }
-      ],
-      "hintTiers": [
-        "The first stitch is not the end of the route. It only gets you to the right sheet.",
-        "Use the top stitch first, then travel downward on the back sheet until you find the second stitch.",
-        "Walk to the top stitch, switch to the back sheet, climb down to the lower stitch, switch back, and finish on the front sheet."
-      ],
-      "layers": [
-        {
-          "id": "receipt-front",
-          "name": "Receipt Front",
-          "tiles": [
-            "#######",
-            "#..S..#",
-            "#.###.#",
-            "#.....#",
-            "#..S.G#",
-            "#######"
-          ]
-        },
-        {
-          "id": "receipt-back",
-          "name": "Receipt Back",
-          "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#..S..#",
-            "#######"
+            "############",
+            "#.#.##.#...#",
+            "#......#.#.#",
+            "#.###..S.#.#",
+            "#.#...##...#",
+            "#.#.S..#.#.#",
+            "#.#.####.#.#",
+            "#.#S#......#",
+            "#.#..#.#..G#",
+            "############"
           ]
         }
       ],
@@ -9606,10 +14735,96 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach that the shortest mailroom routes can alternate between sheets twice.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is effectively solved."
+        "intendedLesson": "Teach players to read three layers before committing to a stitch path.",
+        "targetDifficulty": 4,
+        "expectedSolveMinutes": 12,
+        "commonMisunderstanding": "Players jump at the first stitch they find and end up trapped."
+      }
+    },
+    "mailroom-side-01": {
+      "id": "mailroom-side-01",
+      "districtId": "mailroom",
+      "title": "Return Receipt",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Switch layers three times using the winding stitch network to reach the goal.",
+      "blurb": "A side route that rewards noticing every stitch before choosing your path.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "Some routes ask you to fold the room twice before they make sense."
+        }
+      ],
+      "hintTiers": [
+        "You need to use three different stitches, alternating layers each time.",
+        "Start on the front sheet, take the top-left stitch, navigate down on the back sheet to the center stitch, switch back, then find the bottom stitch.",
+        "Go right to stitch at (3,1), switch layers, go down through corridors to stitch at (5,4), switch back, navigate left and down to stitch at (2,6), switch layers, go right to mailbox."
+      ],
+      "layers": [
+        {
+          "id": "receipt-front",
+          "name": "Receipt Front",
+          "tiles": [
+            "############",
+            "#..S.....#.#",
+            "#.###.##...#",
+            "#.....#..#.#",
+            "#.###.#.##.#",
+            "#.#...S..#.#",
+            "#.#.###....#",
+            "#.....#.##.#",
+            "#.#S#......#",
+            "############"
+          ]
+        },
+        {
+          "id": "receipt-mid",
+          "name": "Receipt Middle",
+          "tiles": [
+            "############",
+            "#..S..##.#.#",
+            "#.......#..#",
+            "#.###.#..#.#",
+            "#.#...####.#",
+            "#.#...S....#",
+            "#.###.#.##.#",
+            "#.....#..#.#",
+            "#.#S#..#...#",
+            "############"
+          ]
+        },
+        {
+          "id": "receipt-back",
+          "name": "Receipt Back",
+          "tiles": [
+            "############",
+            "#..S.#...#.#",
+            "#.#....#...#",
+            "#.###.##.#.#",
+            "#.#......#.#",
+            "#.#.#.S.##.#",
+            "#.....#....#",
+            "#.###.####.#",
+            "#.#S#.....G#",
+            "############"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 1,
+        "facing": "right"
+      },
+      "entities": [],
+      "switches": [],
+      "doors": [],
+      "balance": {
+        "intendedLesson": "Teach routes alternating between three sheets with stitch planning.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 12,
+        "commonMisunderstanding": "Players reach the first stitch and assume the puzzle is solved."
       }
     },
     "mailroom-04": {
@@ -9619,8 +14834,8 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Free the stitch lane, climb to the top fold, then return on the front sheet to the mailbox.",
-      "blurb": "The final mailroom route loops through the back sheet before it is readable.",
+      "objective": "Push parcels onto switches across both layers to open the door blocking the mailbox.",
+      "blurb": "The final mailroom route demands parcel management across winding corridors and two layers.",
       "intro": [
         {
           "speaker": "Mina",
@@ -9634,60 +14849,141 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The stitch at the far right gets you onto the correct sheet, but not yet to the goal.",
-        "Transfer the parcel away from the lower stitch, switch there, then travel to the upper stitch on the back sheet.",
-        "Move right twice, transfer the parcel, switch at the lower stitch, climb to the upper stitch on the back sheet, switch again, and finish on the front."
+        "One parcel goes on the visible switch, the other must be transferred to the back sheet's switch.",
+        "Push parcel A left onto the front switch first, then navigate to parcel B and transfer it to the back sheet where it lands on the hidden switch.",
+        "Push parcel A left onto switch at (1,6), go up and right to parcel B, transfer it to the back layer where it lands on the switch at (6,3), use the stitch, navigate through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "dated-front",
           "name": "Dated Front",
           "tiles": [
-            "#######",
-            "#..S.G#",
-            "#.###.#",
-            "#....S#",
-            "#.....#",
-            "#######"
+            "############",
+            "#...S....#.#",
+            "#.####.#...#",
+            "#.#......#.#",
+            "#.#.##.#.#.#",
+            "#......#...#",
+            "#.##.###.#.#",
+            "#........#.#",
+            "#.####.#...#",
+            "############"
+          ]
+        },
+        {
+          "id": "dated-mid",
+          "name": "Dated Middle",
+          "tiles": [
+            "############",
+            "#...S......#",
+            "#.#..####..#",
+            "#.#......#.#",
+            "#.####.#.#.#",
+            "#......S.S.#",
+            "#.##.#.###.#",
+            "#....#.....#",
+            "#.####.#...#",
+            "############"
           ]
         },
         {
           "id": "dated-back",
           "name": "Dated Back",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#....S#",
-            "#.....#",
-            "#######"
+            "############",
+            "#...S......#",
+            "#.#.####.#.#",
+            "#.#......#.#",
+            "#...##.#.#.#",
+            "#.#..#.S.S.#",
+            "#.####.###.#",
+            "#......#...#",
+            "#.##.#...G.#",
+            "############"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 3,
+        "y": 8,
         "facing": "right"
       },
       "entities": [
         {
-          "id": "parcel-dated",
+          "id": "parcel-a",
           "type": "parcel",
           "layer": 0,
-          "x": 4,
+          "x": 3,
+          "y": 7,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 7,
           "y": 3,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-c",
+          "type": "parcel",
+          "layer": 1,
+          "x": 6,
+          "y": 7,
           "pushable": true,
           "solid": true
         }
       ],
-      "switches": [],
-      "doors": [],
+      "switches": [
+        {
+          "id": "front-plate",
+          "layer": 0,
+          "x": 1,
+          "y": 7
+        },
+        {
+          "id": "mid-plate",
+          "layer": 1,
+          "x": 8,
+          "y": 3
+        },
+        {
+          "id": "back-plate",
+          "layer": 2,
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "doors": [
+        {
+          "id": "dated-door-a",
+          "layer": 1,
+          "x": 9,
+          "y": 5,
+          "switchIds": [
+            "front-plate",
+            "mid-plate"
+          ]
+        },
+        {
+          "id": "dated-door-b",
+          "layer": 2,
+          "x": 9,
+          "y": 8,
+          "switchIds": [
+            "back-plate"
+          ]
+        }
+      ],
       "balance": {
-        "intendedLesson": "Cap the mailroom by chaining transfer with two distinct sheet swaps.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players switch at the lower stitch and then look for the goal immediately instead of climbing to the upper stitch first."
+        "intendedLesson": "Cap the mailroom with three-layer traversal and triple-switch door logic.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players switch too early without managing all parcels first."
       }
     },
     "market-01": {
@@ -9697,86 +14993,110 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Leave a parcel on the plate, switch layers, and use the opened route.",
-      "blurb": "The market lifts its shutters with simple pressure plates.",
+      "objective": "Slide across ice to reach the switch, park the parcel, and take the opened route.",
+      "blurb": "The market lifts its shutters with pressure plates, but the floor is slick with ice.",
       "intro": [
         {
           "speaker": "Market Clerk",
-          "text": "A good parcel is sometimes more useful parked on a plate than delivered."
+          "text": "Ice corridors slide you until you hit something solid. Plan your approach before you step onto the frost."
         }
       ],
       "hintTiers": [
-        "The plate is meant to stay pressed while you move away from it.",
-        "Push the parcel onto the plate first, then go use the stitch marker.",
-        "Move the parcel onto the floor plate in the front sheet, walk to the stitch, switch to the back sheet, and use the now-open door."
+        "The ice corridor slides you all the way across. You need something solid to stop against.",
+        "Push the parcel into the ice lane first so it acts as a stopping block, then slide into position near the switch.",
+        "Push parcel right onto ice, slide right to stop against it, push it right onto the switch, navigate up to the stitch, switch layers, go through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "awnings",
           "name": "Awnings",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#....S.....#.#",
+            "#.####.###...#",
+            "#.#........#.#",
+            "#.#.##.#.#.#.#",
+            "#......#IIII.#",
+            "#.##.###.#.#.#",
+            "#........#.#.#",
+            "#.####.#.....#",
+            "##############"
           ]
         },
         {
           "id": "arcade",
           "name": "Arcade",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#....S.....#.#",
+            "#.#....###...#",
+            "#.#.##.....#.#",
+            "#......#.#.#.#",
+            "#.####.#.....#",
+            "#.#..###.#.#.#",
+            "#.#......#.#.#",
+            "#.####.....G.#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 8,
+        "facing": "right"
       },
       "entities": [
+        {
+          "id": "parcel-a",
+          "type": "parcel",
+          "layer": 0,
+          "x": 4,
+          "y": 5,
+          "pushable": true,
+          "solid": true
+        },
         {
           "id": "parcel-b",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 6,
+          "y": 3,
           "pushable": true,
           "solid": true
         }
       ],
       "switches": [
         {
-          "id": "market-plate",
+          "id": "market-plate-a",
           "layer": 0,
-          "x": 1,
-          "y": 4
+          "x": 12,
+          "y": 5
+        },
+        {
+          "id": "market-plate-b",
+          "layer": 1,
+          "x": 6,
+          "y": 3
         }
       ],
       "doors": [
         {
           "id": "market-door",
           "layer": 1,
-          "x": 3,
-          "y": 2,
+          "x": 11,
+          "y": 8,
           "switchIds": [
-            "market-plate"
+            "market-plate-a",
+            "market-plate-b"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Teach persistent door pressure with parcels and cross-layer route payoff.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players carry the parcel around instead of parking it on the plate first."
+        "intendedLesson": "Introduce ice tiles with parcel-as-blocker and dual switches.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 12,
+        "commonMisunderstanding": "Players step onto ice without a stopping block."
       }
     },
     "market-side-01": {
@@ -9786,59 +15106,67 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "objective": "Park the parcel on the plate, switch layers, and take the reopened shortcut above the stalls.",
-      "blurb": "A side route that asks you to read a shutter and a stitch at the same time.",
+      "objective": "Push the parcel across ice to land on the distant plate, then take the shortcut.",
+      "blurb": "A side route that asks you to aim a parcel slide precisely.",
       "intro": [
         {
           "speaker": "Market Clerk",
           "text": "The side lane is lighter than the main route. Prop the shutter and steal the short way across."
         }
       ],
-      "achievementId": "side-route",
       "hintTiers": [
-        "The shortcut only matters after the plate is already held down.",
-        "Push the parcel onto the front plate first, then climb to the stitch instead of heading for the goal immediately.",
-        "Push the parcel onto the plate at the lower left, walk to the stitch on the top lane, switch to the back sheet, and take the reopened shortcut to the mailbox."
+        "The parcel must slide across ice and stop exactly on the switch. Plan your push direction.",
+        "Push the parcel downward so it slides on ice and stops against the far wall, landing on the switch.",
+        "Navigate above the parcel, push it down onto the ice lane where it slides to the switch at (3,6). Use the stitch, switch layers, and cross through the opened door to the mailbox."
       ],
+      "achievementId": "side-route",
       "layers": [
         {
           "id": "stall-front",
           "name": "Stall Front",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#....S.....#.#",
+            "#.####.###...#",
+            "#.#........#.#",
+            "#.#I##.#.#.#.#",
+            "#..I...#.....#",
+            "#.#I.###.#.#.#",
+            "#..I.....#.#.#",
+            "#.#I##.#.....#",
+            "##############"
           ]
         },
         {
           "id": "stall-back",
           "name": "Stall Back",
           "tiles": [
-            "#######",
-            "#..S.G#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#....S.....#.#",
+            "#.####.###...#",
+            "#.#........G.#",
+            "#.#.##.#.#.#.#",
+            "#......#.....#",
+            "#.##.###.#.#.#",
+            "#........#.#.#",
+            "#.####.#.....#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 1,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "parcel-stall",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 3,
+          "y": 3,
           "pushable": true,
           "solid": true
         }
@@ -9847,26 +15175,26 @@ export const CAMPAIGN_INDEX = {
         {
           "id": "stall-plate",
           "layer": 0,
-          "x": 1,
-          "y": 4
+          "x": 3,
+          "y": 8
         }
       ],
       "doors": [
         {
           "id": "stall-door",
           "layer": 1,
-          "x": 4,
-          "y": 1,
+          "x": 11,
+          "y": 3,
           "switchIds": [
             "stall-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Reinforce visible plates and door logic in a shorter optional room.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players head for the stitch first and only later realize the shortcut itself is still closed."
+        "intendedLesson": "Reinforce ice-slide physics with precise parcel aiming.",
+        "targetDifficulty": 5,
+        "expectedSolveMinutes": 10,
+        "commonMisunderstanding": "Players push the parcel sideways instead of down the ice column."
       }
     },
     "market-02": {
@@ -9876,7 +15204,7 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Send the parcel through the hidden counter slot and walk through the raised shutter.",
+      "objective": "Use ice lanes and two switches to open the path. One parcel slides, one parks.",
       "blurb": "Some market plates live on the back sheet, far from the player.",
       "intro": [
         {
@@ -9885,40 +15213,70 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The shutter opens from a place you cannot stand on yourself.",
-        "Move next to the parcel and transfer it onto the switch behind the counter before walking to the door.",
-        "Step right once, transfer the parcel to the back sheet, then walk up and across the opened shutter to the mailbox."
+        "Two switches control the door. One is visible on ice, the other is hidden on the back layer.",
+        "Slide one parcel across ice onto the visible switch, then transfer the other parcel to land on the hidden switch.",
+        "Push parcel A right across ice to the visible switch. Navigate to parcel B and transfer it to the back layer where it lands on the hidden switch. Use the stitch, walk through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "counter-front",
           "name": "Counter Front",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#...S......#.#",
+            "#.####.###...#",
+            "#.#........#.#",
+            "#.#.##.#.#.#.#",
+            "#......#IIII.#",
+            "#.##.###.#.#.#",
+            "#........#.#.#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####.....#",
+            "##############"
+          ]
+        },
+        {
+          "id": "counter-mid",
+          "name": "Counter Middle",
+          "tiles": [
+            "##############",
+            "#...S......#.#",
+            "#.#.##.###...#",
+            "#.#........#.#",
+            "#.####.#.#.#.#",
+            "#......#.S...#",
+            "#.##.###.#.#.#",
+            "#........#.S.#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####.....#",
+            "##############"
           ]
         },
         {
           "id": "counter-back",
           "name": "Counter Back",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#...S......#.#",
+            "#.#..####....#",
+            "#.#........#.#",
+            "#...##.#.#.#.#",
+            "#.#..#.#.S...#",
+            "#.####.###.#.#",
+            "#......#...S.#",
+            "#.##.#...#.#.#",
+            "#.#....#.#.#.#",
+            "#.####.....G.#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 10,
         "facing": "right"
       },
       "entities": [
@@ -9927,35 +15285,75 @@ export const CAMPAIGN_INDEX = {
           "type": "parcel",
           "layer": 0,
           "x": 3,
-          "y": 4,
+          "y": 5,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-counter",
+          "type": "parcel",
+          "layer": 0,
+          "x": 6,
+          "y": 9,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-hidden",
+          "type": "parcel",
+          "layer": 1,
+          "x": 8,
+          "y": 3,
           "pushable": true,
           "solid": true
         }
       ],
       "switches": [
         {
-          "id": "counter-hidden-plate",
+          "id": "counter-visible-plate",
+          "layer": 0,
+          "x": 12,
+          "y": 5
+        },
+        {
+          "id": "counter-mid-plate",
           "layer": 1,
-          "x": 3,
-          "y": 4
+          "x": 6,
+          "y": 9
+        },
+        {
+          "id": "counter-hidden-plate",
+          "layer": 2,
+          "x": 8,
+          "y": 3
         }
       ],
       "doors": [
         {
-          "id": "counter-shutter",
-          "layer": 0,
-          "x": 3,
-          "y": 2,
+          "id": "counter-shutter-a",
+          "layer": 1,
+          "x": 10,
+          "y": 7,
           "switchIds": [
+            "counter-visible-plate"
+          ]
+        },
+        {
+          "id": "counter-shutter-b",
+          "layer": 2,
+          "x": 11,
+          "y": 10,
+          "switchIds": [
+            "counter-mid-plate",
             "counter-hidden-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Teach that a transfer can activate a switch the player will never physically touch.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players search for a walking path behind the counter instead of treating the parcel as the route's stand-in."
+        "intendedLesson": "Combine ice sliding with cross-layer switch activation using three parcels.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players search for a walking path behind the counter."
       }
     },
     "market-side-02": {
@@ -9965,8 +15363,8 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "objective": "Transfer the parcel onto the hidden plate, switch layers, and use the back-lane shutter.",
-      "blurb": "A side room that mixes the counter-slot trick with a stitched shortcut.",
+      "objective": "Navigate an ice maze that spans both layers, using stitches to bypass blocked corridors.",
+      "blurb": "A side room that turns the entire floor into a sliding puzzle across two sheets.",
       "intro": [
         {
           "speaker": "Market Clerk",
@@ -9974,77 +15372,58 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The parcel belongs on the hidden switch before you ever touch the stitch.",
-        "Transfer the parcel first, then walk to the stitch on the front sheet and switch to the back lane.",
-        "Move right once, transfer the parcel onto the hidden plate, climb to the stitch on the front sheet, switch layers, and take the opened back-lane route to the mailbox."
+        "The ice fills most of both layers. You need walls and stitches as stopping points.",
+        "Slide right on ice, stop at the wall, then slide down to the stitch. Switch layers and navigate the back ice maze.",
+        "Slide right to wall, slide down to stitch at (7,4), switch layers, slide left to wall at (1,4), slide down to (1,6), slide right to wall, slide up to mailbox."
       ],
       "layers": [
         {
           "id": "ledger-front",
           "name": "Ledger Front",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#III#IIIIIIII#",
+            "#I#II...#I..I#",
+            "#I......#I#.I#",
+            "#III#I.ISI..I#",
+            "#I#II..#I#..I#",
+            "#I.......I#.I#",
+            "#I##.#I..I..I#",
+            "#I.......IIII#",
+            "##############"
           ]
         },
         {
           "id": "ledger-back",
           "name": "Ledger Back",
           "tiles": [
-            "#######",
-            "#..S.G#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#III#IIIIIIII#",
+            "#I...#II..I.I#",
+            "#I#I.....GI.I#",
+            "#I.II#.ISI..I#",
+            "#I.....#I...I#",
+            "#I###....I#.I#",
+            "#I......#I..I#",
+            "#IIIIIIIIIII.#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 1,
         "facing": "right"
       },
-      "entities": [
-        {
-          "id": "parcel-ledger",
-          "type": "parcel",
-          "layer": 0,
-          "x": 3,
-          "y": 4,
-          "pushable": true,
-          "solid": true
-        }
-      ],
-      "switches": [
-        {
-          "id": "ledger-hidden-plate",
-          "layer": 1,
-          "x": 3,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "ledger-door",
-          "layer": 1,
-          "x": 4,
-          "y": 1,
-          "switchIds": [
-            "ledger-hidden-plate"
-          ]
-        }
-      ],
+      "entities": [],
+      "switches": [],
+      "doors": [],
       "balance": {
-        "intendedLesson": "Show that hidden switches can matter on a different layer than the route they open.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players head to the stitch before the hidden plate is active and arrive on the back lane too early."
+        "intendedLesson": "Pure ice navigation puzzle requiring both layers.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 14,
+        "commonMisunderstanding": "Players try to navigate only on one layer."
       }
     },
     "market-03": {
@@ -10054,7 +15433,7 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Use one parcel for the visible plate and another for the hidden plate, then walk through the central shutter.",
+      "objective": "Use ice lanes, two parcels, and two switches across both layers to open the central shutter.",
       "blurb": "The final market route asks you to think about both sheets at once.",
       "intro": [
         {
@@ -10069,49 +15448,79 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "You have one parcel for each switch. Decide which one belongs to the hidden plate first.",
-        "Transfer the upper parcel to the back sheet, then push the lower parcel onto the visible floor plate before heading to the door.",
-        "Move up and left to transfer the upper parcel, return to the lower lane to push the second parcel onto the visible plate, then walk up through the opened shutter to the mailbox."
+        "You have one parcel for each switch. The ice complicates positioning. Decide which goes where first.",
+        "Slide parcel A across ice onto the visible switch. Transfer parcel B to the back sheet where it must be pushed onto the hidden switch. Then use the stitch.",
+        "Push parcel A right across ice row to the visible switch at (8,5). Navigate to parcel B and transfer it to back layer. Use the stitch, push the transferred parcel onto the hidden switch at (2,7), then navigate through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "inventory-front",
           "name": "Inventory Front",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#...S......#.#",
+            "#.####.###...#",
+            "#.#........#.#",
+            "#.#.##.#.#.#.#",
+            "#......#IIII.#",
+            "#.##.###.#.#.#",
+            "#........#.#.#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####.....#",
+            "##############"
+          ]
+        },
+        {
+          "id": "inventory-mid",
+          "name": "Inventory Middle",
+          "tiles": [
+            "##############",
+            "#...S......#.#",
+            "#.#.##.###.S.#",
+            "#.#........#.#",
+            "#.####.#.#.#.#",
+            "#......#.....#",
+            "#.##.###.#.#.#",
+            "#........#...#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####.....#",
+            "##############"
           ]
         },
         {
           "id": "inventory-back",
           "name": "Inventory Back",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##############",
+            "#..........#.#",
+            "#.####.###.S.#",
+            "#.#........#.#",
+            "#.#.##.#.#.#.#",
+            "#......#.....#",
+            "#.##.###.#.#.#",
+            "#........#...#",
+            "#.####.#.#...#",
+            "#.#......#.#.#",
+            "#.#.####...G.#",
+            "##############"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 10,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "parcel-visible",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 3,
+          "y": 5,
           "pushable": true,
           "solid": true
         },
@@ -10119,8 +15528,17 @@ export const CAMPAIGN_INDEX = {
           "id": "parcel-hidden",
           "type": "parcel",
           "layer": 0,
-          "x": 3,
-          "y": 3,
+          "x": 5,
+          "y": 9,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-deep",
+          "type": "parcel",
+          "layer": 1,
+          "x": 7,
+          "y": 7,
           "pushable": true,
           "solid": true
         }
@@ -10129,33 +15547,48 @@ export const CAMPAIGN_INDEX = {
         {
           "id": "inventory-visible-plate",
           "layer": 0,
-          "x": 1,
-          "y": 4
+          "x": 12,
+          "y": 5
+        },
+        {
+          "id": "inventory-mid-plate",
+          "layer": 1,
+          "x": 5,
+          "y": 9
         },
         {
           "id": "inventory-hidden-plate",
-          "layer": 1,
-          "x": 3,
-          "y": 3
+          "layer": 2,
+          "x": 7,
+          "y": 7
         }
       ],
       "doors": [
         {
-          "id": "inventory-shutter",
-          "layer": 0,
-          "x": 3,
+          "id": "inventory-shutter-a",
+          "layer": 1,
+          "x": 12,
           "y": 2,
           "switchIds": [
-            "inventory-visible-plate",
+            "inventory-visible-plate"
+          ]
+        },
+        {
+          "id": "inventory-shutter-b",
+          "layer": 2,
+          "x": 11,
+          "y": 10,
+          "switchIds": [
+            "inventory-mid-plate",
             "inventory-hidden-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Cap the market by splitting visible and hidden door logic across two parcels.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players try to solve the visible plate first and only then look for the hidden plate, which leaves too much route still unopened."
+        "intendedLesson": "Cap the market with three-layer parcel management and triple switch logic.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 18,
+        "commonMisunderstanding": "Players try to solve the visible plate first."
       }
     },
     "greenhouse-01": {
@@ -10165,65 +15598,95 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Project a bridge onto the lower sheet and cross the gap.",
-      "blurb": "Lanterns draw temporary structure where the paper has torn away.",
+      "objective": "Push the projector into position, navigate one-way gates, and cross the projected bridge.",
+      "blurb": "Lanterns draw temporary structure where the paper has torn away. One-way gates restrict your path.",
       "intro": [
         {
           "speaker": "Gardener",
-          "text": "Line the lamp up with the tear. The next layer will grow a bridge where the light lands."
+          "text": "Line the lamp up with the tear. The next layer will grow a bridge where the light lands. And mind the one-way gates."
         }
       ],
       "hintTiers": [
-        "The lamp affects the same coordinates in the other layer.",
-        "The pit sits at the same x and y as the square where the lamp should stop.",
-        "Push the lantern to the center lane at x3 y2 on the top sheet, switch layers, and walk across the projected bridge."
+        "The one-way gates force you to circle around. Push the projector before you commit to the gate path.",
+        "Push the projector left to align it with the gap on the other layer, then take the one-way gate circuit to the stitch.",
+        "Push projector left to (2,4), go up through the right-only gate, navigate around to the stitch at (3,1), switch layers, follow the one-way path down across the bridge to the mailbox."
       ],
       "layers": [
         {
           "id": "lantern-bed",
           "name": "Lantern Bed",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#....S.......#.#",
+            "#.####.###.#...#",
+            "#.>........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#....#...#...#",
+            "#.##.###.#.#.#.#",
+            "#.v......#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####......<#",
+            "################"
+          ]
+        },
+        {
+          "id": "vine-mid",
+          "name": "Vine Middle",
+          "tiles": [
+            "################",
+            "#....S.......#.#",
+            "#.#.##.###.#...#",
+            "#.v........#.#.#",
+            "#.####.#.#.S.#.#",
+            "#......#.S.#...#",
+            "#.##.###.#.#.#.#",
+            "#.^......#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         },
         {
           "id": "vine-bed",
           "name": "Vine Bed",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#..~.G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#............#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#~##.#.#.S.#.#",
+            "#.#....#.S.#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####......G#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 10,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "lantern-a",
           "type": "projector",
           "layer": 0,
-          "x": 2,
-          "y": 3,
+          "x": 4,
+          "y": 5,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 1,
+              "layer": 2,
               "dx": 0,
-              "dy": 0
+              "dy": -1
             }
           ]
         }
@@ -10231,10 +15694,10 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach projector alignment and same-coordinate bridge projection.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players expect the lantern to cast forward instead of affecting the aligned coordinate on the other sheet."
+        "intendedLesson": "Introduce one-way gates alongside projector alignment across three layers.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 14,
+        "commonMisunderstanding": "Players go through one-way gates the wrong direction."
       }
     },
     "greenhouse-side-01": {
@@ -10244,8 +15707,8 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "objective": "Use the lantern's offset beam to patch the tear and cross to the mailbox.",
-      "blurb": "Not every bridge blooms directly underneath the lantern.",
+      "objective": "Combine projector placement with ice sliding and one-way gates to bridge the gap.",
+      "blurb": "Not every bridge blooms directly underneath the lantern. Ice complicates the approach.",
       "intro": [
         {
           "speaker": "Gardener",
@@ -10253,40 +15716,70 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "This lantern does not bridge the square directly below it.",
-        "Push the lantern one step to the right so its offset beam lands on the tear.",
-        "Push the lantern right once, walk to the stitch, switch sheets, and use the offset bridge tile near the mailbox."
+        "The projector has an offset beam. It bridges one tile away from where it stands.",
+        "Slide the projector across ice to the right position, then navigate the one-way gates to the stitch.",
+        "Push projector right onto ice where it slides to (5,4). Its offset beam bridges the gap at (6,3) on the back layer. Navigate the one-way loop to the stitch, switch layers, cross the bridge to the mailbox."
       ],
       "layers": [
         {
           "id": "graft-top",
           "name": "Graft Top",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#.>..S.......#.#",
+            "#.#.##.###.#...#",
+            "#.v........#.#.#",
+            "#.#.II.#.#...#.#",
+            "#.#.II.#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#.<.#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "graft-mid",
+          "name": "Graft Middle",
+          "tiles": [
+            "################",
+            "#....S.......#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#.##.#.#.S.#.#",
+            "#.#....#.S.#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         },
         {
           "id": "graft-bottom",
           "name": "Graft Bottom",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#...~G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#............#.#",
+            "#.####.###.#...#",
+            "#......~...#.#.#",
+            "#.#.##.#.#.S.#.#",
+            "#.#....#.S.#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#G#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 3,
+        "y": 10,
         "facing": "right"
       },
       "entities": [
@@ -10294,14 +15787,14 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-offset",
           "type": "projector",
           "layer": 0,
-          "x": 2,
-          "y": 3,
+          "x": 3,
+          "y": 4,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 1,
-              "dx": 1,
+              "layer": 2,
+              "dx": 3,
               "dy": -1
             }
           ]
@@ -10310,10 +15803,10 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Show that a lantern's projection can use an offset target instead of matching coordinates exactly.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players line the lantern up with the tear directly instead of accounting for the shifted beam."
+        "intendedLesson": "Combine offset projection with ice and one-way gates across three layers.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players line the lantern up directly instead of accounting for the shifted beam."
       }
     },
     "greenhouse-02": {
@@ -10323,70 +15816,111 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Grow a two-tile bridge across the wider tear and reach the mailbox.",
-      "blurb": "Some greenhouse tears ask for more than a single square of light.",
+      "objective": "Project bridges across 3 layers using two projectors to create a connected path.",
+      "blurb": "Some greenhouse tears ask for more than a single square of light across multiple sheets.",
       "intro": [
         {
           "speaker": "Gardener",
-          "text": "This bed tore wider than the others. One lamp can still cover it, but only if the bloom stretches far enough."
+          "text": "This bed tore wider than the others. Two lamps, three sheets. Every bridge matters."
         }
       ],
       "hintTiers": [
-        "This lantern can grow more than one bridge tile at once.",
-        "The lantern needs to stop one row higher so both projected tiles span the tear together.",
-        "Push the lantern upward into the center lane, switch sheets, and cross the two-tile bridge to the mailbox."
+        "Each projector bridges a different layer. Position them both before traveling down.",
+        "Projector A bridges layer 0 to layer 1. Projector B bridges layer 1 to layer 2. Push both into alignment first.",
+        "Push projector A up to (3,2) bridging the gap on layer 1. Push projector B right to (6,4) bridging the gap on layer 2. Use the stitch at top, descend through layers using bridges."
       ],
       "layers": [
         {
           "id": "overgrowth-top",
           "name": "Overgrowth Top",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#....S.......#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#....#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "overgrowth-middle",
+          "name": "Overgrowth Middle",
+          "tiles": [
+            "################",
+            "#....S.....#.#.#",
+            "#.#.~####.#....#",
+            "#.#........#.#.#",
+            "#......#.#.S.#.#",
+            "#.###.##...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         },
         {
           "id": "overgrowth-bottom",
           "name": "Overgrowth Bottom",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.~~.G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#............#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#..~.#.#.S.#.#",
+            "#.#.##.#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.#.####......G#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 10,
+        "facing": "right"
       },
       "entities": [
         {
-          "id": "lantern-wide",
+          "id": "lantern-a",
           "type": "projector",
           "layer": 0,
-          "x": 2,
+          "x": 5,
           "y": 3,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
               "layer": 1,
-              "dx": 0,
-              "dy": 0
-            },
+              "dx": -2,
+              "dy": -1
+            }
+          ]
+        },
+        {
+          "id": "lantern-b",
+          "type": "projector",
+          "layer": 0,
+          "x": 8,
+          "y": 6,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
             {
-              "layer": 1,
-              "dx": 1,
-              "dy": 0
+              "layer": 2,
+              "dx": -3,
+              "dy": -2
             }
           ]
         }
@@ -10394,10 +15928,10 @@ export const CAMPAIGN_INDEX = {
       "switches": [],
       "doors": [],
       "balance": {
-        "intendedLesson": "Teach multi-tile projection so wider tears read as one placement puzzle instead of many.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players align the lantern to only one missing tile and overlook that the same lamp can cover both."
+        "intendedLesson": "Three-layer projection requiring two projectors with offset beams.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 16,
+        "commonMisunderstanding": "Players align one projector and forget the second bridge."
       }
     },
     "greenhouse-03": {
@@ -10407,7 +15941,7 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Hold the gate open, grow the bridge, and cross to the mailbox.",
+      "objective": "Combine one-way gates, ice, a projector, and a switch to open the path across three layers.",
       "blurb": "The lantern route and the pressure gate have to be solved in the right order.",
       "intro": [
         {
@@ -10416,49 +15950,79 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The parcel should stay on the switch while you work on the lantern.",
-        "Park the parcel first, then push the lantern into place before you switch layers.",
-        "Push the parcel onto the floor plate, lift the lantern onto the tear line, walk to the stitch, switch sheets, and cross the bridge through the opened gate."
+        "The parcel must reach the switch, the projector must bridge the gap, and you must navigate one-way gates in the right order.",
+        "Push the parcel across ice onto the switch first, then position the projector, then navigate through the one-way gates to descend through layers.",
+        "Push parcel left across ice onto the switch at (1,5). Push projector up to (4,2). Navigate through one-way gates to the top stitch. Descend through middle layer to lower stitch. Cross the bridge through the opened door to the mailbox."
       ],
       "layers": [
         {
           "id": "mist-top",
           "name": "Mist Top",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#...S.......#..#",
+            "#.####.###.#...#",
+            "#.>........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#II....#...#...#",
+            "#.##.###.#.#v#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#.<.#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "mist-middle",
+          "name": "Mist Middle",
+          "tiles": [
+            "################",
+            "#...S.......#..#",
+            "#.#.####.#.#...#",
+            "#..........#.#.#",
+            "#.###.##.#.S.#.#",
+            "#......#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
           ]
         },
         {
           "id": "mist-bottom",
           "name": "Mist Bottom",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#..~.G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#...........#..#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#~##.#.#.S.#.#",
+            "#.#.##.#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.###.####...G.#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 10,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "parcel-mist",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 4,
+          "y": 5,
           "pushable": true,
           "solid": true
         },
@@ -10466,7 +16030,182 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-mist",
           "type": "projector",
           "layer": 0,
+          "x": 6,
+          "y": 4,
+          "pushable": true,
+          "solid": true,
+          "projectionTargets": [
+            {
+              "layer": 2,
+              "dx": -2,
+              "dy": 0
+            }
+          ]
+        },
+        {
+          "id": "parcel-mist-b",
+          "type": "parcel",
+          "layer": 1,
+          "x": 5,
+          "y": 9,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "mist-plate-a",
+          "layer": 0,
+          "x": 1,
+          "y": 5
+        },
+        {
+          "id": "mist-plate-b",
+          "layer": 1,
+          "x": 5,
+          "y": 9
+        }
+      ],
+      "doors": [
+        {
+          "id": "mist-door-a",
+          "layer": 2,
+          "x": 7,
+          "y": 10,
+          "switchIds": [
+            "mist-plate-a"
+          ]
+        },
+        {
+          "id": "mist-door-b",
+          "layer": 2,
+          "x": 12,
+          "y": 4,
+          "switchIds": [
+            "mist-plate-b"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine one-way gates, ice, projection, and dual switches across three layers.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 18,
+        "commonMisunderstanding": "Players try to solve the bridge first."
+      }
+    },
+    "greenhouse-04": {
+      "id": "greenhouse-04",
+      "districtId": "greenhouse",
+      "title": "Festival Draft",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Use two projectors and a parcel across three layers to restore the greenhouse finale route.",
+      "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
+      "intro": [
+        {
+          "speaker": "Mina",
+          "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
+        }
+      ],
+      "hintTiers": [
+        "Treat this like two setup problems before it becomes a travel problem: gate first, lanterns second.",
+        "Park the parcel on the switch, push both projectors into their bridge positions, then descend through all three layers.",
+        "Push parcel onto switch at (1,8). Push projector A to bridge gap on layer 1. Push projector B to bridge gap on layer 2. Use top stitch, descend through middle layer, use lower stitch, cross both bridges through the opened door to the mailbox."
+      ],
+      "achievementId": "demo-complete",
+      "layers": [
+        {
+          "id": "draft-roof",
+          "name": "Draft Roof",
+          "tiles": [
+            "################",
+            "#...S..........#",
+            "#.########.#...#",
+            "#..............#",
+            "#.#..#.#.#.#...#",
+            "#.#.##.........#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "#.########.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "draft-middle",
+          "name": "Draft Middle",
+          "tiles": [
+            "################",
+            "#...S..........#",
+            "#.#.######.#...#",
+            "#.#..~......#..#",
+            "#......#.#.S...#",
+            "#.###.##.......#",
+            "#..............#",
+            "#.####.S.#.#...#",
+            "#..............#",
+            "#.########.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "draft-floor",
+          "name": "Draft Floor",
+          "tiles": [
+            "################",
+            "#..............#",
+            "#.########.#...#",
+            "#..............#",
+            "#.#..~.#.#.S.#.#",
+            "#.#.##....#....#",
+            "#..............#",
+            "#.####.S.#.#...#",
+            "#..............#",
+            "#.########.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#.#########..G.#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 12,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "parcel-draft",
+          "type": "parcel",
+          "layer": 0,
           "x": 3,
+          "y": 12,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-draft-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 8,
+          "y": 6,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "lantern-draft-a",
+          "type": "projector",
+          "layer": 0,
+          "x": 6,
           "y": 3,
           "pushable": true,
           "solid": true,
@@ -10477,150 +16216,63 @@ export const CAMPAIGN_INDEX = {
               "dy": 0
             }
           ]
-        }
-      ],
-      "switches": [
-        {
-          "id": "mist-plate",
-          "layer": 0,
-          "x": 1,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "mist-door",
-          "layer": 1,
-          "x": 4,
-          "y": 2,
-          "switchIds": [
-            "mist-plate"
-          ]
-        }
-      ],
-      "balance": {
-        "intendedLesson": "Combine earlier door logic with projection while still keeping the lantern placement readable.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 6,
-        "commonMisunderstanding": "Players try to solve the bridge first and only later realize the gate still needs the parcel parked on its switch."
-      }
-    },
-    "greenhouse-04": {
-      "id": "greenhouse-04",
-      "districtId": "greenhouse",
-      "title": "Festival Draft",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Hold the gate, bloom the bridge, climb through the middle sheet, and restore the greenhouse finale route.",
-      "blurb": "The final demo room chains parcel parking, projection, and a true three-sheet route.",
-      "intro": [
-        {
-          "speaker": "Mina",
-          "text": "The festival draft uses every early trick at once. Hold the gate first, grow the bridge second, then follow the route where the paper is still layered thick."
-        }
-      ],
-      "achievementId": "demo-complete",
-      "hintTiers": [
-        "Treat this like two setup problems before it becomes a travel problem: gate first, lantern second.",
-        "Park the parcel on the top switch, push the lantern into the tear line, switch to the middle sheet at the top stitch, then descend to the lower stitch.",
-        "Push the parcel onto the top-left switch, lift the lantern into the bridge position, switch to the middle sheet at the upper stitch, travel down to the lower stitch, switch to the final sheet, and cross the opened gate and bridge to the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "draft-roof",
-          "name": "Draft Roof",
-          "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
         },
         {
-          "id": "draft-middle",
-          "name": "Draft Middle",
-          "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#S....#",
-            "#######"
-          ]
-        },
-        {
-          "id": "draft-floor",
-          "name": "Draft Floor",
-          "tiles": [
-            "#######",
-            "#.....#",
-            "#..~.G#",
-            "#.....#",
-            "#S....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
-      },
-      "entities": [
-        {
-          "id": "parcel-draft",
-          "type": "parcel",
-          "layer": 0,
-          "x": 2,
-          "y": 4,
-          "pushable": true,
-          "solid": true
-        },
-        {
-          "id": "lantern-draft",
+          "id": "lantern-draft-b",
           "type": "projector",
           "layer": 0,
-          "x": 3,
-          "y": 3,
+          "x": 10,
+          "y": 8,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
               "layer": 2,
-              "dx": 0,
-              "dy": 0
+              "dx": -5,
+              "dy": -4
             }
           ]
         }
       ],
       "switches": [
         {
-          "id": "draft-plate",
+          "id": "draft-plate-a",
           "layer": 0,
           "x": 1,
-          "y": 4
+          "y": 12
+        },
+        {
+          "id": "draft-plate-b",
+          "layer": 0,
+          "x": 8,
+          "y": 10
         }
       ],
       "doors": [
         {
-          "id": "draft-door",
+          "id": "draft-door-a",
           "layer": 2,
-          "x": 4,
-          "y": 2,
+          "x": 13,
+          "y": 12,
           "switchIds": [
-            "draft-plate"
+            "draft-plate-a"
+          ]
+        },
+        {
+          "id": "draft-door-b",
+          "layer": 1,
+          "x": 12,
+          "y": 3,
+          "switchIds": [
+            "draft-plate-b"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Cap the demo slice with three-sheet traversal layered on top of parcel parking and projection.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 7,
-        "commonMisunderstanding": "Players keep looking for the goal on the middle sheet instead of treating it as the route between the setup layer and the final layer."
+        "intendedLesson": "Cap the demo slice with three-sheet traversal and dual projection.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 22,
+        "commonMisunderstanding": "Players keep looking for the goal on the middle sheet."
       }
     },
     "clocktower-01": {
@@ -10630,133 +16282,72 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Use the echo courier to hold the door long enough to pass.",
-      "blurb": "Your last move returns as a delayed helper on another sheet.",
+      "objective": "Use the echo courier and a teleporter to hold the door long enough to pass.",
+      "blurb": "Your last move returns as a delayed helper, now with teleporter shortcuts.",
       "intro": [
         {
           "speaker": "Bell Keeper",
-          "text": "The echo courier repeats your previous move exactly one turn later. Give it a beat to catch up."
+          "text": "The echo courier repeats your previous move exactly one turn later. Give it a beat to catch up. And the old bell tubes still work."
         }
       ],
       "hintTiers": [
-        "The echo courier needs one turn before it copies your first move.",
-        "Move once, wait once, then take advantage of the opened door while the echo stays on the switch.",
-        "Walk right, wait, walk right through the opened door, then walk right again to the mailbox."
+        "The echo needs to reach the switch via the teleporter. Time your moves so the echo warps to the right spot.",
+        "Move right to queue the echo, wait so it steps onto the teleporter, which sends it near the switch. Then pass through the door.",
+        "Walk right, wait for the echo to teleport near the switch, walk right through the opened door, then navigate the maze to the mailbox."
       ],
       "layers": [
         {
           "id": "clock-face",
           "name": "Clock Face",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#...G.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#..........#...#",
+            "#.####.###.#.#.#",
+            "#......#...#...#",
+            "#.#..#.#.#...#.#",
+            "#.#.##.......#.#",
+            "#..........#.#.#",
+            "#.####.#.#.#...#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#............G.#",
+            "################"
           ]
         },
         {
           "id": "inner-works",
           "name": "Inner Works",
           "tiles": [
-            "#######",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 2,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "echo-a",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
-        }
-      ],
-      "switches": [
-        {
-          "id": "clock-plate",
-          "layer": 1,
-          "x": 2,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "clock-door",
-          "layer": 0,
-          "x": 3,
-          "y": 2,
-          "switchIds": [
-            "clock-plate"
-          ]
-        }
-      ],
-      "balance": {
-        "intendedLesson": "Teach echo timing and the value of a wait action.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players move too quickly and forget the echo only copies the previous move one turn later."
-      }
-    },
-    "clocktower-02": {
-      "id": "clocktower-02",
-      "districtId": "clocktower",
-      "title": "Borrowed Bell",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Let the echo hold the gate, reach the stitch, and climb to the mailbox.",
-      "blurb": "A delayed footstep can hold the route open long enough to fold through it.",
-      "intro": [
-        {
-          "speaker": "Bell Keeper",
-          "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
-        }
-      ],
-      "hintTiers": [
-        "You do not need the echo to escort you forever. You only need the door open for one crossing.",
-        "Move once to queue the echo, wait so it can stand on the plate, then cross the opened gate and keep climbing.",
-        "Walk right, wait, walk right through the door, walk right onto the stitch, switch sheets, then step right into the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "clock-borrowed-front",
-          "name": "Borrowed Face",
-          "tiles": [
-            "########",
-            "#..D.S.#",
-            "#.####.#",
-            "#......#",
-            "#......#",
-            "########"
+            "################",
+            "#..........#...#",
+            "#.####.###.#.#.#",
+            "#..T...#...#...#",
+            "#.#..#.#.#...#.#",
+            "#.#.##.......#.#",
+            "#..........#.#.#",
+            "#.####.#.#.#.T.#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#..............#",
+            "################"
           ]
         },
         {
-          "id": "clock-borrowed-back",
-          "name": "Bell Frame",
+          "id": "bell-gear",
+          "name": "Bell Gear",
           "tiles": [
-            "########",
-            "#....SG#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "################",
+            "#..........#...#",
+            "#.####.###.#.#.#",
+            "#......#F..#...#",
+            "#.#..#.#F#...#.#",
+            "#.#.##..F....#.#",
+            "#..........#.#.#",
+            "#.####.#.#.#...#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#..............#",
+            "################"
           ]
         }
       ],
@@ -10768,11 +16359,11 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "echo-borrowed",
+          "id": "echo-a",
           "type": "echo",
           "layer": 1,
           "x": 1,
-          "y": 4,
+          "y": 9,
           "solid": true,
           "pushable": false,
           "echoDelay": 1,
@@ -10781,29 +16372,230 @@ export const CAMPAIGN_INDEX = {
       ],
       "switches": [
         {
-          "id": "clock-borrowed-plate",
+          "id": "clock-plate",
           "layer": 1,
-          "x": 2,
-          "y": 4
+          "x": 13,
+          "y": 7
         }
       ],
       "doors": [
         {
-          "id": "clock-borrowed-door",
+          "id": "clock-door",
           "layer": 0,
-          "x": 3,
-          "y": 1,
+          "x": 8,
+          "y": 9,
           "switchIds": [
-            "clock-borrowed-plate"
+            "clock-plate"
           ]
         }
       ],
-      "routingStamps": [],
+      "teleporters": [
+        {
+          "id": "tp-clock-a1",
+          "layer": 1,
+          "x": 3,
+          "y": 3,
+          "pairId": "tp-clock-a2"
+        },
+        {
+          "id": "tp-clock-a2",
+          "layer": 1,
+          "x": 13,
+          "y": 7,
+          "pairId": "tp-clock-a1"
+        }
+      ],
       "balance": {
-        "intendedLesson": "Extend echo timing into a stitched route instead of a single hallway crossing.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players often switch too early and forget the echo still has to open the first gate."
+        "intendedLesson": "Teach echo timing with teleporter mechanics and gravity tiles.",
+        "targetDifficulty": 6,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players move too quickly and forget the echo delay."
+      }
+    },
+    "clocktower-02": {
+      "id": "clocktower-02",
+      "districtId": "clocktower",
+      "title": "Borrowed Bell",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Combine the echo, a parcel, and cross-layer teleporters to open the route.",
+      "blurb": "A delayed footstep can hold the route open while the parcel crosses between layers.",
+      "intro": [
+        {
+          "speaker": "Bell Keeper",
+          "text": "The echo only borrows your last move for a moment. Use that borrowed beat to cross before the bell fades."
+        }
+      ],
+      "hintTiers": [
+        "The echo holds the door while you push the parcel onto the teleporter to activate the far switch.",
+        "Time the echo to stay on the near switch while you push the parcel through the teleporter to land on the far switch.",
+        "Move right to queue echo, wait for it to reach the switch, push parcel right onto teleporter which sends it to back layer switch. Go through both opened doors to the stitch, switch layers, navigate to the mailbox."
+      ],
+      "routingStamps": [],
+      "layers": [
+        {
+          "id": "clock-borrowed-front",
+          "name": "Borrowed Face",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#....#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "clock-borrowed-mid",
+          "name": "Bell Mechanism",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.#.##.###.#...#",
+            "#..........#.#.#",
+            "#.####.#.#.S.#.#",
+            "#......#...#.S.#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "clock-borrowed-back",
+          "name": "Bell Frame",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.#..####.#....#",
+            "#.#........#.G.#",
+            "#...##.#.#.S.#.#",
+            "#.#..#.#...#.S.#",
+            "#.####.###.#.#.#",
+            "#......#.#.#.#.#",
+            "#.##.#.#.#...#.#",
+            "#.#......#.#...#",
+            "#.####.........#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 10,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "echo-borrowed",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 9,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        },
+        {
+          "id": "parcel-bell",
+          "type": "parcel",
+          "layer": 0,
+          "x": 6,
+          "y": 8,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-bell-b",
+          "type": "parcel",
+          "layer": 1,
+          "x": 8,
+          "y": 3,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "clock-echo-plate",
+          "layer": 1,
+          "x": 5,
+          "y": 9
+        },
+        {
+          "id": "clock-parcel-plate",
+          "layer": 1,
+          "x": 12,
+          "y": 5
+        },
+        {
+          "id": "clock-back-plate",
+          "layer": 2,
+          "x": 8,
+          "y": 3
+        }
+      ],
+      "doors": [
+        {
+          "id": "clock-door-a",
+          "layer": 0,
+          "x": 5,
+          "y": 3,
+          "switchIds": [
+            "clock-echo-plate"
+          ]
+        },
+        {
+          "id": "clock-door-b",
+          "layer": 1,
+          "x": 13,
+          "y": 5,
+          "switchIds": [
+            "clock-parcel-plate"
+          ]
+        },
+        {
+          "id": "clock-door-c",
+          "layer": 2,
+          "x": 12,
+          "y": 3,
+          "switchIds": [
+            "clock-back-plate"
+          ]
+        }
+      ],
+      "teleporters": [
+        {
+          "id": "tp-bell-a1",
+          "layer": 0,
+          "x": 10,
+          "y": 8,
+          "pairId": "tp-bell-a2"
+        },
+        {
+          "id": "tp-bell-a2",
+          "layer": 1,
+          "x": 12,
+          "y": 3,
+          "pairId": "tp-bell-a1"
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine echo timing with dual parcel management and cross-layer teleportation.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 18,
+        "commonMisunderstanding": "Players switch too early and forget the echo."
       }
     },
     "clocktower-03": {
@@ -10813,42 +16605,72 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Use the routing stamp to land exactly where the mailbox route resumes.",
-      "blurb": "Some stitched exits arrive somewhere else entirely once they pass under the clock stamp.",
+      "objective": "Chain teleporters across three layers to reach the mailbox at the bottom.",
+      "blurb": "The clocktower's tube system spans all three sheets of the bell mechanism.",
       "intro": [
         {
           "speaker": "Bell Keeper",
-          "text": "That stamp reroutes a stitch exit the instant you land. Read the arrow, not just the stitch."
+          "text": "The bell tubes connect all three sheets. Each teleporter drops you one layer deeper. Read the chain before you step in."
         }
       ],
       "hintTiers": [
-        "The goal is not a walk after the stitch. The stitch itself is the final delivery hop.",
-        "Switch on the marked stitch. The routing stamp on the destination sheet will slide the exit to the right.",
-        "Walk right twice onto the stitch, then switch sheets. The routing stamp sends you directly to the mailbox."
+        "The teleporters form a chain: layer 0 to layer 1, then layer 1 to layer 2. But walls block direct paths.",
+        "Use the first teleporter to reach layer 1, navigate the maze there, use the second teleporter to reach layer 2, then find the mailbox.",
+        "Navigate to teleporter at (7,2) on layer 0, warp to layer 1 at (2,5), navigate the middle maze to teleporter at (6,6), warp to layer 2 at (3,2), navigate down and right to the mailbox."
       ],
       "layers": [
         {
           "id": "clock-stamp-front",
-          "name": "Clock Front",
+          "name": "Clock Top",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.###.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#..#.........#.#",
+            "#.##.#.T.###...#",
+            "#..........#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#RRR.#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "clock-stamp-middle",
+          "name": "Clock Middle",
+          "tiles": [
+            "################",
+            "#....#.......#.#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#..#.#.#...#.#",
+            "#.T.##.......#.#",
+            "#..........T.#.#",
+            "#.####.#.#.#...#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#..............#",
+            "################"
           ]
         },
         {
           "id": "clock-stamp-back",
-          "name": "Clock Stamp",
+          "name": "Clock Bottom",
           "tiles": [
-            "#######",
-            "#..S.G#",
-            "#.###.#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "################",
+            "#............#.#",
+            "#.#T####.#.#...#",
+            "#.#........#.#.#",
+            "#...#.##.#...#.#",
+            "#.#.##.......#.#",
+            "#......DDD.#.#.#",
+            "#.####.#.#.#...#",
+            "#..........#.#.#",
+            "#.####.###.....#",
+            "#.............G#",
+            "################"
           ]
         }
       ],
@@ -10861,24 +16683,41 @@ export const CAMPAIGN_INDEX = {
       "entities": [],
       "switches": [],
       "doors": [],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "clock-switch-stamp",
+          "id": "tp-chain-a1",
+          "layer": 0,
+          "x": 7,
+          "y": 2,
+          "pairId": "tp-chain-a2"
+        },
+        {
+          "id": "tp-chain-a2",
           "layer": 1,
+          "x": 2,
+          "y": 5,
+          "pairId": "tp-chain-a1"
+        },
+        {
+          "id": "tp-chain-b1",
+          "layer": 1,
+          "x": 11,
+          "y": 6,
+          "pairId": "tp-chain-b2"
+        },
+        {
+          "id": "tp-chain-b2",
+          "layer": 2,
           "x": 3,
-          "y": 1,
-          "direction": "right",
-          "distance": 2,
-          "appliesTo": [
-            "switch"
-          ]
+          "y": 2,
+          "pairId": "tp-chain-b1"
         }
       ],
       "balance": {
-        "intendedLesson": "Introduce routing stamps through a clean stitched exit instead of layering them onto multiple other systems at once.",
-        "targetDifficulty": 2,
-        "expectedSolveMinutes": 3,
-        "commonMisunderstanding": "Players step on the stitch and still expect to move manually afterward instead of trusting the reroute."
+        "intendedLesson": "Multi-layer teleporter chains with conveyor belts.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 16,
+        "commonMisunderstanding": "Players get disoriented across layers."
       }
     },
     "clocktower-side-01": {
@@ -10888,10 +16727,7 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "requiresRooms": [
-        "clocktower-03"
-      ],
-      "objective": "Borrow a beat, fall through the rerouted stitch, and ride the lower route to the mailbox.",
+      "objective": "Combine echo timing, teleporters, and one-way gates across three layers.",
       "blurb": "A side route that turns one rerouted stitch into a full three-sheet descent.",
       "intro": [
         {
@@ -10900,57 +16736,665 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The first stitch is not the destination. It is the drop point for the second switch.",
-        "Use the echo to open the first door, then let the routing stamp drop you onto the lower stitch before you switch again.",
-        "Walk right, wait, walk right three more times to the stitch, switch to the middle sheet, switch again at the lower stitch, then go right and climb to the mailbox."
+        "The echo must reach the switch via the teleporter while you navigate one-way gates across three layers.",
+        "Time the echo to teleport onto the switch, then navigate through one-way gates, use the stitch to layer 2, use a second teleporter to reach the final area.",
+        "Move right to queue echo, navigate up through one-way gates while echo teleports to switch. Go through opened door, use stitch to middle layer, navigate to teleporter, warp to layer 2, navigate maze to mailbox."
+      ],
+      "requiresRooms": [
+        "clocktower-03"
       ],
       "layers": [
         {
           "id": "clock-pendulum-front",
           "name": "Pendulum Face",
           "tiles": [
-            "########",
-            "#..D.S.#",
-            "#.####.#",
-            "#......#",
-            "#......#",
-            "########"
+            "################",
+            "#...S......#...#",
+            "#.####.###.....#",
+            "#.>..........#.#",
+            "#.#..#..#.#.#..#",
+            "#.#.##....#.#..#",
+            "#.........#.#..#",
+            "#.####.#....#..#",
+            "#.......#.#.#..#",
+            "#.####.###.<...#",
+            "#..............#",
+            "################"
           ]
         },
         {
           "id": "clock-pendulum-middle",
           "name": "Pendulum Frame",
           "tiles": [
-            "########",
-            "#....S.#",
-            "#.####.#",
-            "#......#",
-            "#....S.#",
-            "########"
+            "################",
+            "#...S..T.....#.#",
+            "#.#.####.###...#",
+            "#.v..........^.#",
+            "#......#.#..#..#",
+            "#.###.##..#.#..#",
+            "#.........#.#..#",
+            "#.####.#....#..#",
+            "#.......#.#.#..#",
+            "#.####.###.S...#",
+            "#..............#",
+            "################"
           ]
         },
         {
           "id": "clock-pendulum-back",
           "name": "Bell Route",
           "tiles": [
-            "########",
-            "#.....G#",
-            "#.####.#",
-            "#......#",
-            "#....S.#",
-            "########"
+            "################",
+            "#............G.#",
+            "#.####.###.#...#",
+            "#.T..........^.#",
+            "#.#..#..#.#.#..#",
+            "#.#.##....#.#..#",
+            "#.........#.#..#",
+            "#.####.#....#..#",
+            "#.......#.#.#..#",
+            "#.####.###.S...#",
+            "#..............#",
+            "################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 1,
+        "y": 10,
         "facing": "right"
       },
       "entities": [
         {
           "id": "echo-pendulum",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 10,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        }
+      ],
+      "switches": [
+        {
+          "id": "clock-pendulum-plate",
+          "layer": 1,
+          "x": 12,
+          "y": 1
+        }
+      ],
+      "doors": [
+        {
+          "id": "clock-pendulum-door",
+          "layer": 0,
+          "x": 7,
+          "y": 1,
+          "switchIds": [
+            "clock-pendulum-plate"
+          ]
+        }
+      ],
+      "teleporters": [
+        {
+          "id": "tp-pend-a1",
+          "layer": 1,
+          "x": 7,
+          "y": 1,
+          "pairId": "tp-pend-a2"
+        },
+        {
+          "id": "tp-pend-a2",
+          "layer": 1,
+          "x": 12,
+          "y": 3,
+          "pairId": "tp-pend-a1"
+        },
+        {
+          "id": "tp-pend-b1",
+          "layer": 1,
+          "x": 3,
+          "y": 8,
+          "pairId": "tp-pend-b2"
+        },
+        {
+          "id": "tp-pend-b2",
+          "layer": 2,
+          "x": 3,
+          "y": 3,
+          "pairId": "tp-pend-b1"
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine echo timing with teleporter chains and one-way gates across three layers.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 20,
+        "commonMisunderstanding": "Players forget the final climb."
+      }
+    },
+    "theater-01": {
+      "id": "theater-01",
+      "districtId": "theater",
+      "title": "Understudy",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Guide your shadow to the switch while navigating walls and corridors.",
+      "blurb": "The stage mirrors movement even when the audience cannot see it.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "Your shadow moves in the opposite direction across its own sheet. Think about where it lands, not where you do."
+        }
+      ],
+      "hintTiers": [
+        "The shadow mirrors your movement. Every step right sends it left. Plan a path that places it on the switch.",
+        "You need to move so the shadow hits the switch while you can still reach the door. The maze layout means not every move is mirrored cleanly.",
+        "Move right twice, down once (shadow goes left twice, up once onto the switch). Walk through the opened door and navigate the corridors to the mailbox."
+      ],
+      "layers": [
+        {
+          "id": "stage",
+          "name": "Stage",
+          "tiles": [
+            "################",
+            "#..........#...#",
+            "#.####.###.#.#.#",
+            "#.#......#.#...#",
+            "#.#.##.#...#.#.#",
+            "#......#.#...#.#",
+            "#.##.###.#.#.#.#",
+            "#........#.#...#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####......G#",
+            "################"
+          ]
+        },
+        {
+          "id": "backdrop",
+          "name": "Backdrop",
+          "tiles": [
+            "################",
+            "#..........#...#",
+            "#.#.####.#.#.#.#",
+            "#.#......#.#...#",
+            "#.#..#.#...#.#.#",
+            "#...##.#.#...#.#",
+            "#.##.###.#.#.#.#",
+            "#........#.#...#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "wings",
+          "name": "Wings",
+          "tiles": [
+            "################",
+            "#II........#...#",
+            "#I####.###.#.#.#",
+            "#I#......#.#...#",
+            "#I#.##.#...#.#.#",
+            "#I.....#.#...#.#",
+            "#I##.###.#.#.#.#",
+            "#I.......#.#...#",
+            "#I####.#.#...#.#",
+            "#I#......#.#...#",
+            "#I#.####.......#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 3,
+        "y": 5,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-a",
+          "type": "shadow",
+          "layer": 1,
+          "x": 12,
+          "y": 5,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-plate",
+          "layer": 1,
+          "x": 8,
+          "y": 2
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-door",
+          "layer": 0,
+          "x": 8,
+          "y": 5,
+          "switchIds": [
+            "stage-plate"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Teach mirrored shadow movement with larger maze and ice wings layer.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 15,
+        "commonMisunderstanding": "Players track their own movement but not the shadow."
+      }
+    },
+    "theater-02": {
+      "id": "theater-02",
+      "districtId": "theater",
+      "title": "Latch Cue",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Navigate ice corridors while guiding your shadow to latch the switch across three layers.",
+      "blurb": "The stage route stays open once the understudy hits the mark, but ice changes everything.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
+        }
+      ],
+      "hintTiers": [
+        "The shadow must latch the switch while you slide on ice. Ice affects you but not the shadow.",
+        "Plan your ice slides so the mirrored shadow movement lands on the latch. Then descend through layers.",
+        "Slide right on ice (shadow goes left to switch). Navigate down to stitch, switch to middle layer, descend to lower stitch, switch to layer 2, push parcel to open final path, reach mailbox."
+      ],
+      "routingStamps": [],
+      "layers": [
+        {
+          "id": "stage-latch-front",
+          "name": "Stage",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.####.###.#...#",
+            "#.......II.#.#.#",
+            "#.#.##.#.#...#.#",
+            "#.#....#...#...#",
+            "#.##.###.#.#.#.#",
+            "#........#.#.#.#",
+            "#.####.#.#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-latch-middle",
+          "name": "Wings",
+          "tiles": [
+            "################",
+            "#..S.........#.#",
+            "#.#.####.#.#...#",
+            "#..........#.#.#",
+            "#.####.#.#.S.#.#",
+            "#......#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.#.####.......#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-latch-back",
+          "name": "Backstage",
+          "tiles": [
+            "################",
+            "#...........#..#",
+            "#.####.###.#...#",
+            "#..........#.#.#",
+            "#.#..#.#.#.S.#.#",
+            "#.#.##.#...#...#",
+            "#..........#.#.#",
+            "#.####.S.#.#.#.#",
+            "#........#...#.#",
+            "#.#......#.#...#",
+            "#.###.####...G.#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 10,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-latch",
+          "type": "shadow",
+          "layer": 1,
+          "x": 14,
+          "y": 10,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
+        {
+          "id": "parcel-stage",
+          "type": "parcel",
+          "layer": 2,
+          "x": 6,
+          "y": 8,
+          "pushable": true,
+          "solid": true
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-latch-switch",
+          "layer": 1,
+          "x": 4,
+          "y": 3,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-latch-door",
+          "layer": 2,
+          "x": 11,
+          "y": 10,
+          "switchIds": [
+            "stage-latch-switch"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Combine shadow latching with ice physics and three-layer navigation.",
+        "targetDifficulty": 7,
+        "expectedSolveMinutes": 18,
+        "commonMisunderstanding": "Players assume the shadow must keep standing on the switch."
+      }
+    },
+    "theater-03": {
+      "id": "theater-03",
+      "districtId": "theater",
+      "title": "Marked Landing",
+      "optional": false,
+      "unlockCost": 0,
+      "postmarks": 1,
+      "objective": "Guide two shadows through one-way gates to latch two switches simultaneously.",
+      "blurb": "The spotlight stamp only helps if both shadows have already unlocked their respective doors.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "Two shadows, two marks. Both must hit their cues before the scene opens."
+        }
+      ],
+      "hintTiers": [
+        "Two shadows mirror you on two different layers. Each must reach its own switch.",
+        "Plan a movement sequence that places both shadows on their respective switches while navigating one-way gates.",
+        "Move right twice (both shadows go left). Move down once (both go up). Shadow A reaches switch on layer 1, shadow B reaches switch on layer 2. Navigate through both opened doors via one-way gate circuit to the mailbox."
+      ],
+      "achievementId": "stage-route",
+      "layers": [
+        {
+          "id": "stage-mark-front",
+          "name": "Stage Floor",
+          "tiles": [
+            "################",
+            "#...S......#...#",
+            "#.>###.###.....#",
+            "#.#........v...#",
+            "#...#.##.#..#..#",
+            "#.#.##...#..#..#",
+            "#......<.......#",
+            "#.####.###..#..#",
+            "#..........#...#",
+            "#.#.####.......#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-mark-mid",
+          "name": "Wing Grid",
+          "tiles": [
+            "################",
+            "#...S......#...#",
+            "#.#.####.###...#",
+            "#..............#",
+            "#.....##.#..#..#",
+            "#.###.....#.#..#",
+            "#..............#",
+            "#.####.###..#..#",
+            "#..........#...#",
+            "#.#.####.......#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-mark-back",
+          "name": "Spotlight Grid",
+          "tiles": [
+            "################",
+            "#...S......#...#",
+            "#.####.###.....#",
+            "#..............#",
+            "#.#..#.##.#.#..#",
+            "#.#.##...#..#..#",
+            "#..............#",
+            "#.####.###..#..#",
+            "#..........#...#",
+            "#.#.####.......#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-mark-deep",
+          "name": "Deep Stage",
+          "tiles": [
+            "################",
+            "#...S........G.#",
+            "#.####.###.#...#",
+            "#..............#",
+            "#.#..#.##.#.#..#",
+            "#.#.##...#..#..#",
+            "#..............#",
+            "#.####.###..#..#",
+            "#..........#...#",
+            "#.#.####.......#",
+            "#..............#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 3,
+        "y": 7,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-mark-a",
+          "type": "shadow",
+          "layer": 1,
+          "x": 12,
+          "y": 8,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
+        {
+          "id": "shadow-mark-b",
+          "type": "shadow",
+          "layer": 2,
+          "x": 12,
+          "y": 8,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        }
+      ],
+      "switches": [
+        {
+          "id": "stage-mark-switch-a",
+          "layer": 1,
+          "x": 6,
+          "y": 3,
+          "sticky": true
+        },
+        {
+          "id": "stage-mark-switch-b",
+          "layer": 2,
+          "x": 6,
+          "y": 3,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-mark-door-a",
+          "layer": 0,
+          "x": 8,
+          "y": 1,
+          "switchIds": [
+            "stage-mark-switch-a"
+          ]
+        },
+        {
+          "id": "stage-mark-door-b",
+          "layer": 3,
+          "x": 13,
+          "y": 1,
+          "switchIds": [
+            "stage-mark-switch-b"
+          ]
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Dual shadow coordination with one-way gates across four layers.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 22,
+        "commonMisunderstanding": "Players plan for one shadow and forget the other."
+      }
+    },
+    "theater-side-01": {
+      "id": "theater-side-01",
+      "districtId": "theater",
+      "title": "Backstage Fold",
+      "optional": true,
+      "unlockCost": 0,
+      "postmarks": 0,
+      "objective": "Combine shadow, echo, and teleporters across three layers for the ultimate stage puzzle.",
+      "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
+      "intro": [
+        {
+          "speaker": "Stagehand",
+          "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
+        }
+      ],
+      "hintTiers": [
+        "The shadow latches one door, the echo holds another, and teleporters connect all three layers.",
+        "Move to latch the shadow switch first. Then time the echo to hold the second door while you teleport between layers.",
+        "Move right to latch shadow switch. Navigate to echo timing position. Move right to queue echo onto switch via teleporter. Pass through both opened doors. Use teleporter to layer 2. Navigate the final maze to the mailbox."
+      ],
+      "requiresRooms": [
+        "theater-03"
+      ],
+      "layers": [
+        {
+          "id": "stage-fold-front",
+          "name": "Front Curtain",
+          "tiles": [
+            "################",
+            "#...S..........#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "#.#..#.#.#.#...#",
+            "#.#.##.........#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-fold-middle",
+          "name": "Backstage Grid",
+          "tiles": [
+            "################",
+            "#...S..T.......#",
+            "#.#.####.#.#...#",
+            "#..............#",
+            "#......#.#.#...#",
+            "#.###.#S.......#",
+            "#.T............#",
+            "#.####.S.#.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "################"
+          ]
+        },
+        {
+          "id": "stage-fold-back",
+          "name": "Fly Loft",
+          "tiles": [
+            "################",
+            "#.T............#",
+            "#.####.#.#.#...#",
+            "#..............#",
+            "#.#..#.#.#.#...#",
+            "#.#.##.S.......#",
+            "#..............#",
+            "#.####.S.#.#...#",
+            "#..............#",
+            "#.####.###.#...#",
+            "#..............#",
+            "#.####.#.#.#...#",
+            "#............G.#",
+            "################"
+          ]
+        }
+      ],
+      "start": {
+        "layer": 0,
+        "x": 1,
+        "y": 12,
+        "facing": "right"
+      },
+      "entities": [
+        {
+          "id": "shadow-fold",
+          "type": "shadow",
+          "layer": 1,
+          "x": 14,
+          "y": 12,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
+        {
+          "id": "echo-fold",
           "type": "echo",
           "layer": 1,
           "x": 1,
@@ -10963,447 +17407,74 @@ export const CAMPAIGN_INDEX = {
       ],
       "switches": [
         {
-          "id": "clock-pendulum-plate",
+          "id": "stage-fold-shadow-switch",
+          "layer": 1,
+          "x": 6,
+          "y": 4,
+          "sticky": true
+        },
+        {
+          "id": "stage-fold-echo-switch",
+          "layer": 1,
+          "x": 12,
+          "y": 1
+        }
+      ],
+      "doors": [
+        {
+          "id": "stage-fold-door-a",
+          "layer": 0,
+          "x": 7,
+          "y": 1,
+          "switchIds": [
+            "stage-fold-shadow-switch"
+          ]
+        },
+        {
+          "id": "stage-fold-door-b",
+          "layer": 1,
+          "x": 13,
+          "y": 4,
+          "switchIds": [
+            "stage-fold-echo-switch"
+          ]
+        }
+      ],
+      "teleporters": [
+        {
+          "id": "tp-fold-a1",
+          "layer": 1,
+          "x": 7,
+          "y": 1,
+          "pairId": "tp-fold-a2"
+        },
+        {
+          "id": "tp-fold-a2",
           "layer": 1,
           "x": 2,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "clock-pendulum-door",
-          "layer": 0,
-          "x": 3,
-          "y": 1,
-          "switchIds": [
-            "clock-pendulum-plate"
-          ]
-        }
-      ],
-      "routingStamps": [
-        {
-          "id": "clock-pendulum-stamp",
-          "layer": 1,
-          "x": 5,
-          "y": 1,
-          "direction": "down",
-          "distance": 3,
-          "appliesTo": [
-            "switch"
-          ]
-        }
-      ],
-      "balance": {
-        "intendedLesson": "Use one routing stamp to turn a familiar echo-door puzzle into a genuine three-sheet route.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 7,
-        "commonMisunderstanding": "Players often switch once, see the lower stitch, and then forget the final climb still happens on the back sheet."
-      }
-    },
-    "theater-01": {
-      "id": "theater-01",
-      "districtId": "theater",
-      "title": "Understudy",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Let your shadow open the route while you pass through.",
-      "blurb": "The stage mirrors movement even when the audience cannot see it.",
-      "intro": [
-        {
-          "speaker": "Stagehand",
-          "text": "Your shadow moves in the opposite direction across its own sheet. Think about where it lands, not where you do."
-        }
-      ],
-      "hintTiers": [
-        "One move to the right sends the shadow one move to the left.",
-        "The shadow only needs to step on the switch once for you to get through the door.",
-        "Move right to place the shadow on the switch, then continue right through the door before the route closes behind you."
-      ],
-      "layers": [
-        {
-          "id": "stage",
-          "name": "Stage",
-          "tiles": [
-            "#######",
-            "#.....#",
-            "#...G.#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
+          "y": 6,
+          "pairId": "tp-fold-a1"
         },
         {
-          "id": "backdrop",
-          "name": "Backdrop",
-          "tiles": [
-            "#######",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 2,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "shadow-a",
-          "type": "shadow",
+          "id": "tp-fold-b1",
           "layer": 1,
           "x": 5,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
-      "switches": [
-        {
-          "id": "stage-plate",
-          "layer": 1,
-          "x": 4,
-          "y": 4
-        }
-      ],
-      "doors": [
-        {
-          "id": "stage-door",
-          "layer": 0,
-          "x": 3,
-          "y": 2,
-          "switchIds": [
-            "stage-plate"
-          ]
-        }
-      ],
-      "balance": {
-        "intendedLesson": "Teach mirrored shadow movement and planning for a separate actor.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 4,
-        "commonMisunderstanding": "Players track their own movement but not the shadow?s mirrored destination."
-      }
-    },
-    "theater-02": {
-      "id": "theater-02",
-      "districtId": "theater",
-      "title": "Latch Cue",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Let your shadow latch the hidden switch, then climb through the open route.",
-      "blurb": "The stage route stays open once the understudy hits the mark.",
-      "intro": [
-        {
-          "speaker": "Stagehand",
-          "text": "A latched cue only needs one clean mark. After that, the scene stays set for you."
-        }
-      ],
-      "hintTiers": [
-        "The shadow does not need to babysit the switch. It only needs to touch it once.",
-        "Move right once to latch the switch with the shadow, then make your own climb to the stitch.",
-        "Move right, go up three times to the stitch, switch sheets, then go down and cross the now-open route to the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "stage-latch-front",
-          "name": "Stage",
-          "tiles": [
-            "#######",
-            "#.S...#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
+          "y": 12,
+          "pairId": "tp-fold-b2"
         },
         {
-          "id": "stage-latch-back",
-          "name": "Backstage",
-          "tiles": [
-            "#######",
-            "#.S...#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 4,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "shadow-latch",
-          "type": "shadow",
-          "layer": 1,
-          "x": 5,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
-      "switches": [
-        {
-          "id": "stage-latch-switch",
-          "layer": 1,
-          "x": 4,
-          "y": 4,
-          "sticky": true
-        }
-      ],
-      "doors": [
-        {
-          "id": "stage-latch-door",
-          "layer": 1,
-          "x": 3,
-          "y": 2,
-          "switchIds": [
-            "stage-latch-switch"
-          ]
-        }
-      ],
-      "routingStamps": [],
-      "balance": {
-        "intendedLesson": "Introduce sticky latches as a cleaner shadow-planning escalation before the routed shadow rooms.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players often assume the shadow must keep standing on the switch and overcomplicate the route."
-      }
-    },
-    "theater-03": {
-      "id": "theater-03",
-      "districtId": "theater",
-      "title": "Marked Landing",
-      "optional": false,
-      "unlockCost": 0,
-      "postmarks": 1,
-      "objective": "Latch the mark, switch sheets, and let the stamp drop you through the open landing.",
-      "blurb": "The spotlight stamp only helps if the shadow has already unlocked the door it lands on.",
-      "intro": [
-        {
-          "speaker": "Stagehand",
-          "text": "The stamp lands you on a different mark, but the landing only matters if the shadow has opened the prop door first."
-        }
-      ],
-      "hintTiers": [
-        "The shadow action happens before the stitched landing pays off.",
-        "Step right once to latch the switch with the shadow, then climb to the stitch and trust the rerouted landing.",
-        "Move right, go up three times, move right onto the stitch, switch sheets, and step right into the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "stage-mark-front",
-          "name": "Stage Floor",
-          "tiles": [
-            "########",
-            "#..S...#",
-            "#..##..#",
-            "#......#",
-            "#......#",
-            "########"
-          ]
-        },
-        {
-          "id": "stage-mark-back",
-          "name": "Spotlight Grid",
-          "tiles": [
-            "########",
-            "#..S.DG#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 4,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "shadow-mark",
-          "type": "shadow",
-          "layer": 1,
-          "x": 5,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
-      "switches": [
-        {
-          "id": "stage-mark-switch",
-          "layer": 1,
-          "x": 4,
-          "y": 4,
-          "sticky": true
-        }
-      ],
-      "doors": [
-        {
-          "id": "stage-mark-door",
-          "layer": 1,
-          "x": 5,
-          "y": 1,
-          "switchIds": [
-            "stage-mark-switch"
-          ]
-        }
-      ],
-      "routingStamps": [
-        {
-          "id": "stage-mark-stamp",
-          "layer": 1,
-          "x": 3,
-          "y": 1,
-          "direction": "right",
-          "distance": 2,
-          "appliesTo": [
-            "switch"
-          ]
-        }
-      ],
-      "achievementId": "stage-route",
-      "balance": {
-        "intendedLesson": "Combine sticky shadow setup with a routed stitch landing that only works because the shadow solved the destination first.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 6,
-        "commonMisunderstanding": "Players often climb correctly but forget to move right once at the start, so the landing stays blocked."
-      }
-    },
-    "theater-side-01": {
-      "id": "theater-side-01",
-      "districtId": "theater",
-      "title": "Backstage Fold",
-      "optional": true,
-      "unlockCost": 0,
-      "postmarks": 0,
-      "requiresRooms": [
-        "theater-03"
-      ],
-      "objective": "Latch the cue, fall through the rerouted stitch, and take the hidden backstage climb.",
-      "blurb": "A secret side route that turns one marked landing into a full backstage fold.",
-      "intro": [
-        {
-          "speaker": "Stagehand",
-          "text": "The cleanest backstage routes never look like straight lines from the audience. Trust the drop and keep climbing."
-        }
-      ],
-      "hintTiers": [
-        "The first stitch is the setup. The second stitch is the route.",
-        "Move right once so the shadow latches the cue, then use the routed stitch to drop onto the lower switch point.",
-        "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
-      ],
-      "layers": [
-        {
-          "id": "stage-fold-front",
-          "name": "Front Curtain",
-          "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
-          ]
-        },
-        {
-          "id": "stage-fold-middle",
-          "name": "Backstage Grid",
-          "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#..S...#",
-            "########"
-          ]
-        },
-        {
-          "id": "stage-fold-back",
-          "name": "Fly Loft",
-          "tiles": [
-            "########",
-            "#....DG#",
-            "#......#",
-            "#......#",
-            "#..S...#",
-            "########"
-          ]
-        }
-      ],
-      "start": {
-        "layer": 0,
-        "x": 1,
-        "y": 4,
-        "facing": "right"
-      },
-      "entities": [
-        {
-          "id": "shadow-fold",
-          "type": "shadow",
-          "layer": 1,
-          "x": 5,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
-      "switches": [
-        {
-          "id": "stage-fold-switch",
-          "layer": 1,
-          "x": 4,
-          "y": 4,
-          "sticky": true
-        }
-      ],
-      "doors": [
-        {
-          "id": "stage-fold-door",
+          "id": "tp-fold-b2",
           "layer": 2,
-          "x": 5,
+          "x": 2,
           "y": 1,
-          "switchIds": [
-            "stage-fold-switch"
-          ]
-        }
-      ],
-      "routingStamps": [
-        {
-          "id": "stage-fold-stamp",
-          "layer": 1,
-          "x": 3,
-          "y": 1,
-          "direction": "down",
-          "distance": 3,
-          "appliesTo": [
-            "switch"
-          ]
+          "pairId": "tp-fold-b1"
         }
       ],
       "balance": {
-        "intendedLesson": "Push the routed shadow idea into a three-layer secret path that still hinges on one readable fold.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 8,
-        "commonMisunderstanding": "Players often keep searching the middle sheet for the goal instead of treating it as the folded route into the loft."
+        "intendedLesson": "The ultimate theater challenge combining shadow, echo, and teleporters.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 25,
+        "commonMisunderstanding": "Players keep searching the middle sheet for the goal."
       }
     },
     "rooftops-01": {
@@ -11413,58 +17484,118 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Hold the door, project the bridge, and restore the final delivery lane.",
-      "blurb": "This is the first true mixed-mechanic route in the prototype.",
+      "objective": "Use two parcels, a projector, ice, one-way gates, and switches across three layers.",
+      "blurb": "This is the first true mixed-mechanic route in the campaign.",
       "intro": [
         {
           "speaker": "Mina",
           "text": "By now the town expects more than one insight at a time. Hold the line open, then build the bridge."
         }
       ],
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
+        }
+      ],
       "hintTiers": [
-        "One parcel belongs on the switch. The lantern belongs where the tear is.",
-        "Park the parcel on the switch first so you do not have to revisit it after the bridge is ready.",
-        "Push the parcel onto the floor plate, move the lantern to x3 y2, switch layers at the stitch, then walk over the bridge and through the open door to the mailbox."
+        "One parcel for each switch. The projector bridges the gap. One-way gates force a specific circuit.",
+        "Push parcel A across ice to the visible switch. Transfer parcel B to the hidden switch. Push the projector into position. Navigate the one-way circuit.",
+        "Slide parcel A right on ice to switch at (9,5). Transfer parcel B to back layer switch. Push projector up to bridge the gap on layer 2. Navigate one-way gates through all three layers to the mailbox."
       ],
       "layers": [
         {
           "id": "roofline",
           "name": "Roofline",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##################",
+            "#...S..........#.#",
+            "#.####.###.#.#...#",
+            "#.>............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#IIIIII..#.....#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#.<.#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "gutter-mid",
+          "name": "Gutter Middle",
+          "tiles": [
+            "##################",
+            "#...S..........#.#",
+            "#.#.##.###.#.#...#",
+            "#.v............^.#",
+            "#.####.#.#.#.#.#.#",
+            "#......#...#.S...#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.S...#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "gutter",
           "name": "Gutter Route",
           "tiles": [
-            "#######",
-            "#..S..#",
-            "#..~.G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##################",
+            "#................#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#~.#.#.#.#.#.#.#",
+            "#.#.##.#...#.S...#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.S...#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 12,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "parcel-d",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 3,
+          "y": 5,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-e",
+          "type": "parcel",
+          "layer": 0,
+          "x": 7,
+          "y": 11,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-f",
+          "type": "parcel",
+          "layer": 1,
+          "x": 9,
+          "y": 7,
           "pushable": true,
           "solid": true
         },
@@ -11472,50 +17603,66 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-b",
           "type": "projector",
           "layer": 0,
-          "x": 2,
+          "x": 5,
           "y": 3,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 1,
-              "dx": 0,
-              "dy": 0
+              "layer": 2,
+              "dx": -1,
+              "dy": 1
             }
           ]
         }
       ],
       "switches": [
         {
-          "id": "roof-plate",
+          "id": "roof-plate-a",
           "layer": 0,
-          "x": 1,
-          "y": 4
+          "x": 15,
+          "y": 5
+        },
+        {
+          "id": "roof-plate-b",
+          "layer": 1,
+          "x": 7,
+          "y": 11
+        },
+        {
+          "id": "roof-plate-c",
+          "layer": 1,
+          "x": 9,
+          "y": 7
         }
       ],
       "doors": [
         {
-          "id": "roof-door",
-          "layer": 1,
-          "x": 4,
-          "y": 2,
+          "id": "roof-door-a",
+          "layer": 2,
+          "x": 15,
+          "y": 12,
           "switchIds": [
-            "roof-plate"
+            "roof-plate-a",
+            "roof-plate-b"
+          ]
+        },
+        {
+          "id": "roof-door-b",
+          "layer": 1,
+          "x": 14,
+          "y": 11,
+          "switchIds": [
+            "roof-plate-c"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Combine parcel parking, layer switching, and projection in one route.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 6,
-        "commonMisunderstanding": "Players solve the bridge first and then discover they still needed to hold the door open earlier."
-      },
-      "outro": [
-        {
-          "speaker": "Mina",
-          "text": "The higher lanes are back, but three odd little side routes are still missing from the margins."
-        }
-      ]
+        "intendedLesson": "Combine all previous mechanics.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 22,
+        "commonMisunderstanding": "Players solve the bridge first and discover they need the door open."
+      }
     },
     "rooftops-02": {
       "id": "rooftops-02",
@@ -11524,8 +17671,8 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Push the lantern into line, switch sheets, and cross the rerouted bridge.",
-      "blurb": "The rooftop stamp forwards a bridge one tile farther than the lantern expects.",
+      "objective": "Combine projection, shadow movement, teleporters, and ice across three layers.",
+      "blurb": "The rooftop route demands mastery of projection and shadow coordination.",
       "intro": [
         {
           "speaker": "Mina",
@@ -11533,80 +17680,161 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "Aim the lantern at the stamp tile, not directly at the gap.",
-        "Push the lantern left once so its projection lands on the stamp, then switch sheets and walk over the forwarded bridge.",
-        "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down, then cross right three times to the mailbox."
+        "The shadow latches a switch while the projector bridges the gap. Teleporters connect the layers.",
+        "Move to latch the shadow switch, then push the projector onto ice to slide into position. Use the teleporter to descend.",
+        "Move right to latch shadow. Push projector left onto ice, it slides to bridge position. Navigate to teleporter at layer 0, warp to layer 1, descend to stitch, switch to layer 2, cross bridge through opened door to mailbox."
       ],
       "layers": [
         {
           "id": "roof-forward-top",
           "name": "Roofline",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#II.#.#.#",
+            "#.#.##.......#...#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#...#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "roof-forward-middle",
+          "name": "Forwarded Middle",
+          "tiles": [
+            "##################",
+            "#...S..........#.#",
+            "#.#.####.###.#...#",
+            "#.T............#.#",
+            "#......#.#.S.#.#.#",
+            "#.###.##.......#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.S...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "roof-forward-bottom",
           "name": "Forwarded Span",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#...~.G#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#................#",
+            "#.######.###.#...#",
+            "#.T............#.#",
+            "#.#..~.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.S...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 3,
-        "facing": "left"
+        "x": 1,
+        "y": 12,
+        "facing": "right"
       },
       "entities": [
+        {
+          "id": "shadow-roof",
+          "type": "shadow",
+          "layer": 1,
+          "x": 16,
+          "y": 12,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
+        },
         {
           "id": "lantern-forward",
           "type": "projector",
           "layer": 0,
-          "x": 4,
-          "y": 3,
+          "x": 8,
+          "y": 4,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 1,
-              "dx": 0,
-              "dy": -1
+              "layer": 2,
+              "dx": -3,
+              "dy": 0
             }
           ]
         }
       ],
-      "switches": [],
-      "doors": [],
-      "routingStamps": [
+      "switches": [
         {
-          "id": "roof-forward-stamp",
+          "id": "roof-shadow-plate",
           "layer": 1,
-          "x": 3,
-          "y": 2,
-          "direction": "right",
-          "distance": 1,
-          "appliesTo": [
-            "projection"
+          "x": 7,
+          "y": 3,
+          "sticky": true
+        }
+      ],
+      "doors": [
+        {
+          "id": "roof-forward-door",
+          "layer": 2,
+          "x": 14,
+          "y": 12,
+          "switchIds": [
+            "roof-shadow-plate"
           ]
         }
       ],
+      "teleporters": [
+        {
+          "id": "tp-roof-a1",
+          "layer": 0,
+          "x": 15,
+          "y": 1,
+          "pairId": "tp-roof-a2"
+        },
+        {
+          "id": "tp-roof-a2",
+          "layer": 1,
+          "x": 2,
+          "y": 3,
+          "pairId": "tp-roof-a1"
+        },
+        {
+          "id": "tp-roof-b1",
+          "layer": 1,
+          "x": 15,
+          "y": 9,
+          "pairId": "tp-roof-b2"
+        },
+        {
+          "id": "tp-roof-b2",
+          "layer": 2,
+          "x": 2,
+          "y": 3,
+          "pairId": "tp-roof-b1"
+        }
+      ],
       "balance": {
-        "intendedLesson": "Introduce projection routing as a spatial alignment problem instead of a raw bridge-placement guess.",
-        "targetDifficulty": 3,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players push the lantern directly under the gap and miss that the stamp forwards the bridge one tile farther."
+        "intendedLesson": "Combine shadow latching, ice-based projector placement, and teleporter chains.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 22,
+        "commonMisunderstanding": "Players push the lantern directly under the gap."
       }
     },
     "rooftops-03": {
@@ -11616,7 +17844,7 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Forward the parcel onto the rooftop plate, then climb through the reopened lane.",
+      "objective": "Use two parcels, two switches, and teleporters across three layers to open the final corridor.",
       "blurb": "A transfer stamp can park a parcel exactly where a distant lane needs weight.",
       "intro": [
         {
@@ -11625,90 +17853,183 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "Transfer first. The stamp will handle the final parking spot for the parcel.",
-        "Stand still and transfer the parcel into the other sheet; the stamp there forwards it onto the switch.",
-        "Transfer the parcel, climb to the stitch with three moves up and two right, switch sheets, then walk right three times through the open lane to the mailbox."
+        "Each parcel activates a different switch on a different layer. Teleporters help you reach the distant areas.",
+        "Transfer one parcel to the back layer switch, push the other across the maze to the visible switch. Use teleporters to navigate between layers.",
+        "Transfer parcel A to back layer where it lands on hidden switch. Push parcel B through the maze to visible switch. Use teleporter chain to descend through three layers. Navigate through both opened doors to the mailbox."
       ],
       "layers": [
         {
           "id": "roof-transfer-top",
           "name": "Top Route",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.......#...#",
+            "#.##.###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#...#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "roof-transfer-middle",
+          "name": "Middle Route",
+          "tiles": [
+            "##################",
+            "#...S..........#.#",
+            "#.#.####.###.#...#",
+            "#..............#.#",
+            "#......#.#.S.#.#.#",
+            "#.###.##.......#.#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "roof-transfer-bottom",
           "name": "Stamped Lane",
           "tiles": [
-            "########",
-            "#..S.DG#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#................#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 12,
         "facing": "right"
       },
       "entities": [
         {
-          "id": "parcel-stamped",
+          "id": "parcel-stamped-a",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 4,
+          "y": 9,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-stamped-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 10,
+          "y": 3,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-stamped-c",
+          "type": "parcel",
+          "layer": 1,
+          "x": 6,
+          "y": 10,
           "pushable": true,
           "solid": true
         }
       ],
       "switches": [
         {
-          "id": "roof-transfer-plate",
-          "layer": 1,
+          "id": "roof-visible-plate",
+          "layer": 0,
+          "x": 15,
+          "y": 9
+        },
+        {
+          "id": "roof-hidden-plate",
+          "layer": 2,
           "x": 4,
-          "y": 4
+          "y": 8
+        },
+        {
+          "id": "roof-mid-plate",
+          "layer": 1,
+          "x": 6,
+          "y": 10
         }
       ],
       "doors": [
         {
-          "id": "roof-transfer-door",
-          "layer": 1,
-          "x": 5,
-          "y": 1,
+          "id": "roof-door-a",
+          "layer": 2,
+          "x": 14,
+          "y": 12,
           "switchIds": [
-            "roof-transfer-plate"
+            "roof-visible-plate"
+          ]
+        },
+        {
+          "id": "roof-door-b",
+          "layer": 2,
+          "x": 15,
+          "y": 5,
+          "switchIds": [
+            "roof-hidden-plate",
+            "roof-mid-plate"
           ]
         }
       ],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "roof-transfer-stamp",
+          "id": "tp-transfer-a1",
+          "layer": 0,
+          "x": 16,
+          "y": 1,
+          "pairId": "tp-transfer-a2"
+        },
+        {
+          "id": "tp-transfer-a2",
           "layer": 1,
           "x": 2,
-          "y": 4,
-          "direction": "right",
-          "distance": 2,
-          "appliesTo": [
-            "transfer"
-          ]
+          "y": 5,
+          "pairId": "tp-transfer-a1"
+        },
+        {
+          "id": "tp-transfer-b1",
+          "layer": 1,
+          "x": 15,
+          "y": 11,
+          "pairId": "tp-transfer-b2"
+        },
+        {
+          "id": "tp-transfer-b2",
+          "layer": 2,
+          "x": 2,
+          "y": 3,
+          "pairId": "tp-transfer-b1"
         }
       ],
       "balance": {
-        "intendedLesson": "Introduce transfer routing as a way to park a parcel across the fold without a long push setup.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 6,
-        "commonMisunderstanding": "Players often try to walk the parcel to the plate manually instead of trusting the transfer stamp."
+        "intendedLesson": "Triple parcel management across three layers with teleporter-assisted navigation.",
+        "targetDifficulty": 8,
+        "expectedSolveMinutes": 24,
+        "commonMisunderstanding": "Players try to walk the parcel manually."
       }
     },
     "rooftops-side-01": {
@@ -11718,10 +18039,7 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "requiresRooms": [
-        "rooftops-03"
-      ],
-      "objective": "Push the lantern into line, fold through both stitches, and trace the hidden rooftop note.",
+      "objective": "Combine projector, echo, one-way gates, and ice across three layers for the hidden rooftop note.",
       "blurb": "The skyline keeps one extra route for players who read the stamps and the folds together.",
       "intro": [
         {
@@ -11730,92 +18048,134 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "Set the lantern before you start climbing. The folded route only works once the bridge is already forwarded.",
-        "Push the lantern left once, climb to the top stitch, drop to the lower stitch on the middle sheet, then cross the forwarded bridge on the last sheet.",
-        "Push the lantern left, go up twice and left once to the stitch, switch sheets, go down twice to the lower stitch, switch again, go up once, then cross right three times to the mailbox."
+        "The projector bridges the gap, the echo holds a door, one-way gates force your circuit. Ice adds momentum.",
+        "Push the projector onto ice to slide it into bridge position. Time the echo to hold the door. Navigate the one-way gate circuit through all three layers.",
+        "Push projector right onto ice where it slides to bridge position. Navigate one-way loop to echo timing area. Queue echo, wait for it to reach switch. Pass through door, descend via stitches, cross bridge to mailbox."
+      ],
+      "requiresRooms": [
+        "rooftops-03"
       ],
       "layers": [
         {
           "id": "sky-postscript-top",
           "name": "Upper Roof",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.######.###.#...#",
+            "#.>............#.#",
+            "#.#..#.#.#II.#.#.#",
+            "#.#.##.......#...#",
+            "#.v..###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.<.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#...#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "sky-postscript-middle",
           "name": "Margin Route",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#..S...#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.#.####.###.#...#",
+            "#..............#.#",
+            "#......#.#.S.#.#.#",
+            "#.###.##.......#.#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "sky-postscript-bottom",
           "name": "Skyline Note",
           "tiles": [
-            "########",
-            "#......#",
-            "#...~.G#",
-            "#..S...#",
-            "#......#",
-            "########"
+            "##################",
+            "#................#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..~.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 3,
-        "facing": "left"
+        "x": 1,
+        "y": 12,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "lantern-postscript",
           "type": "projector",
           "layer": 0,
-          "x": 4,
-          "y": 3,
+          "x": 7,
+          "y": 5,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
               "layer": 2,
-              "dx": 0,
-              "dy": -1
+              "dx": -2,
+              "dy": 0
             }
           ]
+        },
+        {
+          "id": "echo-sky",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
         }
       ],
-      "switches": [],
-      "doors": [],
-      "routingStamps": [
+      "switches": [
         {
-          "id": "sky-postscript-stamp",
+          "id": "sky-echo-plate",
+          "layer": 1,
+          "x": 14,
+          "y": 1
+        }
+      ],
+      "doors": [
+        {
+          "id": "sky-door",
           "layer": 2,
-          "x": 3,
-          "y": 2,
-          "direction": "right",
-          "distance": 1,
-          "appliesTo": [
-            "projection"
+          "x": 14,
+          "y": 12,
+          "switchIds": [
+            "sky-echo-plate"
           ]
         }
       ],
       "balance": {
-        "intendedLesson": "Turn projection routing into a longer folded route that still hinges on one bridge-placement insight.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 8,
-        "commonMisunderstanding": "Players often reach the lower stitch correctly but forget the bridge was forwarded one tile farther than the lamp suggests."
+        "intendedLesson": "Combine projector, echo timing, ice, and one-way gates.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 25,
+        "commonMisunderstanding": "Players forget the bridge was forwarded."
       }
     },
     "rooftops-04": {
@@ -11825,8 +18185,8 @@ export const CAMPAIGN_INDEX = {
       "optional": false,
       "unlockCost": 0,
       "postmarks": 1,
-      "objective": "Park the parcel, trust the forwarded lantern bridge, and reconnect the full rooftop line.",
-      "blurb": "The final rooftop route ties pressure, projection, and three stitched sheets into one letter-long climb.",
+      "objective": "Master all mechanics across four layers to reconnect the full rooftop delivery line.",
+      "blurb": "The final rooftop route ties every mechanic into one grand puzzle across four sheets.",
       "intro": [
         {
           "speaker": "Mina",
@@ -11840,9 +18200,9 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "Treat this as setup first and travel second. The parcel and lantern should be ready before you start climbing.",
-        "Push the parcel onto the plate, use the upper stitch to reach the middle sheet, then descend to the lower stitch before you cross the bridge.",
-        "Move left three times to park the parcel, climb to the upper stitch, switch to the middle sheet, descend to the lower stitch, switch again, then go up twice and right three times through the bridge and door."
+        "Four layers, multiple entities, all mechanics. Solve the setup on layer 0 before descending.",
+        "Push parcel onto switch, align projector, latch the shadow switch, then descend through all four layers using stitches and teleporters.",
+        "Push parcel to switch at (1,10). Push projector to bridge position. Move to latch shadow. Use top stitch to layer 1, navigate to teleporter, warp to layer 2, use stitch to layer 3, cross bridge through opened doors to the mailbox."
       ],
       "achievementId": "festival-line",
       "layers": [
@@ -11850,52 +18210,113 @@ export const CAMPAIGN_INDEX = {
           "id": "festival-line-top",
           "name": "Festival Roof",
           "tiles": [
-            "########",
-            "#.S....#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.........#.#",
+            "#.>...........v..#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
           ]
         },
         {
-          "id": "festival-line-middle",
-          "name": "Carrier Fold",
+          "id": "festival-line-mid1",
+          "name": "Carrier Fold A",
           "tiles": [
-            "########",
-            "#.S....#",
-            "#......#",
-            "#......#",
-            "#.S....#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.#.######.###...#",
+            "#..............#.#",
+            "#......#.#.#.#.#.#",
+            "#.###.##.......#.#",
+            "#.<...........^..#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
+          ]
+        },
+        {
+          "id": "festival-line-mid2",
+          "name": "Carrier Fold B",
+          "tiles": [
+            "##################",
+            "#.T..............#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.........#.#",
+            "#................#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
           ]
         },
         {
           "id": "festival-line-bottom",
           "name": "Delivery Lane",
           "tiles": [
-            "########",
-            "#......#",
-            "#..~DG.#",
-            "#......#",
-            "#.S....#",
-            "########"
+            "##################",
+            "#.T..............#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..~.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#................#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#...............G#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
-        "x": 5,
-        "y": 4,
-        "facing": "left"
+        "x": 1,
+        "y": 14,
+        "facing": "right"
       },
       "entities": [
         {
           "id": "festival-parcel",
           "type": "parcel",
           "layer": 0,
-          "x": 2,
-          "y": 4,
+          "x": 4,
+          "y": 14,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "festival-parcel-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 8,
+          "y": 8,
           "pushable": true,
           "solid": true
         },
@@ -11903,56 +18324,106 @@ export const CAMPAIGN_INDEX = {
           "id": "festival-lantern",
           "type": "projector",
           "layer": 0,
-          "x": 3,
+          "x": 8,
           "y": 3,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 2,
-              "dx": -1,
-              "dy": -1
+              "layer": 3,
+              "dx": -3,
+              "dy": 1
             }
           ]
+        },
+        {
+          "id": "festival-shadow",
+          "type": "shadow",
+          "layer": 1,
+          "x": 16,
+          "y": 14,
+          "solid": true,
+          "pushable": false,
+          "mirrorAxis": "vertical"
         }
       ],
       "switches": [
         {
-          "id": "festival-line-plate",
+          "id": "festival-parcel-plate",
           "layer": 0,
           "x": 1,
-          "y": 4
+          "y": 14
+        },
+        {
+          "id": "festival-parcel-plate-b",
+          "layer": 0,
+          "x": 8,
+          "y": 12
+        },
+        {
+          "id": "festival-shadow-plate",
+          "layer": 1,
+          "x": 4,
+          "y": 4,
+          "sticky": true
         }
       ],
       "doors": [
         {
-          "id": "festival-line-door",
-          "layer": 2,
-          "x": 4,
-          "y": 2,
+          "id": "festival-door-a",
+          "layer": 3,
+          "x": 15,
+          "y": 14,
           "switchIds": [
-            "festival-line-plate"
+            "festival-parcel-plate",
+            "festival-parcel-plate-b"
+          ]
+        },
+        {
+          "id": "festival-door-b",
+          "layer": 3,
+          "x": 8,
+          "y": 3,
+          "switchIds": [
+            "festival-shadow-plate"
           ]
         }
       ],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "festival-line-stamp",
+          "id": "tp-festival-a1",
+          "layer": 1,
+          "x": 15,
+          "y": 1,
+          "pairId": "tp-festival-a2"
+        },
+        {
+          "id": "tp-festival-a2",
           "layer": 2,
           "x": 2,
-          "y": 2,
-          "direction": "right",
-          "distance": 1,
-          "appliesTo": [
-            "projection"
-          ]
+          "y": 1,
+          "pairId": "tp-festival-a1"
+        },
+        {
+          "id": "tp-festival-b1",
+          "layer": 2,
+          "x": 15,
+          "y": 12,
+          "pairId": "tp-festival-b2"
+        },
+        {
+          "id": "tp-festival-b2",
+          "layer": 3,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-festival-b1"
         }
       ],
       "balance": {
-        "intendedLesson": "Deliver a real finale by braiding parcel parking, forwarded projection, and three-layer travel into one readable route.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 9,
-        "commonMisunderstanding": "Players often start climbing before the parcel is parked and then have to unravel the whole route when the final door is still shut."
+        "intendedLesson": "The ultimate mixed-mechanic challenge across four layers.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 30,
+        "commonMisunderstanding": "Players start climbing before the parcel is parked."
       }
     },
     "attic-01": {
@@ -11962,49 +18433,118 @@ export const CAMPAIGN_INDEX = {
       "optional": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "objective": "Latch the hidden switch with your shadow, then climb into the rafters.",
-      "blurb": "A secret bonus room built around one permanent switch.",
+      "objective": "Use shadow, teleporters, ice, and one-way gates across three layers to reach the hidden mailbox.",
+      "blurb": "A secret bonus room built around shadow coordination with teleporter shortcuts.",
       "intro": [
         {
           "speaker": "Mina",
           "text": "You found the attic route. The old latch still works, if your shadow can reach it first."
         }
       ],
-      "hintTiers": [
-        "The switch only needs to be touched once.",
-        "Use your first move to the right to send the shadow onto the latch, then focus on reaching the stitch.",
-        "Move right to trigger the shadow latch, head for the stitch at the top, switch to the attic sheet, and follow the now-open route to the mailbox."
+      "outro": [
+        {
+          "speaker": "Mina",
+          "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+        }
       ],
+      "hintTiers": [
+        "The shadow must latch the switch via one-way gates while you navigate ice corridors and teleporters.",
+        "Move to place the shadow on the latch via one-way gate routing. Then use the teleporter to descend through layers.",
+        "Move right to send shadow left through one-way gate onto latch. Navigate the ice corridor to teleporter. Warp to layer 1, navigate maze to stitch, switch to layer 2, cross through opened door to mailbox."
+      ],
+      "achievementId": "attic-secret",
+      "requiresRooms": [
+        "clocktower-side-01",
+        "theater-side-01",
+        "rooftops-side-01"
+      ],
+      "secret": true,
       "layers": [
         {
           "id": "rafters-front",
           "name": "Rafters Front",
           "tiles": [
-            "#######",
-            "#.S...#",
-            "#.....#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##################",
+            "#...S..........#.#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#II.#.#.#",
+            "#.#.##.......#...#",
+            "#.<..###.#.#.#.#.#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#...#.#",
+            "#.#........#.#...#",
+            "#.#.####.#.......#",
+            "#.#........#.#...#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "rafters-mid1",
+          "name": "Rafters Middle A",
+          "tiles": [
+            "##################",
+            "#...S..T.......#.#",
+            "#.#.####.###.#...#",
+            "#..............#.#",
+            "#......#.#.#.#.#.#",
+            "#.###.##.......#.#",
+            "#.>........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
+          ]
+        },
+        {
+          "id": "rafters-mid2",
+          "name": "Rafters Middle B",
+          "tiles": [
+            "##################",
+            "#................#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.S.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.........#",
+            "##################"
           ]
         },
         {
           "id": "rafters-back",
           "name": "Rafters Back",
           "tiles": [
-            "#######",
-            "#.S...#",
-            "#....G#",
-            "#.....#",
-            "#.....#",
-            "#######"
+            "##################",
+            "#.T..............#",
+            "#.######.###.#...#",
+            "#..............#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#..........#.#.#.#",
+            "#.####.#.#.#.#.#.#",
+            "#..........#...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.#.####.#.......#",
+            "#.#.####.......G.#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 12,
         "facing": "right"
       },
       "entities": [
@@ -12012,66 +18552,98 @@ export const CAMPAIGN_INDEX = {
           "id": "shadow-b",
           "type": "shadow",
           "layer": 1,
-          "x": 5,
-          "y": 4,
+          "x": 16,
+          "y": 12,
           "solid": true,
           "pushable": false,
           "mirrorAxis": "vertical"
+        },
+        {
+          "id": "key-red-attic",
+          "type": "key",
+          "layer": 2,
+          "x": 10,
+          "y": 3,
+          "color": "red",
+          "solid": false,
+          "pushable": false
         }
       ],
       "switches": [
         {
           "id": "attic-latch",
           "layer": 1,
-          "x": 4,
-          "y": 4,
+          "x": 5,
+          "y": 3,
           "sticky": true
         }
       ],
       "doors": [
         {
           "id": "attic-door",
-          "layer": 1,
-          "x": 3,
-          "y": 2,
+          "layer": 3,
+          "x": 14,
+          "y": 12,
           "switchIds": [
             "attic-latch"
           ]
         }
       ],
-      "balance": {
-        "intendedLesson": "Teach sticky latches plus shadow setup in a short optional mastery room.",
-        "targetDifficulty": 4,
-        "expectedSolveMinutes": 5,
-        "commonMisunderstanding": "Players assume the shadow must keep standing on the switch instead of recognizing the latch is permanent."
-      },
-      "secret": true,
-      "achievementId": "attic-secret",
-      "outro": [
+      "teleporters": [
         {
-          "speaker": "Mina",
-          "text": "That was only the first hidden fold. The deeper attic line still waits above the rafters."
+          "id": "tp-attic-a1",
+          "layer": 0,
+          "x": 15,
+          "y": 1,
+          "pairId": "tp-attic-a2"
+        },
+        {
+          "id": "tp-attic-a2",
+          "layer": 1,
+          "x": 7,
+          "y": 1,
+          "pairId": "tp-attic-a1"
+        },
+        {
+          "id": "tp-attic-b1",
+          "layer": 1,
+          "x": 4,
+          "y": 9,
+          "pairId": "tp-attic-b2"
+        },
+        {
+          "id": "tp-attic-b2",
+          "layer": 3,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-attic-b1"
         }
       ],
-      "requiresRooms": [
-        "clocktower-side-01",
-        "theater-side-01",
-        "rooftops-side-01"
-      ]
+      "locks": [
+        {
+          "id": "lock-red-attic",
+          "layer": 3,
+          "x": 10,
+          "y": 8,
+          "color": "red"
+        }
+      ],
+      "balance": {
+        "intendedLesson": "Shadow latching with ice, one-way gates, teleporters, and key/lock across four layers.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 25,
+        "commonMisunderstanding": "Players assume the shadow must keep standing on the switch."
+      }
     },
     "attic-02": {
       "id": "attic-02",
       "districtId": "attic",
       "title": "Folded Ledger",
       "optional": true,
-      "secret": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "requiresRooms": [
-        "attic-01"
-      ],
-      "objective": "Latch the shadow cue, drop through the rerouted stitch, and climb the ledger route.",
-      "blurb": "One hidden route folds through a second stitch only after the shadow has opened the door at the top.",
+      "objective": "Combine shadow, echo, two parcels, and all mechanics across three layers.",
+      "blurb": "One hidden route folds through complex machinery requiring every skill learned.",
       "intro": [
         {
           "speaker": "Mina",
@@ -12079,52 +18651,108 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "hintTiers": [
-        "The shadow setup happens before the stitched drop matters.",
-        "Move right once to latch the switch with the shadow, then climb to the stitch and let the routing stamp drop you to the lower one.",
-        "Move right, go up three times, move right onto the stitch, switch sheets, switch again from the lower stitch, then head right, right, up, up, up, and right to the mailbox."
+        "Shadow latches one door, echo holds another, both parcels must reach their switches. Everything happens across three layers.",
+        "Latch the shadow switch first. Time the echo for the second door. Transfer one parcel, push the other. Descend via stitches and teleporters.",
+        "Move right to latch shadow. Navigate to echo timing area, queue it toward switch via teleporter. Transfer parcel A to back layer switch. Push parcel B to visible switch. Descend through all three layers to the mailbox."
       ],
+      "requiresRooms": [
+        "attic-01"
+      ],
+      "secret": true,
       "layers": [
         {
           "id": "attic-ledger-top",
           "name": "Ledger Top",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.........#.#",
+            "#.>...........v..#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
           ]
         },
         {
-          "id": "attic-ledger-middle",
-          "name": "Ledger Fold",
+          "id": "attic-ledger-mid1",
+          "name": "Ledger Fold A",
           "tiles": [
-            "########",
-            "#..S...#",
-            "#......#",
-            "#......#",
-            "#..S...#",
-            "########"
+            "##################",
+            "#...S..T.......#.#",
+            "#.#.######.###...#",
+            "#..............#.#",
+            "#......#.#.#.#.#.#",
+            "#.###.##.......#.#",
+            "#.<...........^..#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
+          ]
+        },
+        {
+          "id": "attic-ledger-mid2",
+          "name": "Ledger Fold B",
+          "tiles": [
+            "##################",
+            "#.T..............#",
+            "#.########.###...#",
+            "#.......RRRR..#..#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.S.......#.#",
+            "#................#",
+            "#.####.S.#.#.#.#.#",
+            "#..........F...#.#",
+            "#.########.F##...#",
+            "#..........F...#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#................#",
+            "##################"
           ]
         },
         {
           "id": "attic-ledger-bottom",
           "name": "Ledger Back",
           "tiles": [
-            "########",
-            "#....DG#",
-            "#......#",
-            "#......#",
-            "#..S...#",
-            "########"
+            "##################",
+            "#.T..............#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.#..#.#.#.#.#.#.#",
+            "#.#.##.S.......#.#",
+            "#................#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.########.###...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.########.###..G#",
+            "#................#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 14,
         "facing": "right"
       },
       "entities": [
@@ -12132,51 +18760,167 @@ export const CAMPAIGN_INDEX = {
           "id": "shadow-ledger",
           "type": "shadow",
           "layer": 1,
-          "x": 5,
-          "y": 4,
+          "x": 16,
+          "y": 14,
           "solid": true,
           "pushable": false,
           "mirrorAxis": "vertical"
+        },
+        {
+          "id": "echo-ledger",
+          "type": "echo",
+          "layer": 1,
+          "x": 1,
+          "y": 4,
+          "solid": true,
+          "pushable": false,
+          "echoDelay": 1,
+          "queuedAction": null
+        },
+        {
+          "id": "parcel-ledger-a",
+          "type": "parcel",
+          "layer": 0,
+          "x": 6,
+          "y": 12,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "parcel-ledger-b",
+          "type": "parcel",
+          "layer": 0,
+          "x": 10,
+          "y": 4,
+          "pushable": true,
+          "solid": true
+        },
+        {
+          "id": "key-blue-ledger",
+          "type": "key",
+          "layer": 2,
+          "x": 14,
+          "y": 4,
+          "color": "blue",
+          "solid": false,
+          "pushable": false
         }
       ],
       "switches": [
         {
-          "id": "attic-ledger-latch",
+          "id": "attic-ledger-shadow-latch",
           "layer": 1,
-          "x": 4,
+          "x": 6,
           "y": 4,
           "sticky": true
+        },
+        {
+          "id": "attic-ledger-echo-switch",
+          "layer": 1,
+          "x": 14,
+          "y": 1
+        },
+        {
+          "id": "attic-ledger-parcel-plate",
+          "layer": 3,
+          "x": 6,
+          "y": 12
+        },
+        {
+          "id": "attic-ledger-visible-plate",
+          "layer": 0,
+          "x": 15,
+          "y": 13
         }
       ],
       "doors": [
         {
-          "id": "attic-ledger-door",
-          "layer": 2,
-          "x": 5,
+          "id": "attic-ledger-door-a",
+          "layer": 0,
+          "x": 7,
           "y": 1,
           "switchIds": [
-            "attic-ledger-latch"
+            "attic-ledger-shadow-latch"
+          ]
+        },
+        {
+          "id": "attic-ledger-door-b",
+          "layer": 1,
+          "x": 14,
+          "y": 4,
+          "switchIds": [
+            "attic-ledger-echo-switch"
+          ]
+        },
+        {
+          "id": "attic-ledger-door-c",
+          "layer": 3,
+          "x": 15,
+          "y": 13,
+          "switchIds": [
+            "attic-ledger-parcel-plate",
+            "attic-ledger-visible-plate"
           ]
         }
       ],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "attic-ledger-stamp",
+          "id": "tp-ledger-a1",
           "layer": 1,
-          "x": 3,
+          "x": 7,
           "y": 1,
-          "direction": "down",
-          "distance": 3,
-          "appliesTo": [
-            "switch"
-          ]
+          "pairId": "tp-ledger-a2"
+        },
+        {
+          "id": "tp-ledger-a2",
+          "layer": 1,
+          "x": 14,
+          "y": 8,
+          "pairId": "tp-ledger-a1"
+        },
+        {
+          "id": "tp-ledger-b1",
+          "layer": 1,
+          "x": 4,
+          "y": 12,
+          "pairId": "tp-ledger-b2"
+        },
+        {
+          "id": "tp-ledger-b2",
+          "layer": 2,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-ledger-b1"
+        },
+        {
+          "id": "tp-ledger-c1",
+          "layer": 2,
+          "x": 14,
+          "y": 12,
+          "pairId": "tp-ledger-c2"
+        },
+        {
+          "id": "tp-ledger-c2",
+          "layer": 3,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-ledger-c1"
+        }
+      ],
+      "locks": [
+        {
+          "id": "lock-blue-ledger",
+          "layer": 3,
+          "x": 12,
+          "y": 10,
+          "color": "blue"
         }
       ],
       "balance": {
-        "intendedLesson": "Blend the secret-route shadow latch with a routed drop that converts one stitched entry into a full attic climb.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 9,
-        "commonMisunderstanding": "Players often set the shadow correctly but keep searching the middle sheet for the goal instead of switching again immediately."
+        "intendedLesson": "Full-mechanic challenge with gravity, conveyors, and key/lock across four layers.",
+        "targetDifficulty": 9,
+        "expectedSolveMinutes": 30,
+        "commonMisunderstanding": "Players set the shadow correctly but keep searching the wrong sheet."
       }
     },
     "attic-03": {
@@ -12184,68 +18928,120 @@ export const CAMPAIGN_INDEX = {
       "districtId": "attic",
       "title": "Mina's Postscript",
       "optional": true,
-      "secret": true,
       "unlockCost": 0,
       "postmarks": 0,
-      "requiresRooms": [
-        "attic-02"
-      ],
-      "objective": "Latch the final cue, trust both stamps, and carry the attic line to its last mailbox.",
-      "blurb": "The hidden route ends by combining a rerouted stitch with a forwarded lantern bridge.",
+      "objective": "Solve the ultimate puzzle using every mechanic across four layers.",
+      "blurb": "The hidden route ends by combining every mechanic the game has taught.",
       "intro": [
         {
           "speaker": "Mina",
           "text": "This is the one route I never wrote down cleanly. Set the shadow cue, trust the drop, and let the lantern finish the sentence."
         }
       ],
-      "achievementId": "secret-line",
       "hintTiers": [
-        "The first move sets the shadow cue. After that, the stamps do the clever part for you.",
-        "Move right once so the shadow latches the switch, climb to the upper stitch, let it drop you to the lower stitch, then follow the lantern bridge through the final door.",
-        "Move right, go up three times, switch sheets, switch again, go up twice, then cross right three times through the bridge and the opened door to the mailbox."
+        "Four layers, shadow, projector, teleporters, ice, one-way gates. Everything converges here.",
+        "Shadow latches door on layer 1. Projector bridges gap on layer 3. Ice and one-way gates control your path. Teleporters connect the layers.",
+        "Move right to latch shadow. Push projector onto ice to bridge position on layer 3. Navigate one-way circuit to top stitch. Descend: layer 1 stitch to layer 2, teleporter to layer 3, cross bridge through opened door to mailbox."
       ],
+      "achievementId": "secret-line",
+      "requiresRooms": [
+        "attic-02"
+      ],
+      "secret": true,
       "layers": [
         {
           "id": "postscript-top",
           "name": "Postscript Front",
           "tiles": [
-            "########",
-            "#.S....#",
-            "#......#",
-            "#......#",
-            "#......#",
-            "########"
+            "##################",
+            "#...S..........#.#",
+            "#.##########.#...#",
+            "#.>............#.#",
+            "#.#..#.#.#.#II.#.#",
+            "#.#.##.........#.#",
+            "#.v..............#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#................#",
+            "##################"
           ]
         },
         {
-          "id": "postscript-middle",
-          "name": "Postscript Fold",
+          "id": "postscript-mid1",
+          "name": "Postscript Fold A",
           "tiles": [
-            "########",
-            "#.S....#",
-            "#......#",
-            "#......#",
-            "#.S....#",
-            "########"
+            "##################",
+            "#...S..T.......#.#",
+            "#.#.########.#...#",
+            "#.<............#.#",
+            "#......#.#.#.#.#.#",
+            "#.###.##.......#.#",
+            "#.^..............#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#................#",
+            "##################"
+          ]
+        },
+        {
+          "id": "postscript-mid2",
+          "name": "Postscript Fold B",
+          "tiles": [
+            "##################",
+            "#.T..............#",
+            "#.##########.#...#",
+            "#...DDDDDD.....#.#",
+            "#.#..#.#.#.S.#.#.#",
+            "#.#.##.........#.#",
+            "#...UUUUUU.......#",
+            "#.####.S.#.#.#.#.#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#..........F...#.#",
+            "#.####.###.F.#...#",
+            "#..........F...#.#",
+            "#.##########.#...#",
+            "#................#",
+            "##################"
           ]
         },
         {
           "id": "postscript-back",
           "name": "Postscript Route",
           "tiles": [
-            "########",
-            "#......#",
-            "#..~DG.#",
-            "#......#",
-            "#.S....#",
-            "########"
+            "##################",
+            "#.T..............#",
+            "#.##########.#...#",
+            "#..............#.#",
+            "#.#..~.#.#.S.#.#.#",
+            "#.#.##.......#...#",
+            "#................#",
+            "#.####.#.#.#.#.#.#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#..............#.#",
+            "#.####.###.#.#...#",
+            "#..............#.#",
+            "#.##########.#...#",
+            "#...............G#",
+            "##################"
           ]
         }
       ],
       "start": {
         "layer": 0,
         "x": 1,
-        "y": 4,
+        "y": 14,
         "facing": "right"
       },
       "entities": [
@@ -12253,8 +19049,8 @@ export const CAMPAIGN_INDEX = {
           "id": "shadow-postscript",
           "type": "shadow",
           "layer": 1,
-          "x": 5,
-          "y": 4,
+          "x": 16,
+          "y": 14,
           "solid": true,
           "pushable": false,
           "mirrorAxis": "vertical"
@@ -12263,24 +19059,44 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-postscript",
           "type": "projector",
           "layer": 0,
-          "x": 3,
-          "y": 3,
+          "x": 8,
+          "y": 4,
           "pushable": true,
           "solid": true,
           "projectionTargets": [
             {
-              "layer": 2,
-              "dx": -1,
-              "dy": -1
+              "layer": 3,
+              "dx": -3,
+              "dy": 0
             }
           ]
+        },
+        {
+          "id": "key-yellow-post",
+          "type": "key",
+          "layer": 2,
+          "x": 14,
+          "y": 6,
+          "color": "yellow",
+          "solid": false,
+          "pushable": false
+        },
+        {
+          "id": "key-green-post",
+          "type": "key",
+          "layer": 3,
+          "x": 6,
+          "y": 8,
+          "color": "green",
+          "solid": false,
+          "pushable": false
         }
       ],
       "switches": [
         {
           "id": "postscript-latch",
           "layer": 1,
-          "x": 4,
+          "x": 6,
           "y": 4,
           "sticky": true
         }
@@ -12288,43 +19104,79 @@ export const CAMPAIGN_INDEX = {
       "doors": [
         {
           "id": "postscript-door",
-          "layer": 2,
-          "x": 4,
-          "y": 2,
+          "layer": 3,
+          "x": 15,
+          "y": 14,
           "switchIds": [
             "postscript-latch"
           ]
         }
       ],
-      "routingStamps": [
+      "teleporters": [
         {
-          "id": "postscript-switch-stamp",
+          "id": "tp-post-a1",
           "layer": 1,
-          "x": 2,
+          "x": 7,
           "y": 1,
-          "direction": "down",
-          "distance": 3,
-          "appliesTo": [
-            "switch"
-          ]
+          "pairId": "tp-post-a2"
         },
         {
-          "id": "postscript-bridge-stamp",
+          "id": "tp-post-a2",
+          "layer": 1,
+          "x": 14,
+          "y": 8,
+          "pairId": "tp-post-a1"
+        },
+        {
+          "id": "tp-post-b1",
+          "layer": 1,
+          "x": 4,
+          "y": 12,
+          "pairId": "tp-post-b2"
+        },
+        {
+          "id": "tp-post-b2",
           "layer": 2,
           "x": 2,
-          "y": 2,
-          "direction": "right",
-          "distance": 1,
-          "appliesTo": [
-            "projection"
-          ]
+          "y": 1,
+          "pairId": "tp-post-b1"
+        },
+        {
+          "id": "tp-post-c1",
+          "layer": 2,
+          "x": 15,
+          "y": 12,
+          "pairId": "tp-post-c2"
+        },
+        {
+          "id": "tp-post-c2",
+          "layer": 3,
+          "x": 2,
+          "y": 1,
+          "pairId": "tp-post-c1"
+        }
+      ],
+      "locks": [
+        {
+          "id": "lock-yellow-post",
+          "layer": 3,
+          "x": 10,
+          "y": 10,
+          "color": "yellow"
+        },
+        {
+          "id": "lock-green-post",
+          "layer": 3,
+          "x": 12,
+          "y": 12,
+          "color": "green"
         }
       ],
       "balance": {
-        "intendedLesson": "Finish the secret route by combining the two routing channels players learned separately into one clean attic postscript.",
-        "targetDifficulty": 5,
-        "expectedSolveMinutes": 10,
-        "commonMisunderstanding": "Players often remember the stitched drop but forget the lantern bridge is also being rerouted by a second stamp."
+        "intendedLesson": "The ultimate finale combining every mechanic across four layers.",
+        "targetDifficulty": 10,
+        "expectedSolveMinutes": 35,
+        "commonMisunderstanding": "Players forget the lantern bridge is being rerouted."
       }
     }
   }
