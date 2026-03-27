@@ -6,125 +6,60 @@
     <title>Patchwork Post</title>
     <link rel="stylesheet" href="./styles/app.css" />
   </head>
-  <body>
-    <div class="shell">
-      <header class="topbar">
+  <body data-screen="title">
+    <!-- ═══ Title Screen ═══ -->
+    <div id="title-screen" class="screen">
+      <div class="title-card">
+        <p class="eyebrow">Warm Whimsical Layered Logic</p>
+        <h1>Patchwork Post</h1>
+        <p class="title-blurb">
+          Move through stitched paper layers, transfer parcels between sheets,
+          and coordinate echoes and shadows to reopen Patchwork Post.
+        </p>
+        <div class="title-actions">
+          <button id="start-btn" class="primary">Start Delivery Route</button>
+          <button id="resume-btn" class="secondary">Resume Last Room</button>
+        </div>
+        <div class="title-controls">
+          <p><strong>Keyboard:</strong> arrows or WASD move, <kbd>Tab</kbd> switch layer, <kbd>X</kbd> transfer, <kbd>Z</kbd>/<kbd>Y</kbd> undo/redo, <kbd>R</kbd> reset, <kbd>Space</kbd> wait.</p>
+          <p><strong>Controller:</strong> d-pad move, <kbd>A</kbd> wait, <kbd>X</kbd> transfer, <kbd>Y</kbd> switch layer, shoulder undo/redo.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Map Screen ═══ -->
+    <div id="map-screen" class="screen">
+      <header class="map-header">
         <div>
           <p class="eyebrow">Festival Delivery Prototype</p>
           <h1>Patchwork Post</h1>
         </div>
-        <div class="topbar-stats">
+        <div class="map-stats">
           <div class="stat-chip">
             <span>Postmarks</span>
             <strong id="postmark-count">0</strong>
           </div>
           <div class="stat-chip">
-            <span>Room</span>
+            <span>Rooms</span>
             <strong id="room-count">0 / 0</strong>
           </div>
         </div>
       </header>
 
-      <main class="layout">
-        <aside class="panel map-panel">
-          <div class="panel-header">
-            <h2>Town Map</h2>
-            <p>Branch through the town and reopen routes layer by layer.</p>
-          </div>
+      <div class="map-body">
+        <div class="map-districts">
+          <h2>Town Map</h2>
+          <p class="map-subtitle">Select a room to begin.</p>
           <div id="district-list" class="district-list"></div>
           <div class="legend">
             <span class="badge mandatory">Main Route</span>
             <span class="badge optional">Side Route</span>
             <span class="badge locked">Locked</span>
           </div>
-        </aside>
+        </div>
 
-        <section class="panel play-panel">
-          <div class="canvas-wrap">
-            <canvas id="game-canvas" width="1180" height="760"></canvas>
-            <div id="start-screen" class="overlay">
-              <div class="overlay-card">
-                <p class="eyebrow">Warm Whimsical Layered Logic</p>
-                <h2>Restore the town before the festival begins.</h2>
-                <p>
-                  Move through stitched paper layers, transfer parcels between sheets,
-                  and coordinate echoes and shadows to reopen Patchwork Post.
-                </p>
-                <div class="overlay-actions">
-                  <button id="start-btn" class="primary">Start Delivery Route</button>
-                  <button id="resume-btn" class="secondary">Resume Last Room</button>
-                </div>
-                <div class="overlay-controls">
-                  <p><strong>Keyboard:</strong> arrows or WASD move, <kbd>Tab</kbd> switch layer, <kbd>X</kbd> transfer, <kbd>Z</kbd>/<kbd>Y</kbd> undo and redo, <kbd>R</kbd> reset, <kbd>Space</kbd> wait.</p>
-                  <p><strong>Controller:</strong> d-pad move, <kbd>A</kbd> wait, <kbd>X</kbd> transfer, <kbd>Y</kbd> switch layer, shoulder buttons undo and redo.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="control-bar">
-            <button data-action="up">Up</button>
-            <button data-action="left">Left</button>
-            <button data-action="down">Down</button>
-            <button data-action="right">Right</button>
-            <button data-action="wait">Wait</button>
-            <button data-action="switch_layer">Switch Layer</button>
-            <button data-action="transfer">Transfer</button>
-            <button data-action="undo">Undo</button>
-            <button data-action="redo">Redo</button>
-            <button data-action="reset">Reset</button>
-            <button data-action="replay">Replay</button>
-          </div>
-
-          <div class="status-strip">
-            <div>
-              <span class="label">District</span>
-              <strong id="district-name">Mailroom</strong>
-            </div>
-            <div>
-              <span class="label">Room</span>
-              <strong id="room-name">Loose Thread</strong>
-            </div>
-            <div>
-              <span class="label">Moves</span>
-              <strong id="move-count">0</strong>
-            </div>
-            <div>
-              <span class="label">Active Layer</span>
-              <strong id="active-layer-name">Front Sheet</strong>
-            </div>
-            <div>
-              <span class="label">Objective</span>
-              <strong id="objective-text">Reach the glowing mailbox.</strong>
-            </div>
-          </div>
-        </section>
-
-        <aside class="panel info-panel">
-          <div class="panel-header">
-            <h2 id="story-title">Town Journal</h2>
-            <p id="story-summary">Small characters, short scenes, and clean mechanical reads.</p>
-          </div>
-
-          <section class="story-card">
-            <h3>Current Beat</h3>
-            <div id="dialogue-card" class="dialogue-card"></div>
-          </section>
-
+        <div class="map-sidebar">
           <details class="drawer" open>
-            <summary>Hints</summary>
-            <div class="drawer-content">
-              <p id="hint-summary">Optional hints preserve momentum without spoiling the room too early.</p>
-              <div class="hint-actions">
-                <button data-hint-tier="1">Hint 1</button>
-                <button data-hint-tier="2">Hint 2</button>
-                <button data-hint-tier="3">Hint 3</button>
-              </div>
-              <div id="hint-list" class="hint-list"></div>
-            </div>
-          </details>
-
-          <details class="drawer">
             <summary>Journal & Achievements</summary>
             <div class="drawer-content">
               <div id="journal-list" class="journal-list"></div>
@@ -158,9 +93,9 @@
             <summary>Content Tools</summary>
             <div class="drawer-content">
               <div class="tool-row">
-                <button id="refresh-room-json">Refresh Current Room JSON</button>
+                <button id="refresh-room-json">Refresh JSON</button>
                 <button id="load-room-json">Preview JSON</button>
-                <button id="validate-room">Validate Room</button>
+                <button id="validate-room">Validate</button>
               </div>
               <div class="tool-row hint-authoring">
                 <input id="author-hint-1" type="text" placeholder="Hint tier 1" />
@@ -170,14 +105,81 @@
               <textarea id="room-json" spellcheck="false"></textarea>
               <pre id="validation-output" class="validation-output"></pre>
               <div class="tool-row">
-                <button id="replay-solution">Replay Best Solution</button>
-                <button id="replay-current">Replay Current Run</button>
+                <button id="replay-solution">Replay Best</button>
+                <button id="replay-current">Replay Current</button>
               </div>
               <pre id="action-log" class="validation-output"></pre>
             </div>
           </details>
-        </aside>
-      </main>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Play Screen ═══ -->
+    <div id="play-screen" class="screen">
+      <div class="play-hud">
+        <button id="hud-back" class="hud-btn" title="Back to Map (Esc)">← Map</button>
+        <div class="hud-info">
+          <strong id="hud-room-name">Room</strong>
+          <span class="hud-sep">·</span>
+          <span id="hud-objective">Objective</span>
+        </div>
+        <div class="hud-stats">
+          <span id="hud-moves">0 moves</span>
+          <span class="hud-sep">·</span>
+          <span id="hud-layer">Layer</span>
+        </div>
+        <div class="hud-actions">
+          <button id="hud-hint" class="hud-btn small">Hint</button>
+          <button id="hud-undo" class="hud-btn small" title="Undo (Z)">↩</button>
+          <button id="hud-redo" class="hud-btn small" title="Redo (Y)">↪</button>
+          <button id="hud-reset" class="hud-btn small" title="Reset (R)">⟲</button>
+        </div>
+      </div>
+
+      <div class="play-canvas-area">
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Solve overlay -->
+        <div id="solve-overlay" class="solve-overlay hidden">
+          <div class="solve-card">
+            <h2>Route Restored!</h2>
+            <p id="solve-stats">12 moves</p>
+            <div class="solve-actions">
+              <button id="solve-next" class="primary">Next Room →</button>
+              <button id="solve-replay" class="secondary">Replay</button>
+              <button id="solve-map" class="secondary">Town Map</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hint overlay -->
+        <div id="hint-overlay" class="hint-overlay hidden">
+          <div class="hint-card">
+            <div class="hint-header">
+              <h3>Hints</h3>
+              <button id="hint-close" class="hud-btn small">✕</button>
+            </div>
+            <div id="hint-content"></div>
+            <div class="hint-actions">
+              <button data-hint-tier="1">Reveal Hint 1</button>
+              <button data-hint-tier="2">Reveal Hint 2</button>
+              <button data-hint-tier="3">Reveal Hint 3</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="play-controls">
+        <button data-action="up" title="↑">▲</button>
+        <button data-action="left" title="←">◄</button>
+        <button data-action="down" title="↓">▼</button>
+        <button data-action="right" title="→">►</button>
+        <span class="control-sep"></span>
+        <button data-action="wait" title="Space">Wait</button>
+        <button data-action="switch_layer" title="Tab">Layer</button>
+        <button data-action="transfer" title="X">Transfer</button>
+      </div>
     </div>
 
     <script type="module" src="./src/main.js"></script>
