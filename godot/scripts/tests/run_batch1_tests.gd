@@ -43,15 +43,22 @@ func _test_canonical_solutions(campaign: Dictionary, solutions: Dictionary) -> v
 		_expect(int(runtime.get("moveCount", -1)) == room_solutions[room_id].size(), "%s move count should match canonical solution length." % room_id)
 
 func _test_snapshot_controls(campaign: Dictionary) -> void:
+	# mailroom-02 "Stamped Twice": start at (1,8) facing right.
+	# Navigate up three tiles to (1,5), then right to (2,5) facing right.
+	# Parcel-a sits at (3,5) on layer 0. Transfer sends it to layer 1.
 	var engine = EngineScript.new(campaign)
 	engine.load_room("mailroom-02")
 
-	_expect(engine.dispatch({"type": "move", "direction": "right"}), "mailroom-02 first move should succeed.")
-	var snapshot_after_move: Dictionary = engine.get_room_snapshot()
-	_expect(int(engine.get_runtime().get("player", {}).get("x", -1)) == 2, "Player should be at x2 after the opening move.")
+	_expect(engine.dispatch({"type": "move", "direction": "up"}), "mailroom-02 first move (up) should succeed.")
+	_expect(engine.dispatch({"type": "move", "direction": "up"}), "mailroom-02 second move (up) should succeed.")
+	_expect(engine.dispatch({"type": "move", "direction": "up"}), "mailroom-02 third move (up) should succeed.")
+	_expect(engine.dispatch({"type": "move", "direction": "right"}), "mailroom-02 fourth move (right) should succeed.")
+	var snapshot_after_moves: Dictionary = engine.get_room_snapshot()
+	_expect(int(engine.get_runtime().get("player", {}).get("x", -1)) == 2, "Player should be at x2 after navigating to parcel.")
+	_expect(int(engine.get_runtime().get("player", {}).get("y", -1)) == 5, "Player should be at y5 after navigating to parcel.")
 
 	_expect(engine.dispatch({"type": "transfer"}), "mailroom-02 transfer should succeed.")
-	_expect(int(engine.get_runtime().get("entities", [])[0].get("layer", -1)) == 1, "Parcel should move to layer 2 after transfer.")
+	_expect(int(engine.get_runtime().get("entities", [])[0].get("layer", -1)) == 1, "Parcel should move to layer 1 after transfer.")
 
 	_expect(engine.dispatch({"type": "undo"}), "Undo should succeed.")
 	_expect(int(engine.get_runtime().get("entities", [])[0].get("layer", -1)) == 0, "Undo should return parcel to its original layer.")
@@ -60,13 +67,14 @@ func _test_snapshot_controls(campaign: Dictionary) -> void:
 	_expect(engine.dispatch({"type": "redo"}), "Redo should succeed.")
 	_expect(int(engine.get_runtime().get("entities", [])[0].get("layer", -1)) == 1, "Redo should reapply the transfer.")
 
-	engine.restore_snapshot(snapshot_after_move)
+	engine.restore_snapshot(snapshot_after_moves)
 	_expect(int(engine.get_runtime().get("player", {}).get("x", -1)) == 2, "Snapshot restore should return the player to x2.")
-	_expect(int(engine.get_runtime().get("entities", [])[0].get("layer", -1)) == 0, "Snapshot restore should return the parcel to layer 1.")
+	_expect(int(engine.get_runtime().get("entities", [])[0].get("layer", -1)) == 0, "Snapshot restore should return the parcel to layer 0.")
 
 	_expect(engine.dispatch({"type": "reset"}), "Reset should succeed.")
 	_expect(int(engine.get_runtime().get("player", {}).get("x", -1)) == 1, "Reset should return the player to the starting x.")
-	_expect(int(engine.get_runtime().get("entities", [])[0].get("layer", -1)) == 0, "Reset should return the parcel to layer 1.")
+	_expect(int(engine.get_runtime().get("player", {}).get("y", -1)) == 8, "Reset should return the player to the starting y.")
+	_expect(int(engine.get_runtime().get("entities", [])[0].get("layer", -1)) == 0, "Reset should return the parcel to layer 0.")
 	_expect(int(engine.get_runtime().get("moveCount", -1)) == 0, "Reset should clear move count.")
 
 func _test_replay(campaign: Dictionary, solutions: Dictionary) -> void:

@@ -400,6 +400,3580 @@ export const CANONICAL_SOLUTIONS = {
       "type": "move",
       "direction": "right"
     }
+  ],
+  "mailroom-03": [
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "market-02": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "transfer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "transfer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "market-03": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "transfer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "transfer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "greenhouse-01": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "greenhouse-02": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "greenhouse-03": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "market-01": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "transfer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "greenhouse-04": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "clocktower-02": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    }
+  ],
+  "clocktower-03": [
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "theater-01": [
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "theater-02": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "rooftops-01": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "rooftops-02": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "rooftops-03": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "rooftops-04": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "clocktower-side-01": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "theater-side-01": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "rooftops-side-01": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "attic-01": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "attic-02": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "attic-03": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    }
+  ],
+  "theater-03": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "left"
+    }
   ]
 };
 export const THREE_LAYER_PROOF_SOLUTION = [

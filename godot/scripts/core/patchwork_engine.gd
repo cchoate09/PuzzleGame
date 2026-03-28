@@ -8,6 +8,20 @@ const DIRECTIONS := {
 	"right": {"dx": 1, "dy": 0, "facing": "right"},
 }
 
+const ONE_WAY_TILES := {
+	">": {"dx": 1, "dy": 0},
+	"<": {"dx": -1, "dy": 0},
+	"^": {"dx": 0, "dy": -1},
+	"v": {"dx": 0, "dy": 1},
+}
+
+const CONVEYOR_TILES := {
+	"R": {"dx": 1, "dy": 0},
+	"L": {"dx": -1, "dy": 0},
+	"U": {"dx": 0, "dy": -1},
+	"D": {"dx": 0, "dy": 1},
+}
+
 var campaign: Dictionary = {}
 var room: Dictionary = {}
 var runtime: Dictionary = {}
@@ -364,6 +378,14 @@ func try_transfer() -> bool:
 func try_move_actor(actor: Dictionary, dx: int, dy: int, can_push: bool) -> bool:
 	var target_x := int(actor["x"]) + dx
 	var target_y := int(actor["y"]) + dy
+
+	# One-way gate check: can only enter if movement direction matches gate direction
+	var target_tile := get_tile(int(actor["layer"]), target_x, target_y)
+	if ONE_WAY_TILES.has(target_tile):
+		var gate: Dictionary = ONE_WAY_TILES[target_tile]
+		if dx != int(gate["dx"]) or dy != int(gate["dy"]):
+			return false
+
 	var blocking_entity := find_entity_at(int(actor["layer"]), target_x, target_y, {
 		"solidOnly": true,
 		"ignoreEntityId": actor.get("id", ""),
@@ -374,13 +396,15 @@ func try_move_actor(actor: Dictionary, dx: int, dy: int, can_push: bool) -> bool
 			return false
 		var beyond_x := target_x + dx
 		var beyond_y := target_y + dy
-		if not is_passable(int(actor["layer"]), beyond_x, beyond_y, {"ignoreEntityId": blocking_entity["id"]}):
+		if not is_passable(int(actor["layer"]), beyond_x, beyond_y, {"ignoreEntityId": blocking_entity["id"], "moveDx": dx, "moveDy": dy}):
 			return false
 		blocking_entity["x"] = beyond_x
 		blocking_entity["y"] = beyond_y
 	elif not is_passable(int(actor["layer"]), target_x, target_y, {
 		"ignoreEntityId": actor.get("id", ""),
 		"ignorePlayer": actor != runtime.get("player", {}),
+		"moveDx": dx,
+		"moveDy": dy,
 	}):
 		return false
 
@@ -388,6 +412,28 @@ func try_move_actor(actor: Dictionary, dx: int, dy: int, can_push: bool) -> bool
 	actor["y"] = target_y
 	if actor == runtime.get("player", {}):
 		runtime["activeLayer"] = actor["layer"]
+
+	# Ice slide: keep moving in same direction until blocked
+	if target_tile == "I":
+		_slide_on_ice(actor, dx, dy)
+
+	# Teleporter: warp to paired teleporter
+	if target_tile == "T" and actor == runtime.get("player", {}):
+		_apply_teleport(actor)
+
+	# Gravity tile: fall downward until blocked
+	var current_tile := get_tile(int(actor["layer"]), int(actor["x"]), int(actor["y"]))
+	if current_tile == "F":
+		_apply_gravity(actor)
+
+	# Conveyor belt: push one tile in belt direction
+	if CONVEYOR_TILES.has(current_tile):
+		_apply_conveyor(actor, current_tile)
+
+	# Key pickup (player only)
+	if actor == runtime.get("player", {}):
+		_try_collect_key(actor)
+
 	return true
 
 func is_passable(layer: int, x: int, y: int, options: Dictionary = {}) -> bool:
@@ -399,10 +445,23 @@ func is_passable(layer: int, x: int, y: int, options: Dictionary = {}) -> bool:
 		if not bridges.has(_coord_key(layer, x, y)):
 			return false
 
+	# One-way gate: only passable if movement direction matches
+	if ONE_WAY_TILES.has(tile) and options.has("moveDx") and options.has("moveDy"):
+		var gate: Dictionary = ONE_WAY_TILES[tile]
+		if int(options["moveDx"]) != int(gate["dx"]) or int(options["moveDy"]) != int(gate["dy"]):
+			return false
+
 	var door := find_door_at(layer, x, y)
 	if not door.is_empty():
 		var open_doors: Dictionary = runtime.get("dynamicState", {}).get("openDoors", {})
 		if not open_doors.has(door["id"]):
+			return false
+
+	# Color lock: passable only if player has matching key
+	var lock := _find_lock_at(layer, x, y)
+	if not lock.is_empty():
+		var open_locks: Dictionary = runtime.get("dynamicState", {}).get("openLocks", {})
+		if not open_locks.has(lock["id"]):
 			return false
 
 	var occupant := find_entity_at(layer, x, y, {
@@ -418,6 +477,146 @@ func is_passable(layer: int, x: int, y: int, options: Dictionary = {}) -> bool:
 			return false
 
 	return true
+
+func _slide_on_ice(actor: Dictionary, dx: int, dy: int) -> void:
+	var max_slide := 20
+	for _i in range(max_slide):
+		var next_x := int(actor["x"]) + dx
+		var next_y := int(actor["y"]) + dy
+		var next_tile := get_tile(int(actor["layer"]), next_x, next_y)
+
+		# Check one-way gate
+		if ONE_WAY_TILES.has(next_tile):
+			var gate: Dictionary = ONE_WAY_TILES[next_tile]
+			if dx != int(gate["dx"]) or dy != int(gate["dy"]):
+				break
+
+		# Check if we can move there (no pushing while sliding)
+		if not is_passable(int(actor["layer"]), next_x, next_y, {
+			"ignoreEntityId": actor.get("id", ""),
+			"ignorePlayer": actor != runtime.get("player", {}),
+			"moveDx": dx,
+			"moveDy": dy,
+		}):
+			break
+
+		# Check for blocking entities
+		var blocker := find_entity_at(int(actor["layer"]), next_x, next_y, {
+			"solidOnly": true,
+			"ignoreEntityId": actor.get("id", ""),
+		})
+		if not blocker.is_empty():
+			break
+
+		actor["x"] = next_x
+		actor["y"] = next_y
+		if actor == runtime.get("player", {}):
+			runtime["activeLayer"] = actor["layer"]
+
+		# Stop sliding if we land on a non-ice tile
+		if next_tile != "I":
+			break
+
+func _apply_teleport(actor: Dictionary) -> void:
+	var teleporters: Array = room.get("teleporters", [])
+	var current_tp: Dictionary = {}
+	for tp in teleporters:
+		if int(tp.get("layer", -1)) == int(actor["layer"]) and int(tp.get("x", -1)) == int(actor["x"]) and int(tp.get("y", -1)) == int(actor["y"]):
+			current_tp = tp
+			break
+	if current_tp.is_empty() or not current_tp.has("pairId"):
+		return
+	var dest: Dictionary = {}
+	for tp in teleporters:
+		if tp.get("id", "") == current_tp["pairId"]:
+			dest = tp
+			break
+	if dest.is_empty():
+		return
+	if is_passable(int(dest["layer"]), int(dest["x"]), int(dest["y"]), {"ignorePlayer": true}):
+		actor["layer"] = int(dest["layer"])
+		actor["x"] = int(dest["x"])
+		actor["y"] = int(dest["y"])
+		if actor == runtime.get("player", {}):
+			runtime["activeLayer"] = int(dest["layer"])
+
+func _apply_gravity(actor: Dictionary) -> void:
+	var max_fall := 20
+	for _i in range(max_fall):
+		var next_x := int(actor["x"])
+		var next_y := int(actor["y"]) + 1
+		var next_tile := get_tile(int(actor["layer"]), next_x, next_y)
+		if next_tile.is_empty() or next_tile == "#":
+			break
+		var blocker := find_entity_at(int(actor["layer"]), next_x, next_y, {
+			"solidOnly": true,
+			"ignoreEntityId": actor.get("id", ""),
+		})
+		if not blocker.is_empty():
+			break
+		if not is_passable(int(actor["layer"]), next_x, next_y, {
+			"ignoreEntityId": actor.get("id", ""),
+			"ignorePlayer": actor != runtime.get("player", {}),
+			"moveDx": 0,
+			"moveDy": 1,
+		}):
+			break
+		actor["x"] = next_x
+		actor["y"] = next_y
+		if actor == runtime.get("player", {}):
+			runtime["activeLayer"] = actor["layer"]
+		if get_tile(int(actor["layer"]), int(actor["x"]), int(actor["y"])) != "F":
+			break
+
+func _apply_conveyor(actor: Dictionary, tile: String) -> void:
+	var dir: Dictionary = CONVEYOR_TILES.get(tile, {})
+	if dir.is_empty():
+		return
+	var next_x := int(actor["x"]) + int(dir["dx"])
+	var next_y := int(actor["y"]) + int(dir["dy"])
+	var next_tile := get_tile(int(actor["layer"]), next_x, next_y)
+	if ONE_WAY_TILES.has(next_tile):
+		var gate: Dictionary = ONE_WAY_TILES[next_tile]
+		if int(dir["dx"]) != int(gate["dx"]) or int(dir["dy"]) != int(gate["dy"]):
+			return
+	var blocker := find_entity_at(int(actor["layer"]), next_x, next_y, {
+		"solidOnly": true,
+		"ignoreEntityId": actor.get("id", ""),
+	})
+	if not blocker.is_empty():
+		return
+	if not is_passable(int(actor["layer"]), next_x, next_y, {
+		"ignoreEntityId": actor.get("id", ""),
+		"ignorePlayer": actor != runtime.get("player", {}),
+		"moveDx": int(dir["dx"]),
+		"moveDy": int(dir["dy"]),
+	}):
+		return
+	actor["x"] = next_x
+	actor["y"] = next_y
+	if actor == runtime.get("player", {}):
+		runtime["activeLayer"] = actor["layer"]
+
+func _try_collect_key(actor: Dictionary) -> void:
+	var entities: Array = runtime.get("entities", [])
+	var key_entity: Dictionary = {}
+	for entity in entities:
+		if entity.get("type", "") == "key" and int(entity.get("layer", -1)) == int(actor["layer"]) and int(entity.get("x", -1)) == int(actor["x"]) and int(entity.get("y", -1)) == int(actor["y"]):
+			key_entity = entity
+			break
+	if key_entity.is_empty():
+		return
+	var collected_keys: Array = runtime.get("collectedKeys", [])
+	var color: String = key_entity.get("color", "")
+	if not collected_keys.has(color):
+		collected_keys.append(color)
+	var new_entities: Array = []
+	for entity in entities:
+		if entity != key_entity:
+			new_entities.append(entity)
+	runtime["entities"] = new_entities
+	var notifications: Array = runtime.get("notifications", [])
+	notifications.append({"type": "key_collected", "color": color})
 
 func update_dynamic_state(runtime_state: Dictionary) -> void:
 	var bridges := {}
@@ -460,9 +659,18 @@ func update_dynamic_state(runtime_state: Dictionary) -> void:
 			latched.append(switch_def["id"])
 
 	runtime_state["latchedSwitches"] = latched
+
+	# Locks: open if player has collected the matching color key
+	var open_locks := {}
+	for lock in room.get("locks", []):
+		var collected_keys: Array = runtime_state.get("collectedKeys", [])
+		if collected_keys.has(lock.get("color", "")):
+			open_locks[lock["id"]] = true
+
 	runtime_state["dynamicState"] = {
 		"activeSwitches": active_switches,
 		"openDoors": open_doors,
+		"openLocks": open_locks,
 		"bridges": bridges,
 	}
 
@@ -492,6 +700,12 @@ func find_door_at(layer: int, x: int, y: int) -> Dictionary:
 	for door in room.get("doors", []):
 		if int(door.get("layer", -1)) == layer and int(door.get("x", -1)) == x and int(door.get("y", -1)) == y:
 			return door
+	return {}
+
+func _find_lock_at(layer: int, x: int, y: int) -> Dictionary:
+	for lock in room.get("locks", []):
+		if int(lock.get("layer", -1)) == layer and int(lock.get("x", -1)) == x and int(lock.get("y", -1)) == y:
+			return lock
 	return {}
 
 func get_tile(layer: int, x: int, y: int) -> String:

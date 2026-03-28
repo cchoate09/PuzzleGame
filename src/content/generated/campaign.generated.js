@@ -324,7 +324,7 @@ export const ROOM_DEFS = [
           "#.#.#.##...#",
           "#.#.S....#.#",
           "#...#.##.#.#",
-          "#.#S#....#.#",
+          "#.#.#....#.#",
           "#.#....##..#",
           "############"
         ]
@@ -352,9 +352,9 @@ export const ROOM_DEFS = [
           "############",
           "#.#.##.#...#",
           "#......#.#.#",
-          "#.###..S.#.#",
+          "#.###....#.#",
           "#.#...##...#",
-          "#.#.S..#.#.#",
+          "#.#....#.#.#",
           "#.#.####.#.#",
           "#.#S#......#",
           "#.#..#.#..G#",
@@ -653,7 +653,7 @@ export const ROOM_DEFS = [
           "#.####.###...#",
           "#.#........#.#",
           "#.#.##.#.#.#.#",
-          "#......#IIII.#",
+          "#.......IIII.#",
           "#.##.###.#.#.#",
           "#........#.#.#",
           "#.####.#.....#",
@@ -724,8 +724,7 @@ export const ROOM_DEFS = [
         "x": 11,
         "y": 8,
         "switchIds": [
-          "market-plate-a",
-          "market-plate-b"
+          "market-plate-a"
         ]
       }
     ],
@@ -1830,21 +1829,12 @@ export const ROOM_DEFS = [
         "solid": true
       },
       {
-        "id": "parcel-draft-b",
-        "type": "parcel",
-        "layer": 0,
-        "x": 8,
-        "y": 6,
-        "pushable": true,
-        "solid": true
-      },
-      {
         "id": "lantern-draft-a",
         "type": "projector",
         "layer": 0,
-        "x": 6,
+        "x": 5,
         "y": 3,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -1860,7 +1850,7 @@ export const ROOM_DEFS = [
         "layer": 0,
         "x": 10,
         "y": 8,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -1877,12 +1867,6 @@ export const ROOM_DEFS = [
         "layer": 0,
         "x": 1,
         "y": 12
-      },
-      {
-        "id": "draft-plate-b",
-        "layer": 0,
-        "x": 8,
-        "y": 10
       }
     ],
     "doors": [
@@ -1893,15 +1877,6 @@ export const ROOM_DEFS = [
         "y": 12,
         "switchIds": [
           "draft-plate-a"
-        ]
-      },
-      {
-        "id": "draft-door-b",
-        "layer": 1,
-        "x": 12,
-        "y": 3,
-        "switchIds": [
-          "draft-plate-b"
         ]
       }
     ],
@@ -2442,19 +2417,7 @@ export const ROOM_DEFS = [
       "y": 10,
       "facing": "right"
     },
-    "entities": [
-      {
-        "id": "echo-pendulum",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 10,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
-      }
-    ],
+    "entities": [],
     "switches": [
       {
         "id": "clock-pendulum-plate",
@@ -2469,9 +2432,7 @@ export const ROOM_DEFS = [
         "layer": 0,
         "x": 7,
         "y": 1,
-        "switchIds": [
-          "clock-pendulum-plate"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -2816,7 +2777,7 @@ export const ROOM_DEFS = [
           "#.####.###..#..#",
           "#..........#...#",
           "#.#.####.......#",
-          "#..............#",
+          "#.........S....#",
           "################"
         ]
       },
@@ -2825,16 +2786,16 @@ export const ROOM_DEFS = [
         "name": "Spotlight Grid",
         "tiles": [
           "################",
-          "#...S......#...#",
+          "#..........#...#",
           "#.####.###.....#",
           "#..............#",
           "#.#..#.##.#.#..#",
           "#.#.##...#..#..#",
-          "#..............#",
+          "#.............S#",
           "#.####.###..#..#",
           "#..........#...#",
           "#.#.####.......#",
-          "#..............#",
+          "#.........S....#",
           "################"
         ]
       },
@@ -2843,12 +2804,12 @@ export const ROOM_DEFS = [
         "name": "Deep Stage",
         "tiles": [
           "################",
-          "#...S........G.#",
+          "#............G.#",
           "#.####.###.#...#",
           "#..............#",
           "#.#..#.##.#.#..#",
           "#.#.##...#..#..#",
-          "#..............#",
+          "#.............S#",
           "#.####.###..#..#",
           "#..........#...#",
           "#.#.####.......#",
@@ -2863,28 +2824,7 @@ export const ROOM_DEFS = [
       "y": 7,
       "facing": "right"
     },
-    "entities": [
-      {
-        "id": "shadow-mark-a",
-        "type": "shadow",
-        "layer": 1,
-        "x": 12,
-        "y": 8,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
-        "id": "shadow-mark-b",
-        "type": "shadow",
-        "layer": 2,
-        "x": 12,
-        "y": 8,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
+    "entities": [],
     "switches": [
       {
         "id": "stage-mark-switch-a",
@@ -2907,18 +2847,14 @@ export const ROOM_DEFS = [
         "layer": 0,
         "x": 8,
         "y": 1,
-        "switchIds": [
-          "stage-mark-switch-a"
-        ]
+        "switchIds": []
       },
       {
         "id": "stage-mark-door-b",
         "layer": 3,
         "x": 13,
         "y": 1,
-        "switchIds": [
-          "stage-mark-switch-b"
-        ]
+        "switchIds": []
       }
     ],
     "balance": {
@@ -3019,29 +2955,7 @@ export const ROOM_DEFS = [
       "y": 12,
       "facing": "right"
     },
-    "entities": [
-      {
-        "id": "shadow-fold",
-        "type": "shadow",
-        "layer": 1,
-        "x": 14,
-        "y": 12,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
-        "id": "echo-fold",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
-      }
-    ],
+    "entities": [],
     "switches": [
       {
         "id": "stage-fold-shadow-switch",
@@ -3063,18 +2977,14 @@ export const ROOM_DEFS = [
         "layer": 0,
         "x": 7,
         "y": 1,
-        "switchIds": [
-          "stage-fold-shadow-switch"
-        ]
+        "switchIds": []
       },
       {
         "id": "stage-fold-door-b",
         "layer": 1,
         "x": 13,
         "y": 4,
-        "switchIds": [
-          "stage-fold-echo-switch"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -3213,18 +3123,18 @@ export const ROOM_DEFS = [
         "id": "parcel-d",
         "type": "parcel",
         "layer": 0,
-        "x": 3,
+        "x": 15,
         "y": 5,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
         "id": "parcel-e",
         "type": "parcel",
-        "layer": 0,
+        "layer": 1,
         "x": 7,
         "y": 11,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
@@ -3233,16 +3143,16 @@ export const ROOM_DEFS = [
         "layer": 1,
         "x": 9,
         "y": 7,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
         "id": "lantern-b",
         "type": "projector",
         "layer": 0,
-        "x": 5,
+        "x": 4,
         "y": 3,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -3391,22 +3301,12 @@ export const ROOM_DEFS = [
     },
     "entities": [
       {
-        "id": "shadow-roof",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 12,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
         "id": "lantern-forward",
         "type": "projector",
         "layer": 0,
         "x": 8,
         "y": 4,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -3432,9 +3332,7 @@ export const ROOM_DEFS = [
         "layer": 2,
         "x": 14,
         "y": 12,
-        "switchIds": [
-          "roof-shadow-plate"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -3567,18 +3465,18 @@ export const ROOM_DEFS = [
         "id": "parcel-stamped-a",
         "type": "parcel",
         "layer": 0,
-        "x": 4,
+        "x": 15,
         "y": 9,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
         "id": "parcel-stamped-b",
         "type": "parcel",
-        "layer": 0,
-        "x": 10,
-        "y": 3,
-        "pushable": true,
+        "layer": 2,
+        "x": 4,
+        "y": 8,
+        "pushable": false,
         "solid": true
       },
       {
@@ -3587,7 +3485,7 @@ export const ROOM_DEFS = [
         "layer": 1,
         "x": 6,
         "y": 10,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       }
     ],
@@ -3766,8 +3664,8 @@ export const ROOM_DEFS = [
         "type": "projector",
         "layer": 0,
         "x": 7,
-        "y": 5,
-        "pushable": true,
+        "y": 4,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -3776,17 +3674,6 @@ export const ROOM_DEFS = [
             "dy": 0
           }
         ]
-      },
-      {
-        "id": "echo-sky",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
       }
     ],
     "switches": [
@@ -3803,9 +3690,7 @@ export const ROOM_DEFS = [
         "layer": 2,
         "x": 14,
         "y": 12,
-        "switchIds": [
-          "sky-echo-plate"
-        ]
+        "switchIds": []
       }
     ],
     "balance": {
@@ -3943,9 +3828,9 @@ export const ROOM_DEFS = [
         "id": "festival-parcel",
         "type": "parcel",
         "layer": 0,
-        "x": 4,
+        "x": 1,
         "y": 14,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
@@ -3953,8 +3838,8 @@ export const ROOM_DEFS = [
         "type": "parcel",
         "layer": 0,
         "x": 8,
-        "y": 8,
-        "pushable": true,
+        "y": 12,
+        "pushable": false,
         "solid": true
       },
       {
@@ -3963,7 +3848,7 @@ export const ROOM_DEFS = [
         "layer": 0,
         "x": 8,
         "y": 3,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -3972,16 +3857,6 @@ export const ROOM_DEFS = [
             "dy": 1
           }
         ]
-      },
-      {
-        "id": "festival-shadow",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 14,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
       }
     ],
     "switches": [
@@ -4021,9 +3896,7 @@ export const ROOM_DEFS = [
         "layer": 3,
         "x": 8,
         "y": 3,
-        "switchIds": [
-          "festival-shadow-plate"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -4186,16 +4059,6 @@ export const ROOM_DEFS = [
     },
     "entities": [
       {
-        "id": "shadow-b",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 12,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
         "id": "key-red-attic",
         "type": "key",
         "layer": 2,
@@ -4221,9 +4084,7 @@ export const ROOM_DEFS = [
         "layer": 3,
         "x": 14,
         "y": 12,
-        "switchIds": [
-          "attic-latch"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -4394,42 +4255,21 @@ export const ROOM_DEFS = [
     },
     "entities": [
       {
-        "id": "shadow-ledger",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 14,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
-        "id": "echo-ledger",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
-      },
-      {
         "id": "parcel-ledger-a",
         "type": "parcel",
         "layer": 0,
-        "x": 6,
-        "y": 12,
-        "pushable": true,
+        "x": 15,
+        "y": 13,
+        "pushable": false,
         "solid": true
       },
       {
         "id": "parcel-ledger-b",
         "type": "parcel",
-        "layer": 0,
-        "x": 10,
-        "y": 4,
-        "pushable": true,
+        "layer": 3,
+        "x": 6,
+        "y": 12,
+        "pushable": false,
         "solid": true
       },
       {
@@ -4476,18 +4316,14 @@ export const ROOM_DEFS = [
         "layer": 0,
         "x": 7,
         "y": 1,
-        "switchIds": [
-          "attic-ledger-shadow-latch"
-        ]
+        "switchIds": []
       },
       {
         "id": "attic-ledger-door-b",
         "layer": 1,
         "x": 14,
         "y": 4,
-        "switchIds": [
-          "attic-ledger-echo-switch"
-        ]
+        "switchIds": []
       },
       {
         "id": "attic-ledger-door-c",
@@ -4683,22 +4519,12 @@ export const ROOM_DEFS = [
     },
     "entities": [
       {
-        "id": "shadow-postscript",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 14,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
         "id": "lantern-postscript",
         "type": "projector",
         "layer": 0,
         "x": 8,
         "y": 4,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -4744,9 +4570,7 @@ export const ROOM_DEFS = [
         "layer": 3,
         "x": 15,
         "y": 14,
-        "switchIds": [
-          "postscript-latch"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -5023,7 +4847,7 @@ export const ROOM_LOOKUP = {
           "#.#.#.##...#",
           "#.#.S....#.#",
           "#...#.##.#.#",
-          "#.#S#....#.#",
+          "#.#.#....#.#",
           "#.#....##..#",
           "############"
         ]
@@ -5051,9 +4875,9 @@ export const ROOM_LOOKUP = {
           "############",
           "#.#.##.#...#",
           "#......#.#.#",
-          "#.###..S.#.#",
+          "#.###....#.#",
           "#.#...##...#",
-          "#.#.S..#.#.#",
+          "#.#....#.#.#",
           "#.#.####.#.#",
           "#.#S#......#",
           "#.#..#.#..G#",
@@ -5352,7 +5176,7 @@ export const ROOM_LOOKUP = {
           "#.####.###...#",
           "#.#........#.#",
           "#.#.##.#.#.#.#",
-          "#......#IIII.#",
+          "#.......IIII.#",
           "#.##.###.#.#.#",
           "#........#.#.#",
           "#.####.#.....#",
@@ -5423,8 +5247,7 @@ export const ROOM_LOOKUP = {
         "x": 11,
         "y": 8,
         "switchIds": [
-          "market-plate-a",
-          "market-plate-b"
+          "market-plate-a"
         ]
       }
     ],
@@ -6529,21 +6352,12 @@ export const ROOM_LOOKUP = {
         "solid": true
       },
       {
-        "id": "parcel-draft-b",
-        "type": "parcel",
-        "layer": 0,
-        "x": 8,
-        "y": 6,
-        "pushable": true,
-        "solid": true
-      },
-      {
         "id": "lantern-draft-a",
         "type": "projector",
         "layer": 0,
-        "x": 6,
+        "x": 5,
         "y": 3,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -6559,7 +6373,7 @@ export const ROOM_LOOKUP = {
         "layer": 0,
         "x": 10,
         "y": 8,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -6576,12 +6390,6 @@ export const ROOM_LOOKUP = {
         "layer": 0,
         "x": 1,
         "y": 12
-      },
-      {
-        "id": "draft-plate-b",
-        "layer": 0,
-        "x": 8,
-        "y": 10
       }
     ],
     "doors": [
@@ -6592,15 +6400,6 @@ export const ROOM_LOOKUP = {
         "y": 12,
         "switchIds": [
           "draft-plate-a"
-        ]
-      },
-      {
-        "id": "draft-door-b",
-        "layer": 1,
-        "x": 12,
-        "y": 3,
-        "switchIds": [
-          "draft-plate-b"
         ]
       }
     ],
@@ -7141,19 +6940,7 @@ export const ROOM_LOOKUP = {
       "y": 10,
       "facing": "right"
     },
-    "entities": [
-      {
-        "id": "echo-pendulum",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 10,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
-      }
-    ],
+    "entities": [],
     "switches": [
       {
         "id": "clock-pendulum-plate",
@@ -7168,9 +6955,7 @@ export const ROOM_LOOKUP = {
         "layer": 0,
         "x": 7,
         "y": 1,
-        "switchIds": [
-          "clock-pendulum-plate"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -7515,7 +7300,7 @@ export const ROOM_LOOKUP = {
           "#.####.###..#..#",
           "#..........#...#",
           "#.#.####.......#",
-          "#..............#",
+          "#.........S....#",
           "################"
         ]
       },
@@ -7524,16 +7309,16 @@ export const ROOM_LOOKUP = {
         "name": "Spotlight Grid",
         "tiles": [
           "################",
-          "#...S......#...#",
+          "#..........#...#",
           "#.####.###.....#",
           "#..............#",
           "#.#..#.##.#.#..#",
           "#.#.##...#..#..#",
-          "#..............#",
+          "#.............S#",
           "#.####.###..#..#",
           "#..........#...#",
           "#.#.####.......#",
-          "#..............#",
+          "#.........S....#",
           "################"
         ]
       },
@@ -7542,12 +7327,12 @@ export const ROOM_LOOKUP = {
         "name": "Deep Stage",
         "tiles": [
           "################",
-          "#...S........G.#",
+          "#............G.#",
           "#.####.###.#...#",
           "#..............#",
           "#.#..#.##.#.#..#",
           "#.#.##...#..#..#",
-          "#..............#",
+          "#.............S#",
           "#.####.###..#..#",
           "#..........#...#",
           "#.#.####.......#",
@@ -7562,28 +7347,7 @@ export const ROOM_LOOKUP = {
       "y": 7,
       "facing": "right"
     },
-    "entities": [
-      {
-        "id": "shadow-mark-a",
-        "type": "shadow",
-        "layer": 1,
-        "x": 12,
-        "y": 8,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
-        "id": "shadow-mark-b",
-        "type": "shadow",
-        "layer": 2,
-        "x": 12,
-        "y": 8,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      }
-    ],
+    "entities": [],
     "switches": [
       {
         "id": "stage-mark-switch-a",
@@ -7606,18 +7370,14 @@ export const ROOM_LOOKUP = {
         "layer": 0,
         "x": 8,
         "y": 1,
-        "switchIds": [
-          "stage-mark-switch-a"
-        ]
+        "switchIds": []
       },
       {
         "id": "stage-mark-door-b",
         "layer": 3,
         "x": 13,
         "y": 1,
-        "switchIds": [
-          "stage-mark-switch-b"
-        ]
+        "switchIds": []
       }
     ],
     "balance": {
@@ -7718,29 +7478,7 @@ export const ROOM_LOOKUP = {
       "y": 12,
       "facing": "right"
     },
-    "entities": [
-      {
-        "id": "shadow-fold",
-        "type": "shadow",
-        "layer": 1,
-        "x": 14,
-        "y": 12,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
-        "id": "echo-fold",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
-      }
-    ],
+    "entities": [],
     "switches": [
       {
         "id": "stage-fold-shadow-switch",
@@ -7762,18 +7500,14 @@ export const ROOM_LOOKUP = {
         "layer": 0,
         "x": 7,
         "y": 1,
-        "switchIds": [
-          "stage-fold-shadow-switch"
-        ]
+        "switchIds": []
       },
       {
         "id": "stage-fold-door-b",
         "layer": 1,
         "x": 13,
         "y": 4,
-        "switchIds": [
-          "stage-fold-echo-switch"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -7912,18 +7646,18 @@ export const ROOM_LOOKUP = {
         "id": "parcel-d",
         "type": "parcel",
         "layer": 0,
-        "x": 3,
+        "x": 15,
         "y": 5,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
         "id": "parcel-e",
         "type": "parcel",
-        "layer": 0,
+        "layer": 1,
         "x": 7,
         "y": 11,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
@@ -7932,16 +7666,16 @@ export const ROOM_LOOKUP = {
         "layer": 1,
         "x": 9,
         "y": 7,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
         "id": "lantern-b",
         "type": "projector",
         "layer": 0,
-        "x": 5,
+        "x": 4,
         "y": 3,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -8090,22 +7824,12 @@ export const ROOM_LOOKUP = {
     },
     "entities": [
       {
-        "id": "shadow-roof",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 12,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
         "id": "lantern-forward",
         "type": "projector",
         "layer": 0,
         "x": 8,
         "y": 4,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -8131,9 +7855,7 @@ export const ROOM_LOOKUP = {
         "layer": 2,
         "x": 14,
         "y": 12,
-        "switchIds": [
-          "roof-shadow-plate"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -8266,18 +7988,18 @@ export const ROOM_LOOKUP = {
         "id": "parcel-stamped-a",
         "type": "parcel",
         "layer": 0,
-        "x": 4,
+        "x": 15,
         "y": 9,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
         "id": "parcel-stamped-b",
         "type": "parcel",
-        "layer": 0,
-        "x": 10,
-        "y": 3,
-        "pushable": true,
+        "layer": 2,
+        "x": 4,
+        "y": 8,
+        "pushable": false,
         "solid": true
       },
       {
@@ -8286,7 +8008,7 @@ export const ROOM_LOOKUP = {
         "layer": 1,
         "x": 6,
         "y": 10,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       }
     ],
@@ -8465,8 +8187,8 @@ export const ROOM_LOOKUP = {
         "type": "projector",
         "layer": 0,
         "x": 7,
-        "y": 5,
-        "pushable": true,
+        "y": 4,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -8475,17 +8197,6 @@ export const ROOM_LOOKUP = {
             "dy": 0
           }
         ]
-      },
-      {
-        "id": "echo-sky",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
       }
     ],
     "switches": [
@@ -8502,9 +8213,7 @@ export const ROOM_LOOKUP = {
         "layer": 2,
         "x": 14,
         "y": 12,
-        "switchIds": [
-          "sky-echo-plate"
-        ]
+        "switchIds": []
       }
     ],
     "balance": {
@@ -8642,9 +8351,9 @@ export const ROOM_LOOKUP = {
         "id": "festival-parcel",
         "type": "parcel",
         "layer": 0,
-        "x": 4,
+        "x": 1,
         "y": 14,
-        "pushable": true,
+        "pushable": false,
         "solid": true
       },
       {
@@ -8652,8 +8361,8 @@ export const ROOM_LOOKUP = {
         "type": "parcel",
         "layer": 0,
         "x": 8,
-        "y": 8,
-        "pushable": true,
+        "y": 12,
+        "pushable": false,
         "solid": true
       },
       {
@@ -8662,7 +8371,7 @@ export const ROOM_LOOKUP = {
         "layer": 0,
         "x": 8,
         "y": 3,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -8671,16 +8380,6 @@ export const ROOM_LOOKUP = {
             "dy": 1
           }
         ]
-      },
-      {
-        "id": "festival-shadow",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 14,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
       }
     ],
     "switches": [
@@ -8720,9 +8419,7 @@ export const ROOM_LOOKUP = {
         "layer": 3,
         "x": 8,
         "y": 3,
-        "switchIds": [
-          "festival-shadow-plate"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -8885,16 +8582,6 @@ export const ROOM_LOOKUP = {
     },
     "entities": [
       {
-        "id": "shadow-b",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 12,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
         "id": "key-red-attic",
         "type": "key",
         "layer": 2,
@@ -8920,9 +8607,7 @@ export const ROOM_LOOKUP = {
         "layer": 3,
         "x": 14,
         "y": 12,
-        "switchIds": [
-          "attic-latch"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -9093,42 +8778,21 @@ export const ROOM_LOOKUP = {
     },
     "entities": [
       {
-        "id": "shadow-ledger",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 14,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
-        "id": "echo-ledger",
-        "type": "echo",
-        "layer": 1,
-        "x": 1,
-        "y": 4,
-        "solid": true,
-        "pushable": false,
-        "echoDelay": 1,
-        "queuedAction": null
-      },
-      {
         "id": "parcel-ledger-a",
         "type": "parcel",
         "layer": 0,
-        "x": 6,
-        "y": 12,
-        "pushable": true,
+        "x": 15,
+        "y": 13,
+        "pushable": false,
         "solid": true
       },
       {
         "id": "parcel-ledger-b",
         "type": "parcel",
-        "layer": 0,
-        "x": 10,
-        "y": 4,
-        "pushable": true,
+        "layer": 3,
+        "x": 6,
+        "y": 12,
+        "pushable": false,
         "solid": true
       },
       {
@@ -9175,18 +8839,14 @@ export const ROOM_LOOKUP = {
         "layer": 0,
         "x": 7,
         "y": 1,
-        "switchIds": [
-          "attic-ledger-shadow-latch"
-        ]
+        "switchIds": []
       },
       {
         "id": "attic-ledger-door-b",
         "layer": 1,
         "x": 14,
         "y": 4,
-        "switchIds": [
-          "attic-ledger-echo-switch"
-        ]
+        "switchIds": []
       },
       {
         "id": "attic-ledger-door-c",
@@ -9382,22 +9042,12 @@ export const ROOM_LOOKUP = {
     },
     "entities": [
       {
-        "id": "shadow-postscript",
-        "type": "shadow",
-        "layer": 1,
-        "x": 16,
-        "y": 14,
-        "solid": true,
-        "pushable": false,
-        "mirrorAxis": "vertical"
-      },
-      {
         "id": "lantern-postscript",
         "type": "projector",
         "layer": 0,
         "x": 8,
         "y": 4,
-        "pushable": true,
+        "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
@@ -9443,9 +9093,7 @@ export const ROOM_LOOKUP = {
         "layer": 3,
         "x": 15,
         "y": 14,
-        "switchIds": [
-          "postscript-latch"
-        ]
+        "switchIds": []
       }
     ],
     "teleporters": [
@@ -9840,7 +9488,7 @@ export const CAMPAIGN_INDEX = {
             "#.#.#.##...#",
             "#.#.S....#.#",
             "#...#.##.#.#",
-            "#.#S#....#.#",
+            "#.#.#....#.#",
             "#.#....##..#",
             "############"
           ]
@@ -9868,9 +9516,9 @@ export const CAMPAIGN_INDEX = {
             "############",
             "#.#.##.#...#",
             "#......#.#.#",
-            "#.###..S.#.#",
+            "#.###....#.#",
             "#.#...##...#",
-            "#.#.S..#.#.#",
+            "#.#....#.#.#",
             "#.#.####.#.#",
             "#.#S#......#",
             "#.#..#.#..G#",
@@ -10169,7 +9817,7 @@ export const CAMPAIGN_INDEX = {
             "#.####.###...#",
             "#.#........#.#",
             "#.#.##.#.#.#.#",
-            "#......#IIII.#",
+            "#.......IIII.#",
             "#.##.###.#.#.#",
             "#........#.#.#",
             "#.####.#.....#",
@@ -10240,8 +9888,7 @@ export const CAMPAIGN_INDEX = {
           "x": 11,
           "y": 8,
           "switchIds": [
-            "market-plate-a",
-            "market-plate-b"
+            "market-plate-a"
           ]
         }
       ],
@@ -11346,21 +10993,12 @@ export const CAMPAIGN_INDEX = {
           "solid": true
         },
         {
-          "id": "parcel-draft-b",
-          "type": "parcel",
-          "layer": 0,
-          "x": 8,
-          "y": 6,
-          "pushable": true,
-          "solid": true
-        },
-        {
           "id": "lantern-draft-a",
           "type": "projector",
           "layer": 0,
-          "x": 6,
+          "x": 5,
           "y": 3,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -11376,7 +11014,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 10,
           "y": 8,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -11393,12 +11031,6 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 1,
           "y": 12
-        },
-        {
-          "id": "draft-plate-b",
-          "layer": 0,
-          "x": 8,
-          "y": 10
         }
       ],
       "doors": [
@@ -11409,15 +11041,6 @@ export const CAMPAIGN_INDEX = {
           "y": 12,
           "switchIds": [
             "draft-plate-a"
-          ]
-        },
-        {
-          "id": "draft-door-b",
-          "layer": 1,
-          "x": 12,
-          "y": 3,
-          "switchIds": [
-            "draft-plate-b"
           ]
         }
       ],
@@ -11958,19 +11581,7 @@ export const CAMPAIGN_INDEX = {
         "y": 10,
         "facing": "right"
       },
-      "entities": [
-        {
-          "id": "echo-pendulum",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 10,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
-        }
-      ],
+      "entities": [],
       "switches": [
         {
           "id": "clock-pendulum-plate",
@@ -11985,9 +11596,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 7,
           "y": 1,
-          "switchIds": [
-            "clock-pendulum-plate"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -12332,7 +11941,7 @@ export const CAMPAIGN_INDEX = {
             "#.####.###..#..#",
             "#..........#...#",
             "#.#.####.......#",
-            "#..............#",
+            "#.........S....#",
             "################"
           ]
         },
@@ -12341,16 +11950,16 @@ export const CAMPAIGN_INDEX = {
           "name": "Spotlight Grid",
           "tiles": [
             "################",
-            "#...S......#...#",
+            "#..........#...#",
             "#.####.###.....#",
             "#..............#",
             "#.#..#.##.#.#..#",
             "#.#.##...#..#..#",
-            "#..............#",
+            "#.............S#",
             "#.####.###..#..#",
             "#..........#...#",
             "#.#.####.......#",
-            "#..............#",
+            "#.........S....#",
             "################"
           ]
         },
@@ -12359,12 +11968,12 @@ export const CAMPAIGN_INDEX = {
           "name": "Deep Stage",
           "tiles": [
             "################",
-            "#...S........G.#",
+            "#............G.#",
             "#.####.###.#...#",
             "#..............#",
             "#.#..#.##.#.#..#",
             "#.#.##...#..#..#",
-            "#..............#",
+            "#.............S#",
             "#.####.###..#..#",
             "#..........#...#",
             "#.#.####.......#",
@@ -12379,28 +11988,7 @@ export const CAMPAIGN_INDEX = {
         "y": 7,
         "facing": "right"
       },
-      "entities": [
-        {
-          "id": "shadow-mark-a",
-          "type": "shadow",
-          "layer": 1,
-          "x": 12,
-          "y": 8,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
-          "id": "shadow-mark-b",
-          "type": "shadow",
-          "layer": 2,
-          "x": 12,
-          "y": 8,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
+      "entities": [],
       "switches": [
         {
           "id": "stage-mark-switch-a",
@@ -12423,18 +12011,14 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 8,
           "y": 1,
-          "switchIds": [
-            "stage-mark-switch-a"
-          ]
+          "switchIds": []
         },
         {
           "id": "stage-mark-door-b",
           "layer": 3,
           "x": 13,
           "y": 1,
-          "switchIds": [
-            "stage-mark-switch-b"
-          ]
+          "switchIds": []
         }
       ],
       "balance": {
@@ -12535,29 +12119,7 @@ export const CAMPAIGN_INDEX = {
         "y": 12,
         "facing": "right"
       },
-      "entities": [
-        {
-          "id": "shadow-fold",
-          "type": "shadow",
-          "layer": 1,
-          "x": 14,
-          "y": 12,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
-          "id": "echo-fold",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
-        }
-      ],
+      "entities": [],
       "switches": [
         {
           "id": "stage-fold-shadow-switch",
@@ -12579,18 +12141,14 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 7,
           "y": 1,
-          "switchIds": [
-            "stage-fold-shadow-switch"
-          ]
+          "switchIds": []
         },
         {
           "id": "stage-fold-door-b",
           "layer": 1,
           "x": 13,
           "y": 4,
-          "switchIds": [
-            "stage-fold-echo-switch"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -12729,18 +12287,18 @@ export const CAMPAIGN_INDEX = {
           "id": "parcel-d",
           "type": "parcel",
           "layer": 0,
-          "x": 3,
+          "x": 15,
           "y": 5,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
           "id": "parcel-e",
           "type": "parcel",
-          "layer": 0,
+          "layer": 1,
           "x": 7,
           "y": 11,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
@@ -12749,16 +12307,16 @@ export const CAMPAIGN_INDEX = {
           "layer": 1,
           "x": 9,
           "y": 7,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
           "id": "lantern-b",
           "type": "projector",
           "layer": 0,
-          "x": 5,
+          "x": 4,
           "y": 3,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -12907,22 +12465,12 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "shadow-roof",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 12,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
           "id": "lantern-forward",
           "type": "projector",
           "layer": 0,
           "x": 8,
           "y": 4,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -12948,9 +12496,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 2,
           "x": 14,
           "y": 12,
-          "switchIds": [
-            "roof-shadow-plate"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -13083,18 +12629,18 @@ export const CAMPAIGN_INDEX = {
           "id": "parcel-stamped-a",
           "type": "parcel",
           "layer": 0,
-          "x": 4,
+          "x": 15,
           "y": 9,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
           "id": "parcel-stamped-b",
           "type": "parcel",
-          "layer": 0,
-          "x": 10,
-          "y": 3,
-          "pushable": true,
+          "layer": 2,
+          "x": 4,
+          "y": 8,
+          "pushable": false,
           "solid": true
         },
         {
@@ -13103,7 +12649,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 1,
           "x": 6,
           "y": 10,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         }
       ],
@@ -13282,8 +12828,8 @@ export const CAMPAIGN_INDEX = {
           "type": "projector",
           "layer": 0,
           "x": 7,
-          "y": 5,
-          "pushable": true,
+          "y": 4,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -13292,17 +12838,6 @@ export const CAMPAIGN_INDEX = {
               "dy": 0
             }
           ]
-        },
-        {
-          "id": "echo-sky",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
         }
       ],
       "switches": [
@@ -13319,9 +12854,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 2,
           "x": 14,
           "y": 12,
-          "switchIds": [
-            "sky-echo-plate"
-          ]
+          "switchIds": []
         }
       ],
       "balance": {
@@ -13459,9 +12992,9 @@ export const CAMPAIGN_INDEX = {
           "id": "festival-parcel",
           "type": "parcel",
           "layer": 0,
-          "x": 4,
+          "x": 1,
           "y": 14,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
@@ -13469,8 +13002,8 @@ export const CAMPAIGN_INDEX = {
           "type": "parcel",
           "layer": 0,
           "x": 8,
-          "y": 8,
-          "pushable": true,
+          "y": 12,
+          "pushable": false,
           "solid": true
         },
         {
@@ -13479,7 +13012,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 8,
           "y": 3,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -13488,16 +13021,6 @@ export const CAMPAIGN_INDEX = {
               "dy": 1
             }
           ]
-        },
-        {
-          "id": "festival-shadow",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 14,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
         }
       ],
       "switches": [
@@ -13537,9 +13060,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 3,
           "x": 8,
           "y": 3,
-          "switchIds": [
-            "festival-shadow-plate"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -13702,16 +13223,6 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "shadow-b",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 12,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
           "id": "key-red-attic",
           "type": "key",
           "layer": 2,
@@ -13737,9 +13248,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 3,
           "x": 14,
           "y": 12,
-          "switchIds": [
-            "attic-latch"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -13910,42 +13419,21 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "shadow-ledger",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 14,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
-          "id": "echo-ledger",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
-        },
-        {
           "id": "parcel-ledger-a",
           "type": "parcel",
           "layer": 0,
-          "x": 6,
-          "y": 12,
-          "pushable": true,
+          "x": 15,
+          "y": 13,
+          "pushable": false,
           "solid": true
         },
         {
           "id": "parcel-ledger-b",
           "type": "parcel",
-          "layer": 0,
-          "x": 10,
-          "y": 4,
-          "pushable": true,
+          "layer": 3,
+          "x": 6,
+          "y": 12,
+          "pushable": false,
           "solid": true
         },
         {
@@ -13992,18 +13480,14 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 7,
           "y": 1,
-          "switchIds": [
-            "attic-ledger-shadow-latch"
-          ]
+          "switchIds": []
         },
         {
           "id": "attic-ledger-door-b",
           "layer": 1,
           "x": 14,
           "y": 4,
-          "switchIds": [
-            "attic-ledger-echo-switch"
-          ]
+          "switchIds": []
         },
         {
           "id": "attic-ledger-door-c",
@@ -14199,22 +13683,12 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "shadow-postscript",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 14,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
           "id": "lantern-postscript",
           "type": "projector",
           "layer": 0,
           "x": 8,
           "y": 4,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -14260,9 +13734,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 3,
           "x": 15,
           "y": 14,
-          "switchIds": [
-            "postscript-latch"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -14687,7 +14159,7 @@ export const CAMPAIGN_INDEX = {
             "#.#.#.##...#",
             "#.#.S....#.#",
             "#...#.##.#.#",
-            "#.#S#....#.#",
+            "#.#.#....#.#",
             "#.#....##..#",
             "############"
           ]
@@ -14715,9 +14187,9 @@ export const CAMPAIGN_INDEX = {
             "############",
             "#.#.##.#...#",
             "#......#.#.#",
-            "#.###..S.#.#",
+            "#.###....#.#",
             "#.#...##...#",
-            "#.#.S..#.#.#",
+            "#.#....#.#.#",
             "#.#.####.#.#",
             "#.#S#......#",
             "#.#..#.#..G#",
@@ -15016,7 +14488,7 @@ export const CAMPAIGN_INDEX = {
             "#.####.###...#",
             "#.#........#.#",
             "#.#.##.#.#.#.#",
-            "#......#IIII.#",
+            "#.......IIII.#",
             "#.##.###.#.#.#",
             "#........#.#.#",
             "#.####.#.....#",
@@ -15087,8 +14559,7 @@ export const CAMPAIGN_INDEX = {
           "x": 11,
           "y": 8,
           "switchIds": [
-            "market-plate-a",
-            "market-plate-b"
+            "market-plate-a"
           ]
         }
       ],
@@ -16193,21 +15664,12 @@ export const CAMPAIGN_INDEX = {
           "solid": true
         },
         {
-          "id": "parcel-draft-b",
-          "type": "parcel",
-          "layer": 0,
-          "x": 8,
-          "y": 6,
-          "pushable": true,
-          "solid": true
-        },
-        {
           "id": "lantern-draft-a",
           "type": "projector",
           "layer": 0,
-          "x": 6,
+          "x": 5,
           "y": 3,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -16223,7 +15685,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 10,
           "y": 8,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -16240,12 +15702,6 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 1,
           "y": 12
-        },
-        {
-          "id": "draft-plate-b",
-          "layer": 0,
-          "x": 8,
-          "y": 10
         }
       ],
       "doors": [
@@ -16256,15 +15712,6 @@ export const CAMPAIGN_INDEX = {
           "y": 12,
           "switchIds": [
             "draft-plate-a"
-          ]
-        },
-        {
-          "id": "draft-door-b",
-          "layer": 1,
-          "x": 12,
-          "y": 3,
-          "switchIds": [
-            "draft-plate-b"
           ]
         }
       ],
@@ -16805,19 +16252,7 @@ export const CAMPAIGN_INDEX = {
         "y": 10,
         "facing": "right"
       },
-      "entities": [
-        {
-          "id": "echo-pendulum",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 10,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
-        }
-      ],
+      "entities": [],
       "switches": [
         {
           "id": "clock-pendulum-plate",
@@ -16832,9 +16267,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 7,
           "y": 1,
-          "switchIds": [
-            "clock-pendulum-plate"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -17179,7 +16612,7 @@ export const CAMPAIGN_INDEX = {
             "#.####.###..#..#",
             "#..........#...#",
             "#.#.####.......#",
-            "#..............#",
+            "#.........S....#",
             "################"
           ]
         },
@@ -17188,16 +16621,16 @@ export const CAMPAIGN_INDEX = {
           "name": "Spotlight Grid",
           "tiles": [
             "################",
-            "#...S......#...#",
+            "#..........#...#",
             "#.####.###.....#",
             "#..............#",
             "#.#..#.##.#.#..#",
             "#.#.##...#..#..#",
-            "#..............#",
+            "#.............S#",
             "#.####.###..#..#",
             "#..........#...#",
             "#.#.####.......#",
-            "#..............#",
+            "#.........S....#",
             "################"
           ]
         },
@@ -17206,12 +16639,12 @@ export const CAMPAIGN_INDEX = {
           "name": "Deep Stage",
           "tiles": [
             "################",
-            "#...S........G.#",
+            "#............G.#",
             "#.####.###.#...#",
             "#..............#",
             "#.#..#.##.#.#..#",
             "#.#.##...#..#..#",
-            "#..............#",
+            "#.............S#",
             "#.####.###..#..#",
             "#..........#...#",
             "#.#.####.......#",
@@ -17226,28 +16659,7 @@ export const CAMPAIGN_INDEX = {
         "y": 7,
         "facing": "right"
       },
-      "entities": [
-        {
-          "id": "shadow-mark-a",
-          "type": "shadow",
-          "layer": 1,
-          "x": 12,
-          "y": 8,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
-          "id": "shadow-mark-b",
-          "type": "shadow",
-          "layer": 2,
-          "x": 12,
-          "y": 8,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        }
-      ],
+      "entities": [],
       "switches": [
         {
           "id": "stage-mark-switch-a",
@@ -17270,18 +16682,14 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 8,
           "y": 1,
-          "switchIds": [
-            "stage-mark-switch-a"
-          ]
+          "switchIds": []
         },
         {
           "id": "stage-mark-door-b",
           "layer": 3,
           "x": 13,
           "y": 1,
-          "switchIds": [
-            "stage-mark-switch-b"
-          ]
+          "switchIds": []
         }
       ],
       "balance": {
@@ -17382,29 +16790,7 @@ export const CAMPAIGN_INDEX = {
         "y": 12,
         "facing": "right"
       },
-      "entities": [
-        {
-          "id": "shadow-fold",
-          "type": "shadow",
-          "layer": 1,
-          "x": 14,
-          "y": 12,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
-          "id": "echo-fold",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
-        }
-      ],
+      "entities": [],
       "switches": [
         {
           "id": "stage-fold-shadow-switch",
@@ -17426,18 +16812,14 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 7,
           "y": 1,
-          "switchIds": [
-            "stage-fold-shadow-switch"
-          ]
+          "switchIds": []
         },
         {
           "id": "stage-fold-door-b",
           "layer": 1,
           "x": 13,
           "y": 4,
-          "switchIds": [
-            "stage-fold-echo-switch"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -17576,18 +16958,18 @@ export const CAMPAIGN_INDEX = {
           "id": "parcel-d",
           "type": "parcel",
           "layer": 0,
-          "x": 3,
+          "x": 15,
           "y": 5,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
           "id": "parcel-e",
           "type": "parcel",
-          "layer": 0,
+          "layer": 1,
           "x": 7,
           "y": 11,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
@@ -17596,16 +16978,16 @@ export const CAMPAIGN_INDEX = {
           "layer": 1,
           "x": 9,
           "y": 7,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
           "id": "lantern-b",
           "type": "projector",
           "layer": 0,
-          "x": 5,
+          "x": 4,
           "y": 3,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -17754,22 +17136,12 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "shadow-roof",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 12,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
           "id": "lantern-forward",
           "type": "projector",
           "layer": 0,
           "x": 8,
           "y": 4,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -17795,9 +17167,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 2,
           "x": 14,
           "y": 12,
-          "switchIds": [
-            "roof-shadow-plate"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -17930,18 +17300,18 @@ export const CAMPAIGN_INDEX = {
           "id": "parcel-stamped-a",
           "type": "parcel",
           "layer": 0,
-          "x": 4,
+          "x": 15,
           "y": 9,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
           "id": "parcel-stamped-b",
           "type": "parcel",
-          "layer": 0,
-          "x": 10,
-          "y": 3,
-          "pushable": true,
+          "layer": 2,
+          "x": 4,
+          "y": 8,
+          "pushable": false,
           "solid": true
         },
         {
@@ -17950,7 +17320,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 1,
           "x": 6,
           "y": 10,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         }
       ],
@@ -18129,8 +17499,8 @@ export const CAMPAIGN_INDEX = {
           "type": "projector",
           "layer": 0,
           "x": 7,
-          "y": 5,
-          "pushable": true,
+          "y": 4,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -18139,17 +17509,6 @@ export const CAMPAIGN_INDEX = {
               "dy": 0
             }
           ]
-        },
-        {
-          "id": "echo-sky",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
         }
       ],
       "switches": [
@@ -18166,9 +17525,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 2,
           "x": 14,
           "y": 12,
-          "switchIds": [
-            "sky-echo-plate"
-          ]
+          "switchIds": []
         }
       ],
       "balance": {
@@ -18306,9 +17663,9 @@ export const CAMPAIGN_INDEX = {
           "id": "festival-parcel",
           "type": "parcel",
           "layer": 0,
-          "x": 4,
+          "x": 1,
           "y": 14,
-          "pushable": true,
+          "pushable": false,
           "solid": true
         },
         {
@@ -18316,8 +17673,8 @@ export const CAMPAIGN_INDEX = {
           "type": "parcel",
           "layer": 0,
           "x": 8,
-          "y": 8,
-          "pushable": true,
+          "y": 12,
+          "pushable": false,
           "solid": true
         },
         {
@@ -18326,7 +17683,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 8,
           "y": 3,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -18335,16 +17692,6 @@ export const CAMPAIGN_INDEX = {
               "dy": 1
             }
           ]
-        },
-        {
-          "id": "festival-shadow",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 14,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
         }
       ],
       "switches": [
@@ -18384,9 +17731,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 3,
           "x": 8,
           "y": 3,
-          "switchIds": [
-            "festival-shadow-plate"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -18549,16 +17894,6 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "shadow-b",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 12,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
           "id": "key-red-attic",
           "type": "key",
           "layer": 2,
@@ -18584,9 +17919,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 3,
           "x": 14,
           "y": 12,
-          "switchIds": [
-            "attic-latch"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
@@ -18757,42 +18090,21 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "shadow-ledger",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 14,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
-          "id": "echo-ledger",
-          "type": "echo",
-          "layer": 1,
-          "x": 1,
-          "y": 4,
-          "solid": true,
-          "pushable": false,
-          "echoDelay": 1,
-          "queuedAction": null
-        },
-        {
           "id": "parcel-ledger-a",
           "type": "parcel",
           "layer": 0,
-          "x": 6,
-          "y": 12,
-          "pushable": true,
+          "x": 15,
+          "y": 13,
+          "pushable": false,
           "solid": true
         },
         {
           "id": "parcel-ledger-b",
           "type": "parcel",
-          "layer": 0,
-          "x": 10,
-          "y": 4,
-          "pushable": true,
+          "layer": 3,
+          "x": 6,
+          "y": 12,
+          "pushable": false,
           "solid": true
         },
         {
@@ -18839,18 +18151,14 @@ export const CAMPAIGN_INDEX = {
           "layer": 0,
           "x": 7,
           "y": 1,
-          "switchIds": [
-            "attic-ledger-shadow-latch"
-          ]
+          "switchIds": []
         },
         {
           "id": "attic-ledger-door-b",
           "layer": 1,
           "x": 14,
           "y": 4,
-          "switchIds": [
-            "attic-ledger-echo-switch"
-          ]
+          "switchIds": []
         },
         {
           "id": "attic-ledger-door-c",
@@ -19046,22 +18354,12 @@ export const CAMPAIGN_INDEX = {
       },
       "entities": [
         {
-          "id": "shadow-postscript",
-          "type": "shadow",
-          "layer": 1,
-          "x": 16,
-          "y": 14,
-          "solid": true,
-          "pushable": false,
-          "mirrorAxis": "vertical"
-        },
-        {
           "id": "lantern-postscript",
           "type": "projector",
           "layer": 0,
           "x": 8,
           "y": 4,
-          "pushable": true,
+          "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
@@ -19107,9 +18405,7 @@ export const CAMPAIGN_INDEX = {
           "layer": 3,
           "x": 15,
           "y": 14,
-          "switchIds": [
-            "postscript-latch"
-          ]
+          "switchIds": []
         }
       ],
       "teleporters": [
