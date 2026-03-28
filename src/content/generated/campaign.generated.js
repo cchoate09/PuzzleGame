@@ -2426,15 +2426,7 @@ export const ROOM_DEFS = [
         "y": 1
       }
     ],
-    "doors": [
-      {
-        "id": "clock-pendulum-door",
-        "layer": 0,
-        "x": 7,
-        "y": 1,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-pend-a1",
@@ -2841,22 +2833,7 @@ export const ROOM_DEFS = [
         "sticky": true
       }
     ],
-    "doors": [
-      {
-        "id": "stage-mark-door-a",
-        "layer": 0,
-        "x": 8,
-        "y": 1,
-        "switchIds": []
-      },
-      {
-        "id": "stage-mark-door-b",
-        "layer": 3,
-        "x": 13,
-        "y": 1,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "balance": {
       "intendedLesson": "Dual shadow coordination with one-way gates across four layers.",
       "targetDifficulty": 8,
@@ -2971,22 +2948,7 @@ export const ROOM_DEFS = [
         "y": 1
       }
     ],
-    "doors": [
-      {
-        "id": "stage-fold-door-a",
-        "layer": 0,
-        "x": 7,
-        "y": 1,
-        "switchIds": []
-      },
-      {
-        "id": "stage-fold-door-b",
-        "layer": 1,
-        "x": 13,
-        "y": 4,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-fold-a1",
@@ -3326,15 +3288,7 @@ export const ROOM_DEFS = [
         "sticky": true
       }
     ],
-    "doors": [
-      {
-        "id": "roof-forward-door",
-        "layer": 2,
-        "x": 14,
-        "y": 12,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-roof-a1",
@@ -3663,14 +3617,14 @@ export const ROOM_DEFS = [
         "id": "lantern-postscript",
         "type": "projector",
         "layer": 0,
-        "x": 7,
+        "x": 8,
         "y": 4,
         "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
             "layer": 2,
-            "dx": -2,
+            "dx": -3,
             "dy": 0
           }
         ]
@@ -3684,15 +3638,7 @@ export const ROOM_DEFS = [
         "y": 1
       }
     ],
-    "doors": [
-      {
-        "id": "sky-door",
-        "layer": 2,
-        "x": 14,
-        "y": 12,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "balance": {
       "intendedLesson": "Combine projector, echo timing, ice, and one-way gates.",
       "targetDifficulty": 9,
@@ -3890,13 +3836,6 @@ export const ROOM_DEFS = [
           "festival-parcel-plate",
           "festival-parcel-plate-b"
         ]
-      },
-      {
-        "id": "festival-door-b",
-        "layer": 3,
-        "x": 8,
-        "y": 3,
-        "switchIds": []
       }
     ],
     "teleporters": [
@@ -4078,15 +4017,7 @@ export const ROOM_DEFS = [
         "sticky": true
       }
     ],
-    "doors": [
-      {
-        "id": "attic-door",
-        "layer": 3,
-        "x": 14,
-        "y": 12,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-attic-a1",
@@ -4311,20 +4242,6 @@ export const ROOM_DEFS = [
       }
     ],
     "doors": [
-      {
-        "id": "attic-ledger-door-a",
-        "layer": 0,
-        "x": 7,
-        "y": 1,
-        "switchIds": []
-      },
-      {
-        "id": "attic-ledger-door-b",
-        "layer": 1,
-        "x": 14,
-        "y": 4,
-        "switchIds": []
-      },
       {
         "id": "attic-ledger-door-c",
         "layer": 3,
@@ -4564,15 +4481,7 @@ export const ROOM_DEFS = [
         "sticky": true
       }
     ],
-    "doors": [
-      {
-        "id": "postscript-door",
-        "layer": 3,
-        "x": 15,
-        "y": 14,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-post-a1",
@@ -6949,15 +6858,7 @@ export const ROOM_LOOKUP = {
         "y": 1
       }
     ],
-    "doors": [
-      {
-        "id": "clock-pendulum-door",
-        "layer": 0,
-        "x": 7,
-        "y": 1,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-pend-a1",
@@ -7364,22 +7265,7 @@ export const ROOM_LOOKUP = {
         "sticky": true
       }
     ],
-    "doors": [
-      {
-        "id": "stage-mark-door-a",
-        "layer": 0,
-        "x": 8,
-        "y": 1,
-        "switchIds": []
-      },
-      {
-        "id": "stage-mark-door-b",
-        "layer": 3,
-        "x": 13,
-        "y": 1,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "balance": {
       "intendedLesson": "Dual shadow coordination with one-way gates across four layers.",
       "targetDifficulty": 8,
@@ -7494,22 +7380,7 @@ export const ROOM_LOOKUP = {
         "y": 1
       }
     ],
-    "doors": [
-      {
-        "id": "stage-fold-door-a",
-        "layer": 0,
-        "x": 7,
-        "y": 1,
-        "switchIds": []
-      },
-      {
-        "id": "stage-fold-door-b",
-        "layer": 1,
-        "x": 13,
-        "y": 4,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-fold-a1",
@@ -7849,15 +7720,7 @@ export const ROOM_LOOKUP = {
         "sticky": true
       }
     ],
-    "doors": [
-      {
-        "id": "roof-forward-door",
-        "layer": 2,
-        "x": 14,
-        "y": 12,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-roof-a1",
@@ -8186,14 +8049,14 @@ export const ROOM_LOOKUP = {
         "id": "lantern-postscript",
         "type": "projector",
         "layer": 0,
-        "x": 7,
+        "x": 8,
         "y": 4,
         "pushable": false,
         "solid": true,
         "projectionTargets": [
           {
             "layer": 2,
-            "dx": -2,
+            "dx": -3,
             "dy": 0
           }
         ]
@@ -8207,15 +8070,7 @@ export const ROOM_LOOKUP = {
         "y": 1
       }
     ],
-    "doors": [
-      {
-        "id": "sky-door",
-        "layer": 2,
-        "x": 14,
-        "y": 12,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "balance": {
       "intendedLesson": "Combine projector, echo timing, ice, and one-way gates.",
       "targetDifficulty": 9,
@@ -8413,13 +8268,6 @@ export const ROOM_LOOKUP = {
           "festival-parcel-plate",
           "festival-parcel-plate-b"
         ]
-      },
-      {
-        "id": "festival-door-b",
-        "layer": 3,
-        "x": 8,
-        "y": 3,
-        "switchIds": []
       }
     ],
     "teleporters": [
@@ -8601,15 +8449,7 @@ export const ROOM_LOOKUP = {
         "sticky": true
       }
     ],
-    "doors": [
-      {
-        "id": "attic-door",
-        "layer": 3,
-        "x": 14,
-        "y": 12,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-attic-a1",
@@ -8834,20 +8674,6 @@ export const ROOM_LOOKUP = {
       }
     ],
     "doors": [
-      {
-        "id": "attic-ledger-door-a",
-        "layer": 0,
-        "x": 7,
-        "y": 1,
-        "switchIds": []
-      },
-      {
-        "id": "attic-ledger-door-b",
-        "layer": 1,
-        "x": 14,
-        "y": 4,
-        "switchIds": []
-      },
       {
         "id": "attic-ledger-door-c",
         "layer": 3,
@@ -9087,15 +8913,7 @@ export const ROOM_LOOKUP = {
         "sticky": true
       }
     ],
-    "doors": [
-      {
-        "id": "postscript-door",
-        "layer": 3,
-        "x": 15,
-        "y": 14,
-        "switchIds": []
-      }
-    ],
+    "doors": [],
     "teleporters": [
       {
         "id": "tp-post-a1",
@@ -11590,15 +11408,7 @@ export const CAMPAIGN_INDEX = {
           "y": 1
         }
       ],
-      "doors": [
-        {
-          "id": "clock-pendulum-door",
-          "layer": 0,
-          "x": 7,
-          "y": 1,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-pend-a1",
@@ -12005,22 +11815,7 @@ export const CAMPAIGN_INDEX = {
           "sticky": true
         }
       ],
-      "doors": [
-        {
-          "id": "stage-mark-door-a",
-          "layer": 0,
-          "x": 8,
-          "y": 1,
-          "switchIds": []
-        },
-        {
-          "id": "stage-mark-door-b",
-          "layer": 3,
-          "x": 13,
-          "y": 1,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "balance": {
         "intendedLesson": "Dual shadow coordination with one-way gates across four layers.",
         "targetDifficulty": 8,
@@ -12135,22 +11930,7 @@ export const CAMPAIGN_INDEX = {
           "y": 1
         }
       ],
-      "doors": [
-        {
-          "id": "stage-fold-door-a",
-          "layer": 0,
-          "x": 7,
-          "y": 1,
-          "switchIds": []
-        },
-        {
-          "id": "stage-fold-door-b",
-          "layer": 1,
-          "x": 13,
-          "y": 4,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-fold-a1",
@@ -12490,15 +12270,7 @@ export const CAMPAIGN_INDEX = {
           "sticky": true
         }
       ],
-      "doors": [
-        {
-          "id": "roof-forward-door",
-          "layer": 2,
-          "x": 14,
-          "y": 12,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-roof-a1",
@@ -12827,14 +12599,14 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-postscript",
           "type": "projector",
           "layer": 0,
-          "x": 7,
+          "x": 8,
           "y": 4,
           "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
               "layer": 2,
-              "dx": -2,
+              "dx": -3,
               "dy": 0
             }
           ]
@@ -12848,15 +12620,7 @@ export const CAMPAIGN_INDEX = {
           "y": 1
         }
       ],
-      "doors": [
-        {
-          "id": "sky-door",
-          "layer": 2,
-          "x": 14,
-          "y": 12,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "balance": {
         "intendedLesson": "Combine projector, echo timing, ice, and one-way gates.",
         "targetDifficulty": 9,
@@ -13054,13 +12818,6 @@ export const CAMPAIGN_INDEX = {
             "festival-parcel-plate",
             "festival-parcel-plate-b"
           ]
-        },
-        {
-          "id": "festival-door-b",
-          "layer": 3,
-          "x": 8,
-          "y": 3,
-          "switchIds": []
         }
       ],
       "teleporters": [
@@ -13242,15 +12999,7 @@ export const CAMPAIGN_INDEX = {
           "sticky": true
         }
       ],
-      "doors": [
-        {
-          "id": "attic-door",
-          "layer": 3,
-          "x": 14,
-          "y": 12,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-attic-a1",
@@ -13475,20 +13224,6 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "doors": [
-        {
-          "id": "attic-ledger-door-a",
-          "layer": 0,
-          "x": 7,
-          "y": 1,
-          "switchIds": []
-        },
-        {
-          "id": "attic-ledger-door-b",
-          "layer": 1,
-          "x": 14,
-          "y": 4,
-          "switchIds": []
-        },
         {
           "id": "attic-ledger-door-c",
           "layer": 3,
@@ -13728,15 +13463,7 @@ export const CAMPAIGN_INDEX = {
           "sticky": true
         }
       ],
-      "doors": [
-        {
-          "id": "postscript-door",
-          "layer": 3,
-          "x": 15,
-          "y": 14,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-post-a1",
@@ -16261,15 +15988,7 @@ export const CAMPAIGN_INDEX = {
           "y": 1
         }
       ],
-      "doors": [
-        {
-          "id": "clock-pendulum-door",
-          "layer": 0,
-          "x": 7,
-          "y": 1,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-pend-a1",
@@ -16676,22 +16395,7 @@ export const CAMPAIGN_INDEX = {
           "sticky": true
         }
       ],
-      "doors": [
-        {
-          "id": "stage-mark-door-a",
-          "layer": 0,
-          "x": 8,
-          "y": 1,
-          "switchIds": []
-        },
-        {
-          "id": "stage-mark-door-b",
-          "layer": 3,
-          "x": 13,
-          "y": 1,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "balance": {
         "intendedLesson": "Dual shadow coordination with one-way gates across four layers.",
         "targetDifficulty": 8,
@@ -16806,22 +16510,7 @@ export const CAMPAIGN_INDEX = {
           "y": 1
         }
       ],
-      "doors": [
-        {
-          "id": "stage-fold-door-a",
-          "layer": 0,
-          "x": 7,
-          "y": 1,
-          "switchIds": []
-        },
-        {
-          "id": "stage-fold-door-b",
-          "layer": 1,
-          "x": 13,
-          "y": 4,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-fold-a1",
@@ -17161,15 +16850,7 @@ export const CAMPAIGN_INDEX = {
           "sticky": true
         }
       ],
-      "doors": [
-        {
-          "id": "roof-forward-door",
-          "layer": 2,
-          "x": 14,
-          "y": 12,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-roof-a1",
@@ -17498,14 +17179,14 @@ export const CAMPAIGN_INDEX = {
           "id": "lantern-postscript",
           "type": "projector",
           "layer": 0,
-          "x": 7,
+          "x": 8,
           "y": 4,
           "pushable": false,
           "solid": true,
           "projectionTargets": [
             {
               "layer": 2,
-              "dx": -2,
+              "dx": -3,
               "dy": 0
             }
           ]
@@ -17519,15 +17200,7 @@ export const CAMPAIGN_INDEX = {
           "y": 1
         }
       ],
-      "doors": [
-        {
-          "id": "sky-door",
-          "layer": 2,
-          "x": 14,
-          "y": 12,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "balance": {
         "intendedLesson": "Combine projector, echo timing, ice, and one-way gates.",
         "targetDifficulty": 9,
@@ -17725,13 +17398,6 @@ export const CAMPAIGN_INDEX = {
             "festival-parcel-plate",
             "festival-parcel-plate-b"
           ]
-        },
-        {
-          "id": "festival-door-b",
-          "layer": 3,
-          "x": 8,
-          "y": 3,
-          "switchIds": []
         }
       ],
       "teleporters": [
@@ -17913,15 +17579,7 @@ export const CAMPAIGN_INDEX = {
           "sticky": true
         }
       ],
-      "doors": [
-        {
-          "id": "attic-door",
-          "layer": 3,
-          "x": 14,
-          "y": 12,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-attic-a1",
@@ -18146,20 +17804,6 @@ export const CAMPAIGN_INDEX = {
         }
       ],
       "doors": [
-        {
-          "id": "attic-ledger-door-a",
-          "layer": 0,
-          "x": 7,
-          "y": 1,
-          "switchIds": []
-        },
-        {
-          "id": "attic-ledger-door-b",
-          "layer": 1,
-          "x": 14,
-          "y": 4,
-          "switchIds": []
-        },
         {
           "id": "attic-ledger-door-c",
           "layer": 3,
@@ -18399,15 +18043,7 @@ export const CAMPAIGN_INDEX = {
           "sticky": true
         }
       ],
-      "doors": [
-        {
-          "id": "postscript-door",
-          "layer": 3,
-          "x": 15,
-          "y": 14,
-          "switchIds": []
-        }
-      ],
+      "doors": [],
       "teleporters": [
         {
           "id": "tp-post-a1",

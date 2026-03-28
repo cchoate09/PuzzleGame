@@ -3067,158 +3067,6 @@ export const CANONICAL_SOLUTIONS = {
       "direction": "right"
     }
   ],
-  "rooftops-side-01": [
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "up"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "switch_layer"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "switch_layer"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "down"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    },
-    {
-      "type": "move",
-      "direction": "right"
-    }
-  ],
   "attic-01": [
     {
       "type": "move",
@@ -3973,6 +3821,158 @@ export const CANONICAL_SOLUTIONS = {
     {
       "type": "move",
       "direction": "left"
+    }
+  ],
+  "rooftops-side-01": [
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "up"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "switch_layer"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "down"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
+    },
+    {
+      "type": "move",
+      "direction": "right"
     }
   ]
 };
