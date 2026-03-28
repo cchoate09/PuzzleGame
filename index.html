@@ -130,6 +130,7 @@
           <span id="hud-layer">Layer</span>
         </div>
         <div class="hud-actions">
+          <button id="hud-legend" class="hud-btn small" title="Legend">?</button>
           <button id="hud-hint" class="hud-btn small">Hint</button>
           <button id="hud-undo" class="hud-btn small" title="Undo (Z)">↩</button>
           <button id="hud-redo" class="hud-btn small" title="Redo (Y)">↪</button>
@@ -166,6 +167,104 @@
               <button data-hint-tier="2">Reveal Hint 2</button>
               <button data-hint-tier="3">Reveal Hint 3</button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tutorial overlay (first-time onboarding) -->
+      <div id="tutorial-overlay" class="tutorial-overlay hidden">
+        <div class="tutorial-card">
+          <div class="tutorial-step" data-step="0">
+            <div class="tutorial-icon">&#x1F4EC;</div>
+            <h2>Welcome to Patchwork Post</h2>
+            <p>You're a postkeeper restoring delivery routes through a paper-craft town torn apart by a storm. Each room is a puzzle to solve.</p>
+          </div>
+          <div class="tutorial-step" data-step="1">
+            <div class="tutorial-icon">&#x1F4E5;</div>
+            <h2>Your Goal</h2>
+            <p>Reach the <strong>golden mailbox</strong> to restore each route. Look for the glowing gold tile with a small brown flag on top.</p>
+            <div class="tutorial-legend-row">
+              <canvas class="tutorial-tile-preview" data-tile="G" width="48" height="48"></canvas>
+              <span>This is the mailbox — your destination.</span>
+            </div>
+          </div>
+          <div class="tutorial-step" data-step="2">
+            <div class="tutorial-icon">&#x1F3AE;</div>
+            <h2>Moving Around</h2>
+            <p>Use <kbd>Arrow keys</kbd> or <kbd>WASD</kbd> to move one tile at a time. Brown blocks are walls you can't pass through.</p>
+            <div class="tutorial-legend-row">
+              <canvas class="tutorial-tile-preview" data-tile="player" width="48" height="48"></canvas>
+              <span>You — the blue circle with a tan face.</span>
+            </div>
+            <div class="tutorial-legend-row">
+              <canvas class="tutorial-tile-preview" data-tile="#" width="48" height="48"></canvas>
+              <span>Walls — impassable.</span>
+            </div>
+          </div>
+          <div class="tutorial-step" data-step="3">
+            <div class="tutorial-icon">&#x1F9F5;</div>
+            <h2>Layers &amp; Stitches</h2>
+            <p>Rooms are made of stacked paper sheets. The <strong>active layer</strong> has a gold border. Stand on a <strong>stitch marker</strong> and press <kbd>Tab</kbd> to flip between layers.</p>
+            <div class="tutorial-legend-row">
+              <canvas class="tutorial-tile-preview" data-tile="S" width="48" height="48"></canvas>
+              <span>Stitch marker — your portal between layers.</span>
+            </div>
+          </div>
+          <div class="tutorial-step" data-step="4">
+            <div class="tutorial-icon">&#x1F4E6;</div>
+            <h2>Parcels &amp; Transfer</h2>
+            <p>Brown boxes are <strong>parcels</strong> you can push by walking into them. Face a parcel and press <kbd>X</kbd> to <strong>transfer</strong> it to the same spot on another layer.</p>
+            <div class="tutorial-legend-row">
+              <canvas class="tutorial-tile-preview" data-tile="parcel" width="48" height="48"></canvas>
+              <span>Parcel — push or transfer between layers.</span>
+            </div>
+          </div>
+          <div class="tutorial-step" data-step="5">
+            <div class="tutorial-icon">&#x1F4A1;</div>
+            <h2>Helpful Tools</h2>
+            <p>Press <kbd>Z</kbd> to undo a move, <kbd>R</kbd> to reset the room, and click <strong>Hint</strong> if you get stuck. There's no penalty for experimenting!</p>
+          </div>
+          <div class="tutorial-nav">
+            <button id="tutorial-prev" class="secondary">← Back</button>
+            <div class="tutorial-dots" id="tutorial-dots"></div>
+            <button id="tutorial-next" class="primary">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Room intro dialogue -->
+      <div id="intro-overlay" class="intro-overlay hidden">
+        <div class="intro-card">
+          <div class="intro-speaker" id="intro-speaker"></div>
+          <p class="intro-text" id="intro-text"></p>
+          <button id="intro-dismiss" class="primary">Got it →</button>
+        </div>
+      </div>
+
+      <!-- Legend overlay -->
+      <div id="legend-overlay" class="legend-overlay hidden">
+        <div class="legend-card">
+          <div class="legend-header">
+            <h3>Legend</h3>
+            <button id="legend-close" class="hud-btn small">✕</button>
+          </div>
+          <div class="legend-grid">
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="player" width="36" height="36"></canvas><span>You</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="G" width="36" height="36"></canvas><span>Mailbox (goal)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="#" width="36" height="36"></canvas><span>Wall</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="S" width="36" height="36"></canvas><span>Stitch (layer switch)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="parcel" width="36" height="36"></canvas><span>Parcel (pushable)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="~" width="36" height="36"></canvas><span>Gap (impassable)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="switch" width="36" height="36"></canvas><span>Switch (pressure plate)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="door" width="36" height="36"></canvas><span>Door (needs switch)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="projector" width="36" height="36"></canvas><span>Projector (builds bridges)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="echo" width="36" height="36"></canvas><span>Echo (delayed mirror)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="shadow" width="36" height="36"></canvas><span>Shadow (mirrored mover)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="I" width="36" height="36"></canvas><span>Ice (slides)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="T" width="36" height="36"></canvas><span>Teleporter</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile=">" width="36" height="36"></canvas><span>One-way gate</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="key" width="36" height="36"></canvas><span>Key (collect to unlock)</span></div>
+            <div class="legend-item"><canvas class="tutorial-tile-preview" data-tile="lock" width="36" height="36"></canvas><span>Lock (needs key)</span></div>
           </div>
         </div>
       </div>

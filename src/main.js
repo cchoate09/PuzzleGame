@@ -35,6 +35,9 @@ const state = {
   hintOpen: false,
   autoAdvanceTimer: 0,
   autoAdvanceTarget: null,
+  tutorialStep: 0,
+  tutorialTotal: 6,
+  legendOpen: false,
 };
 
 // ═══════════════════════════════════════
@@ -88,6 +91,20 @@ const el = {
   hintOverlay: document.getElementById("hint-overlay"),
   hintContent: document.getElementById("hint-content"),
   hintClose: document.getElementById("hint-close"),
+  // Tutorial overlay
+  tutorialOverlay: document.getElementById("tutorial-overlay"),
+  tutorialPrev: document.getElementById("tutorial-prev"),
+  tutorialNext: document.getElementById("tutorial-next"),
+  tutorialDots: document.getElementById("tutorial-dots"),
+  // Intro overlay
+  introOverlay: document.getElementById("intro-overlay"),
+  introSpeaker: document.getElementById("intro-speaker"),
+  introText: document.getElementById("intro-text"),
+  introDismiss: document.getElementById("intro-dismiss"),
+  // Legend
+  hudLegend: document.getElementById("hud-legend"),
+  legendOverlay: document.getElementById("legend-overlay"),
+  legendClose: document.getElementById("legend-close"),
 };
 
 const ctx = el.canvas.getContext("2d");
@@ -342,6 +359,7 @@ function renderDistrictList() {
       ensureRoomLoaded(button.dataset.roomId);
       syncEditorFromRoom();
       setScreen("play");
+      showRoomIntro();
     });
   });
 }
@@ -532,12 +550,28 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
     drawRoundedRect(cardX + 1, cardY + 1, cardW - 2, cardH - 2, 27);
     ctx.stroke();
     ctx.restore();
+  } else {
+    // Subtle border for inactive layers
+    ctx.save();
+    ctx.strokeStyle = "rgba(109, 78, 47, 0.12)";
+    ctx.lineWidth = 1;
+    drawRoundedRect(cardX + 1, cardY + 1, cardW - 2, cardH - 2, 27);
+    ctx.stroke();
+    ctx.restore();
   }
 
-  // Layer name
+  // Layer name with layer number indicator
   ctx.fillStyle = active ? "#5d301f" : "#7d6853";
   ctx.font = active ? "700 20px Georgia" : "600 16px Georgia";
   ctx.fillText(layer.name, boardX - 2, boardY - 16);
+  if (active) {
+    // Small active dot next to name
+    ctx.fillStyle = "#d39b34";
+    const nameW = ctx.measureText(layer.name).width;
+    ctx.beginPath();
+    ctx.arc(boardX + nameW + 8, boardY - 22, 4, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   // Tiles
   for (let y = 0; y < height; y++) {
@@ -546,12 +580,39 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
       const sx = boardX + x * tileSize;
       const sy = boardY + y * tileSize;
 
+      // Tile base with subtle rounded corners
       ctx.fillStyle = tileColor(tile);
-      ctx.fillRect(sx, sy, tileSize - 2, tileSize - 2);
+      const tGap = 1;
+      const tRad = Math.max(2, tileSize * 0.06);
+      ctx.beginPath();
+      ctx.moveTo(sx + tRad, sy);
+      ctx.arcTo(sx + tileSize - tGap, sy, sx + tileSize - tGap, sy + tileSize - tGap, tRad);
+      ctx.arcTo(sx + tileSize - tGap, sy + tileSize - tGap, sx, sy + tileSize - tGap, tRad);
+      ctx.arcTo(sx, sy + tileSize - tGap, sx, sy, tRad);
+      ctx.arcTo(sx, sy, sx + tileSize - tGap, sy, tRad);
+      ctx.closePath();
+      ctx.fill();
+
+      // Subtle inner highlight on floor tiles
+      if (tile === "." || tile === "S" || tile === "G") {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+        ctx.fillRect(sx + 1, sy + 1, tileSize - 3, 2);
+      }
 
       if (tile === "#") {
         ctx.fillStyle = "#8d6a45";
-        ctx.fillRect(sx + 5, sy + 5, tileSize - 12, tileSize - 12);
+        const wInset = Math.max(4, tileSize * 0.1);
+        ctx.beginPath();
+        ctx.moveTo(sx + wInset + 2, sy + wInset);
+        ctx.arcTo(sx + tileSize - wInset - tGap, sy + wInset, sx + tileSize - wInset - tGap, sy + tileSize - wInset - tGap, 2);
+        ctx.arcTo(sx + tileSize - wInset - tGap, sy + tileSize - wInset - tGap, sx + wInset, sy + tileSize - wInset - tGap, 2);
+        ctx.arcTo(sx + wInset, sy + tileSize - wInset - tGap, sx + wInset, sy + wInset, 2);
+        ctx.arcTo(sx + wInset, sy + wInset, sx + tileSize - wInset - tGap, sy + wInset, 2);
+        ctx.closePath();
+        ctx.fill();
+        // Wall highlight
+        ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+        ctx.fillRect(sx + wInset, sy + wInset, tileSize - wInset * 2 - tGap, 2);
       }
       if (tile === "S") {
         ctx.fillStyle = "rgba(247, 224, 161, 0.35)";
@@ -678,36 +739,117 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
     if (entity.layer !== layerIndex) continue;
     const ex = boardX + entity.x * tileSize;
     const ey = boardY + entity.y * tileSize;
+    const ecx = ex + tileSize / 2;
+    const ecy = ey + tileSize / 2;
+
     if (entity.type === "parcel") {
+      const pi = Math.max(6, tileSize * 0.14);
+      // Shadow
+      ctx.fillStyle = "rgba(120, 60, 30, 0.12)";
+      ctx.beginPath();
+      ctx.ellipse(ecx, ey + tileSize - pi + 2, tileSize * 0.3, tileSize * 0.08, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Outer box
       ctx.fillStyle = "#bf5f3c";
-      ctx.fillRect(ex + 8, ey + 8, tileSize - 18, tileSize - 18);
+      drawRoundedRect(ex + pi, ey + pi, tileSize - pi * 2 - 1, tileSize - pi * 2 - 1, 4);
+      ctx.fill();
+      // Inner label area
       ctx.fillStyle = "#fff3e7";
-      ctx.fillRect(ex + 15, ey + 15, tileSize - 32, tileSize - 32);
+      const li = pi + Math.max(5, tileSize * 0.08);
+      drawRoundedRect(ex + li, ey + li, tileSize - li * 2 - 1, tileSize - li * 2 - 1, 2);
+      ctx.fill();
+      // Cross string
+      ctx.strokeStyle = "rgba(191, 95, 60, 0.4)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(ex + pi, ecy); ctx.lineTo(ex + tileSize - pi - 1, ecy);
+      ctx.moveTo(ecx, ey + pi); ctx.lineTo(ecx, ey + tileSize - pi - 1);
+      ctx.stroke();
     } else if (entity.type === "projector") {
+      // Glow
+      ctx.fillStyle = "rgba(211, 155, 52, 0.15)";
+      ctx.beginPath();
+      ctx.arc(ecx, ecy, tileSize * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      // Lens body
       ctx.fillStyle = "#d39b34";
       ctx.beginPath();
-      ctx.arc(ex + tileSize / 2, ey + tileSize / 2, tileSize * 0.28, 0, Math.PI * 2);
+      ctx.arc(ecx, ecy, tileSize * 0.26, 0, Math.PI * 2);
       ctx.fill();
+      // Lens highlight
+      ctx.fillStyle = "rgba(255, 240, 200, 0.45)";
+      ctx.beginPath();
+      ctx.arc(ecx - tileSize * 0.06, ecy - tileSize * 0.08, tileSize * 0.13, 0, Math.PI * 2);
+      ctx.fill();
+      // Housing
       ctx.strokeStyle = "#7d3f29";
-      ctx.strokeRect(ex + 10, ey + 10, tileSize - 20, tileSize - 20);
+      ctx.lineWidth = 1.5;
+      drawRoundedRect(ex + tileSize * 0.2, ey + tileSize * 0.2, tileSize * 0.6, tileSize * 0.6, 4);
+      ctx.stroke();
+      ctx.lineWidth = 1;
     } else if (entity.type === "echo") {
+      // Trailing ghost
+      ctx.fillStyle = "rgba(105, 150, 211, 0.2)";
+      ctx.beginPath();
+      ctx.arc(ecx - 3, ecy, tileSize * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      // Main body
       ctx.fillStyle = "rgba(105, 150, 211, 0.78)";
       ctx.beginPath();
-      ctx.arc(ex + tileSize / 2, ey + tileSize / 2, tileSize * 0.28, 0, Math.PI * 2);
+      ctx.arc(ecx, ecy, tileSize * 0.28, 0, Math.PI * 2);
       ctx.fill();
+      // Highlight
+      ctx.fillStyle = "rgba(200, 220, 255, 0.4)";
+      ctx.beginPath();
+      ctx.arc(ecx - tileSize * 0.06, ecy - tileSize * 0.08, tileSize * 0.12, 0, Math.PI * 2);
+      ctx.fill();
+      // Ripple rings
+      ctx.strokeStyle = "rgba(105, 150, 211, 0.25)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(ecx, ecy, tileSize * 0.38, 0, Math.PI * 2);
+      ctx.stroke();
     } else if (entity.type === "shadow") {
+      // Dark aura
+      ctx.fillStyle = "rgba(40, 30, 20, 0.1)";
+      ctx.beginPath();
+      ctx.arc(ecx, ecy, tileSize * 0.38, 0, Math.PI * 2);
+      ctx.fill();
+      // Main body
       ctx.fillStyle = "rgba(59, 44, 36, 0.78)";
       ctx.beginPath();
-      ctx.arc(ex + tileSize / 2, ey + tileSize / 2, tileSize * 0.3, 0, Math.PI * 2);
+      ctx.arc(ecx, ecy, tileSize * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      // Inner dark
+      ctx.fillStyle = "rgba(30, 20, 15, 0.3)";
+      ctx.beginPath();
+      ctx.arc(ecx + tileSize * 0.04, ecy + tileSize * 0.04, tileSize * 0.16, 0, Math.PI * 2);
       ctx.fill();
     } else if (entity.type === "key") {
       const kc = KEY_LOCK_COLORS[entity.color] || KEY_LOCK_COLORS.red;
+      // Sparkle glow
+      ctx.fillStyle = kc.light;
+      ctx.globalAlpha = 0.2;
+      ctx.beginPath();
+      ctx.arc(ecx, ecy, tileSize * 0.35, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      // Key head
       ctx.fillStyle = kc.fill;
       ctx.beginPath();
-      ctx.arc(ex + tileSize / 2, ey + tileSize * 0.38, tileSize * 0.18, 0, Math.PI * 2);
+      ctx.arc(ecx, ey + tileSize * 0.35, tileSize * 0.16, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillRect(ex + tileSize * 0.44, ey + tileSize * 0.45, tileSize * 0.12, tileSize * 0.32);
-      ctx.fillRect(ex + tileSize * 0.48, ey + tileSize * 0.65, tileSize * 0.16, tileSize * 0.06);
+      // Key hole
+      ctx.fillStyle = tileColor(".");
+      ctx.beginPath();
+      ctx.arc(ecx, ey + tileSize * 0.35, tileSize * 0.06, 0, Math.PI * 2);
+      ctx.fill();
+      // Key shaft
+      ctx.fillStyle = kc.fill;
+      ctx.fillRect(ecx - tileSize * 0.04, ey + tileSize * 0.48, tileSize * 0.08, tileSize * 0.28);
+      // Key teeth
+      ctx.fillRect(ecx, ey + tileSize * 0.6, tileSize * 0.1, tileSize * 0.04);
+      ctx.fillRect(ecx, ey + tileSize * 0.68, tileSize * 0.08, tileSize * 0.04);
     }
   }
 
@@ -719,22 +861,32 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
     const open = runtime.dynamicState.openLocks.has(lock.id);
     const lc = KEY_LOCK_COLORS[lock.color] || KEY_LOCK_COLORS.red;
     if (!open) {
+      const lcx = lx + tileSize / 2;
+      const lcy = ly + tileSize / 2;
       ctx.fillStyle = lc.fill;
       ctx.globalAlpha = 0.7;
-      ctx.fillRect(lx + 4, ly + 4, tileSize - 10, tileSize - 10);
+      drawRoundedRect(lx + 4, ly + 4, tileSize - 10, tileSize - 10, 4);
+      ctx.fill();
       ctx.globalAlpha = 1;
       ctx.strokeStyle = lc.fill;
       ctx.lineWidth = 2;
-      ctx.strokeRect(lx + 4, ly + 4, tileSize - 10, tileSize - 10);
+      drawRoundedRect(lx + 4, ly + 4, tileSize - 10, tileSize - 10, 4);
+      ctx.stroke();
       ctx.lineWidth = 1;
-      // Lock icon
+      // Drawn lock icon
       ctx.fillStyle = "#fff";
-      ctx.font = `${Math.floor(tileSize * 0.35)}px sans-serif`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("🔒", lx + tileSize / 2, ly + tileSize / 2);
-      ctx.textAlign = "left";
-      ctx.textBaseline = "alphabetic";
+      // Lock body
+      const lbw = tileSize * 0.3;
+      const lbh = tileSize * 0.22;
+      drawRoundedRect(lcx - lbw / 2, lcy, lbw, lbh, 2);
+      ctx.fill();
+      // Lock shackle
+      ctx.strokeStyle = "#fff";
+      ctx.lineWidth = tileSize * 0.05;
+      ctx.beginPath();
+      ctx.arc(lcx, lcy, tileSize * 0.12, Math.PI, 0);
+      ctx.stroke();
+      ctx.lineWidth = 1;
     } else {
       ctx.strokeStyle = lc.light;
       ctx.lineWidth = 1;
@@ -748,12 +900,60 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
   if (runtime.player.layer === layerIndex) {
     const px = boardX + runtime.player.x * tileSize;
     const py = boardY + runtime.player.y * tileSize;
+    const pcx = px + tileSize / 2;
+    const pcy = py + tileSize / 2;
+    const pr = tileSize * 0.32;
+
+    // Body shadow
+    ctx.fillStyle = "rgba(30, 40, 60, 0.15)";
+    ctx.beginPath();
+    ctx.ellipse(pcx, pcy + pr + 2, pr * 0.85, pr * 0.3, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Body
     ctx.fillStyle = "#2f4d6a";
     ctx.beginPath();
-    ctx.arc(px + tileSize / 2, py + tileSize / 2, tileSize * 0.3, 0, Math.PI * 2);
+    ctx.arc(pcx, pcy, pr, 0, Math.PI * 2);
     ctx.fill();
+
+    // Body highlight
+    ctx.fillStyle = "rgba(158, 186, 212, 0.35)";
+    ctx.beginPath();
+    ctx.arc(pcx - pr * 0.15, pcy - pr * 0.2, pr * 0.55, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Face
+    const fw = tileSize * 0.2;
+    const fh = tileSize * 0.18;
+    const fx = pcx - fw / 2;
+    const fy = pcy - pr * 0.5;
     ctx.fillStyle = "#f9dcb2";
-    ctx.fillRect(px + tileSize * 0.4, py + tileSize * 0.22, tileSize * 0.18, tileSize * 0.18);
+    ctx.beginPath();
+    ctx.moveTo(fx + 2, fy);
+    ctx.arcTo(fx + fw, fy, fx + fw, fy + fh, 2);
+    ctx.arcTo(fx + fw, fy + fh, fx, fy + fh, 2);
+    ctx.arcTo(fx, fy + fh, fx, fy, 2);
+    ctx.arcTo(fx, fy, fx + fw, fy, 2);
+    ctx.closePath();
+    ctx.fill();
+
+    // Eyes
+    ctx.fillStyle = "#32261a";
+    const eyeY = fy + fh * 0.45;
+    const eyeGap = fw * 0.28;
+    ctx.beginPath();
+    ctx.arc(pcx - eyeGap, eyeY, tileSize * 0.025, 0, Math.PI * 2);
+    ctx.arc(pcx + eyeGap, eyeY, tileSize * 0.025, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Direction indicator
+    const facing = runtime.player.facing;
+    const dirs = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+    const [fdx, fdy] = dirs[facing] || [0, -1];
+    ctx.fillStyle = "rgba(211, 155, 52, 0.7)";
+    ctx.beginPath();
+    ctx.arc(pcx + fdx * (pr + 3), pcy + fdy * (pr + 3), tileSize * 0.05, 0, Math.PI * 2);
+    ctx.fill();
   }
 
   state.boardLayout.push({
@@ -773,15 +973,35 @@ function renderCanvas() {
   ctx.clearRect(0, 0, rect.width, rect.height);
   state.boardLayout = [];
 
-  // Background
-  ctx.fillStyle = "#e7d9b5";
+  // Background — warm craft-paper gradient
+  const bgGrad = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+  bgGrad.addColorStop(0, "#efe3c5");
+  bgGrad.addColorStop(0.5, "#e7d9b5");
+  bgGrad.addColorStop(1, "#ddd0a8");
+  ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, rect.width, rect.height);
-  ctx.fillStyle = "rgba(255,255,255,0.25)";
-  for (let i = 0; i < 12; i++) {
+
+  // Subtle craft-paper texture dots
+  ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+  for (let i = 0; i < 18; i++) {
+    const bx = (i * 97 + 40) % (rect.width + 60);
+    const by = (i * 53 + 30) % (rect.height + 40);
     ctx.beginPath();
-    ctx.arc(100 + i * 110, 60 + (i % 4) * 30, 22, 0, Math.PI * 2);
+    ctx.arc(bx, by, 16 + (i % 5) * 6, 0, Math.PI * 2);
     ctx.fill();
   }
+
+  // Decorative stitch-line running across top
+  ctx.save();
+  ctx.strokeStyle = "rgba(125, 63, 41, 0.08)";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([8, 6]);
+  ctx.beginPath();
+  ctx.moveTo(0, 28);
+  ctx.lineTo(rect.width, 28);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
 
   if (!room || !runtime) {
     ctx.fillStyle = "#5d301f";
@@ -815,26 +1035,40 @@ function renderCanvas() {
   // Replay indicator
   if (engine.replayState) {
     ctx.save();
-    ctx.fillStyle = "rgba(255, 248, 228, 0.88)";
-    const rw = 180;
+    const rw = 200;
     const rx = (rect.width - rw) / 2;
-    drawRoundedRect(rx, 12, rw, 36, 14);
+    ctx.fillStyle = "rgba(255, 248, 228, 0.92)";
+    ctx.shadowColor = "rgba(74, 43, 17, 0.12)";
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetY = 4;
+    drawRoundedRect(rx, 12, rw, 38, 16);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.strokeStyle = "rgba(211, 155, 52, 0.4)";
+    ctx.lineWidth = 1;
+    drawRoundedRect(rx, 12, rw, 38, 16);
+    ctx.stroke();
+    // Progress bar
+    const prog = engine.replayState.index / Math.max(1, engine.replayState.actions.length);
+    ctx.fillStyle = "rgba(211, 155, 52, 0.25)";
+    drawRoundedRect(rx + 4, 42, (rw - 8) * prog, 4, 2);
     ctx.fill();
     ctx.fillStyle = "#5d301f";
-    ctx.font = "600 14px Trebuchet MS";
+    ctx.font = "600 13px Trebuchet MS";
     ctx.textAlign = "center";
     ctx.fillText(`Replaying... ${engine.replayState.index}/${engine.replayState.actions.length}`, rect.width / 2, 36);
     ctx.textAlign = "left";
     ctx.restore();
   }
 
-  // Keyboard shortcuts at bottom
+  // Keyboard shortcuts at bottom — only shown when not in replay
   if (!runtime.solved && !engine.replayState) {
     ctx.save();
     ctx.font = "11px Trebuchet MS";
-    ctx.fillStyle = "rgba(125, 104, 83, 0.45)";
+    ctx.fillStyle = "rgba(125, 104, 83, 0.35)";
     ctx.textAlign = "center";
-    ctx.fillText("Arrows: Move · Tab: Switch Layer · X: Transfer · Z/Y: Undo/Redo · R: Reset · Esc: Map", rect.width / 2, rect.height - 8);
+    ctx.fillText("\u2190\u2191\u2192\u2193 Move  \u00B7  Tab: Layer  \u00B7  X: Transfer  \u00B7  Z/Y: Undo/Redo  \u00B7  R: Reset  \u00B7  ?: Legend", rect.width / 2, rect.height - 8);
     ctx.textAlign = "left";
     ctx.restore();
   }
@@ -893,8 +1127,18 @@ function handleKeydown(event) {
   // Don't handle while typing in inputs
   if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) return;
 
-  // Don't handle game input when solve overlay is showing
+  // Don't handle game input when overlays are showing
   if (!el.solveOverlay.classList.contains("hidden")) return;
+  if (!el.tutorialOverlay.classList.contains("hidden")) return;
+  if (!el.introOverlay.classList.contains("hidden")) return;
+  if (!el.legendOverlay.classList.contains("hidden")) {
+    if (event.code === "Escape") {
+      state.legendOpen = false;
+      el.legendOverlay.classList.add("hidden");
+      event.preventDefault();
+    }
+    return;
+  }
 
   const action = keyToAction(event.code);
   if (!action) return;
@@ -983,12 +1227,18 @@ function bindEvents() {
     ensureRoomLoaded(nextRoom);
     syncEditorFromRoom();
     setScreen("play");
+    if (!profile.tutorialSeen) {
+      openTutorial();
+    } else {
+      showRoomIntro();
+    }
   });
 
   el.resumeBtn.addEventListener("click", () => {
     ensureRoomLoaded(profile.lastRoomId || "mailroom-01");
     syncEditorFromRoom();
     setScreen("play");
+    showRoomIntro();
   });
 
   // Play HUD buttons
@@ -1100,6 +1350,32 @@ function bindEvents() {
     engine.startReplay(bestSolution);
   });
 
+  // Tutorial
+  el.tutorialNext.addEventListener("click", () => {
+    if (state.tutorialStep >= state.tutorialTotal - 1) {
+      closeTutorial();
+    } else {
+      showTutorialStep(state.tutorialStep + 1);
+    }
+  });
+  el.tutorialPrev.addEventListener("click", () => {
+    showTutorialStep(state.tutorialStep - 1);
+  });
+
+  // Intro dialogue
+  el.introDismiss.addEventListener("click", dismissIntro);
+
+  // Legend
+  el.hudLegend.addEventListener("click", () => {
+    state.legendOpen = !state.legendOpen;
+    el.legendOverlay.classList.toggle("hidden", !state.legendOpen);
+    if (state.legendOpen) renderAllTilePreviews();
+  });
+  el.legendClose.addEventListener("click", () => {
+    state.legendOpen = false;
+    el.legendOverlay.classList.add("hidden");
+  });
+
   // Global input
   window.addEventListener("keydown", handleKeydown);
   el.canvas.addEventListener("click", handleCanvasClick);
@@ -1130,6 +1406,203 @@ function updateLoop(now) {
   }
 
   requestAnimationFrame(updateLoop);
+}
+
+// ═══════════════════════════════════════
+// Tutorial / Onboarding
+// ═══════════════════════════════════════
+
+function drawTilePreview(canvas, tileType) {
+  const size = canvas.width;
+  const c = canvas.getContext("2d");
+  c.clearRect(0, 0, size, size);
+
+  if (tileType === "player") {
+    c.fillStyle = "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    c.fillStyle = "#2f4d6a";
+    c.beginPath();
+    c.arc(size / 2, size / 2, size * 0.3, 0, Math.PI * 2);
+    c.fill();
+    c.fillStyle = "#f9dcb2";
+    c.fillRect(size * 0.4, size * 0.22, size * 0.18, size * 0.18);
+  } else if (tileType === "parcel") {
+    c.fillStyle = "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    c.fillStyle = "#bf5f3c";
+    c.fillRect(size * 0.16, size * 0.16, size * 0.68, size * 0.68);
+    c.fillStyle = "#fff3e7";
+    c.fillRect(size * 0.3, size * 0.3, size * 0.4, size * 0.4);
+  } else if (tileType === "projector") {
+    c.fillStyle = "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    c.fillStyle = "#d39b34";
+    c.beginPath();
+    c.arc(size / 2, size / 2, size * 0.28, 0, Math.PI * 2);
+    c.fill();
+    c.strokeStyle = "#7d3f29";
+    c.strokeRect(size * 0.22, size * 0.22, size * 0.56, size * 0.56);
+  } else if (tileType === "echo") {
+    c.fillStyle = "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    c.fillStyle = "rgba(105, 150, 211, 0.78)";
+    c.beginPath();
+    c.arc(size / 2, size / 2, size * 0.28, 0, Math.PI * 2);
+    c.fill();
+  } else if (tileType === "shadow") {
+    c.fillStyle = "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    c.fillStyle = "rgba(59, 44, 36, 0.78)";
+    c.beginPath();
+    c.arc(size / 2, size / 2, size * 0.3, 0, Math.PI * 2);
+    c.fill();
+  } else if (tileType === "switch") {
+    c.fillStyle = "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    c.fillStyle = "#b9d3a9";
+    c.fillRect(size * 0.15, size * 0.6, size * 0.7, size * 0.2);
+  } else if (tileType === "door") {
+    c.fillStyle = "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    c.fillStyle = "#7d3f29";
+    c.fillRect(size * 0.15, size * 0.06, size * 0.7, size * 0.88);
+  } else if (tileType === "key") {
+    c.fillStyle = "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    c.fillStyle = "#e04040";
+    c.beginPath();
+    c.arc(size / 2, size * 0.38, size * 0.18, 0, Math.PI * 2);
+    c.fill();
+    c.fillRect(size * 0.44, size * 0.45, size * 0.12, size * 0.32);
+  } else if (tileType === "lock") {
+    c.fillStyle = "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    c.fillStyle = "#e04040";
+    c.globalAlpha = 0.7;
+    c.fillRect(size * 0.1, size * 0.1, size * 0.8, size * 0.8);
+    c.globalAlpha = 1;
+    c.fillStyle = "#fff";
+    c.font = `${Math.floor(size * 0.4)}px sans-serif`;
+    c.textAlign = "center";
+    c.textBaseline = "middle";
+    c.fillText("\u{1F512}", size / 2, size / 2);
+    c.textAlign = "left";
+    c.textBaseline = "alphabetic";
+  } else {
+    // Tile type from tile character
+    const colors = {
+      "#": "#ad8c63", "~": "#d7c5a2", S: "#f7efdd", G: "#f7e0a1",
+      I: "#c8dff0", T: "#d8c4f0", ">": "#f0e4c8", ".": "#fff8ed",
+    };
+    c.fillStyle = colors[tileType] || "#fff8ed";
+    c.fillRect(0, 0, size, size);
+    if (tileType === "#") {
+      c.fillStyle = "#8d6a45";
+      c.fillRect(size * 0.12, size * 0.12, size * 0.76, size * 0.76);
+    }
+    if (tileType === "S") {
+      c.strokeStyle = "#7d3f29";
+      c.lineWidth = 1.5;
+      c.setLineDash([3, 2]);
+      c.strokeRect(size * 0.18, size * 0.18, size * 0.64, size * 0.64);
+      c.setLineDash([]);
+      c.fillStyle = "#7d3f29";
+      const cx = size / 2, cy = size / 2, d = size * 0.1;
+      c.beginPath();
+      c.moveTo(cx, cy - d); c.lineTo(cx + d, cy); c.lineTo(cx, cy + d); c.lineTo(cx - d, cy);
+      c.closePath(); c.fill();
+    }
+    if (tileType === "G") {
+      c.fillStyle = "#d39b34";
+      c.fillRect(size * 0.25, size * 0.3, size * 0.5, size * 0.45);
+      c.fillStyle = "#7d3f29";
+      c.fillRect(size * 0.35, size * 0.15, size * 0.3, size * 0.2);
+    }
+    if (tileType === "~") {
+      c.strokeStyle = "#a98964";
+      c.beginPath();
+      c.moveTo(size * 0.18, size * 0.18); c.lineTo(size * 0.82, size * 0.82);
+      c.moveTo(size * 0.82, size * 0.18); c.lineTo(size * 0.18, size * 0.82);
+      c.stroke();
+    }
+    if (tileType === "I") {
+      c.strokeStyle = "rgba(100, 160, 210, 0.45)";
+      for (let i = 0; i < 3; i++) {
+        const lx = size * 0.15 + i * size * 0.35;
+        c.beginPath(); c.moveTo(lx, size * 0.15); c.lineTo(lx, size * 0.85); c.stroke();
+      }
+    }
+    if (tileType === "T") {
+      c.fillStyle = "rgba(150, 120, 200, 0.35)";
+      c.beginPath(); c.arc(size / 2, size / 2, size * 0.3, 0, Math.PI * 2); c.fill();
+      c.strokeStyle = "#7d5faa"; c.lineWidth = 2;
+      c.beginPath(); c.arc(size / 2, size / 2, size * 0.3, 0, Math.PI * 2); c.stroke();
+    }
+    if (tileType === ">") {
+      c.fillStyle = "rgba(109, 78, 47, 0.35)";
+      c.font = `${Math.floor(size * 0.5)}px sans-serif`;
+      c.textAlign = "center"; c.textBaseline = "middle";
+      c.fillText("\u2192", size / 2, size / 2);
+      c.textAlign = "left"; c.textBaseline = "alphabetic";
+    }
+  }
+}
+
+function renderAllTilePreviews() {
+  document.querySelectorAll(".tutorial-tile-preview").forEach((canvas) => {
+    drawTilePreview(canvas, canvas.dataset.tile);
+  });
+}
+
+function showTutorialStep(step) {
+  state.tutorialStep = Math.max(0, Math.min(step, state.tutorialTotal - 1));
+  el.tutorialOverlay.querySelectorAll(".tutorial-step").forEach((el) => {
+    el.classList.toggle("active", Number(el.dataset.step) === state.tutorialStep);
+  });
+  // Update dots
+  el.tutorialDots.innerHTML = "";
+  for (let i = 0; i < state.tutorialTotal; i++) {
+    const dot = document.createElement("span");
+    dot.className = `tutorial-dot${i === state.tutorialStep ? " active" : ""}`;
+    el.tutorialDots.append(dot);
+  }
+  // Update buttons
+  el.tutorialPrev.style.visibility = state.tutorialStep === 0 ? "hidden" : "visible";
+  el.tutorialNext.textContent = state.tutorialStep === state.tutorialTotal - 1 ? "Start Playing!" : "Next \u2192";
+}
+
+function openTutorial() {
+  el.tutorialOverlay.classList.remove("hidden");
+  showTutorialStep(0);
+  renderAllTilePreviews();
+}
+
+function closeTutorial() {
+  el.tutorialOverlay.classList.add("hidden");
+  profile.tutorialSeen = true;
+  saveProfile(profile);
+  // Show room intro if available
+  showRoomIntro();
+}
+
+function showRoomIntro() {
+  const room = currentRoom();
+  if (!room?.intro?.length) return;
+  const introKey = `intro_${room.id}`;
+  if (profile[introKey]) return;
+  const intro = room.intro[0];
+  el.introSpeaker.textContent = intro.speaker || "";
+  el.introText.textContent = intro.text || "";
+  el.introOverlay.classList.remove("hidden");
+}
+
+function dismissIntro() {
+  const room = currentRoom();
+  if (room) {
+    profile[`intro_${room.id}`] = true;
+    saveProfile(profile);
+  }
+  el.introOverlay.classList.add("hidden");
 }
 
 // ═══════════════════════════════════════
