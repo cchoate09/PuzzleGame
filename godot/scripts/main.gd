@@ -16,6 +16,7 @@ const SaveRuntime = preload("res://scripts/core/patchwork_save.gd")
 const EngineScript = preload("res://scripts/core/patchwork_engine.gd")
 const ContentRepository = preload("res://scripts/core/content_repository.gd")
 const SteamBridgeScript = preload("res://scripts/platform/steam_bridge.gd")
+const SteamAchievements = preload("res://scripts/platform/steam_achievements.gd")
 const RoomViewScript = preload("res://scripts/ui/room_view.gd")
 const AudioManagerScript = preload("res://scripts/ui/audio_manager.gd")
 const PlaytestLoggerScript = preload("res://scripts/tools/playtest_logger.gd")
@@ -122,6 +123,7 @@ func _ready() -> void:
 	source_campaign = ContentRepository.load_source_campaign()
 	playtest_logger = PlaytestLoggerScript.new()
 	_apply_profile_settings()
+	_try_load_cloud_save()
 	_sync_steam_state()
 
 	if campaign.is_empty():
@@ -1407,6 +1409,7 @@ func _after_state_change(action: Dictionary = {}, previous_runtime: Dictionary =
 				SaveRuntime.unlock_achievement(profile, "careful-hands")
 			if profile.get("journalEntriesUnlocked", []).size() >= _get_journal_entries().size() and not _get_journal_entries().is_empty():
 				SaveRuntime.unlock_achievement(profile, "archivist")
+			_grant_pending_achievements()
 			SaveRuntime.set_room_snapshot(profile, room_id, null)
 			if not journal_unlocks.is_empty():
 				_show_toast("Hidden notes unlocked: %s." % ", ".join(journal_unlocks))
@@ -1765,6 +1768,29 @@ func _sync_steam_state() -> void:
 		SaveRuntime.mark_steam_achievement_synced(profile, String(achievement_id))
 	if not synced_ids.is_empty():
 		SaveRuntime.save_profile(profile)
+	# Cloud save: upload current profile when cloud is available.
+	if bool(steam_status.get("cloudReady", false)):
+		SaveRuntime.save_to_cloud(profile, steam_bridge)
+
+func _grant_pending_achievements() -> void:
+	if steam_bridge == null:
+		return
+	var pending: Array = SaveRuntime.get_pending_steam_achievements(profile)
+	for achievement_id in pending:
+		var granted := SteamAchievements.check_and_grant(profile, steam_bridge, String(achievement_id))
+		if granted:
+			SaveRuntime.mark_steam_achievement_synced(profile, String(achievement_id))
+
+func _try_load_cloud_save() -> void:
+	if steam_bridge == null:
+		return
+	if not bool(steam_status.get("cloudReady", false)):
+		return
+	var cloud_profile := SaveRuntime.load_from_cloud(steam_bridge)
+	if cloud_profile.is_empty():
+		return
+	profile = SaveRuntime.resolve_cloud_conflict(profile, cloud_profile)
+	SaveRuntime.save_profile(profile)
 
 func _handle_high_contrast_toggled(enabled: bool) -> void:
 	profile.get("settings", {})["highContrast"] = enabled

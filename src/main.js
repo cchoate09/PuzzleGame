@@ -14,6 +14,7 @@ import {
   unlockJournal,
 } from "./game/save.js";
 import { validateRoom } from "./game/validator.js";
+import { AudioManager } from "./audio/audio-manager.js";
 
 const campaign = buildCampaignIndex();
 const profile = loadProfile();
@@ -41,6 +42,137 @@ const state = {
 };
 
 // ═══════════════════════════════════════
+// Audio manager
+// ═══════════════════════════════════════
+const audio = new AudioManager();
+
+// ═══════════════════════════════════════
+// Animation state — visual interpolation
+// ═══════════════════════════════════════
+const anim = {
+  playerX: 0,
+  playerY: 0,
+  playerLayer: 0,
+  displayedActiveLayer: 0,
+  enterProgress: 0,       // 0→1 room entry fade-in
+  solveFlash: 0,          // 1→0 golden flash
+  stampRingRadius: 0,     // expanding ring on solve
+  stampRingAlpha: 0,
+  confetti: [],           // { x, y, vx, vy, rot, drot, w, h, color, alpha }
+  keySparkles: [],        // { x, y, alpha, radius }
+  screenShake: 0,         // screen shake intensity
+  initialized: false,
+};
+
+function moveToward(current, target, maxDelta) {
+  if (Math.abs(target - current) <= maxDelta) return target;
+  return current + Math.sign(target - current) * maxDelta;
+}
+
+function initAnimFromRuntime() {
+  const rt = currentRuntime();
+  if (!rt) return;
+  anim.playerX = rt.player.x;
+  anim.playerY = rt.player.y;
+  anim.playerLayer = rt.player.layer;
+  anim.displayedActiveLayer = rt.activeLayer;
+  anim.enterProgress = 0;
+  anim.solveFlash = 0;
+  anim.stampRingRadius = 0;
+  anim.stampRingAlpha = 0;
+  anim.confetti = [];
+  anim.keySparkles = [];
+  anim.screenShake = 0;
+  anim.initialized = true;
+}
+
+function triggerSolveEffects() {
+  anim.solveFlash = 1.0;
+  anim.stampRingRadius = 0;
+  anim.stampRingAlpha = 1.0;
+  anim.screenShake = 6;
+  // Spawn confetti
+  const palette = ["#d39b34", "#bf5f3c", "#2f4d6a", "#5d301f", "#8b6c42", "#c87941", "#e8c77b"];
+  for (let i = 0; i < 18; i++) {
+    anim.confetti.push({
+      x: 0.3 + Math.random() * 0.4,  // normalized 0-1 screen coords
+      y: 0.2 + Math.random() * 0.3,
+      vx: (Math.random() - 0.5) * 160,
+      vy: -60 - Math.random() * 120,
+      rot: Math.random() * Math.PI * 2,
+      drot: (Math.random() - 0.5) * 8,
+      w: 3 + Math.random() * 5,
+      h: 3 + Math.random() * 5,
+      color: palette[i % palette.length],
+      alpha: 1.0,
+    });
+  }
+}
+
+function spawnKeySparkles(canvasX, canvasY) {
+  for (let i = 0; i < 8; i++) {
+    anim.keySparkles.push({
+      x: canvasX + (Math.random() - 0.5) * 20,
+      y: canvasY + (Math.random() - 0.5) * 20,
+      alpha: 1.0,
+      radius: 2 + Math.random() * 4,
+    });
+  }
+}
+
+function updateAnimations(deltaSec) {
+  const rt = currentRuntime();
+  if (!rt) return;
+  const reducedMotion = profile.settings.reducedMotion;
+  const speed = reducedMotion ? 999 : 14;
+  const layerSpeed = reducedMotion ? 999 : 5.2;
+
+  // Lerp player position
+  anim.playerX = moveToward(anim.playerX, rt.player.x, deltaSec * speed);
+  anim.playerY = moveToward(anim.playerY, rt.player.y, deltaSec * speed);
+  anim.playerLayer = rt.player.layer;
+  anim.displayedActiveLayer = moveToward(anim.displayedActiveLayer, rt.activeLayer, deltaSec * layerSpeed);
+
+  // Room entry animation
+  if (anim.enterProgress < 1) {
+    anim.enterProgress = Math.min(1, anim.enterProgress + deltaSec * 3.6);
+  }
+
+  // Solve flash decay
+  if (anim.solveFlash > 0) {
+    anim.solveFlash = Math.max(0, anim.solveFlash - deltaSec * 1.9);
+  }
+
+  // Stamp ring expansion
+  if (anim.stampRingAlpha > 0) {
+    anim.stampRingRadius += deltaSec * 200;
+    anim.stampRingAlpha = Math.max(0, anim.stampRingAlpha - deltaSec * 1.6);
+  }
+
+  // Screen shake decay
+  if (anim.screenShake > 0) {
+    anim.screenShake = Math.max(0, anim.screenShake - deltaSec * 18);
+  }
+
+  // Confetti physics
+  for (const p of anim.confetti) {
+    p.x += (p.vx / 800) * deltaSec;
+    p.y += (p.vy / 800) * deltaSec;
+    p.vy += 110 * deltaSec;
+    p.rot += p.drot * deltaSec;
+    p.alpha = Math.max(0, p.alpha - deltaSec * 1.2);
+  }
+  anim.confetti = anim.confetti.filter(p => p.alpha > 0.01);
+
+  // Key sparkle decay
+  for (const s of anim.keySparkles) {
+    s.alpha = Math.max(0, s.alpha - deltaSec * 3);
+    s.radius += deltaSec * 8;
+  }
+  anim.keySparkles = anim.keySparkles.filter(s => s.alpha > 0.01);
+}
+
+// ═══════════════════════════════════════
 // Element references
 // ═══════════════════════════════════════
 
@@ -59,6 +191,8 @@ const el = {
   settingContrast: document.getElementById("setting-contrast"),
   settingMotion: document.getElementById("setting-motion"),
   settingFontScale: document.getElementById("setting-font-scale"),
+  settingAudio: document.getElementById("setting-audio"),
+  settingVolume: document.getElementById("setting-volume"),
   controlList: document.getElementById("control-list"),
   roomJson: document.getElementById("room-json"),
   validationOutput: document.getElementById("validation-output"),
@@ -118,12 +252,14 @@ function setScreen(screen) {
   el.body.setAttribute("data-screen", screen);
   if (screen === "map") {
     renderMapScreen();
+    audio.stopAmbient();
   }
   if (screen === "play") {
     el.solveOverlay.classList.add("hidden");
     state.hintOpen = false;
     el.hintOverlay.classList.add("hidden");
     updateHUD();
+    audio.startAmbient();
   }
 }
 
@@ -145,6 +281,8 @@ function ensureRoomLoaded(roomId) {
   state.currentRoomId = roomId;
   profile.lastRoomId = roomId;
   saveProfile(profile);
+  initAnimFromRuntime();
+  audio.play("enter");
 }
 
 function roomSolved(roomId) {
@@ -236,6 +374,7 @@ function onRoomSolved() {
   if (room.achievementId) unlockAchievement(profile, room.achievementId);
   if ((roomProgress.hintsRevealed || 0) === 0) unlockAchievement(profile, "careful-hands");
   saveProfile(profile);
+  // Solve effects already triggered in performAction
   showSolveOverlay();
 }
 
@@ -282,8 +421,45 @@ function advanceToNextRoom() {
 // ═══════════════════════════════════════
 
 function performAction(action) {
+  // Snapshot entity/key state before dispatch for change detection
+  const prevEntities = currentRuntime()?.entities?.map(e => `${e.x}:${e.y}`) || [];
+  const prevKeys = currentRuntime()?.collectedKeys?.length || 0;
+
   const changed = engine.dispatch(action);
   if (!changed) return;
+
+  // Determine audio event
+  const rt = currentRuntime();
+  const newEntities = rt?.entities?.map(e => `${e.x}:${e.y}`) || [];
+  const entityMoved = prevEntities.some((pos, i) => newEntities[i] !== pos);
+  const keyCollected = (rt?.collectedKeys?.length || 0) > prevKeys;
+
+  if (rt?.solved) {
+    audio.play("solve");
+    triggerSolveEffects();
+  } else if (entityMoved && action.type === "move") {
+    audio.play("push");
+  } else if (action.type === "switch_layer") {
+    audio.play("switch_layer");
+  } else if (action.type === "transfer") {
+    audio.play("transfer");
+  } else if (action.type === "wait") {
+    audio.play("wait");
+  } else if (action.type === "undo") {
+    audio.play("undo");
+  } else if (action.type === "redo") {
+    audio.play("redo");
+  } else if (action.type === "reset") {
+    audio.play("reset");
+    initAnimFromRuntime();
+  } else if (action.type === "move") {
+    audio.play("move");
+  }
+
+  if (keyCollected) {
+    spawnKeySparkles(0, 0); // position updated at render time
+  }
+
   persistCurrentSnapshot();
   onRoomSolved();
   updateHUD();
@@ -421,8 +597,12 @@ function renderMapStats() {
   el.settingContrast.checked = !!profile.settings.highContrast;
   el.settingMotion.checked = !!profile.settings.reducedMotion;
   el.settingFontScale.value = String(profile.settings.fontScale || 1);
+  el.settingAudio.checked = profile.settings.audioEnabled !== false;
+  el.settingVolume.value = String(profile.settings.audioVolume ?? 0.6);
   document.documentElement.style.fontSize = `${(profile.settings.fontScale || 1) * 16}px`;
   document.body.classList.toggle("high-contrast", !!profile.settings.highContrast);
+  audio.setEnabled(profile.settings.audioEnabled !== false);
+  audio.setVolume(profile.settings.audioVolume ?? 0.6);
 }
 
 function syncEditorFromRoom() {
@@ -898,8 +1078,8 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
 
   // Player
   if (runtime.player.layer === layerIndex) {
-    const px = boardX + runtime.player.x * tileSize;
-    const py = boardY + runtime.player.y * tileSize;
+    const px = boardX + (anim.initialized ? anim.playerX : runtime.player.x) * tileSize;
+    const py = boardY + (anim.initialized ? anim.playerY : runtime.player.y) * tileSize;
     const pcx = px + tileSize / 2;
     const pcy = py + tileSize / 2;
     const pr = tileSize * 0.32;
@@ -969,8 +1149,11 @@ function renderCanvas() {
   const scale = window.devicePixelRatio || 1;
   el.canvas.width = rect.width * scale;
   el.canvas.height = rect.height * scale;
-  ctx.setTransform(scale, 0, 0, scale, 0, 0);
-  ctx.clearRect(0, 0, rect.width, rect.height);
+  // Screen shake offset
+  const shakeX = anim.screenShake > 0.1 ? (Math.random() - 0.5) * anim.screenShake : 0;
+  const shakeY = anim.screenShake > 0.1 ? (Math.random() - 0.5) * anim.screenShake : 0;
+  ctx.setTransform(scale, 0, 0, scale, shakeX * scale, shakeY * scale);
+  ctx.clearRect(-10, -10, rect.width + 20, rect.height + 20);
   state.boardLayout = [];
 
   // Background — warm craft-paper gradient
@@ -1028,7 +1211,12 @@ function renderCanvas() {
 
   room.layers.forEach((_, index) => {
     const boardX = startX + index * (w * tileSize + 48);
-    const boardY = startY + (runtime.activeLayer === index ? 0 : 22);
+    // Smooth layer elevation: active layer rises, others descend
+    const activeDist = Math.abs(index - (anim.initialized ? anim.displayedActiveLayer : runtime.activeLayer));
+    const layerOffset = Math.min(1, activeDist) * 22;
+    // Entry animation: layers slide down from top
+    const entrySlide = anim.initialized ? (1 - anim.enterProgress) * (50 + index * 20) : 0;
+    const boardY = startY + layerOffset + entrySlide;
     drawLayerBoard(index, boardX, boardY, tileSize);
   });
 
@@ -1072,6 +1260,49 @@ function renderCanvas() {
     ctx.textAlign = "left";
     ctx.restore();
   }
+
+  // ── Visual effects overlay ──
+
+  // Solve golden flash
+  if (anim.solveFlash > 0.01) {
+    ctx.save();
+    ctx.fillStyle = `rgba(211, 155, 52, ${anim.solveFlash * 0.15})`;
+    ctx.fillRect(0, 0, rect.width, rect.height);
+    ctx.restore();
+  }
+
+  // Stamp ring
+  if (anim.stampRingAlpha > 0.01) {
+    ctx.save();
+    ctx.strokeStyle = `rgba(211, 155, 52, ${anim.stampRingAlpha * 0.6})`;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(rect.width / 2, rect.height / 2, anim.stampRingRadius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Confetti particles
+  for (const p of anim.confetti) {
+    ctx.save();
+    ctx.globalAlpha = p.alpha;
+    ctx.translate(p.x * rect.width, p.y * rect.height);
+    ctx.rotate(p.rot);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    ctx.restore();
+  }
+
+  // Key collection sparkles
+  for (const s of anim.keySparkles) {
+    ctx.save();
+    ctx.globalAlpha = s.alpha;
+    ctx.fillStyle = "#ffd700";
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
 }
 
 // ═══════════════════════════════════════
@@ -1097,6 +1328,9 @@ function keyToAction(code) {
 }
 
 function handleKeydown(event) {
+  // Lazy-init audio on first user interaction (browser autoplay policy)
+  audio.init();
+
   // Remap mode (on map screen)
   if (state.awaitingRemap) {
     event.preventDefault();
@@ -1151,6 +1385,7 @@ function handleKeydown(event) {
 }
 
 function handleCanvasClick(event) {
+  audio.init();
   if (state.screen !== "play") return;
   const room = currentRoom();
   const runtime = currentRuntime();
@@ -1264,6 +1499,7 @@ function bindEvents() {
       revealHint(profile, room.id, Number(button.dataset.hintTier));
       saveProfile(profile);
       updateHintOverlay();
+      audio.play("hint");
     });
   });
 
@@ -1311,6 +1547,16 @@ function bindEvents() {
     profile.settings.fontScale = Number(el.settingFontScale.value);
     saveProfile(profile);
     renderMapStats();
+  });
+  el.settingAudio.addEventListener("change", () => {
+    profile.settings.audioEnabled = el.settingAudio.checked;
+    audio.setEnabled(el.settingAudio.checked);
+    saveProfile(profile);
+  });
+  el.settingVolume.addEventListener("input", () => {
+    profile.settings.audioVolume = Number(el.settingVolume.value);
+    audio.setVolume(Number(el.settingVolume.value));
+    saveProfile(profile);
   });
 
   // Content tools
@@ -1388,10 +1634,12 @@ function bindEvents() {
 function updateLoop(now) {
   const delta = now - state.lastRenderTime;
   state.lastRenderTime = now;
+  const deltaSec = Math.min(delta / 1000, 0.1); // cap to avoid huge jumps
 
   if (state.screen === "play") {
     engine.update(profile.settings.reducedMotion ? Math.max(delta, 260) : delta);
     pollGamepad();
+    updateAnimations(deltaSec);
     renderCanvas();
 
     // Auto-advance countdown

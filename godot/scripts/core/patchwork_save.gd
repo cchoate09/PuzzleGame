@@ -293,3 +293,91 @@ static func get_solved_count(profile: Dictionary) -> int:
 		if profile["rooms"][room_id].get("solved", false):
 			solved += 1
 	return solved
+
+
+# ---------------------------------------------------------------------------
+# Cloud save helpers (Steam Remote Storage)
+# ---------------------------------------------------------------------------
+
+static func save_to_cloud(profile: Dictionary, steam_bridge) -> bool:
+	if steam_bridge == null:
+		return false
+	if not (profile is Dictionary) or profile.is_empty():
+		return false
+
+	var slot: String = profile.get("steam", {}).get("cloudSlot", "patchwork-post-profile")
+	if slot.is_empty():
+		return false
+
+	if not steam_bridge.has_method("upload_save"):
+		return false
+
+	var data := JSON.stringify(profile, "\t")
+	if data.is_empty():
+		return false
+
+	return steam_bridge.upload_save(slot, data)
+
+
+static func load_from_cloud(steam_bridge) -> Dictionary:
+	if steam_bridge == null:
+		return {}
+
+	if not steam_bridge.has_method("download_save"):
+		return {}
+
+	# Use the default cloud slot; we cannot read the profile yet since that
+	# is what we are trying to load.
+	var slot := "patchwork-post-profile"
+
+	var raw_json: String = steam_bridge.download_save(slot)
+	if raw_json.is_empty():
+		return {}
+
+	var parsed: Variant = JSON.parse_string(raw_json)
+	if parsed == null or not (parsed is Dictionary):
+		return {}
+
+	return hydrate_profile(parsed)
+
+
+## Given a local and a cloud profile, return whichever represents more
+## progress.  "More progress" is defined as: higher solved-room count wins;
+## on a tie the profile with the later timestamp wins.
+static func resolve_cloud_conflict(local: Dictionary, cloud: Dictionary) -> Dictionary:
+	if local.is_empty() and cloud.is_empty():
+		return create_default_profile()
+	if local.is_empty():
+		return cloud
+	if cloud.is_empty():
+		return local
+
+	var local_solved := get_solved_count(local)
+	var cloud_solved := get_solved_count(cloud)
+
+	if local_solved > cloud_solved:
+		return local
+	if cloud_solved > local_solved:
+		return cloud
+
+	# Tie-break: prefer whichever was saved more recently.
+	var local_rooms: Dictionary = local.get("rooms", {})
+	var cloud_rooms: Dictionary = cloud.get("rooms", {})
+	var local_latest := _latest_completed_at(local_rooms)
+	var cloud_latest := _latest_completed_at(cloud_rooms)
+
+	if cloud_latest > local_latest:
+		return cloud
+	return local
+
+
+static func _latest_completed_at(rooms: Dictionary) -> String:
+	var latest := ""
+	for room_id in rooms.keys():
+		var room_data: Dictionary = rooms[room_id]
+		if not (room_data is Dictionary):
+			continue
+		var completed: String = String(room_data.get("completedAt", ""))
+		if not completed.is_empty() and completed > latest:
+			latest = completed
+	return latest

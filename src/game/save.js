@@ -30,6 +30,8 @@ export function createDefaultProfile() {
       highContrast: false,
       reducedMotion: false,
       fontScale: 1,
+      audioEnabled: true,
+      audioVolume: 0.6,
       controls: clone(DEFAULT_CONTROLS),
     },
   };
