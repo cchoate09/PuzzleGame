@@ -54,6 +54,7 @@ const anim = {
   playerY: 0,
   playerLayer: 0,
   displayedActiveLayer: 0,
+  cameraX: 0,            // smooth horizontal scroll offset
   enterProgress: 0,       // 0→1 room entry fade-in
   solveFlash: 0,          // 1→0 golden flash
   stampRingRadius: 0,     // expanding ring on solve
@@ -61,6 +62,7 @@ const anim = {
   confetti: [],           // { x, y, vx, vy, rot, drot, w, h, color, alpha }
   keySparkles: [],        // { x, y, alpha, radius }
   screenShake: 0,         // screen shake intensity
+  goalPulse: 0,           // 0→2π cycling pulse for goal tiles
   initialized: false,
 };
 
@@ -76,6 +78,7 @@ function initAnimFromRuntime() {
   anim.playerY = rt.player.y;
   anim.playerLayer = rt.player.layer;
   anim.displayedActiveLayer = rt.activeLayer;
+  anim.cameraX = 0; // will be set properly on first render
   anim.enterProgress = 0;
   anim.solveFlash = 0;
   anim.stampRingRadius = 0;
@@ -83,6 +86,7 @@ function initAnimFromRuntime() {
   anim.confetti = [];
   anim.keySparkles = [];
   anim.screenShake = 0;
+  anim.goalPulse = 0;
   anim.initialized = true;
 }
 
@@ -153,6 +157,9 @@ function updateAnimations(deltaSec) {
   if (anim.screenShake > 0) {
     anim.screenShake = Math.max(0, anim.screenShake - deltaSec * 18);
   }
+
+  // Goal tile pulse cycle
+  anim.goalPulse = (anim.goalPulse + deltaSec * 2.5) % (Math.PI * 2);
 
   // Confetti physics
   for (const p of anim.confetti) {
@@ -635,7 +642,26 @@ function updateHUD() {
   const runtime = currentRuntime();
   if (!room || !runtime) return;
   el.hudRoomName.textContent = room.title;
-  el.hudObjective.textContent = runtime.solved ? "Route restored!" : room.objective;
+  // Show objective with contextual mechanic tip
+  if (runtime.solved) {
+    el.hudObjective.textContent = "Route restored!";
+  } else {
+    let tip = room.objective;
+    // Add contextual tips based on room entities and tiles
+    const entities = runtime.entities || [];
+    const hasParcel = entities.some(e => e.type === "parcel");
+    const hasProjector = entities.some(e => e.type === "projector");
+    const hasSwitches = (room.switches || []).length > 0;
+    const hasDoors = (room.doors || []).length > 0;
+    const layerCount = room.layers?.length || 1;
+    const hints = [];
+    if (hasParcel && hasSwitches) hints.push("Push parcels onto green switches to open doors.");
+    else if (hasParcel) hints.push("Push parcels by walking into them.");
+    if (hasProjector) hints.push("Projectors create bridges on other layers.");
+    if (layerCount > 1 && !tip.toLowerCase().includes("layer")) hints.push("Press Tab to switch layers at stitch markers (⬡).");
+    tip += hints.length > 0 ? (" · " + hints[0]) : "";
+    el.hudObjective.textContent = tip;
+  }
   let moveText = `${runtime.moveCount} moves`;
   const keys = runtime.collectedKeys || [];
   if (keys.length > 0) {
@@ -823,10 +849,29 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
         ctx.stroke();
       }
       if (tile === "G") {
+        // Pulsing glow around goal
+        const pulse = 0.2 + 0.15 * Math.sin(anim.goalPulse);
+        ctx.fillStyle = `rgba(211, 155, 52, ${pulse})`;
+        ctx.beginPath();
+        ctx.arc(sx + tileSize / 2, sy + tileSize / 2, tileSize * 0.52, 0, Math.PI * 2);
+        ctx.fill();
+        // Mailbox body
         ctx.fillStyle = "#d39b34";
-        ctx.fillRect(sx + tileSize * 0.25, sy + tileSize * 0.3, tileSize * 0.5, tileSize * 0.45);
+        ctx.fillRect(sx + tileSize * 0.2, sy + tileSize * 0.28, tileSize * 0.6, tileSize * 0.48);
+        // Mailbox flag/top
         ctx.fillStyle = "#7d3f29";
-        ctx.fillRect(sx + tileSize * 0.35, sy + tileSize * 0.15, tileSize * 0.3, tileSize * 0.2);
+        ctx.fillRect(sx + tileSize * 0.28, sy + tileSize * 0.12, tileSize * 0.44, tileSize * 0.2);
+        // Slot
+        ctx.fillStyle = "rgba(255, 243, 231, 0.7)";
+        ctx.fillRect(sx + tileSize * 0.35, sy + tileSize * 0.46, tileSize * 0.3, tileSize * 0.06);
+        // "GOAL" label below if tile is large enough
+        if (tileSize >= 42) {
+          ctx.fillStyle = "rgba(211, 155, 52, 0.85)";
+          ctx.font = `700 ${Math.max(8, Math.floor(tileSize * 0.17))}px sans-serif`;
+          ctx.textAlign = "center";
+          ctx.fillText("GOAL", sx + tileSize / 2, sy + tileSize - 2);
+          ctx.textAlign = "left";
+        }
       }
       // Ice tile
       if (tile === "I") {
@@ -895,8 +940,16 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
     if (switchDef.layer !== layerIndex) continue;
     const sx = boardX + switchDef.x * tileSize;
     const sy = boardY + switchDef.y * tileSize;
-    ctx.fillStyle = runtime.dynamicState.activeSwitches.has(switchDef.id) ? "#80a768" : "#b9d3a9";
-    ctx.fillRect(sx + 7, sy + tileSize - 16, tileSize - 16, 9);
+    const isActive = runtime.dynamicState.activeSwitches.has(switchDef.id);
+    // More prominent pressure plate
+    ctx.fillStyle = isActive ? "#6a9e50" : "#a8c893";
+    drawRoundedRect(sx + 5, sy + tileSize * 0.6, tileSize - 12, tileSize * 0.3, 3);
+    ctx.fill();
+    ctx.strokeStyle = isActive ? "#4a7a30" : "#7d9e68";
+    ctx.lineWidth = 1.5;
+    drawRoundedRect(sx + 5, sy + tileSize * 0.6, tileSize - 12, tileSize * 0.3, 3);
+    ctx.stroke();
+    ctx.lineWidth = 1;
   }
 
   // Doors
@@ -906,11 +959,27 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
     const sy = boardY + door.y * tileSize;
     const open = runtime.dynamicState.openDoors.has(door.id);
     if (!open) {
+      // Closed door: solid with knob
       ctx.fillStyle = "#7d3f29";
-      ctx.fillRect(sx + 7, sy + 3, tileSize - 16, tileSize - 6);
+      drawRoundedRect(sx + 5, sy + 2, tileSize - 12, tileSize - 4, 3);
+      ctx.fill();
+      // Door panel detail
+      ctx.strokeStyle = "rgba(255, 240, 210, 0.25)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(sx + 9, sy + 6, tileSize - 20, (tileSize - 12) * 0.4);
+      ctx.strokeRect(sx + 9, sy + 6 + (tileSize - 12) * 0.5, tileSize - 20, (tileSize - 12) * 0.4);
+      // Knob
+      ctx.fillStyle = "#d39b34";
+      ctx.beginPath();
+      ctx.arc(sx + tileSize - 12, sy + tileSize / 2, 2.5, 0, Math.PI * 2);
+      ctx.fill();
     } else {
-      ctx.strokeStyle = "#7d3f29";
-      ctx.strokeRect(sx + 9, sy + 5, tileSize - 20, tileSize - 10);
+      ctx.strokeStyle = "rgba(125, 63, 41, 0.35)";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      drawRoundedRect(sx + 7, sy + 4, tileSize - 16, tileSize - 8, 3);
+      ctx.stroke();
+      ctx.setLineDash([]);
     }
   }
 
@@ -1136,6 +1205,38 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
     ctx.fill();
   }
 
+  // Floating labels on active layer for key entities (helps players understand mechanics)
+  if (active && tileSize >= 38) {
+    const labelFont = `600 ${Math.max(8, Math.floor(tileSize * 0.18))}px sans-serif`;
+    ctx.font = labelFont;
+    ctx.textAlign = "center";
+
+    const drawEntityLabel = (cx, topY, text, color) => {
+      const tw = ctx.measureText(text).width;
+      const lx = cx - tw / 2 - 4;
+      const ly = topY - 14;
+      ctx.fillStyle = "rgba(255, 252, 244, 0.88)";
+      drawRoundedRect(lx, ly, tw + 8, 14, 4);
+      ctx.fill();
+      ctx.fillStyle = color;
+      ctx.fillText(text, cx, topY - 3);
+    };
+
+    for (const entity of runtime.entities) {
+      if (entity.layer !== layerIndex) continue;
+      const ex = boardX + entity.x * tileSize;
+      const ey = boardY + entity.y * tileSize;
+      const ecx = ex + tileSize / 2;
+      if (entity.type === "parcel") drawEntityLabel(ecx, ey, "PARCEL", "#bf5f3c");
+      else if (entity.type === "projector") drawEntityLabel(ecx, ey, "PROJECTOR", "#b8862d");
+      else if (entity.type === "echo") drawEntityLabel(ecx, ey, "ECHO", "#4a7db5");
+      else if (entity.type === "shadow") drawEntityLabel(ecx, ey, "SHADOW", "#4a3528");
+      else if (entity.type === "key") drawEntityLabel(ecx, ey, "KEY", (KEY_LOCK_COLORS[entity.color] || KEY_LOCK_COLORS.red).fill);
+    }
+
+    ctx.textAlign = "left";
+  }
+
   state.boardLayout.push({
     layerIndex, x: boardX, y: boardY,
     width: boardWidth, height: boardHeight, tileSize,
@@ -1197,20 +1298,47 @@ function renderCanvas() {
   const h = room.layers[0].tiles.length;
   const layerCount = room.layers.length;
 
-  // Calculate tile size to fit the available space
+  // Calculate tile size: fit ONE layer comfortably, then scroll if needed
   const availW = rect.width - 80;
   const availH = rect.height - 100;
-  const maxTileByWidth = Math.floor(availW / (w * layerCount + (layerCount - 1) * 1.2));
+  // Try to fit all layers first
+  const maxTileAllLayers = Math.floor(availW / (w * layerCount + (layerCount - 1) * 1.2));
+  const maxTileSingleLayer = Math.floor(availW / (w + 2));
   const maxTileByHeight = Math.floor((availH - 60) / h);
-  const tileSize = Math.min(78, Math.max(36, Math.min(maxTileByWidth, maxTileByHeight)));
+  // Use the all-layers size if it's reasonable (>= 36px), otherwise size for one layer and scroll
+  const allFit = Math.min(maxTileAllLayers, maxTileByHeight) >= 36;
+  const tileSize = allFit
+    ? Math.min(78, Math.max(36, Math.min(maxTileAllLayers, maxTileByHeight)))
+    : Math.min(78, Math.max(36, Math.min(maxTileSingleLayer, maxTileByHeight)));
 
-  const totalBoardWidth = layerCount * (w * tileSize + 48) - 48;
+  const layerGap = 48;
+  const totalBoardWidth = layerCount * (w * tileSize + layerGap) - layerGap;
   const totalBoardHeight = h * tileSize + 60;
-  const startX = Math.max(40, (rect.width - totalBoardWidth) / 2);
+  const needsScroll = totalBoardWidth > rect.width - 40;
+
+  // Camera: smoothly center the active layer in the viewport
+  let cameraOffset = 0;
+  if (needsScroll) {
+    const activeIdx = anim.initialized ? anim.displayedActiveLayer : runtime.activeLayer;
+    const layerCenterX = activeIdx * (w * tileSize + layerGap) + (w * tileSize) / 2;
+    const targetCamera = layerCenterX - rect.width / 2;
+    const maxCamera = totalBoardWidth - rect.width + 60;
+    const clampedTarget = Math.max(-30, Math.min(maxCamera, targetCamera));
+    // Smooth lerp for camera
+    if (!anim.initialized || anim.cameraX === 0) {
+      anim.cameraX = clampedTarget;
+    } else {
+      const cameraSpeed = profile.settings.reducedMotion ? 999 : 8;
+      anim.cameraX = moveToward(anim.cameraX, clampedTarget, Math.abs(clampedTarget - anim.cameraX) * Math.min(1, cameraSpeed * (1 / 60)));
+    }
+    cameraOffset = -anim.cameraX;
+  }
+
+  const startX = needsScroll ? 30 + cameraOffset : Math.max(40, (rect.width - totalBoardWidth) / 2);
   const startY = Math.max(50, (rect.height - totalBoardHeight) / 2);
 
   room.layers.forEach((_, index) => {
-    const boardX = startX + index * (w * tileSize + 48);
+    const boardX = startX + index * (w * tileSize + layerGap);
     // Smooth layer elevation: active layer rises, others descend
     const activeDist = Math.abs(index - (anim.initialized ? anim.displayedActiveLayer : runtime.activeLayer));
     const layerOffset = Math.min(1, activeDist) * 22;
@@ -1259,6 +1387,50 @@ function renderCanvas() {
     ctx.fillText("\u2190\u2191\u2192\u2193 Move  \u00B7  Tab: Layer  \u00B7  X: Transfer  \u00B7  Z/Y: Undo/Redo  \u00B7  R: Reset  \u00B7  ?: Legend", rect.width / 2, rect.height - 8);
     ctx.textAlign = "left";
     ctx.restore();
+  }
+
+  // ── Contextual "how to play" banner for first 6 moves ──
+  if (!runtime.solved && !engine.replayState && runtime.moveCount < 6) {
+    const entities = runtime.entities || [];
+    const hasParcel = entities.some(e => e.type === "parcel");
+    const hasProjector = entities.some(e => e.type === "projector");
+    const hasSwitches = (room.switches || []).length > 0;
+    const hasGoal = room.layers.some(l => l.tiles.some(row => row.includes("G")));
+    const lines = [];
+    if (hasGoal) lines.push("🏁 Reach the GOAL mailbox to complete this room");
+    if (hasParcel && hasSwitches) lines.push("📦 Push PARCELS onto green SWITCHES to open doors");
+    else if (hasParcel) lines.push("📦 Push PARCELS by walking into them");
+    if (hasProjector) lines.push("🔦 PROJECTORS create bridges on other layers when on a stitch");
+    if (layerCount > 1) lines.push("⬡ Stand on a STITCH MARKER and press Tab to switch layers");
+    if (lines.length > 0) {
+      const bannerAlpha = Math.max(0, 1 - runtime.moveCount * 0.2);
+      const bannerW = Math.min(rect.width - 40, 480);
+      const bannerH = 18 + lines.length * 18;
+      const bannerX = (rect.width - bannerW) / 2;
+      const bannerY = 42;
+      ctx.save();
+      ctx.globalAlpha = bannerAlpha * 0.92;
+      ctx.fillStyle = "rgba(255, 252, 240, 0.95)";
+      ctx.shadowColor = "rgba(74, 43, 17, 0.12)";
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetY = 3;
+      drawRoundedRect(bannerX, bannerY, bannerW, bannerH, 12);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(211, 155, 52, 0.35)";
+      ctx.lineWidth = 1;
+      drawRoundedRect(bannerX, bannerY, bannerW, bannerH, 12);
+      ctx.stroke();
+      ctx.fillStyle = "#5d301f";
+      ctx.font = "600 12px Trebuchet MS, sans-serif";
+      ctx.textAlign = "center";
+      lines.forEach((line, i) => {
+        ctx.fillText(line, rect.width / 2, bannerY + 16 + i * 18);
+      });
+      ctx.textAlign = "left";
+      ctx.restore();
+    }
   }
 
   // ── Visual effects overlay ──
