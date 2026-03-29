@@ -657,7 +657,7 @@ function updateHUD() {
     const hints = [];
     if (hasParcel && hasSwitches) hints.push("Push parcels onto green switches to open doors.");
     else if (hasParcel) hints.push("Push parcels by walking into them.");
-    if (hasProjector) hints.push("Projectors create bridges on other layers.");
+    if (hasProjector) hints.push("Projectors beam a bridge onto gap tiles on other layers. Push them into position!");
     if (layerCount > 1 && !tip.toLowerCase().includes("layer")) hints.push("Press Tab to switch layers at stitch markers (⬡).");
     tip += hints.length > 0 ? (" · " + hints[0]) : "";
     el.hudObjective.textContent = tip;
@@ -839,14 +839,50 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
         ctx.closePath();
         ctx.fill();
       }
-      if (tile === "~" && !runtime.dynamicState.bridges.has(`${layerIndex}:${x}:${y}`)) {
-        ctx.strokeStyle = "#a98964";
-        ctx.beginPath();
-        ctx.moveTo(sx + 8, sy + 8);
-        ctx.lineTo(sx + tileSize - 10, sy + tileSize - 10);
-        ctx.moveTo(sx + tileSize - 10, sy + 8);
-        ctx.lineTo(sx + 8, sy + tileSize - 10);
-        ctx.stroke();
+      if (tile === "~") {
+        const isBridged = runtime.dynamicState.bridges.has(`${layerIndex}:${x}:${y}`);
+        if (isBridged) {
+          // Active bridge: golden plank pattern
+          ctx.fillStyle = "rgba(211, 175, 90, 0.5)";
+          drawRoundedRect(sx + 3, sy + 3, tileSize - 6, tileSize - 6, 3);
+          ctx.fill();
+          // Plank lines
+          ctx.strokeStyle = "rgba(180, 140, 60, 0.5)";
+          ctx.lineWidth = 1;
+          for (let i = 0; i < 3; i++) {
+            const ly = sy + 6 + i * (tileSize - 12) / 2;
+            ctx.beginPath();
+            ctx.moveTo(sx + 5, ly);
+            ctx.lineTo(sx + tileSize - 5, ly);
+            ctx.stroke();
+          }
+          // "BRIDGE" label
+          if (tileSize >= 42) {
+            ctx.fillStyle = "rgba(150, 110, 30, 0.7)";
+            ctx.font = `600 ${Math.max(7, Math.floor(tileSize * 0.15))}px sans-serif`;
+            ctx.textAlign = "center";
+            ctx.fillText("BRIDGE", sx + tileSize / 2, sy + tileSize - 3);
+            ctx.textAlign = "left";
+          }
+        } else {
+          // Unbridged gap: X pattern
+          ctx.strokeStyle = "#a98964";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(sx + 8, sy + 8);
+          ctx.lineTo(sx + tileSize - 10, sy + tileSize - 10);
+          ctx.moveTo(sx + tileSize - 10, sy + 8);
+          ctx.lineTo(sx + 8, sy + tileSize - 10);
+          ctx.stroke();
+          // "GAP" label
+          if (tileSize >= 42) {
+            ctx.fillStyle = "rgba(169, 137, 100, 0.6)";
+            ctx.font = `600 ${Math.max(7, Math.floor(tileSize * 0.15))}px sans-serif`;
+            ctx.textAlign = "center";
+            ctx.fillText("GAP", sx + tileSize / 2, sy + tileSize - 3);
+            ctx.textAlign = "left";
+          }
+        }
       }
       if (tile === "G") {
         // Pulsing glow around goal
@@ -935,6 +971,47 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
     }
   }
 
+  // Projection beams — draw a dashed golden line from projectors to their bridge targets on this layer
+  for (const entity of runtime.entities) {
+    if (entity.type !== "projector" || !entity.projectionTargets) continue;
+    for (const proj of entity.projectionTargets) {
+      if (proj.layer !== layerIndex) continue;
+      const targetX = entity.x + proj.dx;
+      const targetY = entity.y + proj.dy;
+      const targetTile = room.layers[proj.layer]?.tiles[targetY]?.[targetX];
+      if (!targetTile) continue;
+      // Draw a pulsing target indicator on the bridged tile
+      const tx = boardX + targetX * tileSize + tileSize / 2;
+      const ty = boardY + targetY * tileSize + tileSize / 2;
+      const beamPulse = 0.4 + 0.25 * Math.sin(anim.goalPulse * 1.5);
+      ctx.strokeStyle = `rgba(211, 155, 52, ${beamPulse})`;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.arc(tx, ty, tileSize * 0.42, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.lineWidth = 1;
+    }
+    // If projector is on this layer, show beam origin indicator
+    if (entity.layer === layerIndex) {
+      for (const proj of entity.projectionTargets) {
+        const ecx = boardX + entity.x * tileSize + tileSize / 2;
+        const ecy = boardY + entity.y * tileSize + tileSize / 2;
+        // Arrow pointing in projection direction
+        ctx.strokeStyle = "rgba(211, 155, 52, 0.45)";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(ecx, ecy);
+        ctx.lineTo(ecx + proj.dx * tileSize * 0.7, ecy + proj.dy * tileSize * 0.7);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.lineWidth = 1;
+      }
+    }
+  }
+
   // Switches
   for (const switchDef of room.switches || []) {
     if (switchDef.layer !== layerIndex) continue;
@@ -1015,27 +1092,40 @@ function drawLayerBoard(layerIndex, boardX, boardY, tileSize) {
       ctx.moveTo(ecx, ey + pi); ctx.lineTo(ecx, ey + tileSize - pi - 1);
       ctx.stroke();
     } else if (entity.type === "projector") {
-      // Glow
-      ctx.fillStyle = "rgba(211, 155, 52, 0.15)";
+      // Pulsing outer glow
+      const projPulse = 0.15 + 0.1 * Math.sin(anim.goalPulse * 1.8);
+      ctx.fillStyle = `rgba(211, 155, 52, ${projPulse})`;
       ctx.beginPath();
-      ctx.arc(ecx, ecy, tileSize * 0.4, 0, Math.PI * 2);
+      ctx.arc(ecx, ecy, tileSize * 0.44, 0, Math.PI * 2);
       ctx.fill();
       // Lens body
       ctx.fillStyle = "#d39b34";
       ctx.beginPath();
-      ctx.arc(ecx, ecy, tileSize * 0.26, 0, Math.PI * 2);
+      ctx.arc(ecx, ecy, tileSize * 0.28, 0, Math.PI * 2);
       ctx.fill();
       // Lens highlight
-      ctx.fillStyle = "rgba(255, 240, 200, 0.45)";
+      ctx.fillStyle = "rgba(255, 240, 200, 0.5)";
       ctx.beginPath();
-      ctx.arc(ecx - tileSize * 0.06, ecy - tileSize * 0.08, tileSize * 0.13, 0, Math.PI * 2);
+      ctx.arc(ecx - tileSize * 0.06, ecy - tileSize * 0.08, tileSize * 0.14, 0, Math.PI * 2);
       ctx.fill();
       // Housing
       ctx.strokeStyle = "#7d3f29";
-      ctx.lineWidth = 1.5;
-      drawRoundedRect(ex + tileSize * 0.2, ey + tileSize * 0.2, tileSize * 0.6, tileSize * 0.6, 4);
+      ctx.lineWidth = 2;
+      drawRoundedRect(ex + tileSize * 0.18, ey + tileSize * 0.18, tileSize * 0.64, tileSize * 0.64, 5);
       ctx.stroke();
       ctx.lineWidth = 1;
+      // Beam direction arrows on the projector itself
+      if (entity.projectionTargets) {
+        for (const proj of entity.projectionTargets) {
+          const arrowLen = tileSize * 0.2;
+          const ax = ecx + (proj.dx !== 0 ? Math.sign(proj.dx) * arrowLen : 0);
+          const ay = ecy + (proj.dy !== 0 ? Math.sign(proj.dy) * arrowLen : 0);
+          ctx.fillStyle = "rgba(255, 240, 200, 0.8)";
+          ctx.beginPath();
+          ctx.arc(ax, ay, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
     } else if (entity.type === "echo") {
       // Trailing ghost
       ctx.fillStyle = "rgba(105, 150, 211, 0.2)";
@@ -1400,7 +1490,7 @@ function renderCanvas() {
     if (hasGoal) lines.push("🏁 Reach the GOAL mailbox to complete this room");
     if (hasParcel && hasSwitches) lines.push("📦 Push PARCELS onto green SWITCHES to open doors");
     else if (hasParcel) lines.push("📦 Push PARCELS by walking into them");
-    if (hasProjector) lines.push("🔦 PROJECTORS create bridges on other layers when on a stitch");
+    if (hasProjector) lines.push("🔦 PROJECTORS beam a bridge onto GAP tiles — push them into position!");
     if (layerCount > 1) lines.push("⬡ Stand on a STITCH MARKER and press Tab to switch layers");
     if (lines.length > 0) {
       const bannerAlpha = Math.max(0, 1 - runtime.moveCount * 0.2);
